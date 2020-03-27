@@ -1,0 +1,35 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "NansDifficultySystem",
+	"Description": "This add some core c++ classes and UE4 to manage difficulties in game",
+	"Category": "Other",
+	"CreatedBy": "Nans Pellicari",
+	"CreatedByURL": "https://github.com/NansPellicari",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "NansDifficultySystemCore",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "NansDifficultySystemUE4",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
+	],
+    "Plugins": [
+		{
+			"Name": "NansCommon",
+			"Enabled": true
+		}
+	]
+}
