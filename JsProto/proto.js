@@ -97,53 +97,54 @@ class ResetOperator extends AbstractOperatorWithStack {
         // ResetOperator.resetList[this.stack.id] = [];
     }
     compute(lh, rh) {
-            let maxAttempt = 10;
-            const resetList = ResetOperator.resetList[this.stack.id];
-            // console.log(this.stack, this.key, this.stack.get(this.key))
-            let diff = this.stack.get(this.key);
-            if (diff.getOperator() !== this) {
-                throw new Error('the key or stack passed to the ResetOperator is not valid')
-            }
+        let maxAttempt = 10;
+        const resetList = ResetOperator.resetList[this.stack.id];
+        // console.log(this.stack, this.key, this.stack.get(this.key))
+        let diff = this.stack.get(this.key);
+        if (diff.getOperator() !== this) {
+            throw new Error('the key or stack passed to the ResetOperator is not valid')
+        }
 
-            let resetDiff = diff;
-            let id = resetDiff.id;
-            const valReset = rh;
-            let nullOpRes = new NullOperator().compute(lh, rh);
-            // console.log("resetList", resetList)
-            // console.log("reset---------", valReset)
-            while(maxAttempt > 0 && (!resetDiff.getActivate() || resetDiff.operator instanceof ResetOperator || resetList.includes(id))) {
-                const resetKey = this.key - (valReset + (10 - maxAttempt));
-                if (resetKey < 0) return nullOpRes;
-                // console.log("resetKey", resetKey);
-                resetDiff = this.stack.get(resetKey);
-                // console.log(resetDiff, resetDiff.getActivate())
-                id = resetDiff.id;
-                maxAttempt--;
-            }
+        let resetDiff = diff;
+        let id = resetDiff.id;
+        const valReset = rh;
+        let nullOpRes = new NullOperator().compute(lh, rh);
+        // console.log("resetList", resetList)
+        // console.log("reset---------", valReset)
+        while (maxAttempt > 0 && (!resetDiff.getActivate() || resetDiff.operator instanceof ResetOperator || resetList.includes(id))) {
+            const resetKey = this.key - (valReset + (10 - maxAttempt));
+            if (resetKey < 0) return nullOpRes;
+            // console.log("resetKey", resetKey);
+            resetDiff = this.stack.get(resetKey);
+            // console.log(resetDiff, resetDiff.getActivate())
+            id = resetDiff.id;
+            maxAttempt--;
+        }
 
-            if (resetDiff === diff) {
-                console.error("reset can't be found");
-                return nullOpRes;
-            }
-            if (!resetList.includes(id)) resetList.push(id);
-            return resetDiff.getOperator().getInverse().compute(lh, resetDiff.getVal());
+        if (resetDiff === diff) {
+            console.error("reset can't be found");
+            return nullOpRes;
+        }
+        if (!resetList.includes(id)) resetList.push(id);
+        return resetDiff.getOperator().getInverse().compute(lh, resetDiff.getVal());
     }
-    
+
     getInverse() {
         return new NullOperator();
     }
 
     setStack(stack) {
         this.stack = stack;
+    }
+    setKeyInStack(key) {
+        this.key = key;
+
         if (typeof ResetOperator.resetList[this.stack.id] === 'undefined' || typeof this.stack.iterationFlags['ResetList_Created'] === 'undefined') {
             ResetOperator.resetList[this.stack.id] = [];
         }
         if (typeof this.stack.iterationFlags['ResetList_Created'] === 'undefined') {
             this.stack.iterationFlags['ResetList_Created'] = true;
         }
-    }
-    setKeyInStack(key) {
-        this.key = key;
     }
 
     static resetList = {};
@@ -185,9 +186,19 @@ class Difficulty {
 }
 
 class DifficultyState {
-    constructor() {
+    constructor(time) {
+        if (typeof time !== "number") {
+            throw new Error('A state has to be related to a time period')
+
+        }
         this.operators = [];
         this.value = 0;
+        this.time = time
+
+    }
+
+    getTime() {
+        return this.time;
     }
 
     add(value, operator) {
@@ -197,7 +208,8 @@ class DifficultyState {
         this.operators.push([operator, value]);
     }
 
-    compute(value) {
+    compute() {
+        let value = 1;
         // console.log(this.operators);
         for (let operatorData of this.operators) {
             let [operator, coeff] = operatorData;
@@ -214,7 +226,7 @@ class DifficultyStack {
     constructor() {
         this.stack = [];
         this.time = 0;
-        this.id= 'stack-'+Date.now().toString(36) + Math.random().toString(36).substr(2);
+        this.id = 'stack-' + Date.now().toString(36) + Math.random().toString(36).substr(2);
         this.iterationFlags = {};
 
     }
@@ -235,7 +247,7 @@ class DifficultyStack {
     }
 
     getCurrentState() {
-        const state = new DifficultyState();
+        const state = new DifficultyState(this.time);
         this.iterationFlags = {};
 
         for (let key in this.stack) {
@@ -253,13 +265,13 @@ class DifficultyStack {
 const diffsStack = new DifficultyStack();
 // for now it work only for point, but should be great to create a stack different for time duration (on QTE for ex.)
 diffsStack.add(new Difficulty(2, new AddOperator()));
-diffsStack.add(new Difficulty(1.5,  new MultiplyOperator(), 2));
+diffsStack.add(new Difficulty(1.5, new MultiplyOperator(), 2));
 diffsStack.add(new Difficulty(2, new AddOperator(), 10));
 
 // simulate game loop
 let time = 0;
 setInterval(() => {
-    console.log('current time', time)
+    // console.log('current time', time)
 
     if (time == '4') {
         diffsStack.add(new Difficulty(2, new ResetOperator(), 4));
@@ -267,8 +279,9 @@ setInterval(() => {
     if (time == '6') {
         diffsStack.add(new Difficulty(1, new ResetOperator(), 5));
     }
-    
-    console.log('point: ', diffsStack.getCurrentState().compute(1, diffsStack));
     diffsStack.addTime(1);
+    const state = diffsStack.getCurrentState();
+    console.log("time:", state.getTime());
+    console.log('point: ', state.compute());
     time++;
 }, 500);

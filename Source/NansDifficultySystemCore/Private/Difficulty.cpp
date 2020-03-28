@@ -4,20 +4,28 @@
 #include "Operator/DifficultyOperator.h"
 #include "Operator/Interfaces.h"
 
-void UNDifficulty::Initialize(int32 _DiffValue, IDifficultyOperator* _Operator, float _Duration)
+UNDifficulty* UNDifficulty::Initialize(float _DiffValue, IDifficultyOperator* _Operator, float _Duration, FName _Reason)
 {
     DifficultyValue = _DiffValue;
     Operator = _Operator;
     Duration = _Duration;
+    Reason = _Reason;
+    return this;
 }
 
-bool UNDifficulty::IsActivate()
+FName UNDifficulty::GetReason() const
+{
+    mycheck(Operator != nullptr);
+    return Reason;
+}
+
+bool UNDifficulty::IsActivate() const
 {
     mycheck(Operator != nullptr);
     return Duration == 0 || DurationSinceActivation <= Duration;
 }
 
-IDifficultyOperator* UNDifficulty::GetOperator()
+IDifficultyOperator* UNDifficulty::GetOperator() const
 {
     mycheck(Operator != nullptr);
     if (!IsActivate())
@@ -27,7 +35,7 @@ IDifficultyOperator* UNDifficulty::GetOperator()
     return Operator;
 }
 
-int32 UNDifficulty::GetDifficultyValue()
+float UNDifficulty::GetDifficultyValue() const
 {
     mycheck(Operator != nullptr);
     if (!IsActivate())

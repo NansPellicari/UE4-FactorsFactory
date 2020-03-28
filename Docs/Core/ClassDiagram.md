@@ -36,7 +36,7 @@ class DifficultyStack {
 }
 ```
 
-## 
+## Exemple of how it works on client side
 
 ```mermaid
 classDiagram

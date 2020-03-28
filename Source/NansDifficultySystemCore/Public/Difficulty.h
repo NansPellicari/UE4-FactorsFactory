@@ -12,18 +12,20 @@ class NANSDIFFICULTYSYSTEMCORE_API UNDifficulty : public UObject
 {
     GENERATED_BODY()
 public:
-    void Initialize(int32 _DiffValue, IDifficultyOperator* _Operator, float _Duration);
-    bool IsActivate();
-    IDifficultyOperator* GetOperator();
-    int32 GetDifficultyValue();
+    UNDifficulty* Initialize(float _DiffValue, IDifficultyOperator* _Operator, float _Duration, FName Reason);
+    bool IsActivate() const;
+    IDifficultyOperator* GetOperator() const;
+    float GetDifficultyValue() const;
+    FName GetReason() const;
     void AddTime(float Time);
 
 protected:
-    int32 DifficultyValue;
+    FName Reason;
+    float DifficultyValue;
     IDifficultyOperator* Operator;
     // 0 means infinite
     float Duration = 0.f;
 
 private:
-    float DurationSinceActivation = 1.f;
+    float DurationSinceActivation = 0.f;
 };

@@ -10,7 +10,7 @@ class NANSDIFFICULTYSYSTEMCORE_API UNNullOperator : public UObject, public IDiff
 {
     GENERATED_BODY()
 public:
-    virtual int32 Compute(int32 Lh, int32 Rh) override;
+    virtual float Compute(float Lh, float Rh) override;
     virtual IDifficultyOperator* GetInverse() override;
 };
 
@@ -19,7 +19,7 @@ class NANSDIFFICULTYSYSTEMCORE_API UNAddOperator : public UObject, public IDiffi
 {
     GENERATED_BODY()
 public:
-    virtual int32 Compute(int32 Lh, int32 Rh) override;
+    virtual float Compute(float Lh, float Rh) override;
     virtual IDifficultyOperator* GetInverse() override;
 };
 
@@ -28,7 +28,7 @@ class NANSDIFFICULTYSYSTEMCORE_API UNSubsctractOperator : public UObject, public
 {
     GENERATED_BODY()
 public:
-    virtual int32 Compute(int32 Lh, int32 Rh) override;
+    virtual float Compute(float Lh, float Rh) override;
     virtual IDifficultyOperator* GetInverse() override;
 };
 
@@ -37,7 +37,7 @@ class NANSDIFFICULTYSYSTEMCORE_API UNMultiplyOperator : public UObject, public I
 {
     GENERATED_BODY()
 public:
-    virtual int32 Compute(int32 Lh, int32 Rh) override;
+    virtual float Compute(float Lh, float Rh) override;
     virtual IDifficultyOperator* GetInverse() override;
 };
 
@@ -46,6 +46,6 @@ class NANSDIFFICULTYSYSTEMCORE_API UNDividerOperator : public UObject, public ID
 {
     GENERATED_BODY()
 public:
-    virtual int32 Compute(int32 Lh, int32 Rh) override;
+    virtual float Compute(float Lh, float Rh) override;
     virtual IDifficultyOperator* GetInverse() override;
 };
