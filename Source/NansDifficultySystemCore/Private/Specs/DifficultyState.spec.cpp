@@ -38,7 +38,7 @@ void DifficultyStateSpec::Define()
 
             DifficultyState->Initialize(Time);
             DifficultyState->AddDifficulty(Difficulty);
-            TEST_EQUAL("Should be equal to 3.f", DifficultyState->Compute(), 3.f);
+            TEST_EQUAL("Should be equal to 2.f", DifficultyState->Compute(), 2.f);
         });
 
         It("should compute with a bunch of operators given", [this]() {
@@ -54,7 +54,7 @@ void DifficultyStateSpec::Define()
                 Diff->AddTime(Time);
                 DifficultyState->AddDifficulty(Diff);
             }
-            TEST_EQUAL("Should be equal to 6.f", DifficultyState->Compute(), 6.f);
+            TEST_EQUAL("Should be equal to 4.f", DifficultyState->Compute(), 4.f);
         });
 
         It("should compute with a bunch of operators given and considered not activated operator", [this]() {
@@ -74,7 +74,7 @@ void DifficultyStateSpec::Define()
                 Diff->AddTime(Time);
                 DifficultyState->AddDifficulty(Diff);
             }
-            TEST_EQUAL("Should be equal to 5.f", DifficultyState->Compute(), 5.f);
+            TEST_EQUAL("Should be equal to 4.f", DifficultyState->Compute(), 4.f);
         });
     });
 }

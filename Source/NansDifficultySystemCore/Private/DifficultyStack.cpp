@@ -36,7 +36,7 @@ float UNDifficultyStack::GetTime() const
     return Time;
 }
 
-UNDifficulty* UNDifficultyStack::GetDifficulty(int32 Key) const
+UNDifficulty* UNDifficultyStack::GetDifficulty(uint32 Key) const
 {
     mycheck(Name != NAME_None);
     mycheck(Difficulties.IsValidIndex(Key));
@@ -47,6 +47,12 @@ void UNDifficultyStack::AddDifficulty(UNDifficulty* Difficulty)
 {
     mycheck(Name != NAME_None);
     Difficulties.Add(Difficulty);
+}
+
+bool UNDifficultyStack::HasFlag(FString Flag) const
+{
+    mycheck(Name != NAME_None);
+    return IterationFlags.Contains(Flag);
 }
 
 bool UNDifficultyStack::GetFlag(FString Flag) const
@@ -72,14 +78,8 @@ void UNDifficultyStack::AddTime(float _Time)
     }
 }
 
-UNDifficultyState* UNDifficultyStack::GetCurrentState()
+void UNDifficultyStack::AddDifficultiesToState(UNDifficultyState* State)
 {
-    mycheck(Name != NAME_None);
-    UNDifficultyState* State = NewObject<UNDifficultyState>()->Initialize(GetTime());
-    State->bDebug = bDebug;
-    // Need to reset it, values should depend on iteration scope
-    IterationFlags.Empty();
-
     for (int32 Index = 0; Index != Difficulties.Num(); ++Index)
     {
         UNDifficulty* Diff = Difficulties[Index];
@@ -91,6 +91,17 @@ UNDifficultyState* UNDifficultyStack::GetCurrentState()
         }
         State->AddDifficulty(Diff);
     }
+}
+
+UNDifficultyState* UNDifficultyStack::GetCurrentState()
+{
+    mycheck(Name != NAME_None);
+    UNDifficultyState* State = NewObject<UNDifficultyState>(this)->Initialize(GetTime());
+    State->bDebug = bDebug;
+    // Need to reset it, values should depend on iteration scope
+    IterationFlags.Empty();
+
+    AddDifficultiesToState(State);
 
     return State;
 }

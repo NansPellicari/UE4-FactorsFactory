@@ -18,18 +18,20 @@ public:
     UNDifficultyStack* Initialize(FName _Name);
     FName GetName() const;
     float GetTime() const;
-    UNDifficulty* GetDifficulty(int32 Key) const;
+    UNDifficulty* GetDifficulty(uint32 Key) const;
     void AddDifficulty(UNDifficulty* Difficulty);
+    bool HasFlag(FString Flag) const;
     bool GetFlag(FString Flag) const;
     void SetFlag(FString Flag, bool value);
     void AddTime(float _Time);
-    UNDifficultyState* GetCurrentState();
+    virtual UNDifficultyState* GetCurrentState();
     bool bDebug = false;
 
 protected:
     TMap<FString, bool> IterationFlags;
     float Time = 0.f;
     TArray<UNDifficulty*> Difficulties;
+    void AddDifficultiesToState(UNDifficultyState* State);
 
 private:
     FName Name;

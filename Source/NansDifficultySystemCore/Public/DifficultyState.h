@@ -37,8 +37,8 @@ protected:
     TArray<FNDifficultyStateOperator> Operators;
 
 private:
-    // Difficulty 1 is the basic difficulty level
-    float DifficultyValue = 1.f;
+    // Difficulty 0 means no difficulty
+    float DifficultyValue = 0.f;
     // This value means it has not been initiliazed
     float Time = -1.f;
 };

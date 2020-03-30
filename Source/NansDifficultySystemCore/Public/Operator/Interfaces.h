@@ -32,6 +32,6 @@ class IDifficultyOperatorWithStack
     GENERATED_BODY()
 
 public:
-    void SetStack(UNDifficultyStack* Stack) PURE_VIRTUAL(IDifficultyOperatorWithStack::SetStack, );
-    void SetKeyInStack(int32 Key) PURE_VIRTUAL(IDifficultyOperatorWithStack::SetKeyInStack, );
+    virtual void SetStack(UNDifficultyStack* Stack) PURE_VIRTUAL(IDifficultyOperatorWithStack::SetStack, );
+    virtual void SetKeyInStack(uint32 Key) PURE_VIRTUAL(IDifficultyOperatorWithStack::SetKeyInStack, );
 };

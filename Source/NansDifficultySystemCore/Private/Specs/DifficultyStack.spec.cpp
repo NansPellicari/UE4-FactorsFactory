@@ -7,14 +7,15 @@
 #include "Operator/Interfaces.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
-
 BEGIN_DEFINE_SPEC(DifficultyStackSpec,
     "NansDifficultySystem.Core.DifficultyStack.Spec",
     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
-UNDifficultyStack* DifficultyStack = NewObject<UNDifficultyStack>();
+UNDifficultyStack* DifficultyStack;
 END_DEFINE_SPEC(DifficultyStackSpec)
 void DifficultyStackSpec::Define()
 {
+    DifficultyStack = NewObject<UNDifficultyStack>();
+
     Describe("How to use DifficultyStack", [this]() {
         It("should triggered error if any method is called before the name has been set", [this]() {
             TMap<FString, TBaseDelegate<void>> Delegates;
@@ -49,6 +50,21 @@ void DifficultyStackSpec::Define()
             Delegates.Empty();
         });
 
+        It("should removes every set Flags after getting the current state", [this]() {
+            DifficultyStack->Initialize(FName("Test iteration flag"));
+            DifficultyStack->SetFlag("Flag", true);
+            DifficultyStack->GetCurrentState();
+            try
+            {
+                DifficultyStack->GetFlag("Flag");
+            }
+            catch (const TCHAR* e)
+            {
+                TEST_EQUAL("Error has been triggered: IterationFlags.Contains(Flag)", e, TEXT("IterationFlags.Contains(Flag)"));
+            }
+            DifficultyStack->Reset();
+        });
+
         Describe("DifficultyStack should get valid state and compute correctly when", [this]() {
             BeforeEach([this]() {
                 DifficultyStack->Initialize(FName("Dialog"));
@@ -67,19 +83,19 @@ void DifficultyStackSpec::Define()
                 DifficultyStack->AddTime(1.f);
                 auto State = DifficultyStack->GetCurrentState();
                 TEST_EQUAL("Total time: 1.f", State->GetTime(), 1.f);
-                TEST_EQUAL("6.5f", State->Compute(), 6.5f);
+                TEST_EQUAL("5.f", State->Compute(), 5.f);
             });
             It("3 secs have passed", [this]() {
                 DifficultyStack->AddTime(3.f);
                 auto State = DifficultyStack->GetCurrentState();
                 TEST_EQUAL("Total time: 3.f", State->GetTime(), 3.f);
-                TEST_EQUAL("5.f", State->Compute(), 5.f);
+                TEST_EQUAL("4.f", State->Compute(), 4.f);
             });
-            It("10 secs have passed", [this]() {
+            It("10.1 secs have passed", [this]() {
                 DifficultyStack->AddTime(10.1f);
                 auto State = DifficultyStack->GetCurrentState();
                 TEST_EQUAL("Total time: 10.1f", State->GetTime(), 10.1f);
-                TEST_EQUAL("3.f", State->Compute(), 3.f);
+                TEST_EQUAL("2.f", State->Compute(), 2.f);
             });
             Describe("4 secs have passed and new difficulty is added", [this]() {
                 BeforeEach([this]() {
@@ -90,13 +106,13 @@ void DifficultyStackSpec::Define()
                 It("should add new difficulty in computation", [this]() {
                     auto State = DifficultyStack->GetCurrentState();
                     TEST_EQUAL("Total time: 4.f", State->GetTime(), 4.f);
-                    TEST_EQUAL("9.f", State->Compute(), 9.f);
+                    TEST_EQUAL("8.f", State->Compute(), 8.f);
                 });
-                It("+1,1secs should not add new difficulty in computation", [this]() {
+                It("+1,1secs should not added the last new difficulty in computation", [this]() {
                     DifficultyStack->AddTime(1.1f);
                     auto State = DifficultyStack->GetCurrentState();
                     TEST_EQUAL("Total time: 5.1f", State->GetTime(), 5.1f);
-                    TEST_EQUAL("5.f", State->Compute(), 5.f);
+                    TEST_EQUAL("4.f", State->Compute(), 4.f);
                 });
             });
             AfterEach([this]() { DifficultyStack->Reset(); });
