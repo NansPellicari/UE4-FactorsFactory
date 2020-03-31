@@ -72,7 +72,7 @@ class IDifficultySystemGameInstance {
 class NDifficultySystemClient {
     <<public>>
     +CreateStack(FString StackName) void
-    +GetDifficulty(TArray<FString> StackNames) DifficultyState
+    +GetDifficulty(TArray<FString> StackNames) TArray<DifficultyState>
     +AddDifficulty(TArray<FString> StackNames, Difficulty) void
 }
 

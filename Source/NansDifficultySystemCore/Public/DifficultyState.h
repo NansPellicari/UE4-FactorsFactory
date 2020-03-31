@@ -17,6 +17,8 @@ struct FNDifficultyStateOperator
     FNDifficultyStateOperator(const UNDifficulty* Difficulty);
 
     float Value;
+    FName Reason;
+    bool Activate;
     IDifficultyOperator* Operator;
     // TODO create  Serialize method which save Value + Operator class and value
 };
@@ -29,7 +31,7 @@ public:
     UNDifficultyState* Initialize(float _Time);
     void AddDifficulty(const UNDifficulty* Difficulty);
     float GetTime() const;
-    float Compute();
+    virtual float Compute();
     bool bDebug = false;
     // TODO create a Serialize method which save Time + DifficultyValue +  Operators
 

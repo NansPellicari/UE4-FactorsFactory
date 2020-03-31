@@ -9,6 +9,8 @@ FNDifficultyStateOperator::FNDifficultyStateOperator(const UNDifficulty* Difficu
 {
     Value = Difficulty->GetDifficultyValue();
     Operator = Difficulty->GetOperator();
+    Reason = Difficulty->GetReason();
+    Activate = Difficulty->IsActivate();
 }
 
 UNDifficultyState* UNDifficultyState::Initialize(float _Time)
