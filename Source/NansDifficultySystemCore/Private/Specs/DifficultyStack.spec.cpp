@@ -77,6 +77,7 @@ void DifficultyStackSpec::Define()
                 DifficultyStack->AddDifficulty(
                     NewObject<UNDifficulty>()->Initialize(2.f, NewObject<UNAddOperator>(), 10, FName("Psychologicaly attacked")));
             });
+
             It("1 second have passed ", [this]() {
                 // To get debug infos in output
                 // DifficultyStack->bDebug = true;
@@ -85,29 +86,34 @@ void DifficultyStackSpec::Define()
                 TEST_EQUAL("Total time: 1.f", State->GetTime(), 1.f);
                 TEST_EQUAL("5.f", State->Compute(), 5.f);
             });
+
             It("3 secs have passed", [this]() {
                 DifficultyStack->AddTime(3.f);
                 auto State = DifficultyStack->GetCurrentState();
                 TEST_EQUAL("Total time: 3.f", State->GetTime(), 3.f);
                 TEST_EQUAL("4.f", State->Compute(), 4.f);
             });
+
             It("10.1 secs have passed", [this]() {
                 DifficultyStack->AddTime(10.1f);
                 auto State = DifficultyStack->GetCurrentState();
                 TEST_EQUAL("Total time: 10.1f", State->GetTime(), 10.1f);
                 TEST_EQUAL("2.f", State->Compute(), 2.f);
             });
+
             Describe("4 secs have passed and new difficulty is added", [this]() {
                 BeforeEach([this]() {
                     DifficultyStack->AddTime(4.f);
                     DifficultyStack->AddDifficulty(
                         NewObject<UNDifficulty>()->Initialize(4.f, NewObject<UNAddOperator>(), 1.f, FName("Exhausted")));
                 });
+
                 It("should add new difficulty in computation", [this]() {
                     auto State = DifficultyStack->GetCurrentState();
                     TEST_EQUAL("Total time: 4.f", State->GetTime(), 4.f);
                     TEST_EQUAL("8.f", State->Compute(), 8.f);
                 });
+
                 It("+1,1secs should not added the last new difficulty in computation", [this]() {
                     DifficultyStack->AddTime(1.1f);
                     auto State = DifficultyStack->GetCurrentState();
@@ -115,6 +121,7 @@ void DifficultyStackSpec::Define()
                     TEST_EQUAL("4.f", State->Compute(), 4.f);
                 });
             });
+
             AfterEach([this]() { DifficultyStack->Reset(); });
         });
     });
