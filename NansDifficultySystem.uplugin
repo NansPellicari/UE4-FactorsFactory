@@ -22,7 +22,7 @@
 		},
 		{
 			"Name": "NansDifficultySystemUE4",
-			"Type": "Editor",
+			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
 	],

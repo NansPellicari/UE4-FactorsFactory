@@ -4,38 +4,43 @@
 #include "Operator/DifficultyOperator.h"
 #include "Operator/Interfaces.h"
 
-UNDifficulty* UNDifficulty::Initialize(float _DiffValue, IDifficultyOperator* _Operator, float _Duration, FName _Reason)
+NDifficulty::NDifficulty(float _DiffValue, IDifficultyOperator* _Operator, float _Duration, FName _Reason)
 {
     DifficultyValue = _DiffValue;
     Operator = _Operator;
     Duration = _Duration;
     Reason = _Reason;
-    return this;
+    Id = ++NDifficultyGUID::sNextId;
 }
 
-FName UNDifficulty::GetReason() const
+uint32 NDifficulty::GetUID() const
+{
+    return Id;
+}
+
+FName NDifficulty::GetReason() const
 {
     mycheck(Operator != nullptr);
     return Reason;
 }
 
-bool UNDifficulty::IsActivate() const
+bool NDifficulty::IsActivate() const
 {
     mycheck(Operator != nullptr);
     return Duration == 0 || DurationSinceActivation <= Duration;
 }
 
-IDifficultyOperator* UNDifficulty::GetOperator() const
+IDifficultyOperator* NDifficulty::GetOperator() const
 {
     mycheck(Operator != nullptr);
     if (!IsActivate())
     {
-        return NewObject<UNNullOperator>();
+        return new NNullOperator();
     }
     return Operator;
 }
 
-float UNDifficulty::GetDifficultyValue() const
+float NDifficulty::GetDifficultyValue() const
 {
     mycheck(Operator != nullptr);
     if (!IsActivate())
@@ -45,7 +50,7 @@ float UNDifficulty::GetDifficultyValue() const
     return DifficultyValue;
 }
 
-void UNDifficulty::AddTime(float Time)
+void NDifficulty::AddTime(float Time)
 {
     mycheck(Operator != nullptr);
     DurationSinceActivation += Time;

@@ -1,20 +1,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/ObjectMacros.h"
-
-#include "DifficultyState.generated.h"
 
 class IDifficultyOperator;
-class UNDifficulty;
+class INDifficultyInterface;
 
-USTRUCT()
 struct FNDifficultyStateOperator
 {
-    GENERATED_USTRUCT_BODY()
-
     FNDifficultyStateOperator() {}
-    FNDifficultyStateOperator(const UNDifficulty* Difficulty);
+    FNDifficultyStateOperator(const INDifficultyInterface* Difficulty);
 
     float Value;
     FName Reason;
@@ -23,16 +17,16 @@ struct FNDifficultyStateOperator
     // TODO create  Serialize method which save Value + Operator class and value
 };
 
-UCLASS()
-class NANSDIFFICULTYSYSTEMCORE_API UNDifficultyState : public UObject
+class NANSDIFFICULTYSYSTEMCORE_API NDifficultyState
 {
-    GENERATED_BODY()
 public:
-    UNDifficultyState* Initialize(float _Time);
-    void AddDifficulty(const UNDifficulty* Difficulty);
+    virtual ~NDifficultyState() {}
+    NDifficultyState(float _Time);
+    void AddDifficulty(const INDifficultyInterface* Difficulty);
     float GetTime() const;
     virtual float Compute();
     bool bDebug = false;
+    const TArray<FNDifficultyStateOperator> GetOperators() const;
     // TODO create a Serialize method which save Time + DifficultyValue +  Operators
 
 protected:

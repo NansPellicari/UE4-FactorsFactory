@@ -1,51 +1,51 @@
 #include "Operator/DifficultyOperator.h"
 
-float UNNullOperator::Compute(float Lh, float Rh)
+float NNullOperator::Compute(float Lh, float Rh)
 {
     return Lh;
 }
 
-IDifficultyOperator* UNNullOperator::GetInverse()
+IDifficultyOperator* NNullOperator::GetInverse()
 {
     return this;
 }
 
-float UNAddOperator::Compute(float Lh, float Rh)
+float NAddOperator::Compute(float Lh, float Rh)
 {
     return Lh + Rh;
 }
 
-IDifficultyOperator* UNAddOperator::GetInverse()
+IDifficultyOperator* NAddOperator::GetInverse()
 {
-    return NewObject<UNSubsctractOperator>(this);
+    return new NSubsctractOperator();
 }
 
-float UNSubsctractOperator::Compute(float Lh, float Rh)
+float NSubsctractOperator::Compute(float Lh, float Rh)
 {
     return Lh - Rh;
 }
 
-IDifficultyOperator* UNSubsctractOperator::GetInverse()
+IDifficultyOperator* NSubsctractOperator::GetInverse()
 {
-    return NewObject<UNAddOperator>(this);
+    return new NAddOperator();
 }
 
-float UNMultiplyOperator::Compute(float Lh, float Rh)
+float NMultiplyOperator::Compute(float Lh, float Rh)
 {
     return Lh * Rh;
 }
 
-IDifficultyOperator* UNMultiplyOperator::GetInverse()
+IDifficultyOperator* NMultiplyOperator::GetInverse()
 {
-    return NewObject<UNDividerOperator>(this);
+    return new NDividerOperator();
 }
 
-float UNDividerOperator::Compute(float Lh, float Rh)
+float NDividerOperator::Compute(float Lh, float Rh)
 {
     return Lh / Rh;
 }
 
-IDifficultyOperator* UNDividerOperator::GetInverse()
+IDifficultyOperator* NDividerOperator::GetInverse()
 {
-    return NewObject<UNMultiplyOperator>(this);
+    return new NMultiplyOperator();
 }

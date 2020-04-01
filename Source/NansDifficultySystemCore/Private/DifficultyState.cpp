@@ -3,9 +3,10 @@
 #include "Difficulty.h"
 #include "NansCommon/Public/Misc/NansAssertionMacros.h"
 #include "Operator/Interfaces.h"
-#include "UObject/UObjectBaseUtility.h"
 
-FNDifficultyStateOperator::FNDifficultyStateOperator(const UNDifficulty* Difficulty)
+#include <typeinfo>
+
+FNDifficultyStateOperator::FNDifficultyStateOperator(const INDifficultyInterface* Difficulty)
 {
     Value = Difficulty->GetDifficultyValue();
     Operator = Difficulty->GetOperator();
@@ -13,26 +14,28 @@ FNDifficultyStateOperator::FNDifficultyStateOperator(const UNDifficulty* Difficu
     Activate = Difficulty->IsActivate();
 }
 
-UNDifficultyState* UNDifficultyState::Initialize(float _Time)
+NDifficultyState::NDifficultyState(float _Time)
 {
     Time = _Time;
-    return this;
 }
-void UNDifficultyState::AddDifficulty(const UNDifficulty* Difficulty)
+
+void NDifficultyState::AddDifficulty(const INDifficultyInterface* Difficulty)
 {
     mycheck(Time != -1.f);
 
     Operators.Add(FNDifficultyStateOperator(Difficulty));
 }
 
-float UNDifficultyState::GetTime() const
+float NDifficultyState::GetTime() const
 {
     return Time;
 }
 
-float UNDifficultyState::Compute()
+float NDifficultyState::Compute()
 {
     mycheck(Time != -1.f);
+    // Reset the value
+    DifficultyValue = 0;
     for (FNDifficultyStateOperator Operation : Operators)
     {
         float Value = Operation.Operator->Compute(DifficultyValue, Operation.Value);
@@ -42,11 +45,16 @@ float UNDifficultyState::Compute()
                 Warning,
                 TEXT("Compute with Previous value: %f Operator: %s Operation Value: %f results to: %f"),
                 DifficultyValue,
-                *Cast<UObject>(Operation.Operator)->GetName(),
+                typeid(Operation.Operator).name(),
                 Operation.Value,
                 Value);
         }
         DifficultyValue = Value;
     }
     return DifficultyValue;
+}
+
+const TArray<FNDifficultyStateOperator> NDifficultyState::GetOperators() const
+{
+    return Operators;
 }

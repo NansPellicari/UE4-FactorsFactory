@@ -6,6 +6,8 @@ public class NansDifficultySystemCore : ModuleRules
     public NansDifficultySystemCore(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+        // This to allow dynamic_cast
+        bUseRTTI = true;
 
         PublicIncludePaths.AddRange(
             new string[] {

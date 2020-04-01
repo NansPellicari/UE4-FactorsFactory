@@ -2,36 +2,28 @@
 
 #include "CoreMinimal.h"
 #include "DifficultyStack.h"
-#include "UObject/Interface.h"
-
-#include "Interfaces.generated.h"
-
-UINTERFACE(MinimalApi)
-class UDifficultyOperator : public UInterface
-{
-    GENERATED_BODY()
-};
 
 class IDifficultyOperator
 {
-    GENERATED_BODY()
-
 public:
-    virtual float Compute(float Lh, float Rh) PURE_VIRTUAL(IDifficultyOperator::Compute, return 0.f;);
-    virtual IDifficultyOperator* GetInverse() PURE_VIRTUAL(IDifficultyOperator::GetInverse, return this;);
-};
-
-UINTERFACE(MinimalApi)
-class UDifficultyOperatorWithStack : public UInterface
-{
-    GENERATED_BODY()
+    virtual float Compute(float Lh, float Rh) = 0;
+    virtual IDifficultyOperator* GetInverse() = 0;
+    virtual void InIteration(NDifficultyStack* Stack) {}
 };
 
 class IDifficultyOperatorWithStack
 {
-    GENERATED_BODY()
-
 public:
-    virtual void SetStack(UNDifficultyStack* Stack) PURE_VIRTUAL(IDifficultyOperatorWithStack::SetStack, );
-    virtual void SetKeyInStack(uint32 Key) PURE_VIRTUAL(IDifficultyOperatorWithStack::SetKeyInStack, );
+    virtual void SetStack(NDifficultyStack* Stack) = 0;
+    virtual void SetKeyInStack(uint32 Key) = 0;
+};
+
+class OperatorUtils
+{
+public:
+    template <typename T>
+    static bool IsOperatorWithStack(T Operator)
+    {
+        return dynamic_cast<IDifficultyOperatorWithStack*>(Operator) != nullptr;
+    }
 };

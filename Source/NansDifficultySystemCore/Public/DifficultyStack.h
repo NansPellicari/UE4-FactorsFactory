@@ -1,38 +1,33 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/ObjectMacros.h"
 
-#include "DifficultyStack.generated.h"
+class INDifficultyInterface;
+class IDifficultyOperatorWithStack;
+class NDifficultyState;
 
-class UNDifficulty;
-class UNDifficultyState;
-
-UCLASS()
-class NANSDIFFICULTYSYSTEMCORE_API UNDifficultyStack : public UObject
+class NANSDIFFICULTYSYSTEMCORE_API NDifficultyStack
 {
-    GENERATED_BODY()
 public:
-    ~UNDifficultyStack();
+    NDifficultyStack(FName _Name);
+    virtual ~NDifficultyStack();
     void Reset();
-    UNDifficultyStack* Initialize(FName _Name);
+    void SetName(FName _Name);
     FName GetName() const;
     float GetTime() const;
-    UNDifficulty* GetDifficulty(uint32 Key) const;
-    void AddDifficulty(UNDifficulty* Difficulty);
+    INDifficultyInterface* GetDifficulty(uint32 Key) const;
+    void AddDifficulty(INDifficultyInterface* Difficulty);
     bool HasFlag(FString Flag) const;
     bool GetFlag(FString Flag) const;
     void SetFlag(FString Flag, bool value);
     void AddTime(float _Time);
-    virtual UNDifficultyState* GetCurrentState();
+    virtual NDifficultyState* GetCurrentState();
     bool bDebug = false;
 
 protected:
     TMap<FString, bool> IterationFlags;
     float Time = 0.f;
-    TArray<UNDifficulty*> Difficulties;
-    void AddDifficultiesToState(UNDifficultyState* State);
-
-private:
+    TArray<INDifficultyInterface*> Difficulties;
+    void AddDifficultiesToState(NDifficultyState* State);
     FName Name;
 };

@@ -1,16 +1,18 @@
 #include "DifficultyStack.h"
 
-#include "Difficulty.h"
+#include "DifficultyInterface.h"
 #include "DifficultyState.h"
 #include "NansCommon/Public/Misc/NansAssertionMacros.h"
 #include "Operator/Interfaces.h"
 
-UNDifficultyStack::~UNDifficultyStack()
+#include <typeinfo>
+
+NDifficultyStack::~NDifficultyStack()
 {
     Reset();
 }
 
-void UNDifficultyStack::Reset()
+void NDifficultyStack::Reset()
 {
     Name = NAME_None;
     IterationFlags.Empty();
@@ -18,57 +20,61 @@ void UNDifficultyStack::Reset()
     Time = 0.f;
 }
 
-UNDifficultyStack* UNDifficultyStack::Initialize(FName _Name)
+NDifficultyStack::NDifficultyStack(FName _Name)
 {
     Name = _Name;
-    return this;
 }
 
-FName UNDifficultyStack::GetName() const
+FName NDifficultyStack::GetName() const
 {
     mycheck(Name != NAME_None);
     return Name;
 }
 
-float UNDifficultyStack::GetTime() const
+void NDifficultyStack::SetName(FName _Name)
+{
+    Name = _Name;
+}
+
+float NDifficultyStack::GetTime() const
 {
     mycheck(Name != NAME_None);
     return Time;
 }
 
-UNDifficulty* UNDifficultyStack::GetDifficulty(uint32 Key) const
+INDifficultyInterface* NDifficultyStack::GetDifficulty(uint32 Key) const
 {
     mycheck(Name != NAME_None);
     mycheck(Difficulties.IsValidIndex(Key));
     return Difficulties[Key];
 }
 
-void UNDifficultyStack::AddDifficulty(UNDifficulty* Difficulty)
+void NDifficultyStack::AddDifficulty(INDifficultyInterface* Difficulty)
 {
     mycheck(Name != NAME_None);
     Difficulties.Add(Difficulty);
 }
 
-bool UNDifficultyStack::HasFlag(FString Flag) const
+bool NDifficultyStack::HasFlag(FString Flag) const
 {
     mycheck(Name != NAME_None);
     return IterationFlags.Contains(Flag);
 }
 
-bool UNDifficultyStack::GetFlag(FString Flag) const
+bool NDifficultyStack::GetFlag(FString Flag) const
 {
     mycheck(Name != NAME_None);
     mycheck(IterationFlags.Contains(Flag));
     return IterationFlags[Flag];
 }
 
-void UNDifficultyStack::SetFlag(FString Flag, bool value)
+void NDifficultyStack::SetFlag(FString Flag, bool value)
 {
     mycheck(Name != NAME_None);
     IterationFlags.Add(Flag, value);
 }
 
-void UNDifficultyStack::AddTime(float _Time)
+void NDifficultyStack::AddTime(float _Time)
 {
     mycheck(Name != NAME_None);
     Time += _Time;
@@ -78,14 +84,14 @@ void UNDifficultyStack::AddTime(float _Time)
     }
 }
 
-void UNDifficultyStack::AddDifficultiesToState(UNDifficultyState* State)
+void NDifficultyStack::AddDifficultiesToState(NDifficultyState* State)
 {
     for (int32 Index = 0; Index != Difficulties.Num(); ++Index)
     {
-        UNDifficulty* Diff = Difficulties[Index];
-        IDifficultyOperatorWithStack* Operator = Cast<IDifficultyOperatorWithStack>(Diff->GetOperator());
-        if (Operator)
+        INDifficultyInterface* Diff = Difficulties[Index];
+        if (OperatorUtils::IsOperatorWithStack(Diff->GetOperator()))
         {
+            IDifficultyOperatorWithStack* Operator = dynamic_cast<IDifficultyOperatorWithStack*>(Diff->GetOperator());
             Operator->SetStack(this);
             Operator->SetKeyInStack(Index);
         }
@@ -93,15 +99,14 @@ void UNDifficultyStack::AddDifficultiesToState(UNDifficultyState* State)
     }
 }
 
-UNDifficultyState* UNDifficultyStack::GetCurrentState()
+NDifficultyState* NDifficultyStack::GetCurrentState()
 {
-    mycheck(Name != NAME_None);
-    UNDifficultyState* State = NewObject<UNDifficultyState>(this)->Initialize(GetTime());
+    mycheckf(Name != NAME_None, TEXT("Should set a name before calling %s"), ANSI_TO_TCHAR(__FUNCTION__));
+    NDifficultyState* State = new NDifficultyState(GetTime());
     State->bDebug = bDebug;
     // Need to reset it, values should depend on iteration scope
     IterationFlags.Empty();
 
     AddDifficultiesToState(State);
-
     return State;
 }

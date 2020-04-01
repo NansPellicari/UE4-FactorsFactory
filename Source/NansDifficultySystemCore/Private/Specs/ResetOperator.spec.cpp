@@ -22,87 +22,89 @@ public:
     }
 };
 
-class UNMockDifficultyStack : public UNDifficultyStack
+class NMockDifficultyStack : public NDifficultyStack
 {
 public:
-    virtual UNDifficultyState* GetCurrentState() override
+    NMockDifficultyStack(FName _Name) : NDifficultyStack(_Name) {}
+    virtual NDifficultyState* GetCurrentState() override
     {
-        UNDifficultyState* State = NewObject<UNDifficultyState>();
+        NDifficultyState* State = new NDifficultyState(0.f);
         AddDifficultiesToState(State);
         return State;
     }
 };
 
 BEGIN_DEFINE_SPEC(ResetOperatorSpec,
-    "NansDifficultySystem.Core.ResetOperator.Spec",
+    "Nans.DifficultySystem.Core.ResetOperator.Spec",
     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
-UNMockDifficultyStack* DifficultyStack;
+NMockDifficultyStack* DifficultyStack;
 END_DEFINE_SPEC(ResetOperatorSpec) void ResetOperatorSpec::Define()
 {
     Describe("should compute with a reset operator", [this]() {
         BeforeEach([this]() {
-            DifficultyStack = NewObject<UNMockDifficultyStack>();
-            DifficultyStack->Initialize(FName("Mocked stack"));
-            UNDifficulty* Diff1 = NewObject<UNDifficulty>()->Initialize(2, NewObject<UNAddOperator>(), 0, FName("reason1"));
-            UNDifficulty* Diff2 = NewObject<UNDifficulty>()->Initialize(3, NewObject<UNAddOperator>(), 0, FName("reason2"));
+            DifficultyStack = new NMockDifficultyStack(FName("Mocked stack"));
             // // 1 difficulty to be reset
-            DifficultyStack->AddDifficulty(Diff1);
-            DifficultyStack->AddDifficulty(Diff2);
+            DifficultyStack->AddDifficulty(new NDifficulty(2, new NAddOperator(), 0, FName("reason1")));
+            DifficultyStack->AddDifficulty(new NDifficulty(3, new NAddOperator(), 0, FName("reason2")));
+        });
+        It("should check if is an operator with stack or not", [this]() {
+            // Some difficulties to be reset
+            UNMockResetOperator* Operator = new UNMockResetOperator();
+            TEST_FALSE("NNullOperator Is", OperatorUtils::IsOperatorWithStack(new NNullOperator()));
+            TEST_TRUE("UNMockResetOperator Is", OperatorUtils::IsOperatorWithStack(Operator));
         });
 
-        It("should trigger an error if trying to set a key before having a stack", [this]() {
-            // Some difficulties to be reset
-            UNMockResetOperator* Operator = NewObject<UNMockResetOperator>();
-            try
-            {
-                Operator->SetKeyInStack(0);
-                TEST_TRUE("Should not be called", false);
-            }
-            catch (const TCHAR* e)
-            {
-                TEST_EQUAL("Error has been triggered: MyStack != nullptr", e, TEXT("MyStack != nullptr"));
-            }
-        });
+        // It("should trigger an error if trying to set a key before having a stack", [this]() {
+        //     // Some difficulties to be reset
+        //     UNMockResetOperator* Operator = new UNMockResetOperator();
+        //     try
+        //     {
+        //         Operator->SetKeyInStack(0);
+        //         TEST_TRUE("Should not be called", false);
+        //     }
+        //     catch (const TCHAR* e)
+        //     {
+        //         TEST_EQUAL("Error has been triggered: MyStack != nullptr", e, TEXT("MyStack != nullptr"));
+        //     }
+        // });
 
         It("should reset the last difficulty set in the stack", [this]() {
             // Some difficulties to be reset
-            UNMockResetOperator* Operator = NewObject<UNMockResetOperator>();
+            UNMockResetOperator* Operator = new UNMockResetOperator();
 
-            DifficultyStack->AddDifficulty(NewObject<UNDifficulty>()->Initialize(1, Operator, 0, FName("Magic potion")));
+            DifficultyStack->AddDifficulty(new NDifficulty(1, Operator, 0, FName("Magic potion")));
             TEST_EQUAL("Test current state result = 2.f", DifficultyStack->GetCurrentState()->Compute(), 2.f);
             TEST_TRUE("Has a stack", Operator->HasStack());
             TEST_TRUE("Has a key", Operator->GetKeyInStack() > 0);
             TEST_TRUE("Difficulty has the key of the reset difficulty",
                 DifficultyStack->HasFlag(UNMockResetOperator::GetResetIdFlag(DifficultyStack->GetDifficulty(1))));
-            DifficultyStack->Reset();
         });
 
         It("should reset the first difficulty set in the stack", [this]() {
             // Some difficulties to be reset
-            UNMockResetOperator* Operator = NewObject<UNMockResetOperator>();
+            UNMockResetOperator* Operator = new UNMockResetOperator();
 
-            DifficultyStack->AddDifficulty(NewObject<UNDifficulty>()->Initialize(2, Operator, 0, FName("Magic potion")));
+            DifficultyStack->AddDifficulty(new NDifficulty(2, Operator, 0, FName("Magic potion")));
 
             TEST_EQUAL("Test current state result = 3.f", DifficultyStack->GetCurrentState()->Compute(), 3.f);
             TEST_TRUE("Difficulty has the key of the reset difficulty",
                 DifficultyStack->HasFlag(UNMockResetOperator::GetResetIdFlag(DifficultyStack->GetDifficulty(0))));
-            DifficultyStack->Reset();
         });
 
         It("should reset the first and last difficulty set in the stack", [this]() {
             // Some difficulties to be reset
-            UNMockResetOperator* Operator = NewObject<UNMockResetOperator>();
+            UNMockResetOperator* Operator = new UNMockResetOperator();
 
-            DifficultyStack->AddDifficulty(NewObject<UNDifficulty>()->Initialize(1, Operator, 0, FName("Magic potion")));
-            DifficultyStack->AddDifficulty(NewObject<UNDifficulty>()->Initialize(2, Operator, 0, FName("Magic potion")));
+            DifficultyStack->AddDifficulty(new NDifficulty(1, Operator, 0, FName("Magic potion")));
+            DifficultyStack->AddDifficulty(new NDifficulty(2, Operator, 0, FName("Magic potion")));
 
             TEST_EQUAL("Test current state result = 0.f", DifficultyStack->GetCurrentState()->Compute(), 0.f);
             TEST_TRUE("Difficulty has the key of the reset difficulty",
                 DifficultyStack->HasFlag(UNMockResetOperator::GetResetIdFlag(DifficultyStack->GetDifficulty(0))));
             TEST_TRUE("Difficulty has the key of the reset difficulty",
                 DifficultyStack->HasFlag(UNMockResetOperator::GetResetIdFlag(DifficultyStack->GetDifficulty(1))));
-            DifficultyStack->Reset();
         });
+        AfterEach([this]() { delete DifficultyStack; });
     });
 }
 
