@@ -4,15 +4,16 @@
 
 class IDifficultyOperator;
 class INDifficultyInterface;
+class NNullOperator;
 
 struct FNDifficultyStateOperator
 {
-    FNDifficultyStateOperator() {}
+    FNDifficultyStateOperator();
     FNDifficultyStateOperator(const INDifficultyInterface* Difficulty);
 
-    float Value;
-    FName Reason;
-    bool Activate;
+    float Value = 0.f;
+    FName Reason = FName("");
+    bool Activate = true;
     IDifficultyOperator* Operator;
     // TODO create  Serialize method which save Value + Operator class and value
 };
@@ -21,8 +22,9 @@ class NANSDIFFICULTYSYSTEMCORE_API NDifficultyState
 {
 public:
     virtual ~NDifficultyState() {}
+    NDifficultyState() {}
     NDifficultyState(float _Time);
-    void AddDifficulty(const INDifficultyInterface* Difficulty);
+    virtual void AddDifficulty(const INDifficultyInterface* Difficulty);
     float GetTime() const;
     virtual float Compute();
     bool bDebug = false;

@@ -104,6 +104,16 @@ void DifficultySystemClientSpec::Define()
             TEST_EQUAL("And get a result", Client->GetState(Names[0])->Compute(), 400.f);
         });
 
+        It("should remove a stack", [this]() {
+            Client->Reset();
+            TArray<FName> Names = {FName("test1")};
+            Client->CreateStack(Names[0]);
+            TEST_TRUE("Get a not empty stacklist", Client->GetStack().Num() > 0);
+            TEST_TRUE("Get the stack with name", Client->GetStack().Contains(Names[0]));
+            Client->RemoveStack(Names[0]);
+            TEST_TRUE("Get an empty stacklist", Client->GetStack().Num() == 0);
+        });
+
         It("should dispatch time in stack and difficulties", [this]() {
             // TODO implements this test
             TEST_TRUE("Implements this", false);

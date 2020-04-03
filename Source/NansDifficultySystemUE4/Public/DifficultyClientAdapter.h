@@ -17,6 +17,7 @@ class NANSDIFFICULTYSYSTEMUE4_API UNDifficultyClientAdapter : public UObject
 public:
     UNDifficultyClientAdapter(const FObjectInitializer& ObjectInitializer);
     void CreateStack(FName StackName);
+    void RemoveStack(FName StackName);
     NDifficultyState* GetState(FName StackName);
     TArray<NDifficultyState*> GetStates(TArray<FName> StackNames);
     void AddDifficulty(FName StackName, INDifficultyInterface* Difficulty);

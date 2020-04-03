@@ -3,10 +3,12 @@
 #include "CoreMinimal.h"
 #include "NansDifficultySystemCore/Public/DifficultyState.h"
 
-class NANSDIFFICULTYSYSTEMCORE_API UNNullDifficultyState : public NDifficultyState
-{
-    using NDifficultyState::NDifficultyState;
+class INDifficultyInterface;
 
+class NANSDIFFICULTYSYSTEMCORE_API NNullDifficultyState : public NDifficultyState
+{
 public:
+    NNullDifficultyState();
+    virtual void AddDifficulty(const INDifficultyInterface* Difficulty) override;
     virtual float Compute() override;
 };

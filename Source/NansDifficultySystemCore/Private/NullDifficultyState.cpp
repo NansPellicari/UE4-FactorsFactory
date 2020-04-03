@@ -1,7 +1,20 @@
 
 #include "NullDifficultyState.h"
 
-float UNNullDifficultyState::Compute()
+#include "DifficultyInterface.h"
+
+NNullDifficultyState::NNullDifficultyState()
+{
+    NDifficultyState(0.f);
+    Operators.Add(FNDifficultyStateOperator());
+}
+
+float NNullDifficultyState::Compute()
 {
     return 0.f;
+}
+
+void NNullDifficultyState::AddDifficulty(const INDifficultyInterface* Difficulty)
+{
+    return;
 }

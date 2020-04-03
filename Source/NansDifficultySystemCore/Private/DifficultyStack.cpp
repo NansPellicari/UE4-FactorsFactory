@@ -89,9 +89,9 @@ void NDifficultyStack::AddDifficultiesToState(NDifficultyState* State)
     for (int32 Index = 0; Index != Difficulties.Num(); ++Index)
     {
         INDifficultyInterface* Diff = Difficulties[Index];
-        if (OperatorUtils::IsOperatorWithStack(Diff->GetOperator()))
+        IDifficultyOperatorWithStack* Operator = dynamic_cast<IDifficultyOperatorWithStack*>(Diff->GetOperator());
+        if (Operator != nullptr)
         {
-            IDifficultyOperatorWithStack* Operator = dynamic_cast<IDifficultyOperatorWithStack*>(Diff->GetOperator());
             Operator->SetStack(this);
             Operator->SetKeyInStack(Index);
         }

@@ -6,6 +6,14 @@
 #include "NansCommon/Public/Misc/NansAssertionMacros.h"
 #include "NullDifficultyState.h"
 
+void NDifficultySystemClient::RemoveStack(FName StackName)
+{
+    if (myensureMsgf(StacksList.Contains(StackName), TEXT("The stack \"%s\" does not exists"), *StackName.ToString()))
+    {
+        StacksList.Remove(StackName);
+    }
+}
+
 void NDifficultySystemClient::CreateStack(FName StackName)
 {
     if (myensureMsgf(!StacksList.Contains(StackName), TEXT("The stack \"%s\" has been already created"), *StackName.ToString()))
@@ -17,13 +25,12 @@ void NDifficultySystemClient::CreateStack(FName StackName)
 
 NDifficultyState* NDifficultySystemClient::GetState(FName StackName)
 {
-    NDifficultyState* State = new UNNullDifficultyState(0.f);
+    NDifficultyState* State = new NNullDifficultyState();
 
-    if (ensureAlwaysMsgf(
-            StacksList.Contains(StackName), TEXT("The name \"%s\" has not been found in the stack list"), *StackName.ToString()))
+    if (StacksList.Contains(StackName))
     {
         NDifficultyStack* Stack = StacksList[StackName];
-        checkf(Stack != nullptr, TEXT("The stack '%s' existed in the stack list but has been removed"), *StackName.ToString());
+        mycheckf(Stack != nullptr, TEXT("The stack '%s' existed in the stack list but has been removed"), *StackName.ToString());
         State = Stack->GetCurrentState();
     }
 

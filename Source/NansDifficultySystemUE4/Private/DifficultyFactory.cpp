@@ -9,6 +9,7 @@
 #include "NansDifficultySystemCore/Public/Difficulty.h"
 #include "NansDifficultySystemCore/Public/DifficultyInterface.h"
 #include "NansDifficultySystemCore/Public/DifficultyState.h"
+#include "NansDifficultySystemCore/Public/NullDifficultyState.h"
 #include "NansDifficultySystemCore/Public/Operator/DifficultyOperator.h"
 #include "NansDifficultySystemCore/Public/Operator/Interfaces.h"
 
@@ -33,9 +34,11 @@ UNDifficultyClientAdapter* UNDifficultyFactory::GetDifficultyClient(UObject* Wor
     if (!World) return nullptr;
 
     UGameInstance* GI = World->GetGameInstance();
-    INDifficultySystemGameInstance* IGI = Cast<INDifficultySystemGameInstance>(GI);
+    if (!myensureMsgf(GI, TEXT("Should have a game instance to works"))) return nullptr;
 
-    if (myensureMsgf(IGI != nullptr, TEXT("The game instance should implements INDifficultySystemGameInstance to works")))
+    bool bIsImplementedDifficultyGI = GI->Implements<UNDifficultySystemGameInstance>();
+    if (myensureMsgf(
+            bIsImplementedDifficultyGI, TEXT("The game instance should implements INDifficultySystemGameInstance to works")))
     {
         UNDifficultyClientAdapter* Client = INDifficultySystemGameInstance::Execute_GetDifficultySystemClient(GI);
         return Client;
@@ -61,19 +64,33 @@ TMap<FName, FNDifficultyStateResult> UNDifficultyFactory::GetDifficultyStates(UO
     for (FName StackName : StackNames)
     {
         NDifficultyState* State = Client->GetState(StackName);
-        if (State == nullptr) continue;
-
         TArray<FName> Reasons;
+        if (State == nullptr)
+        {
+            State = new NNullDifficultyState();
+        }
+
         const TArray<FNDifficultyStateOperator> Operators = State->GetOperators();
         for (FNDifficultyStateOperator Op : Operators)
         {
             // TODO Should be great to get the number of time the same reason has been added
             Reasons.AddUnique(Op.Reason);
         }
-
         Results.Add(StackName, FNDifficultyStateResult(State->Compute(), Reasons, State->GetTime()));
     }
     return Results;
+}
+
+void UNDifficultyFactory::Clear(UObject* WorldContextObject, TArray<FName> StackNames)
+{
+    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
+
+    if (Client == nullptr) return;
+
+    for (FName StackName : StackNames)
+    {
+        Client->RemoveStack(StackName);
+    }
 }
 
 IDifficultyOperator* UNDifficultyFactory::EnumToOperator(ENDifficultyOperator Enum)

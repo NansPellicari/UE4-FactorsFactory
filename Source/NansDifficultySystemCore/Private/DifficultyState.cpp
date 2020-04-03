@@ -2,10 +2,15 @@
 
 #include "Difficulty.h"
 #include "NansCommon/Public/Misc/NansAssertionMacros.h"
+#include "Operator/DifficultyOperator.h"
 #include "Operator/Interfaces.h"
 
 #include <typeinfo>
 
+FNDifficultyStateOperator::FNDifficultyStateOperator()
+{
+    Operator = new NNullOperator();
+}
 FNDifficultyStateOperator::FNDifficultyStateOperator(const INDifficultyInterface* Difficulty)
 {
     Value = Difficulty->GetDifficultyValue();

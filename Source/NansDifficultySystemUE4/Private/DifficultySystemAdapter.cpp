@@ -13,6 +13,11 @@ void UNDifficultyClientAdapter::CreateStack(FName StackName)
     Client->CreateStack(StackName);
 }
 
+void UNDifficultyClientAdapter::RemoveStack(FName StackName)
+{
+    Client->RemoveStack(StackName);
+}
+
 NDifficultyState* UNDifficultyClientAdapter::GetState(FName StackName)
 {
     return Client->GetState(StackName);
