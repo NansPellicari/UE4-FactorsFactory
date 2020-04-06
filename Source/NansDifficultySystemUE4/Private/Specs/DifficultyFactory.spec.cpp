@@ -1,3 +1,4 @@
+#include "Difficulty/DifficultyAdapters.h"
 #include "DifficultyFactory.h"
 #include "Engine/Engine.h"
 #include "Engine/GameInstance.h"

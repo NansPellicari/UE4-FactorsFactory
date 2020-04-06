@@ -9,7 +9,7 @@
 
 #if WITH_DEV_AUTOMATION_TESTS
 
-class UNMockResetOperator : public UNResetOperator
+class UNMockResetOperator : public NResetOperator
 {
 public:
     uint32 GetKeyInStack()

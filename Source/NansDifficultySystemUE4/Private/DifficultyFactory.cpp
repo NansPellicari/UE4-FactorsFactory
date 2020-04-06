@@ -1,5 +1,6 @@
 #include "DifficultyFactory.h"
 
+#include "Difficulty/DifficultyAdapters.h"
 #include "DifficultyClientAdapter.h"
 #include "DifficultySystemGameInstance.h"
 #include "Engine.h"
@@ -12,6 +13,7 @@
 #include "NansDifficultySystemCore/Public/NullDifficultyState.h"
 #include "NansDifficultySystemCore/Public/Operator/DifficultyOperator.h"
 #include "NansDifficultySystemCore/Public/Operator/Interfaces.h"
+#include "NansDifficultySystemCore/Public/Operator/ResetOperator.h"
 
 void UNDifficultyFactory::AddBasicDifficulty(UObject* WorldContextObject,
     TArray<FName> StackNames,
@@ -24,7 +26,7 @@ void UNDifficultyFactory::AddBasicDifficulty(UObject* WorldContextObject,
 
     if (Client == nullptr) return;
 
-    IDifficultyOperator* OperatorObject = EnumToOperator(Operator);
+    IDifficultyOperator* OperatorObject = UNDifficultyAdapterBasic::EnumToOperator(Operator);
     Client->AddDifficulty(StackNames, new NDifficulty(DifficultyValue, OperatorObject, Duration, Reason));
 }
 
@@ -54,6 +56,32 @@ void UNDifficultyFactory::Debug(UObject* WorldContextObject, const TArray<FName>
     Client->SetDebug(StackNames, Debug);
 }
 
+FNDifficultyStateResult UNDifficultyFactory::GetDifficultyState(FName StackName, UNDifficultyClientAdapter* Client)
+{
+    NDifficultyState* State = Client->GetState(StackName);
+    TArray<FName> Reasons;
+    if (State == nullptr)
+    {
+        State = new NNullDifficultyState();
+    }
+
+    const TArray<FNDifficultyStateOperator> Operators = State->GetOperators();
+    for (FNDifficultyStateOperator Op : Operators)
+    {
+        // TODO Should be great to get the number of time the same reason has been added
+        Reasons.AddUnique(Op.Reason);
+    }
+
+    return FNDifficultyStateResult(State->Compute(), Reasons, State->GetTime());
+}
+FNDifficultyStateResult UNDifficultyFactory::GetDifficultyState(UObject* WorldContextObject, FName StackName)
+{
+    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
+    if (Client == nullptr) return FNDifficultyStateResult();
+
+    return UNDifficultyFactory::GetDifficultyState(StackName, Client);
+}
+
 TMap<FName, FNDifficultyStateResult> UNDifficultyFactory::GetDifficultyStates(UObject* WorldContextObject, TArray<FName> StackNames)
 {
     TMap<FName, FNDifficultyStateResult> Results;
@@ -63,20 +91,7 @@ TMap<FName, FNDifficultyStateResult> UNDifficultyFactory::GetDifficultyStates(UO
 
     for (FName StackName : StackNames)
     {
-        NDifficultyState* State = Client->GetState(StackName);
-        TArray<FName> Reasons;
-        if (State == nullptr)
-        {
-            State = new NNullDifficultyState();
-        }
-
-        const TArray<FNDifficultyStateOperator> Operators = State->GetOperators();
-        for (FNDifficultyStateOperator Op : Operators)
-        {
-            // TODO Should be great to get the number of time the same reason has been added
-            Reasons.AddUnique(Op.Reason);
-        }
-        Results.Add(StackName, FNDifficultyStateResult(State->Compute(), Reasons, State->GetTime()));
+        Results.Add(StackName, UNDifficultyFactory::GetDifficultyState(StackName, Client));
     }
     return Results;
 }
@@ -93,27 +108,8 @@ void UNDifficultyFactory::Clear(UObject* WorldContextObject, TArray<FName> Stack
     }
 }
 
-IDifficultyOperator* UNDifficultyFactory::EnumToOperator(ENDifficultyOperator Enum)
+UNDifficultyAdapterAbstract* UNDifficultyFactory::AddDifficulty(UNDifficultyAdapterAbstract* Difficulty)
 {
-    if (Enum == ENDifficultyOperator::Add)
-    {
-        return new NAddOperator();
-    }
-
-    if (Enum == ENDifficultyOperator::Sub)
-    {
-        return new NSubsctractOperator();
-    }
-
-    if (Enum == ENDifficultyOperator::Mul)
-    {
-        return new NMultiplyOperator();
-    }
-
-    if (Enum == ENDifficultyOperator::Div)
-    {
-        return new NDividerOperator();
-    }
-
-    return new NNullOperator();
+    UE_LOG(LogTemp, Warning, TEXT("Call me baby!!"));
+    return Difficulty;
 }

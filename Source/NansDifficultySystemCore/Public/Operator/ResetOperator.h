@@ -6,7 +6,7 @@
 class INDifficultyInterface;
 class NDifficultyStack;
 
-class NANSDIFFICULTYSYSTEMCORE_API UNResetOperatorBase : public IDifficultyOperator
+class NANSDIFFICULTYSYSTEMCORE_API NResetOperatorBase : public IDifficultyOperator
 {
 public:
     virtual IDifficultyOperator* GetInverse() override;
@@ -14,7 +14,7 @@ public:
 };
 
 // TODO create ResetByReasonOperator ResetWithRangeOperator ResetAllOperator
-class NANSDIFFICULTYSYSTEMCORE_API UNResetOperator : public UNResetOperatorBase, public IDifficultyOperatorWithStack
+class NANSDIFFICULTYSYSTEMCORE_API NResetOperator : public NResetOperatorBase, public IDifficultyOperatorWithStack
 {
 public:
     virtual float Compute(float Lh, float Rh) override;

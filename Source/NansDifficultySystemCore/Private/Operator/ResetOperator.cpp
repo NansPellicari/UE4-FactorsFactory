@@ -7,18 +7,18 @@
 
 #include <typeinfo>
 
-IDifficultyOperator* UNResetOperatorBase::UNResetOperatorBase::GetInverse()
+IDifficultyOperator* NResetOperatorBase::NResetOperatorBase::GetInverse()
 {
     return new NNullOperator();
 }
 
-FString UNResetOperatorBase::GetResetIdFlag(INDifficultyInterface* Difficulty)
+FString NResetOperatorBase::GetResetIdFlag(INDifficultyInterface* Difficulty)
 {
     const FString Prefix = TEXT("Reset_list_");
     return FString::Format(TEXT("{0}{1}"), {Prefix, FString::FromInt(Difficulty->GetUID())});
 }
 
-float UNResetOperator::Compute(float Lh, float Rh)
+float NResetOperator::Compute(float Lh, float Rh)
 {
     uint32 MaxAttempt = 10;
     float NullOperationResult = GetInverse()->Compute(Lh, Rh);
@@ -28,7 +28,7 @@ float UNResetOperator::Compute(float Lh, float Rh)
 
     INDifficultyInterface* ResetDiff = Diff;
     while (MaxAttempt > 0 && (!ResetDiff->IsActivate() || OperatorUtils::IsOperatorWithStack(ResetDiff->GetOperator()) ||
-                                 MyStack->HasFlag(UNResetOperatorBase::GetResetIdFlag(ResetDiff))))
+                                 MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetDiff))))
     {
         int32 ResetKey = KeyInStack - (Rh + (10 - MaxAttempt));
         if (ResetKey < 0) return NullOperationResult;
@@ -41,26 +41,26 @@ float UNResetOperator::Compute(float Lh, float Rh)
         return NullOperationResult;
     }
 
-    if (!MyStack->HasFlag(UNResetOperatorBase::GetResetIdFlag(ResetDiff)) ||
-        !MyStack->GetFlag(UNResetOperatorBase::GetResetIdFlag(ResetDiff)))
+    if (!MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetDiff)) ||
+        !MyStack->GetFlag(NResetOperatorBase::GetResetIdFlag(ResetDiff)))
     {
-        MyStack->SetFlag(UNResetOperatorBase::GetResetIdFlag(ResetDiff), true);
+        MyStack->SetFlag(NResetOperatorBase::GetResetIdFlag(ResetDiff), true);
     }
     return ResetDiff->GetOperator()->GetInverse()->Compute(Lh, ResetDiff->GetDifficultyValue());
 }
 
-IDifficultyOperator* UNResetOperator::GetInverse()
+IDifficultyOperator* NResetOperator::GetInverse()
 {
     return new NNullOperator();
 }
 
-void UNResetOperator::SetKeyInStack(uint32 Key)
+void NResetOperator::SetKeyInStack(uint32 Key)
 {
     mycheck(MyStack != nullptr);
     KeyInStack = Key;
 }
 
-void UNResetOperator::SetStack(NDifficultyStack* Stack)
+void NResetOperator::SetStack(NDifficultyStack* Stack)
 {
     MyStack = Stack;
 }

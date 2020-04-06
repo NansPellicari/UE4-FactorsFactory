@@ -37,10 +37,12 @@ public class NansDifficultySystemUE4 : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore",
-                "UMG",
+                "UnrealEd",
+                "KismetCompiler",
+                "BlueprintGraph",
                 "InputCore",
                 "NansCommon",
-                "NansDifficultySystemCore"
+                "NansDifficultySystemCore",
             }
             );
 
