@@ -59,17 +59,24 @@ void DifficultyFactorySpec::Define()
             CollectGarbage(RF_NoFlags);
         });
 
+        It("should instanciate a UNDifficultyAdapterBasic", [this]() {
+            World->SetGameInstance(GI.Get());
+            WorldContextObject = NewObject<UMockObject>();
+            WorldContextObject->SetMyWorld(World);
+            UNDifficultyAdapterAbstract* MyObject =
+                UNDifficultyFactory::CreateDifficulty(WorldContextObject, UNDifficultyAdapterBasic::StaticClass());
+            TEST_NOT_NULL("Should not be null", MyObject);
+        });
+
         It("should log and error to notify developper if the Game Instance does not implements INDifficultySystemGameInstance",
             [this]() {
-                TArray<FName> Names = {FName("test1")};
                 World->SetGameInstance(DGI.Get());
                 WorldContextObject = NewObject<UMockObject>();
                 WorldContextObject->SetMyWorld(World);
 
                 try
                 {
-                    UNDifficultyFactory::AddBasicDifficulty(
-                        WorldContextObject, Names, 2.f, ENDifficultyOperator::Add, 0, FName("Reason"));
+                    UNDifficultyFactory::CreateDifficulty(WorldContextObject, UNDifficultyAdapterBasic::StaticClass());
                     TEST_TRUE("Should not be called", false);
                 }
                 catch (const TCHAR* e)
@@ -78,6 +85,24 @@ void DifficultyFactorySpec::Define()
                 }
             });
 
+        It("should Create and add a new Difficulty", [this]() {
+            World->SetGameInstance(GI.Get());
+            WorldContextObject = NewObject<UMockObject>();
+            WorldContextObject->SetMyWorld(World);
+            UNDifficultyAdapterBasic* MyObject = Cast<UNDifficultyAdapterBasic>(
+                UNDifficultyFactory::CreateDifficulty(WorldContextObject, UNDifficultyAdapterBasic::StaticClass()));
+            TEST_NOT_NULL("Should not be null", MyObject);
+            MyObject->DifficultyValue = 2.f;
+            MyObject->Duration = 0;
+            MyObject->Reason = FName("Reason");
+            MyObject->Operator = ENDifficultyOperator::Add;
+            MyObject->InStack = FName("test1");
+
+            UNDifficultyAdapterBasic* ObjectAdded =
+                Cast<UNDifficultyAdapterBasic>(UNDifficultyFactory::AddDifficulty(WorldContextObject, MyObject));
+            TEST_EQUAL("Should be add and equals as itself...", ObjectAdded, MyObject);
+        });
+
         It("should get a results even if the asked stack not exists", [this]() {
             World->SetGameInstance(GI.Get());
             WorldContextObject = NewObject<UMockObject>();
@@ -85,7 +110,7 @@ void DifficultyFactorySpec::Define()
             TArray<FName> Names = {FName("Im not existing")};
             TMap<FName, FNDifficultyStateResult> States;
 
-            // An error is throw by the "myensureMsgf" function only in test env
+            // An error is thrown by the "myensureMsgf" function only in test env
             // This global var is used to avoid this behavior.
             GNAssertThrowError = false;
             States = UNDifficultyFactory::GetDifficultyStates(WorldContextObject, Names);
@@ -104,8 +129,15 @@ void DifficultyFactorySpec::Define()
 
             for (uint32 I = 0; I < 200; I++)
             {
-                UNDifficultyFactory::AddBasicDifficulty(
-                    WorldContextObject, Names, 2.f, ENDifficultyOperator::Add, 0, FName("Reason"));
+                UNDifficultyAdapterBasic* MyObject = Cast<UNDifficultyAdapterBasic>(
+                    UNDifficultyFactory::CreateDifficulty(WorldContextObject, UNDifficultyAdapterBasic::StaticClass()));
+                MyObject->DifficultyValue = 2.f;
+                MyObject->Duration = 0;
+                MyObject->Reason = FName("Reason");
+                MyObject->Operator = ENDifficultyOperator::Add;
+                MyObject->InStack = Names[0];
+
+                UNDifficultyFactory::AddDifficulty(WorldContextObject, MyObject);
             }
 
             TEST_TRUE("Yes it can without crashing", true);
@@ -121,65 +153,69 @@ void DifficultyFactorySpec::Define()
             UNDifficultyFactory::Clear(WorldContextObject, Names);
         });
 
-        It("can add a lot of difficulty in one time AND in multiple Stacks", [this]() {
-            World->SetGameInstance(GI.Get());
-            WorldContextObject = NewObject<UMockObject>();
-            WorldContextObject->SetMyWorld(World);
+        // It("can add a lot of difficulty in one time AND in multiple Stacks", [this]() {
+        //     World->SetGameInstance(GI.Get());
+        //     WorldContextObject = NewObject<UMockObject>();
+        //     WorldContextObject->SetMyWorld(World);
 
-            TArray<FName> Names = {FName("test1"), FName("test2")};
+        //     TArray<FName> Names = {FName("test1"), FName("test2")};
 
-            for (uint32 I = 0; I < 200; I++)
-            {
-                UNDifficultyFactory::AddBasicDifficulty(
-                    WorldContextObject, Names, 2.f, ENDifficultyOperator::Add, 0, FName("Reason"));
-            }
+        //     for (uint32 I = 0; I < 200; I++)
+        //     {
+        //         UNDifficultyAdapterBasic* MyObject = Cast<UNDifficultyAdapterBasic>(
+        //             UNDifficultyFactory::CreateDifficulty(WorldContextObject, UNDifficultyAdapterBasic::StaticClass()));
+        //         MyObject->DifficultyValue = 2.f;
+        //         MyObject->Duration = 0;
+        //         MyObject->Reason = FName("Reason");
+        //         MyObject->Operator = ENDifficultyOperator::Add;
+        //         MyObject->InStack = Names[0];
 
-            TEST_TRUE("Yes it can without crashing", true);
-            TMap<FName, FNDifficultyStateResult> States = UNDifficultyFactory::GetDifficultyStates(WorldContextObject, Names);
-            TEST_TRUE("And get some results", States.Num() == 2);
-            TEST_TRUE("And get a result for the stack 'test1'", States.Contains(Names[0]));
-            TEST_TRUE("And get a result for the stack 'test2'", States.Contains(Names[1]));
+        //         UNDifficultyFactory::AddDifficulty(WorldContextObject, MyObject);
+        //     }
 
-            // Just to avoid crashing the test
-            if (States.Contains(Names[0]))
-            {
-                TEST_EQUAL("And get a result", States[Names[0]].Amount, 400.f);
-                TEST_EQUAL("And get a result", States[Names[1]].Amount, 400.f);
-            }
-            UNDifficultyFactory::Clear(WorldContextObject, Names);
-        });
+        //     TEST_TRUE("Yes it can create and add 200 diff without crashing", true);
+        //     TMap<FName, FNDifficultyStateResult> States = UNDifficultyFactory::GetDifficultyStates(WorldContextObject, Names);
+        //     TEST_TRUE("And get some results", States.Num() == 2);
+        //     TEST_TRUE("And get a result for the stack 'test1'", States.Contains(Names[0]));
+        //     TEST_TRUE("And get a result for the stack 'test2'", States.Contains(Names[1]));
 
-        It("Should continue to works after garbage collects", [this]() {
-            World->SetGameInstance(GI.Get());
-            WorldContextObject = NewObject<UMockObject>();
-            WorldContextObject->SetMyWorld(World);
+        //     // Just to avoid crashing the test
+        //     if (States.Contains(Names[0]))
+        //     {
+        //         TEST_EQUAL("And get a result", States[Names[0]].Amount, 400.f);
+        //         TEST_EQUAL("And get a result", States[Names[1]].Amount, 400.f);
+        //     }
+        //     UNDifficultyFactory::Clear(WorldContextObject, Names);
+        // });
 
-            TArray<FName> Names = {FName("test1"), FName("test2")};
+        // It("Should continue to works after garbage collects", [this]() {
+        //     World->SetGameInstance(GI.Get());
+        //     WorldContextObject = NewObject<UMockObject>();
+        //     WorldContextObject->SetMyWorld(World);
 
-            for (uint32 I = 0; I < 2; I++)
-            {
-                UNDifficultyFactory::AddBasicDifficulty(
-                    WorldContextObject, Names, 2.f, ENDifficultyOperator::Add, 0, FName("Reason"));
+        //     TArray<FName> Names = {FName("test1"), FName("test2")};
 
-                if (I == 1)
-                {
-                    CollectGarbage(RF_NoFlags);
-                    WorldContextObject = NewObject<UMockObject>();
-                    WorldContextObject->SetMyWorld(World);
-                }
+        //     for (uint32 I = 0; I < 2; I++)
+        //     {
+        //         UNDifficultyFactory::AddBasicDifficulty(
+        //             WorldContextObject, Names, 2.f, ENDifficultyOperator::Add, 0, FName("Reason"));
 
-                TMap<FName, FNDifficultyStateResult> States = UNDifficultyFactory::GetDifficultyStates(WorldContextObject, Names);
-                UE_LOG(LogTemp, Display, TEXT("Count %d - Stack number  %d"), I, States.Num());
-            }
+        //         if (I == 1)
+        //         {
+        //             CollectGarbage(RF_NoFlags);
+        //             WorldContextObject = NewObject<UMockObject>();
+        //             WorldContextObject->SetMyWorld(World);
+        //         }
 
-            TEST_TRUE("Yes it can without crashing", true);
-            UNDifficultyFactory::Clear(WorldContextObject, Names);
-        });
+        //         TMap<FName, FNDifficultyStateResult> States = UNDifficultyFactory::GetDifficultyStates(WorldContextObject,
+        //         Names); UE_LOG(LogTemp, Display, TEXT("Count %d - Stack number  %d"), I, States.Num());
+        //     }
 
-        AfterEach([this]() {
-            // GEngine->DestroyWorldContext(World.Get());
-            // World->DestroyWorld(false);
-        });
+        //     TEST_TRUE("Yes it can without crashing", true);
+        //     UNDifficultyFactory::Clear(WorldContextObject, Names);
+        // });
+
+        AfterEach([this]() {});
     });
 }
 

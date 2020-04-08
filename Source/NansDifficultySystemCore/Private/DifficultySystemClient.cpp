@@ -62,6 +62,8 @@ void NDifficultySystemClient::AddDifficulty(TArray<FName> StackNames, INDifficul
 
 void NDifficultySystemClient::AddDifficulty(FName StackName, INDifficultyInterface* Difficulty)
 {
+    mycheck(StackName != NAME_None);
+
     if (!StacksList.Contains(StackName))
     {
         CreateStack(StackName);
@@ -88,6 +90,11 @@ void NDifficultySystemClient::SetDebug(const TArray<FName> StackNames, bool bDeb
 {
     for (FName StackName : StackNames)
     {
+        if (!StacksList.Contains(StackName))
+        {
+            CreateStack(StackName);
+        }
+
         if (!ensureMsgf(
                 StacksList.Contains(StackName), TEXT("Can not debug an inexistant stack named \"%s\""), *StackName.ToString()))
             return;

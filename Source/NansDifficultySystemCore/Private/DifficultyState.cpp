@@ -48,9 +48,9 @@ float NDifficultyState::Compute()
         {
             UE_LOG(LogTemp,
                 Warning,
-                TEXT("Compute with Previous value: %f Operator: %s Operation Value: %f results to: %f"),
+                TEXT("Compute with Previous value: %f - Operator: %s - Operation Value: %f - results to: %f"),
                 DifficultyValue,
-                typeid(Operation.Operator).name(),
+                *Operation.Operator->GetName().ToString(),
                 Operation.Value,
                 Value);
         }

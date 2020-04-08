@@ -8,6 +8,7 @@ class IDifficultyOperator
 public:
     virtual float Compute(float Lh, float Rh) = 0;
     virtual IDifficultyOperator* GetInverse() = 0;
+    virtual const FName GetName() = 0;
     virtual void InIteration(NDifficultyStack* Stack) {}
 };
 

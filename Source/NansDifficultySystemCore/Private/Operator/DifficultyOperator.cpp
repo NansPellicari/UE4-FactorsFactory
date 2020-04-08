@@ -1,5 +1,11 @@
 #include "Operator/DifficultyOperator.h"
 
+const FName NNullOperator::Name(TEXT("Null"));
+const FName NAddOperator::Name(TEXT("Add"));
+const FName NSubsctractOperator::Name(TEXT("Subsctract"));
+const FName NMultiplyOperator::Name(TEXT("Multiply"));
+const FName NDividerOperator::Name(TEXT("Divider"));
+
 float NNullOperator::Compute(float Lh, float Rh)
 {
     return Lh;

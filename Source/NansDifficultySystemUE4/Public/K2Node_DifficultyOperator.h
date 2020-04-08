@@ -60,12 +60,21 @@ public:
     static FName ClassPinName;
     /** Object pin name */
     static FName ObjectPinName;
+    /** Outer pin name */
+    static FName OuterPinName;
+
+    bool TryConnectPin(FKismetCompilerContext& CompilerContext, UEdGraphPin* PinA, UEdGraphPin* PinB) const;
 
     /** Finds and returns the class input pin from the current set of pins. */
     UEdGraphPin* FindClassPin() const
     {
-        return FindClassPin(Pins);
+        UEdGraphPin* Pin = FindPinChecked(UK2Node_DifficultyOperator::ClassPinName);
+        check(Pin->Direction == EGPD_Input);
+        return Pin;
     }
+    UEdGraphPin* GetResultPin() const;
+    UEdGraphPin* GetThenPin() const;
+    UEdGraphPin* GetOuterPin() const;
 
     /** Retrieves the current input class type. */
     UClass* GetInputClass() const
@@ -77,6 +86,11 @@ public:
     void ClearDelegates();
 
 protected:
+#if WITH_EDITOR
+    // TODO create a Pin available only in dev mode to switch this
+    bool bDebug = true;
+    void DebugConnectionPin(uint32 Step, const UEdGraphPin* PinA, const UEdGraphPin* PinB, const bool bSucceeded) const;
+#endif
     /**
      * Finds and returns the class input pin.
      *

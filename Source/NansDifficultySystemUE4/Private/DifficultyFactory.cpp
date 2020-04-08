@@ -6,6 +6,7 @@
 #include "Engine.h"
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 #include "NansCommon/Public/Misc/NansAssertionMacros.h"
 #include "NansDifficultySystemCore/Public/Difficulty.h"
 #include "NansDifficultySystemCore/Public/DifficultyInterface.h"
@@ -14,21 +15,6 @@
 #include "NansDifficultySystemCore/Public/Operator/DifficultyOperator.h"
 #include "NansDifficultySystemCore/Public/Operator/Interfaces.h"
 #include "NansDifficultySystemCore/Public/Operator/ResetOperator.h"
-
-void UNDifficultyFactory::AddBasicDifficulty(UObject* WorldContextObject,
-    TArray<FName> StackNames,
-    float DifficultyValue,
-    ENDifficultyOperator Operator,
-    float Duration,
-    FName Reason)
-{
-    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
-
-    if (Client == nullptr) return;
-
-    IDifficultyOperator* OperatorObject = UNDifficultyAdapterBasic::EnumToOperator(Operator);
-    Client->AddDifficulty(StackNames, new NDifficulty(DifficultyValue, OperatorObject, Duration, Reason));
-}
 
 UNDifficultyClientAdapter* UNDifficultyFactory::GetDifficultyClient(UObject* WorldContextObject)
 {
@@ -108,8 +94,20 @@ void UNDifficultyFactory::Clear(UObject* WorldContextObject, TArray<FName> Stack
     }
 }
 
-UNDifficultyAdapterAbstract* UNDifficultyFactory::AddDifficulty(UNDifficultyAdapterAbstract* Difficulty)
+UNDifficultyAdapterAbstract* UNDifficultyFactory::AddDifficulty(
+    UObject* WorldContextObject, UNDifficultyAdapterAbstract* Difficulty)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Call me baby!!"));
+    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
+
+    if (Client == nullptr) return Difficulty;
+
+    Client->AddDifficulty(Difficulty->InStack, Difficulty->GetDifficulty());
+
     return Difficulty;
+}
+
+UNDifficultyAdapterAbstract* UNDifficultyFactory::CreateDifficulty(UObject* WorldContextObject, UClass* Class)
+{
+    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
+    return Cast<UNDifficultyAdapterAbstract>(UGameplayStatics::SpawnObject(Class, Client));
 }

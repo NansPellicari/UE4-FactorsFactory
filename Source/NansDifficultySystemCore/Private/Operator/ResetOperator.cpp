@@ -7,6 +7,8 @@
 
 #include <typeinfo>
 
+const FName NResetOperator::Name(TEXT("Reset"));
+
 IDifficultyOperator* NResetOperatorBase::NResetOperatorBase::GetInverse()
 {
     return new NNullOperator();

@@ -39,14 +39,6 @@ public:
     static FNDifficultyStateResult GetDifficultyState(FName StackName, UNDifficultyClientAdapter* Client);
 
     // clang-format off
-    UFUNCTION(BlueprintCallable, Category = "DifficultySystem|Factory", meta = (WorldContext = "WorldContextObject", UnsafeDuringActorConstruction = "false", Keywords = "DifficultySystem add factory", DisplayName = "Add a basic difficulty"))
-    static void AddBasicDifficulty(UObject* WorldContextObject,
-        const TArray<FName> StackNames,
-        float DifficultyValue,
-        const ENDifficultyOperator Operator,
-        float Duration,
-        FName Reason);
-
     /**
      * My design decision here is to always retrieve a result (0 is a result),
      * even if the desired StackName does not (still) exists.
@@ -68,14 +60,16 @@ public:
     UFUNCTION(BlueprintPure, Category = "DifficultySystem|Factory", meta = (WorldContext = "WorldContextObject", Keywords = "DifficultySystem get state factory", DisplayName = "Get a state of a difficulty"))
     static FNDifficultyStateResult GetDifficultyState(UObject* WorldContextObject, FName StackName);
 
-    UFUNCTION(BlueprintCallable, Category = "DifficultySystem|Factory", meta = (WorldContext = "WorldContextObject", Keywords = "DifficultySystem reset states factory", DisplayName = "clear difficulties"))
+    UFUNCTION(BlueprintCallable, Category = "DifficultySystem|Factory", meta = (WorldContext = "WorldContextObject", Keywords = "DifficultySystem reset states factory", DisplayName = "Clear difficulties"))
     static void Clear(UObject* WorldContextObject, TArray<FName> StackNames);
 
     UFUNCTION(BlueprintCallable, Category = "DifficultySystem|Factory", meta = (DevelopmentOnly, WorldContext = "WorldContextObject", Keywords = "DifficultySystem debug", DisplayName = "Debug Difficulties"))
     static void Debug(UObject* WorldContextObject, const TArray<FName> StackNames, const bool Debug);
 
-    UFUNCTION(meta = (BlueprintInternalUseOnly = "true"), BlueprintCallable, Category = "DifficultySystem|Factory")
-    static UNDifficultyAdapterAbstract* AddDifficulty(UNDifficultyAdapterAbstract* Difficulty);
-    //TODO create a new function to reset a stack
+    UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "DifficultySystem|Factory")
+    static UNDifficultyAdapterAbstract* CreateDifficulty(UObject* WorldContextObject, UClass* Class);
+
+    UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "DifficultySystem|Factory")
+    static UNDifficultyAdapterAbstract* AddDifficulty(UObject* WorldContextObject, UNDifficultyAdapterAbstract* Difficulty);
     // clang-format on
 };

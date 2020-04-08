@@ -21,6 +21,11 @@ public:
     virtual IDifficultyOperator* GetInverse() override;
     virtual void SetStack(NDifficultyStack* Stack) override;
     virtual void SetKeyInStack(uint32 Key) override;
+    static const FName Name;
+    virtual const FName GetName() override
+    {
+        return Name;
+    }
 
 protected:
     NDifficultyStack* MyStack;
