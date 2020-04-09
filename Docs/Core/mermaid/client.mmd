@@ -1,0 +1,36 @@
+classDiagram
+IDifficultySystemGameInstance --> NDifficultySystemClient
+NDifficultySystemClient *-- DiffStackArray
+DiffStackArray <|.. DiffStask1
+DiffStackArray <|.. DiffStask2
+DiffStackArray <|.. DiffStask3
+DiffStackArray <|.. DiffStask4
+DiffStackArray <|.. DiffStask5
+
+class DiffStask1 {
+    &lt;&lt;For Action&gt;&gt;
+}
+class DiffStask2 {
+    &lt;&lt;For Dialog&gt;&gt;
+}
+class DiffStask3 {
+    &lt;&lt;For Alignment CNV&gt;&gt;
+}
+class DiffStask4 {
+    &lt;&lt;For Alignment CSV&gt;&gt;
+}
+class DiffStask5 {
+    &lt;&lt;For Alignment NEUTRAL&gt;&gt;
+}
+
+class IDifficultySystemGameInstance {
+    &lt;&lt;interface&gt;&gt;  &lt;&lt;public&gt;&gt;
+    +GetDifficultySystemClient() NPointSystemClient
+}
+
+class NDifficultySystemClient {
+    &lt;&lt;public&gt;&gt;
+    +CreateStack(FString StackName) void
+    +GetDifficulty(TArray&lt;FString&gt; StackNames) TArray&lt;DifficultyState&gt;
+    +AddDifficulty(TArray&lt;FString&gt; StackNames, Difficulty) void
+}

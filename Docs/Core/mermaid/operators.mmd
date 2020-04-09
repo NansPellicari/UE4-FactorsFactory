@@ -1,0 +1,31 @@
+classDiagram
+
+DifficultyStack "1" *-- "1..*" Difficulty
+Difficulty *-- IOperator
+DifficultyStack --> DifficultyState : generate
+IOperator <|-- IOperatorWithStack
+IOperator <|-- NullOperator
+IOperator <|-- AddOperator
+IOperator <|-- SubtractOperator
+IOperator <|-- MultiplyOperator
+IOperator <|-- DivideOperator
+IOperatorWithStack <|-- ResetOperator
+
+class IOperator {
+    &lt;&lt;interface&gt;&gt;
+    +Compute(Lh, Rh)
+    +GetInverse() IOperator
+}
+
+class IOperatorWithStack {
+    &lt;&lt;interface&gt;&gt;
+    +SetStack(DifficultyStack Stack) void
+    +SetKeyInStack(int32 Key) void
+}
+
+class DifficultyStack {
+    +GetCurrentState() DifficultyState
+    +AddTime(int32 Time)
+    +Get(int32 Key) Difficulty
+    +Add(Difficulty Difficulty)
+}
