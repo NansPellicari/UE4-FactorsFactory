@@ -5,7 +5,7 @@
 ### To get a difficulty system plugins of course!
 
 And here it is! I'm glad you are here and I hope your uses will ease by this documentation.  
-I try to create the most documentation as I can to help you using or extending it for your needs, and if it's not clear enough, send me some feedbacks on my [repo](https://github.com/NansPellicari/UE4-NansDifficultySystem), I'll be glad to help you!  
+I try to create the most documentation as I can to help you using or extending it for your needs, and if it's not clear enough, send me some feedbacks on my [repo](https://github.com/NansPellicari/UE4-NansFactorsFactory), I'll be glad to help you!  
 
 ### To see how to use some Unreal libraries
 
@@ -47,8 +47,8 @@ As a designer and a developper I wanted to:
 | Needs | What is my solution |
 | -- | -- |
 | Create a difficulty in any moment and in every single part of the game (eg. Behavior tree, Blueprint, c++ classes,...) | **1** single **API entry point** saved in the **Game Instance** |
-| Don't have to use my brain too much... | **2 mains blueprints nodes** to manage all of this (**adding & getting**), getting a difficulty always return a value (see my considerations [here](./Source/NansDifficultySystemUE4/Public/DifficultyFactory.h)) |
-| Easily extend it later | Simple architecture in isolated plugins, use a bunch of interfaces (more "as if" interface cause of c++ limitation) and a lot of tests/specs (see below or [code](./Source/NansDifficultySystemCore/Private/Specs/Difficulty.spec.cpp) directly) to avoid regression |
+| Don't have to use my brain too much... | **2 mains blueprints nodes** to manage all of this (**adding & getting**), getting a difficulty always return a value (see my considerations [here](./Source/NansFactorsFactoryUE4/Public/DifficultyFactory.h)) |
+| Easily extend it later | Simple architecture in isolated plugins, use a bunch of interfaces (more "as if" interface cause of c++ limitation) and a lot of tests/specs (see below or [code](./Source/NansFactorsFactoryCore/Private/Specs/Difficulty.spec.cpp) directly) to avoid regression |
 
 ### What is a difficulty?
 
@@ -66,7 +66,7 @@ A difficulty **UNIT** is basically composed of:
 
 | A Reason | A Value | An Operator | A Duration | A Timeline Label |
 | -- | -- | -- | -- | -- |
-| Is the **Why** this difficulty appears (can be used to send feedback to player, to make some stats,...) | **What** amount/degree of difficulty it is  | **How** the value is computed with previous difficulties in the same category (or stack, see below) | Duration of this difficulty applies (it's use [NullOperator](./Source/NansDifficultySystemCore/Private/Operator/DifficultyOperator.cpp) after that) | To indicates on which timeline this difficulty lies on |
+| Is the **Why** this difficulty appears (can be used to send feedback to player, to make some stats,...) | **What** amount/degree of difficulty it is  | **How** the value is computed with previous difficulties in the same category (or stack, see below) | Duration of this difficulty applies (it's use [NullOperator](./Source/NansFactorsFactoryCore/Private/Operator/DifficultyOperator.cpp) after that) | To indicates on which timeline this difficulty lies on |
 | **Using last examples:** |
 | 1. eat rotten fruit | 2 | Add | 300sec | level |
 | 2. drunk | 4 | Multiply | 200sec | level |

@@ -1,4 +1,6 @@
 /Binaries/*
 /Intermediate/*
 /node_modules/*
+/package-lock.json
+/doxygen/
 **~

@@ -1,6 +1,6 @@
 classDiagram
-IDifficultySystemGameInstance --> NDifficultySystemClient
-NDifficultySystemClient *-- DiffStackArray
+IFactorsFactoryGameInstance --> NFactorsFactoryClient
+NFactorsFactoryClient *-- DiffStackArray
 DiffStackArray <|.. DiffStask1
 DiffStackArray <|.. DiffStask2
 DiffStackArray <|.. DiffStask3
@@ -23,12 +23,12 @@ class DiffStask5 {
     &lt;&lt;For Alignment NEUTRAL&gt;&gt;
 }
 
-class IDifficultySystemGameInstance {
+class IFactorsFactoryGameInstance {
     &lt;&lt;interface&gt;&gt;  &lt;&lt;public&gt;&gt;
-    +GetDifficultySystemClient() NPointSystemClient
+    +GetFactorsFactoryClient() NPointSystemClient
 }
 
-class NDifficultySystemClient {
+class NFactorsFactoryClient {
     &lt;&lt;public&gt;&gt;
     +CreateStack(FString StackName) void
     +GetDifficulty(TArray&lt;FString&gt; StackNames) TArray&lt;DifficultyState&gt;

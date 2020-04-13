@@ -1,0 +1,113 @@
+#include "DifficultyFactory.h"
+
+#include "Difficulty/DifficultyAdapters.h"
+#include "DifficultyClientAdapter.h"
+#include "FactorsFactoryGameInstance.h"
+#include "Engine.h"
+#include "Engine/GameInstance.h"
+#include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
+#include "NansFactorsFactoryCore/Public/Difficulty.h"
+#include "NansFactorsFactoryCore/Public/DifficultyInterface.h"
+#include "NansFactorsFactoryCore/Public/DifficultyState.h"
+#include "NansFactorsFactoryCore/Public/NullDifficultyState.h"
+#include "NansFactorsFactoryCore/Public/Operator/DifficultyOperator.h"
+#include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
+#include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
+
+UNDifficultyClientAdapter* UNDifficultyFactory::GetDifficultyClient(UObject* WorldContextObject)
+{
+    UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
+    if (!World) return nullptr;
+
+    UGameInstance* GI = World->GetGameInstance();
+    if (!myensureMsgf(GI, TEXT("Should have a game instance to works"))) return nullptr;
+
+    bool bIsImplementedDifficultyGI = GI->Implements<UNFactorsFactoryGameInstance>();
+    if (myensureMsgf(
+            bIsImplementedDifficultyGI, TEXT("The game instance should implements INFactorsFactoryGameInstance to works")))
+    {
+        UNDifficultyClientAdapter* Client = INFactorsFactoryGameInstance::Execute_GetFactorsFactoryClient(GI);
+        return Client;
+    }
+    return nullptr;
+}
+
+void UNDifficultyFactory::Debug(UObject* WorldContextObject, const TArray<FName> StackNames, const bool Debug)
+{
+    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
+    if (Client == nullptr) return;
+
+    Client->SetDebug(StackNames, Debug);
+}
+
+FNDifficultyStateResult UNDifficultyFactory::GetDifficultyState(FName StackName, UNDifficultyClientAdapter* Client)
+{
+    NDifficultyState* State = Client->GetState(StackName);
+    TArray<FName> Reasons;
+    if (State == nullptr)
+    {
+        State = new NNullDifficultyState();
+    }
+
+    const TArray<FNDifficultyStateOperator> Operators = State->GetOperators();
+    for (FNDifficultyStateOperator Op : Operators)
+    {
+        // TODO Should be great to get the number of time the same reason has been added
+        Reasons.AddUnique(Op.Reason);
+    }
+
+    return FNDifficultyStateResult(State->Compute(), Reasons, State->GetTime());
+}
+FNDifficultyStateResult UNDifficultyFactory::GetDifficultyState(UObject* WorldContextObject, FName StackName)
+{
+    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
+    if (Client == nullptr) return FNDifficultyStateResult();
+
+    return UNDifficultyFactory::GetDifficultyState(StackName, Client);
+}
+
+TMap<FName, FNDifficultyStateResult> UNDifficultyFactory::GetDifficultyStates(UObject* WorldContextObject, TArray<FName> StackNames)
+{
+    TMap<FName, FNDifficultyStateResult> Results;
+    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
+
+    if (Client == nullptr) return Results;
+
+    for (FName StackName : StackNames)
+    {
+        Results.Add(StackName, UNDifficultyFactory::GetDifficultyState(StackName, Client));
+    }
+    return Results;
+}
+
+void UNDifficultyFactory::Clear(UObject* WorldContextObject, TArray<FName> StackNames)
+{
+    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
+
+    if (Client == nullptr) return;
+
+    for (FName StackName : StackNames)
+    {
+        Client->RemoveStack(StackName);
+    }
+}
+
+UNDifficultyAdapterAbstract* UNDifficultyFactory::AddDifficulty(
+    UObject* WorldContextObject, UNDifficultyAdapterAbstract* Difficulty)
+{
+    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
+
+    if (Client == nullptr) return Difficulty;
+
+    Client->AddDifficulty(Difficulty->InStack, Difficulty->GetDifficulty());
+
+    return Difficulty;
+}
+
+UNDifficultyAdapterAbstract* UNDifficultyFactory::CreateDifficulty(UObject* WorldContextObject, UClass* Class)
+{
+    UNDifficultyClientAdapter* Client = GetDifficultyClient(WorldContextObject);
+    return Cast<UNDifficultyAdapterAbstract>(UGameplayStatics::SpawnObject(Class, Client));
+}

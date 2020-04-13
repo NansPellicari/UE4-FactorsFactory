@@ -1,0 +1,51 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "NansFactorsFactory",
+	"Description": "This add some core c++ classes and UE4 to manage difficulties in game",
+	"Category": "Other",
+	"CreatedBy": "Nans Pellicari",
+	"CreatedByURL": "https://github.com/NansPellicari",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "NansFactorsFactoryCore",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "NansFactorsFactoryUE4",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "NansUE4TestsHelpers",
+			"Enabled": true
+		},
+		{
+			"Name": "NansTimelineSystemCore",
+			"Enabled": true
+		},
+		{
+			"Name": "NansTimelineSystemUE4",
+			"Enabled": true
+		},
+		{
+			"Name": "NansCommon",
+			"Enabled": true
+		},
+		{
+			"Name": "NansCoreHelpers",
+			"Enabled": true
+		}
+	]
+}
