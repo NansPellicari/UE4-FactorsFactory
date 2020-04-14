@@ -2,7 +2,7 @@
 
 #include "DifficultyInterface.h"
 #include "DifficultyState.h"
-#include "NansCommon/Public/Misc/NansAssertionMacros.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "Operator/Interfaces.h"
 
 #include <typeinfo>

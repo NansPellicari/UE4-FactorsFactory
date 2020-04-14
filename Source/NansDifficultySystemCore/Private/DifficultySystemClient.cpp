@@ -3,7 +3,7 @@
 #include "DifficultyInterface.h"
 #include "DifficultyStack.h"
 #include "DifficultyState.h"
-#include "NansCommon/Public/Misc/NansAssertionMacros.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NullDifficultyState.h"
 
 void NDifficultySystemClient::RemoveStack(FName StackName)

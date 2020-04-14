@@ -4,8 +4,8 @@
 #include "Engine/GameInstance.h"
 #include "EngineGlobals.h"
 #include "Misc/AutomationTest.h"
-#include "NansCommon/Public/Misc/NansAssertionMacros.h"
 #include "NansCommon/Public/Specs/NansCommonHelpers.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansDifficultySystemCore/Public/DifficultySystemClient.h"
 #include "Specs/Mocks/MockEngineAndWorld.h"
 

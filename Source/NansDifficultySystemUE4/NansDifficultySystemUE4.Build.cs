@@ -7,6 +7,11 @@ public class NansDifficultySystemUE4 : ModuleRules
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
+        // TODO remove this when all CORE tests are made with GG tests
+        // This to allow dynamic_cast
+        // https://answers.unrealengine.com/questions/477792/how-do-i-cast-between-polymorphic-classes-that-don.html?sort=oldest
+        bUseRTTI = true;
+
         PublicDependencyModuleNames.AddRange(
             new string[]
             {

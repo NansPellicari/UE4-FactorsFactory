@@ -2,7 +2,7 @@
 
 #include "Difficulty.h"
 #include "DifficultyStack.h"
-#include "NansCommon/Public/Misc/NansAssertionMacros.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "Operator/DifficultyOperator.h"
 
 #include <typeinfo>

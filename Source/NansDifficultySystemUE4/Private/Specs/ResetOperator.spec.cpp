@@ -1,11 +1,11 @@
-#include "Difficulty.h"
-#include "DifficultyStack.h"
-#include "DifficultyState.h"
 #include "Misc/AutomationTest.h"
 #include "NansCommon/Public/Specs/NansCommonHelpers.h"
-#include "Operator/DifficultyOperator.h"
-#include "Operator/Interfaces.h"
-#include "Operator/ResetOperator.h"
+#include "NansDifficultySystemCore/Public/Difficulty.h"
+#include "NansDifficultySystemCore/Public/DifficultyStack.h"
+#include "NansDifficultySystemCore/Public/DifficultyState.h"
+#include "NansDifficultySystemCore/Public/Operator/DifficultyOperator.h"
+#include "NansDifficultySystemCore/Public/Operator/Interfaces.h"
+#include "NansDifficultySystemCore/Public/Operator/ResetOperator.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 

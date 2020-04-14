@@ -1,9 +1,9 @@
-#include "DifficultySystemClient.h"
 #include "Misc/AutomationTest.h"
 #include "NansCommon/Public/Specs/NansCommonHelpers.h"
 #include "NansDifficultySystemCore/Public/Difficulty.h"
 #include "NansDifficultySystemCore/Public/DifficultyStack.h"
 #include "NansDifficultySystemCore/Public/DifficultyState.h"
+#include "NansDifficultySystemCore/Public/DifficultySystemClient.h"
 #include "NansDifficultySystemCore/Public/Operator/DifficultyOperator.h"
 #include "NullDifficultyState.h"
 

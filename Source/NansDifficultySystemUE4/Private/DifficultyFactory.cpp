@@ -7,7 +7,7 @@
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
-#include "NansCommon/Public/Misc/NansAssertionMacros.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansDifficultySystemCore/Public/Difficulty.h"
 #include "NansDifficultySystemCore/Public/DifficultyInterface.h"
 #include "NansDifficultySystemCore/Public/DifficultyState.h"

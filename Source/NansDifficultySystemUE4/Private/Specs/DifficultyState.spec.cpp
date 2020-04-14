@@ -1,9 +1,9 @@
-#include "Difficulty.h"
-#include "DifficultyState.h"
 #include "Misc/AutomationTest.h"
 #include "NansCommon/Public/Specs/NansCommonHelpers.h"
-#include "Operator/DifficultyOperator.h"
-#include "Operator/Interfaces.h"
+#include "NansDifficultySystemCore/Public/Difficulty.h"
+#include "NansDifficultySystemCore/Public/DifficultyState.h"
+#include "NansDifficultySystemCore/Public/Operator/DifficultyOperator.h"
+#include "NansDifficultySystemCore/Public/Operator/Interfaces.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 

@@ -1,6 +1,6 @@
 #include "Difficulty.h"
 
-#include "NansCommon/Public/Misc/NansAssertionMacros.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "Operator/DifficultyOperator.h"
 #include "Operator/Interfaces.h"
 
