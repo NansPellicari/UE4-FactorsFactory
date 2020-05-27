@@ -1,10 +1,9 @@
-# Difficulty system
+# Factor system
 
-## Stack, difficulty, operators
+## Stack, factor, operators
 
 ![Client](./mermaid/operators.png)
 
 ## API
 
 ![Client](./mermaid/client.png)
-

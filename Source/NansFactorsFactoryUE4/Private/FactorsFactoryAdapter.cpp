@@ -1,49 +1,49 @@
-#include "DifficultyClientAdapter.h"
-#include "NansFactorsFactoryCore/Public/DifficultyInterface.h"
-#include "NansFactorsFactoryCore/Public/DifficultyState.h"
+#include "FactorClientAdapter.h"
+#include "NansFactorsFactoryCore/Public/FactorInterface.h"
+#include "NansFactorsFactoryCore/Public/FactorState.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
 
-UNDifficultyClientAdapter::UNDifficultyClientAdapter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+UNFactorClientAdapter::UNFactorClientAdapter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
     Client = MakeShareable(new NFactorsFactoryClient());
 }
 
-void UNDifficultyClientAdapter::CreateStack(FName StackName)
+void UNFactorClientAdapter::CreateStack(FName StackName)
 {
     Client->CreateStack(StackName);
 }
 
-void UNDifficultyClientAdapter::RemoveStack(FName StackName)
+void UNFactorClientAdapter::RemoveStack(FName StackName)
 {
     Client->RemoveStack(StackName);
 }
 
-NDifficultyState* UNDifficultyClientAdapter::GetState(FName StackName)
+NFactorState* UNFactorClientAdapter::GetState(FName StackName)
 {
     return Client->GetState(StackName);
 }
 
-TArray<NDifficultyState*> UNDifficultyClientAdapter::GetStates(TArray<FName> StackNames)
+TArray<NFactorState*> UNFactorClientAdapter::GetStates(TArray<FName> StackNames)
 {
     return Client->GetStates(StackNames);
 }
 
-void UNDifficultyClientAdapter::AddDifficulty(FName StackName, INDifficultyInterface* Difficulty)
+void UNFactorClientAdapter::AddFactor(FName StackName, INFactorInterface* Factor)
 {
-    Client->AddDifficulty(StackName, Difficulty);
+    Client->AddFactor(StackName, Factor);
 }
 
-void UNDifficultyClientAdapter::AddTime(float Seconds)
+void UNFactorClientAdapter::AddTime(float Seconds)
 {
     Client->AddTime(Seconds);
 }
 
-void UNDifficultyClientAdapter::SetDebug(const TArray<FName> StackNames, bool bDebug)
+void UNFactorClientAdapter::SetDebug(const TArray<FName> StackNames, bool bDebug)
 {
     Client->SetDebug(StackNames, bDebug);
 }
 
-void UNDifficultyClientAdapter::AddDifficulty(TArray<FName> StackNames, INDifficultyInterface* Difficulty)
+void UNFactorClientAdapter::AddFactor(TArray<FName> StackNames, INFactorInterface* Factor)
 {
-    Client->AddDifficulty(StackNames, Difficulty);
+    Client->AddFactor(StackNames, Factor);
 }

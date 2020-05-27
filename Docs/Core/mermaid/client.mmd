@@ -1,25 +1,25 @@
 classDiagram
 IFactorsFactoryGameInstance --> NFactorsFactoryClient
-NFactorsFactoryClient *-- DiffStackArray
-DiffStackArray <|.. DiffStask1
-DiffStackArray <|.. DiffStask2
-DiffStackArray <|.. DiffStask3
-DiffStackArray <|.. DiffStask4
-DiffStackArray <|.. DiffStask5
+NFactorsFactoryClient *-- FactorStackArray
+FactorStackArray <|.. FactorStask1
+FactorStackArray <|.. FactorStask2
+FactorStackArray <|.. FactorStask3
+FactorStackArray <|.. FactorStask4
+FactorStackArray <|.. FactorStask5
 
-class DiffStask1 {
+class FactorStask1 {
     &lt;&lt;For Action&gt;&gt;
 }
-class DiffStask2 {
+class FactorStask2 {
     &lt;&lt;For Dialog&gt;&gt;
 }
-class DiffStask3 {
+class FactorStask3 {
     &lt;&lt;For Alignment CNV&gt;&gt;
 }
-class DiffStask4 {
+class FactorStask4 {
     &lt;&lt;For Alignment CSV&gt;&gt;
 }
-class DiffStask5 {
+class FactorStask5 {
     &lt;&lt;For Alignment NEUTRAL&gt;&gt;
 }
 
@@ -31,6 +31,6 @@ class IFactorsFactoryGameInstance {
 class NFactorsFactoryClient {
     &lt;&lt;public&gt;&gt;
     +CreateStack(FString StackName) void
-    +GetDifficulty(TArray&lt;FString&gt; StackNames) TArray&lt;DifficultyState&gt;
-    +AddDifficulty(TArray&lt;FString&gt; StackNames, Difficulty) void
+    +GetFactor(TArray&lt;FString&gt; StackNames) TArray&lt;FactorState&gt;
+    +AddFactor(TArray&lt;FString&gt; StackNames, Factor) void
 }

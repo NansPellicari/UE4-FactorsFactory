@@ -6,7 +6,7 @@
 #include "CoreMinimal.h"
 #include "K2Node.h"
 
-#include "K2Node_DifficultyOperator.generated.h"
+#include "K2Node_FactorOperator.generated.h"
 
 class FBlueprintActionDatabaseRegistrar;
 
@@ -14,7 +14,7 @@ class FBlueprintActionDatabaseRegistrar;
  *
  */
 UCLASS()
-class NANSFACTORSFACTORYUE4_API UK2Node_DifficultyOperator : public UK2Node
+class NANSFACTORSFACTORYUE4_API UK2Node_FactorOperator : public UK2Node
 {
     GENERATED_BODY()
 
@@ -68,7 +68,7 @@ public:
     /** Finds and returns the class input pin from the current set of pins. */
     UEdGraphPin* FindClassPin() const
     {
-        UEdGraphPin* Pin = FindPinChecked(UK2Node_DifficultyOperator::ClassPinName);
+        UEdGraphPin* Pin = FindPinChecked(UK2Node_FactorOperator::ClassPinName);
         check(Pin->Direction == EGPD_Input);
         return Pin;
     }

@@ -1,20 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "K2Node_DifficultyOperator.h"
+#include "K2Node_FactorOperator.h"
 
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
-#include "Difficulty/DifficultyAdapterAbstract.h"
-#include "DifficultyFactory.h"
 #include "EdGraph/EdGraphSchema.h"
 #include "EdGraphSchema_K2.h"
 #include "EdGraphUtilities.h"
 #include "EditorCategoryUtils.h"
 #include "Engine/Blueprint.h"
 #include "Engine/BlueprintGeneratedClass.h"
+#include "Factor/FactorAdapterAbstract.h"
+#include "FactorFactory.h"
 #include "GraphEditorActions.h"
 #include "K2Node_CallFunction.h"
-#include "K2Node_DifficultyOperator.h"
+#include "K2Node_FactorOperator.h"
 #include "K2Node_GenericCreateObject.h"
 #include "K2Node_PureAssignmentStatement.h"
 #include "K2Node_TemporaryVariable.h"
@@ -30,9 +30,9 @@
 namespace
 {
     // Optional pin manager subclass.
-    struct FDifficultyOperatorOptionalPinManager : public FOptionalPinManager
+    struct FFactorOperatorOptionalPinManager : public FOptionalPinManager
     {
-        FDifficultyOperatorOptionalPinManager(UClass* InClass, bool bExcludeObjectContainers) : FOptionalPinManager()
+        FFactorOperatorOptionalPinManager(UClass* InClass, bool bExcludeObjectContainers) : FOptionalPinManager()
         {
             SrcClass = InClass;
             bExcludeObjectArrayProperties = bExcludeObjectContainers;
@@ -43,9 +43,9 @@ namespace
         {
             FOptionalPinManager::GetRecordDefaults(TestProperty, Record);
 
-            // Show pin which the property is owned by the src class or UNDifficultyAdapterAbstract class.
+            // Show pin which the property is owned by the src class or UNFactorAdapterAbstract class.
             Record.bShowPin = TestProperty->GetOwnerClass() == SrcClass ||
-                              TestProperty->GetOwnerClass() == UNDifficultyAdapterAbstract::StaticClass();
+                              TestProperty->GetOwnerClass() == UNFactorAdapterAbstract::StaticClass();
             Record.bShowPin = !TestProperty->HasAnyPropertyFlags(CPF_DisableEditOnInstance);
         }
 
@@ -61,16 +61,16 @@ namespace
     };
 
     // Compilation handler subclass.
-    class FKCHandler_DifficultyOperator : public FNodeHandlingFunctor
+    class FKCHandler_FactorOperator : public FNodeHandlingFunctor
     {
     public:
-        FKCHandler_DifficultyOperator(FKismetCompilerContext& InCompilerContext) : FNodeHandlingFunctor(InCompilerContext) {}
+        FKCHandler_FactorOperator(FKismetCompilerContext& InCompilerContext) : FNodeHandlingFunctor(InCompilerContext) {}
 
         //     virtual void RegisterNets(FKismetFunctionContext& Context, UEdGraphNode* Node) override
         //     {
         //         UE_LOG(LogTemp, Display, TEXT("*********** Calling %s"), ANSI_TO_TCHAR(__FUNCTION__));
         //         // Cast to the correct node type
-        //         if (const UK2Node_DifficultyOperator* GetClassDefaultsNode = Cast<UK2Node_DifficultyOperator>(Node))
+        //         if (const UK2Node_FactorOperator* GetClassDefaultsNode = Cast<UK2Node_FactorOperator>(Node))
         //         {
         //             // Only if we have a valid class input pin
         //             if (UEdGraphPin* ClassPin = GetClassDefaultsNode->FindClassPin())
@@ -117,7 +117,7 @@ namespace
         //                             UEdGraphPin* Pin = Node->Pins[PinIndex];
         //                             if (Pin != nullptr && Pin->Direction == EGPD_Input &&
         //                                 Pin->PinType.PinCategory != UEdGraphSchema_K2::PC_Exec &&
-        //                                 Pin->PinName != UK2Node_DifficultyOperator::ClassPinName)
+        //                                 Pin->PinName != UK2Node_FactorOperator::ClassPinName)
         //                             {
         //                                 UProperty* BoundProperty = FindField<UProperty>(ClassType, Pin->PinName);
         //                                 if (BoundProperty != nullptr)
@@ -160,27 +160,26 @@ namespace
     };
 }    // namespace
 
-FName UK2Node_DifficultyOperator::ClassPinName(TEXT("DifficultyClass"));
-FName UK2Node_DifficultyOperator::OuterPinName(TEXT("Outer"));
-FName UK2Node_DifficultyOperator::ObjectPinName(TEXT("DifficultyObject"));
+FName UK2Node_FactorOperator::ClassPinName(TEXT("FactorClass"));
+FName UK2Node_FactorOperator::OuterPinName(TEXT("Outer"));
+FName UK2Node_FactorOperator::ObjectPinName(TEXT("FactorObject"));
 
-FText UK2Node_DifficultyOperator::GetNodeTitle(ENodeTitleType::Type TitleType) const
+FText UK2Node_FactorOperator::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
-    return LOCTEXT("DifficultyOperatorFactory_Title", "Create a Difficulty");
+    return LOCTEXT("FactorOperatorFactory_Title", "Create a Factor");
 }
 
-FText UK2Node_DifficultyOperator::GetTooltipText() const
+FText UK2Node_FactorOperator::GetTooltipText() const
 {
-    return LOCTEXT(
-        "DifficultyOperatorFactory_Tooltip", "This node allow to create any difficulty and add it to a new difficulty stack");
+    return LOCTEXT("FactorOperatorFactory_Tooltip", "This node allow to create any factor and add it to a new factor stack");
 }
 
-FText UK2Node_DifficultyOperator::GetMenuCategory() const
+FText UK2Node_FactorOperator::GetMenuCategory() const
 {
-    return LOCTEXT("DifficultyOperatorFactory_MenuCategory", "FactorsFactory|Factory");
+    return LOCTEXT("FactorOperatorFactory_MenuCategory", "FactorsFactory|Factory");
 }
 
-void UK2Node_DifficultyOperator::PreEditChange(UProperty* PropertyThatWillChange)
+void UK2Node_FactorOperator::PreEditChange(UProperty* PropertyThatWillChange)
 {
     Super::PreEditChange(PropertyThatWillChange);
 
@@ -190,28 +189,28 @@ void UK2Node_DifficultyOperator::PreEditChange(UProperty* PropertyThatWillChange
     }
 }
 
-UEdGraphPin* UK2Node_DifficultyOperator::GetOuterPin() const
+UEdGraphPin* UK2Node_FactorOperator::GetOuterPin() const
 {
-    UEdGraphPin* Pin = FindPin(UK2Node_DifficultyOperator::OuterPinName);
+    UEdGraphPin* Pin = FindPin(UK2Node_FactorOperator::OuterPinName);
     ensure(nullptr == Pin || Pin->Direction == EGPD_Input);
     return Pin;
 }
 
-UEdGraphPin* UK2Node_DifficultyOperator::GetResultPin() const
+UEdGraphPin* UK2Node_FactorOperator::GetResultPin() const
 {
     UEdGraphPin* Pin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
     check(Pin->Direction == EGPD_Output);
     return Pin;
 }
 
-UEdGraphPin* UK2Node_DifficultyOperator::GetThenPin() const
+UEdGraphPin* UK2Node_FactorOperator::GetThenPin() const
 {
     UEdGraphPin* Pin = FindPinChecked(UEdGraphSchema_K2::PN_Then);
     check(Pin->Direction == EGPD_Output);
     return Pin;
 }
 
-void UK2Node_DifficultyOperator::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
+void UK2Node_FactorOperator::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
 {
     UClass* ActionKey = GetClass();
     if (ActionRegistrar.IsOpenForRegistration(ActionKey))
@@ -223,7 +222,7 @@ void UK2Node_DifficultyOperator::GetMenuActions(FBlueprintActionDatabaseRegistra
     }
 }
 
-UEdGraphPin* UK2Node_DifficultyOperator::FindClassPin(const TArray<UEdGraphPin*>& FromPins) const
+UEdGraphPin* UK2Node_FactorOperator::FindClassPin(const TArray<UEdGraphPin*>& FromPins) const
 {
     UEdGraphPin* const* FoundPin = FromPins.FindByPredicate(
         [](const UEdGraphPin* CurPin) { return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == ClassPinName; });
@@ -231,7 +230,7 @@ UEdGraphPin* UK2Node_DifficultyOperator::FindClassPin(const TArray<UEdGraphPin*>
     return FoundPin ? *FoundPin : nullptr;
 }
 
-UClass* UK2Node_DifficultyOperator::GetInputClass(const UEdGraphPin* FromPin) const
+UClass* UK2Node_FactorOperator::GetInputClass(const UEdGraphPin* FromPin) const
 {
     UClass* InputClass = nullptr;
 
@@ -270,7 +269,7 @@ UClass* UK2Node_DifficultyOperator::GetInputClass(const UEdGraphPin* FromPin) co
     return InputClass;
 }
 
-void UK2Node_DifficultyOperator::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+void UK2Node_FactorOperator::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
     const FName PropertyName = (PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None);
 
@@ -283,7 +282,7 @@ void UK2Node_DifficultyOperator::PostEditChangeProperty(FPropertyChangedEvent& P
     Super::PostEditChangeProperty(PropertyChangedEvent);
 }
 
-void UK2Node_DifficultyOperator::PostPlacedNewNode()
+void UK2Node_FactorOperator::PostPlacedNewNode()
 {
     // Always exclude object container properties for new nodes.
     // @TODO - Could potentially expose object reference values if/when we have support for 'const' input pins.
@@ -298,7 +297,7 @@ void UK2Node_DifficultyOperator::PostPlacedNewNode()
     }
 }
 
-void UK2Node_DifficultyOperator::PinConnectionListChanged(UEdGraphPin* ChangedPin)
+void UK2Node_FactorOperator::PinConnectionListChanged(UEdGraphPin* ChangedPin)
 {
     if (ChangedPin != nullptr && ChangedPin->PinName == ClassPinName && ChangedPin->Direction == EGPD_Input)
     {
@@ -306,7 +305,7 @@ void UK2Node_DifficultyOperator::PinConnectionListChanged(UEdGraphPin* ChangedPi
     }
 }
 
-void UK2Node_DifficultyOperator::PinDefaultValueChanged(UEdGraphPin* ChangedPin)
+void UK2Node_FactorOperator::PinDefaultValueChanged(UEdGraphPin* ChangedPin)
 {
     if (ChangedPin != nullptr && ChangedPin->PinName == ClassPinName && ChangedPin->Direction == EGPD_Input)
     {
@@ -314,7 +313,7 @@ void UK2Node_DifficultyOperator::PinDefaultValueChanged(UEdGraphPin* ChangedPin)
     }
 }
 
-bool UK2Node_DifficultyOperator::HasExternalDependencies(TArray<class UStruct*>* OptionalOutput) const
+bool UK2Node_FactorOperator::HasExternalDependencies(TArray<class UStruct*>* OptionalOutput) const
 {
 #if WITH_EDITOR
     UE_LOG(LogTemp, Display, TEXT(">>>>>>>> %s >>>>>>>>"), ANSI_TO_TCHAR(__FUNCTION__));
@@ -332,12 +331,12 @@ bool UK2Node_DifficultyOperator::HasExternalDependencies(TArray<class UStruct*>*
     return bSuperResult || bResult;
 }
 
-FNodeHandlingFunctor* UK2Node_DifficultyOperator::CreateNodeHandler(FKismetCompilerContext& CompilerContext) const
+FNodeHandlingFunctor* UK2Node_FactorOperator::CreateNodeHandler(FKismetCompilerContext& CompilerContext) const
 {
-    return new FKCHandler_DifficultyOperator(CompilerContext);
+    return new FKCHandler_FactorOperator(CompilerContext);
 }
 
-void UK2Node_DifficultyOperator::AllocateDefaultPins()
+void UK2Node_FactorOperator::AllocateDefaultPins()
 {
     const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
 
@@ -347,17 +346,16 @@ void UK2Node_DifficultyOperator::AllocateDefaultPins()
 
     // Create the class input type selector pin
     UEdGraphPin* ClassPin =
-        CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Class, UNDifficultyAdapterAbstract::StaticClass(), ClassPinName);
+        CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Class, UNFactorAdapterAbstract::StaticClass(), ClassPinName);
     K2Schema->ConstructBasicPinTooltip(*ClassPin,
         LOCTEXT("ClassPinDescription", "The class from which to access one or more default values."),
         ClassPin->PinToolTip);
 
-    CreatePin(
-        EGPD_Output, UEdGraphSchema_K2::PC_Object, UNDifficultyAdapterAbstract::StaticClass(), UEdGraphSchema_K2::PN_ReturnValue);
+    CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, UNFactorAdapterAbstract::StaticClass(), UEdGraphSchema_K2::PN_ReturnValue);
 }
 
 #if WITH_EDITOR
-void UK2Node_DifficultyOperator::DebugConnectionPin(
+void UK2Node_FactorOperator::DebugConnectionPin(
     uint32 Step, const UEdGraphPin* PinA, const UEdGraphPin* PinB, const bool bSucceeded) const
 {
     if (bDebug)
@@ -375,7 +373,7 @@ void UK2Node_DifficultyOperator::DebugConnectionPin(
 }
 #endif    // WITH_EDITOR
 
-void UK2Node_DifficultyOperator::ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
+void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
 {
     Super::ExpandNode(CompilerContext, SourceGraph);
 
@@ -383,7 +381,7 @@ void UK2Node_DifficultyOperator::ExpandNode(class FKismetCompilerContext& Compil
 
     UClass* ClassType = GetInputClass();
 
-    UK2Node_DifficultyOperator* Node = this;
+    UK2Node_FactorOperator* Node = this;
     UEdGraphPin* ClassPin = FindClassPin();
 
 #if WITH_EDITOR
@@ -393,7 +391,7 @@ void UK2Node_DifficultyOperator::ExpandNode(class FKismetCompilerContext& Compil
     if (!(ClassType || ClassPin->LinkedTo.Num() > 0) || ClassType->HasAnyClassFlags(EClassFlags::CLASS_Abstract))
     {
         CompilerContext.MessageLog.Error(
-            *LOCTEXT("DifficultyOperator_Error", "DifficultyOperator node @@ must have a @@ specified in @@").ToString(),
+            *LOCTEXT("FactorOperator_Error", "FactorOperator node @@ must have a @@ specified in @@").ToString(),
             *Node->GetName(),
             *ClassPin->GetName(),
             this);
@@ -405,7 +403,7 @@ void UK2Node_DifficultyOperator::ExpandNode(class FKismetCompilerContext& Compil
 
     UK2Node_CallFunction* CallCreateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
     CallCreateNode->FunctionReference.SetExternalMember(
-        GET_FUNCTION_NAME_CHECKED(UNDifficultyFactory, CreateDifficulty), UNDifficultyFactory::StaticClass());
+        GET_FUNCTION_NAME_CHECKED(UNFactorFactory, CreateFactor), UNFactorFactory::StaticClass());
     CallCreateNode->AllocateDefaultPins();
 
     CompilerContext.MessageLog.NotifyIntermediateObjectCreation(CallCreateNode, this);
@@ -570,48 +568,48 @@ void UK2Node_DifficultyOperator::ExpandNode(class FKismetCompilerContext& Compil
     }
 
 #if WITH_EDITOR
-    if (bDebug) UE_LOG(LogTemp, Display, TEXT("> AddDifficultyNode "));
+    if (bDebug) UE_LOG(LogTemp, Display, TEXT("> AddFactorNode "));
 #endif
 
-    UK2Node_CallFunction* CallAddDifficultyNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
-    CallAddDifficultyNode->FunctionReference.SetExternalMember(
-        GET_FUNCTION_NAME_CHECKED(UNDifficultyFactory, AddDifficulty), UNDifficultyFactory::StaticClass());
-    CallAddDifficultyNode->AllocateDefaultPins();
-    CompilerContext.MessageLog.NotifyIntermediateObjectCreation(CallAddDifficultyNode, this);
+    UK2Node_CallFunction* CallAddFactorNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
+    CallAddFactorNode->FunctionReference.SetExternalMember(
+        GET_FUNCTION_NAME_CHECKED(UNFactorFactory, AddFactor), UNFactorFactory::StaticClass());
+    CallAddFactorNode->AllocateDefaultPins();
+    CompilerContext.MessageLog.NotifyIntermediateObjectCreation(CallAddFactorNode, this);
 
     // Move pin values from this node to the function library
-    UEdGraphPin* CallAddDifficultyPin = CallAddDifficultyNode->FindPin(TEXT("Difficulty"));
-    bSucceeded &= CompilerContext.GetSchema()->TryCreateConnection(CallResultPin, CallAddDifficultyPin);
+    UEdGraphPin* CallAddFactorPin = CallAddFactorNode->FindPin(TEXT("Factor"));
+    bSucceeded &= CompilerContext.GetSchema()->TryCreateConnection(CallResultPin, CallAddFactorPin);
 
 #if WITH_EDITOR
-    DebugConnectionPin(1, CallResultPin, CallAddDifficultyPin, bSucceeded);
+    DebugConnectionPin(1, CallResultPin, CallAddFactorPin, bSucceeded);
 #endif
 
-    bSucceeded &= CallAddDifficultyNode->GetThenPin() && LastThen &&
-                  CompilerContext.MovePinLinksToIntermediate(*LastThen, *CallAddDifficultyNode->GetThenPin()).CanSafeConnect();
+    bSucceeded &= CallAddFactorNode->GetThenPin() && LastThen &&
+                  CompilerContext.MovePinLinksToIntermediate(*LastThen, *CallAddFactorNode->GetThenPin()).CanSafeConnect();
 
 #if WITH_EDITOR
-    DebugConnectionPin(2, LastThen, CallAddDifficultyNode->GetThenPin(), bSucceeded);
+    DebugConnectionPin(2, LastThen, CallAddFactorNode->GetThenPin(), bSucceeded);
 #endif
 
-    bSucceeded &= CompilerContext.GetSchema()->TryCreateConnection(LastThen, CallAddDifficultyNode->GetExecPin());
+    bSucceeded &= CompilerContext.GetSchema()->TryCreateConnection(LastThen, CallAddFactorNode->GetExecPin());
 
 #if WITH_EDITOR
-    DebugConnectionPin(2, LastThen, CallAddDifficultyNode->GetExecPin(), bSucceeded);
+    DebugConnectionPin(2, LastThen, CallAddFactorNode->GetExecPin(), bSucceeded);
 #endif
 
     BreakAllNodeLinks();
 
     if (!bSucceeded)
     {
-        CompilerContext.MessageLog.Error(*LOCTEXT("DifficultyOperator_Error", "DifficultyOperator error @@").ToString(), this);
+        CompilerContext.MessageLog.Error(*LOCTEXT("FactorOperator_Error", "FactorOperator error @@").ToString(), this);
     }
 #if WITH_EDITOR
     if (bDebug) UE_LOG(LogTemp, Display, TEXT("<<<<<<<< END: %s <<<<<<<<"), ANSI_TO_TCHAR(__FUNCTION__));
 #endif
 }
 
-bool UK2Node_DifficultyOperator::TryConnectPin(FKismetCompilerContext& CompilerContext, UEdGraphPin* PinA, UEdGraphPin* PinB) const
+bool UK2Node_FactorOperator::TryConnectPin(FKismetCompilerContext& CompilerContext, UEdGraphPin* PinA, UEdGraphPin* PinB) const
 {
     const UEdGraphSchema_K2* Schema = CompilerContext.GetSchema();
     bool bSucceeded = true;
@@ -621,8 +619,8 @@ bool UK2Node_DifficultyOperator::TryConnectPin(FKismetCompilerContext& CompilerC
     {
         bSucceeded = false;
         CompilerContext.MessageLog.Warning(
-            *LOCTEXT("DifficultyOperator_PinConnection_Error",
-                "DifficultyOperator error when trying to connect pins @@->@@ & @@->@@. Message: @@ in @@")
+            *LOCTEXT("FactorOperator_PinConnection_Error",
+                "FactorOperator error when trying to connect pins @@->@@ & @@->@@. Message: @@ in @@")
                  .ToString(),
             *PinA->GetOwningNode()->GetName(),
             *PinA->GetName(),
@@ -638,7 +636,7 @@ bool UK2Node_DifficultyOperator::TryConnectPin(FKismetCompilerContext& CompilerC
     return bSucceeded;
 }
 
-void UK2Node_DifficultyOperator::OnBlueprintClassModified(UBlueprint* TargetBlueprint)
+void UK2Node_FactorOperator::OnBlueprintClassModified(UBlueprint* TargetBlueprint)
 {
     check(TargetBlueprint);
     UBlueprint* OwnerBlueprint =
@@ -667,7 +665,7 @@ void UK2Node_DifficultyOperator::OnBlueprintClassModified(UBlueprint* TargetBlue
     }
 }
 
-void UK2Node_DifficultyOperator::ReallocatePinsDuringReconstruction(TArray<UEdGraphPin*>& OldPins)
+void UK2Node_FactorOperator::ReallocatePinsDuringReconstruction(TArray<UEdGraphPin*>& OldPins)
 {
 #if WITH_EDITOR
     if (bDebug) UE_LOG(LogTemp, Display, TEXT(">>>>>>>> %s >>>>>>>>"), ANSI_TO_TCHAR(__FUNCTION__));
@@ -693,10 +691,10 @@ void UK2Node_DifficultyOperator::ReallocatePinsDuringReconstruction(TArray<UEdGr
     RestoreSplitPins(OldPins);
 }
 
-void UK2Node_DifficultyOperator::CreateNewPins(UClass* InClass)
+void UK2Node_FactorOperator::CreateNewPins(UClass* InClass)
 {
     // Create the set of output pins through the optional pin manager
-    FDifficultyOperatorOptionalPinManager OptionalPinManager(InClass, bExcludeObjectContainers);
+    FFactorOperatorOptionalPinManager OptionalPinManager(InClass, bExcludeObjectContainers);
     OptionalPinManager.RebuildPropertyList(ShowPinForProperties, InClass);
     OptionalPinManager.CreateVisiblePins(ShowPinForProperties, InClass, EGPD_Input, this);
 
@@ -730,19 +728,18 @@ void UK2Node_DifficultyOperator::CreateNewPins(UClass* InClass)
     }
 }
 
-void UK2Node_DifficultyOperator::OnClassPinChanged()
+void UK2Node_FactorOperator::OnClassPinChanged()
 {
     UClass* InputClass = GetInputClass();
 
 #if WITH_EDITOR
-    if (!InputClass->IsChildOf(UNDifficultyAdapterAbstract::StaticClass()) ||
-        InputClass->HasAnyClassFlags(EClassFlags::CLASS_Abstract))
+    if (!InputClass->IsChildOf(UNFactorAdapterAbstract::StaticClass()) || InputClass->HasAnyClassFlags(EClassFlags::CLASS_Abstract))
     {
         UE_LOG(LogTemp,
             Error,
             TEXT("%s has a wrong class selected, you have to set a subclass of %s"),
             *this->GetName(),
-            *UNDifficultyAdapterAbstract::StaticClass()->GetName());
+            *UNFactorAdapterAbstract::StaticClass()->GetName());
     }
 #endif
 
@@ -807,7 +804,7 @@ void UK2Node_DifficultyOperator::OnClassPinChanged()
     }
 }
 
-void UK2Node_DifficultyOperator::ValidateNodeDuringCompilation(class FCompilerResultsLog& MessageLog) const
+void UK2Node_FactorOperator::ValidateNodeDuringCompilation(class FCompilerResultsLog& MessageLog) const
 {
     Super::ValidateNodeDuringCompilation(MessageLog);
 
@@ -817,7 +814,7 @@ void UK2Node_DifficultyOperator::ValidateNodeDuringCompilation(class FCompilerRe
 
     if (const UClass* SourceClass = GetInputClass())
     {
-        if (!SourceClass->IsChildOf(UNDifficultyAdapterAbstract::StaticClass()) ||
+        if (!SourceClass->IsChildOf(UNFactorAdapterAbstract::StaticClass()) ||
             SourceClass->HasAnyClassFlags(EClassFlags::CLASS_Abstract))
         {
             bool bEmitWarning = true;
@@ -825,7 +822,7 @@ void UK2Node_DifficultyOperator::ValidateNodeDuringCompilation(class FCompilerRe
                 *LOCTEXT("NotInstanciableObjectWarning", "@@ has a wrong class selected, you have to set a subclass of @@")
                      .ToString(),
                 this,
-                UNDifficultyAdapterAbstract::StaticClass());
+                UNFactorAdapterAbstract::StaticClass());
             return;
         }
 
@@ -878,7 +875,7 @@ void UK2Node_DifficultyOperator::ValidateNodeDuringCompilation(class FCompilerRe
     }
 }
 
-void UK2Node_DifficultyOperator::ClearDelegates()
+void UK2Node_FactorOperator::ClearDelegates()
 {
     if (OnBlueprintChangedDelegate.IsValid())
     {
@@ -900,7 +897,7 @@ void UK2Node_DifficultyOperator::ClearDelegates()
     BlueprintSubscribedTo = nullptr;
 }
 
-void UK2Node_DifficultyOperator::BeginDestroy()
+void UK2Node_FactorOperator::BeginDestroy()
 {
     ClearDelegates();
     Super::BeginDestroy();

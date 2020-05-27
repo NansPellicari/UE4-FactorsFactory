@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DifficultyClientAdapter.h"
+#include "FactorClientAdapter.h"
 #include "FactorsFactoryGameInstance.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 
@@ -33,14 +33,14 @@ class UMockGameInstance : public UGameInstance, public INFactorsFactoryGameInsta
 public:
     UMockGameInstance(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
     {
-        FactorsFactoryClient = NewObject<UNDifficultyClientAdapter>();
+        FactorsFactoryClient = NewObject<UNFactorClientAdapter>();
     }
-    virtual UNDifficultyClientAdapter* GetFactorsFactoryClient_Implementation() const override
+    virtual UNFactorClientAdapter* GetFactorsFactoryClient_Implementation() const override
     {
         return FactorsFactoryClient;
     }
 
 protected:
     UPROPERTY()
-    UNDifficultyClientAdapter* FactorsFactoryClient;
+    UNFactorClientAdapter* FactorsFactoryClient;
 };

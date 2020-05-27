@@ -1,10 +1,10 @@
 #include "FactorsFactoryClient.h"
 
-#include "DifficultyInterface.h"
-#include "DifficultyStack.h"
-#include "DifficultyState.h"
+#include "FactorInterface.h"
+#include "FactorStack.h"
+#include "FactorState.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
-#include "NullDifficultyState.h"
+#include "NullFactorState.h"
 
 void NFactorsFactoryClient::RemoveStack(FName StackName)
 {
@@ -18,18 +18,18 @@ void NFactorsFactoryClient::CreateStack(FName StackName)
 {
     if (myensureMsgf(!StacksList.Contains(StackName), TEXT("The stack \"%s\" has been already created"), *StackName.ToString()))
     {
-        NDifficultyStack* Stack = new NDifficultyStack(StackName);
+        NFactorStack* Stack = new NFactorStack(StackName);
         StacksList.Add(StackName, Stack);
     }
 }
 
-NDifficultyState* NFactorsFactoryClient::GetState(FName StackName)
+NFactorState* NFactorsFactoryClient::GetState(FName StackName)
 {
-    NDifficultyState* State = new NNullDifficultyState();
+    NFactorState* State = new NNullFactorState();
 
     if (StacksList.Contains(StackName))
     {
-        NDifficultyStack* Stack = StacksList[StackName];
+        NFactorStack* Stack = StacksList[StackName];
         mycheckf(Stack != nullptr, TEXT("The stack '%s' existed in the stack list but has been removed"), *StackName.ToString());
         State = Stack->GetCurrentState();
     }
@@ -37,12 +37,12 @@ NDifficultyState* NFactorsFactoryClient::GetState(FName StackName)
     return State;
 }
 
-TArray<NDifficultyState*> NFactorsFactoryClient::GetStates(TArray<FName> StackNames)
+TArray<NFactorState*> NFactorsFactoryClient::GetStates(TArray<FName> StackNames)
 {
-    TArray<NDifficultyState*> States;
+    TArray<NFactorState*> States;
     for (FName Name : StackNames)
     {
-        NDifficultyState* State = GetState(Name);
+        NFactorState* State = GetState(Name);
         if (State != nullptr)
         {
             States.Add(State);
@@ -52,15 +52,15 @@ TArray<NDifficultyState*> NFactorsFactoryClient::GetStates(TArray<FName> StackNa
     return States;
 }
 
-void NFactorsFactoryClient::AddDifficulty(TArray<FName> StackNames, INDifficultyInterface* Difficulty)
+void NFactorsFactoryClient::AddFactor(TArray<FName> StackNames, INFactorInterface* Factor)
 {
     for (FName Name : StackNames)
     {
-        AddDifficulty(Name, Difficulty);
+        AddFactor(Name, Factor);
     }
 }
 
-void NFactorsFactoryClient::AddDifficulty(FName StackName, INDifficultyInterface* Difficulty)
+void NFactorsFactoryClient::AddFactor(FName StackName, INFactorInterface* Factor)
 {
     mycheck(StackName != NAME_None);
 
@@ -69,19 +69,19 @@ void NFactorsFactoryClient::AddDifficulty(FName StackName, INDifficultyInterface
         CreateStack(StackName);
     }
 
-    NDifficultyStack* Stack = StacksList[StackName];
+    NFactorStack* Stack = StacksList[StackName];
     if (Stack == nullptr)
     {
         return;
     }
-    Stack->AddDifficulty(Difficulty);
+    Stack->AddFactor(Factor);
 }
 
 void NFactorsFactoryClient::AddTime(float Seconds)
 {
     for (auto It : StacksList)
     {
-        NDifficultyStack* Stack = It.Value;
+        NFactorStack* Stack = It.Value;
         Stack->AddTime(Seconds);
     }
 }
@@ -99,7 +99,7 @@ void NFactorsFactoryClient::SetDebug(const TArray<FName> StackNames, bool bDebug
                 StacksList.Contains(StackName), TEXT("Can not debug an inexistant stack named \"%s\""), *StackName.ToString()))
             return;
 
-        NDifficultyStack* Stack = StacksList[StackName];
+        NFactorStack* Stack = StacksList[StackName];
         Stack->bDebug = bDebug;
     }
 }

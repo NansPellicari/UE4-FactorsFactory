@@ -1,15 +1,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DifficultyAdapterAbstract.h"
-#include "NansFactorsFactoryCore/Public/Operator/DifficultyOperator.h"
+#include "FactorAdapterAbstract.h"
+#include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
 #include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
 
-#include "DifficultyAdapters.generated.h"
+#include "FactorAdapters.generated.h"
 
 UENUM(BlueprintType)
-enum class ENDifficultyOperator : uint8
+enum class ENFactorOperator : uint8
 {
     Null UMETA(DisplayName = "Null"),
     Add UMETA(DisplayName = "Add"),
@@ -20,36 +20,36 @@ enum class ENDifficultyOperator : uint8
 };
 
 UCLASS(BlueprintType)
-class NANSFACTORSFACTORYUE4_API UNDifficultyAdapterBasic : public UNDifficultyAdapterAbstract
+class NANSFACTORSFACTORYUE4_API UNFactorAdapterBasic : public UNFactorAdapterAbstract
 {
     GENERATED_BODY()
 public:
     // TODO Move This when Factory doesn't require anymore
-    static IDifficultyOperator* EnumToOperator(ENDifficultyOperator Enum)
+    static IFactorOperator* EnumToOperator(ENFactorOperator Enum)
     {
-        IDifficultyOperator* Op = new NNullOperator();
+        IFactorOperator* Op = new NNullOperator();
 
-        if (Enum == ENDifficultyOperator::Add)
+        if (Enum == ENFactorOperator::Add)
         {
             Op = new NAddOperator();
         }
 
-        if (Enum == ENDifficultyOperator::Sub)
+        if (Enum == ENFactorOperator::Sub)
         {
             Op = new NSubsctractOperator();
         }
 
-        if (Enum == ENDifficultyOperator::Mul)
+        if (Enum == ENFactorOperator::Mul)
         {
             Op = new NMultiplyOperator();
         }
 
-        if (Enum == ENDifficultyOperator::Div)
+        if (Enum == ENFactorOperator::Div)
         {
             Op = new NDividerOperator();
         }
 
-        if (Enum == ENDifficultyOperator::ResP)
+        if (Enum == ENFactorOperator::ResP)
         {
             Op = new NResetOperator();
         }
@@ -58,17 +58,17 @@ public:
     }
 
     UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
-    ENDifficultyOperator Operator = ENDifficultyOperator::Null;
+    ENFactorOperator Operator = ENFactorOperator::Null;
 
-    virtual IDifficultyOperator* GetOperator()
+    virtual IFactorOperator* GetOperator()
     {
-        return UNDifficultyAdapterBasic::EnumToOperator(Operator);
+        return UNFactorAdapterBasic::EnumToOperator(Operator);
     }
 };
 
 // TODO Create an ENUM to choose behaviors (all, last, number)
 UCLASS(BlueprintType)
-class NANSFACTORSFACTORYUE4_API UNDifficultyAdapterResetFromReason : public UNDifficultyAdapterAbstract
+class NANSFACTORSFACTORYUE4_API UNFactorAdapterResetFromReason : public UNFactorAdapterAbstract
 {
     GENERATED_BODY()
 public:

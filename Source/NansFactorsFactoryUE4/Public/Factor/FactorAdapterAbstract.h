@@ -1,29 +1,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NansFactorsFactoryCore/Public/Difficulty.h"
-#include "NansFactorsFactoryCore/Public/Operator/DifficultyOperator.h"
+#include "NansFactorsFactoryCore/Public/Factor.h"
+#include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
 
-#include "DifficultyAdapterAbstract.generated.h"
+#include "FactorAdapterAbstract.generated.h"
 
 UCLASS(Abstract, Blueprintable)
-class NANSFACTORSFACTORYUE4_API UNDifficultyAdapterAbstract : public UObject
+class NANSFACTORSFACTORYUE4_API UNFactorAdapterAbstract : public UObject
 {
     GENERATED_BODY()
 public:
-    NDifficulty* GetDifficulty()
+    NFactor* GetFactor()
     {
-        return new NDifficulty(DifficultyValue, GetOperator(), Duration, Reason);
+        return new NFactor(FactorValue, GetOperator(), Duration, Reason);
     }
 
-    virtual IDifficultyOperator* GetOperator()
+    virtual IFactorOperator* GetOperator()
     {
         return new NNullOperator();
     }
 
     UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
-    float DifficultyValue = 0.f;
+    float FactorValue = 0.f;
 
     UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
     float Duration = 0.f;

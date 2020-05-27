@@ -1,8 +1,8 @@
 classDiagram
 
-DifficultyStack "1" *-- "1..*" Difficulty
-Difficulty *-- IOperator
-DifficultyStack --> DifficultyState : generate
+FactorStack "1" *-- "1..*" Factor
+Factor *-- IOperator
+FactorStack --> FactorState : generate
 IOperator <|-- IOperatorWithStack
 IOperator <|-- NullOperator
 IOperator <|-- AddOperator
@@ -19,13 +19,13 @@ class IOperator {
 
 class IOperatorWithStack {
     &lt;&lt;interface&gt;&gt;
-    +SetStack(DifficultyStack Stack) void
+    +SetStack(FactorStack Stack) void
     +SetKeyInStack(int32 Key) void
 }
 
-class DifficultyStack {
-    +GetCurrentState() DifficultyState
+class FactorStack {
+    +GetCurrentState() FactorState
     +AddTime(int32 Time)
-    +Get(int32 Key) Difficulty
-    +Add(Difficulty Difficulty)
+    +Get(int32 Key) Factor
+    +Add(Factor Factor)
 }

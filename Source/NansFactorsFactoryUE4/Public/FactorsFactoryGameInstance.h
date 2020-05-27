@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "DifficultyClientAdapter.h"
+#include "FactorClientAdapter.h"
 #include "UObject/ObjectMacros.h"
 
 #include "FactorsFactoryGameInstance.generated.h"
@@ -17,5 +17,5 @@ class NANSFACTORSFACTORYUE4_API INFactorsFactoryGameInstance
     GENERATED_BODY()
 public:
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "FactorsFactory")
-    UNDifficultyClientAdapter* GetFactorsFactoryClient() const;
+    UNFactorClientAdapter* GetFactorsFactoryClient() const;
 };

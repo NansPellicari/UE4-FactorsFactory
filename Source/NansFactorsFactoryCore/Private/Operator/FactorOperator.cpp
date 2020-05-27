@@ -1,4 +1,4 @@
-#include "Operator/DifficultyOperator.h"
+#include "Operator/FactorOperator.h"
 
 const FName NNullOperator::Name(TEXT("Null"));
 const FName NAddOperator::Name(TEXT("Add"));
@@ -11,7 +11,7 @@ float NNullOperator::Compute(float Lh, float Rh)
     return Lh;
 }
 
-IDifficultyOperator* NNullOperator::GetInverse()
+IFactorOperator* NNullOperator::GetInverse()
 {
     return this;
 }
@@ -21,7 +21,7 @@ float NAddOperator::Compute(float Lh, float Rh)
     return Lh + Rh;
 }
 
-IDifficultyOperator* NAddOperator::GetInverse()
+IFactorOperator* NAddOperator::GetInverse()
 {
     return new NSubsctractOperator();
 }
@@ -31,7 +31,7 @@ float NSubsctractOperator::Compute(float Lh, float Rh)
     return Lh - Rh;
 }
 
-IDifficultyOperator* NSubsctractOperator::GetInverse()
+IFactorOperator* NSubsctractOperator::GetInverse()
 {
     return new NAddOperator();
 }
@@ -41,7 +41,7 @@ float NMultiplyOperator::Compute(float Lh, float Rh)
     return Lh * Rh;
 }
 
-IDifficultyOperator* NMultiplyOperator::GetInverse()
+IFactorOperator* NMultiplyOperator::GetInverse()
 {
     return new NDividerOperator();
 }
@@ -51,7 +51,7 @@ float NDividerOperator::Compute(float Lh, float Rh)
     return Lh / Rh;
 }
 
-IDifficultyOperator* NDividerOperator::GetInverse()
+IFactorOperator* NDividerOperator::GetInverse()
 {
     return new NMultiplyOperator();
 }

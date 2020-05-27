@@ -1,14 +1,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
 
-class NFactorStack;
-class NFactorState;
+#include "FactorClientAdapter.generated.h"
+
 class INFactorInterface;
+class NFactorState;
 
-class NANSFACTORSFACTORYCORE_API NFactorsFactoryClient
+UCLASS(BlueprintType)
+class NANSFACTORSFACTORYUE4_API UNFactorClientAdapter : public UObject
 {
+    GENERATED_BODY()
+
 public:
+    UNFactorClientAdapter(const FObjectInitializer& ObjectInitializer);
     void CreateStack(FName StackName);
     void RemoveStack(FName StackName);
     NFactorState* GetState(FName StackName);
@@ -19,8 +26,5 @@ public:
     void SetDebug(const TArray<FName> StackNames, bool bDebug);
 
 protected:
-    UPROPERTY()
-    TMap<FName, NFactorStack*> StacksList;
-
-private:
+    TSharedPtr<NFactorsFactoryClient> Client;
 };

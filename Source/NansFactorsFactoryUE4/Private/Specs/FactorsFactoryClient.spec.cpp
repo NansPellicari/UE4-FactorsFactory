@@ -1,18 +1,18 @@
 #include "Misc/AutomationTest.h"
 #include "NansCommon/Public/Specs/NansCommonHelpers.h"
-#include "NansFactorsFactoryCore/Public/Difficulty.h"
-#include "NansFactorsFactoryCore/Public/DifficultyStack.h"
-#include "NansFactorsFactoryCore/Public/DifficultyState.h"
+#include "NansFactorsFactoryCore/Public/Factor.h"
+#include "NansFactorsFactoryCore/Public/FactorStack.h"
+#include "NansFactorsFactoryCore/Public/FactorState.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
-#include "NansFactorsFactoryCore/Public/Operator/DifficultyOperator.h"
-#include "NullDifficultyState.h"
+#include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
+#include "NullFactorState.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
 class UNMockFactorsFactoryClient : public NFactorsFactoryClient
 {
 public:
-    TMap<FName, NDifficultyStack*> GetStack()
+    TMap<FName, NFactorStack*> GetStack()
     {
         return StacksList;
     };
@@ -55,49 +55,49 @@ void FactorsFactoryClientSpec::Define()
             }
         });
 
-        It("should add a difficulty to a stack", [this]() {
+        It("should add a factor to a stack", [this]() {
             FName Name = FName("test");
             Client->CreateStack(Name);
-            Client->AddDifficulty(Name, new NDifficulty(1, new NAddOperator(), 0, FName("reason1")));
-            TEST_EQUAL("The new stack should have the new difficulty recently added",
-                Client->GetStack()[Name]->GetDifficulty(0)->GetReason(),
+            Client->AddFactor(Name, new NFactor(1, new NAddOperator(), 0, FName("reason1")));
+            TEST_EQUAL("The new stack should have the new factor recently added",
+                Client->GetStack()[Name]->GetFactor(0)->GetReason(),
                 FName("reason1"))
         });
 
-        It("should add a new difficulty to 2 stacks", [this]() {
+        It("should add a new factor to 2 stacks", [this]() {
             TArray<FName> Names = {FName("test1"), FName("test2")};
             Client->CreateStack(Names[0]);
             Client->CreateStack(Names[1]);
-            Client->AddDifficulty(Names, new NDifficulty(1, new NAddOperator(), 0, FName("reason1")));
-            TEST_EQUAL("The 1st and the second stack should have the same new difficulty recently added",
-                Client->GetStack()[Names[0]]->GetDifficulty(0),
-                Client->GetStack()[Names[1]]->GetDifficulty(0));
+            Client->AddFactor(Names, new NFactor(1, new NAddOperator(), 0, FName("reason1")));
+            TEST_EQUAL("The 1st and the second stack should have the same new factor recently added",
+                Client->GetStack()[Names[0]]->GetFactor(0),
+                Client->GetStack()[Names[1]]->GetFactor(0));
         });
 
-        It("should get a stack's state after adding difficulty", [this]() {
+        It("should get a stack's state after adding factor", [this]() {
             FName Name = FName("test");
             Client->CreateStack(Name);
-            Client->AddDifficulty(Name, new NDifficulty(1, new NAddOperator(), 0, FName("reason1")));
+            Client->AddFactor(Name, new NFactor(1, new NAddOperator(), 0, FName("reason1")));
             TEST_NOT_NULL("Should get a state", Client->GetState(Name));
         });
 
-        It("should get stack's states after adding difficulties", [this]() {
+        It("should get stack's states after adding factors", [this]() {
             TArray<FName> Names = {FName("test1"), FName("test2")};
             Client->CreateStack(Names[0]);
             Client->CreateStack(Names[1]);
-            Client->AddDifficulty(Names, new NDifficulty(1, new NAddOperator(), 0, FName("reason1")));
+            Client->AddFactor(Names, new NFactor(1, new NAddOperator(), 0, FName("reason1")));
             TEST_EQUAL("Should get 2 states", Client->GetStates(Names).Num(), 2);
-            TEST_EQUAL("State 1 should get the right amount of difficulty", Client->GetState(Names[0])->Compute(), 1.f);
-            TEST_EQUAL("State 2 should get the right amount of difficulty", Client->GetState(Names[1])->Compute(), 1.f);
+            TEST_EQUAL("State 1 should get the right amount of factor", Client->GetState(Names[0])->Compute(), 1.f);
+            TEST_EQUAL("State 2 should get the right amount of factor", Client->GetState(Names[1])->Compute(), 1.f);
         });
 
-        It("can add a lot of difficulty in one time", [this]() {
+        It("can add a lot of factor in one time", [this]() {
             TArray<FName> Names = {FName("test1")};
 
             for (uint32 I = 0; I < 200; I++)
             {
-                NDifficulty* Diff = new NDifficulty(2.f, new NAddOperator(), 0, FName("Reason"));
-                Client->AddDifficulty(Names, Diff);
+                NFactor* Factor = new NFactor(2.f, new NAddOperator(), 0, FName("Reason"));
+                Client->AddFactor(Names, Factor);
             }
 
             TEST_TRUE("Yes it can without crashing", true);
@@ -114,10 +114,10 @@ void FactorsFactoryClientSpec::Define()
             TEST_TRUE("Get an empty stacklist", Client->GetStack().Num() == 0);
         });
 
-        It("should dispatch time in stack and difficulties", [this]() {
+        It("should dispatch time in stack and factors", [this]() {
             // TODO implements this test
             TEST_TRUE("Implements this", false);
-            TEST_TRUE("Time is synchronized between client>stacks>difficulties", false);
+            TEST_TRUE("Time is synchronized between client>stacks>factors", false);
         });
     });
 }

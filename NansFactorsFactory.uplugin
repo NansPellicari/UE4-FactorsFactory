@@ -3,7 +3,7 @@
 	"Version": 1,
 	"VersionName": "1.0",
 	"FriendlyName": "NansFactorsFactory",
-	"Description": "This add some core c++ classes and UE4 to manage difficulties in game",
+	"Description": "This add some core c++ classes and UE4 to manage factors in game",
 	"Category": "Other",
 	"CreatedBy": "Nans Pellicari",
 	"CreatedByURL": "https://github.com/NansPellicari",

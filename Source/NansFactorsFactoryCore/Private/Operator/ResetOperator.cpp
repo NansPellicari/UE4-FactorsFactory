@@ -1,57 +1,57 @@
 #include "Operator/ResetOperator.h"
 
-#include "Difficulty.h"
-#include "DifficultyStack.h"
+#include "Factor.h"
+#include "FactorStack.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
-#include "Operator/DifficultyOperator.h"
+#include "Operator/FactorOperator.h"
 
 #include <typeinfo>
 
 const FName NResetOperator::Name(TEXT("Reset"));
 
-IDifficultyOperator* NResetOperatorBase::NResetOperatorBase::GetInverse()
+IFactorOperator* NResetOperatorBase::NResetOperatorBase::GetInverse()
 {
     return new NNullOperator();
 }
 
-FString NResetOperatorBase::GetResetIdFlag(INDifficultyInterface* Difficulty)
+FString NResetOperatorBase::GetResetIdFlag(INFactorInterface* Factor)
 {
     const FString Prefix = TEXT("Reset_list_");
-    return FString::Format(TEXT("{0}{1}"), {Prefix, FString::FromInt(Difficulty->GetUID())});
+    return FString::Format(TEXT("{0}{1}"), {Prefix, FString::FromInt(Factor->GetUID())});
 }
 
 float NResetOperator::Compute(float Lh, float Rh)
 {
     uint32 MaxAttempt = 10;
     float NullOperationResult = GetInverse()->Compute(Lh, Rh);
-    INDifficultyInterface* Diff = MyStack->GetDifficulty(KeyInStack);
+    INFactorInterface* Factor = MyStack->GetFactor(KeyInStack);
     // Means KeyInStack set is invalid
-    mycheck(Diff != nullptr);
+    mycheck(Factor != nullptr);
 
-    INDifficultyInterface* ResetDiff = Diff;
-    while (MaxAttempt > 0 && (!ResetDiff->IsActivate() || OperatorUtils::IsOperatorWithStack(ResetDiff->GetOperator()) ||
-                                 MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetDiff))))
+    INFactorInterface* ResetFactor = Factor;
+    while (MaxAttempt > 0 && (!ResetFactor->IsActivate() || OperatorUtils::IsOperatorWithStack(ResetFactor->GetOperator()) ||
+                                 MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor))))
     {
         int32 ResetKey = KeyInStack - (Rh + (10 - MaxAttempt));
         if (ResetKey < 0) return NullOperationResult;
-        ResetDiff = MyStack->GetDifficulty(ResetKey);
+        ResetFactor = MyStack->GetFactor(ResetKey);
         MaxAttempt--;
     }
 
-    if (ResetDiff == Diff)
+    if (ResetFactor == Factor)
     {
         return NullOperationResult;
     }
 
-    if (!MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetDiff)) ||
-        !MyStack->GetFlag(NResetOperatorBase::GetResetIdFlag(ResetDiff)))
+    if (!MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor)) ||
+        !MyStack->GetFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor)))
     {
-        MyStack->SetFlag(NResetOperatorBase::GetResetIdFlag(ResetDiff), true);
+        MyStack->SetFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor), true);
     }
-    return ResetDiff->GetOperator()->GetInverse()->Compute(Lh, ResetDiff->GetDifficultyValue());
+    return ResetFactor->GetOperator()->GetInverse()->Compute(Lh, ResetFactor->GetFactorValue());
 }
 
-IDifficultyOperator* NResetOperator::GetInverse()
+IFactorOperator* NResetOperator::GetInverse()
 {
     return new NNullOperator();
 }
@@ -62,7 +62,7 @@ void NResetOperator::SetKeyInStack(uint32 Key)
     KeyInStack = Key;
 }
 
-void NResetOperator::SetStack(NDifficultyStack* Stack)
+void NResetOperator::SetStack(NFactorStack* Stack)
 {
     MyStack = Stack;
 }

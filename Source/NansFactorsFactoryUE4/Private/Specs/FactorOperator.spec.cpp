@@ -1,17 +1,17 @@
 #include "Misc/AutomationTest.h"
 #include "NansCommon/Public/Specs/NansCommonHelpers.h"
-#include "NansFactorsFactoryCore/Public/Difficulty.h"
-#include "NansFactorsFactoryCore/Public/DifficultyStack.h"
-#include "NansFactorsFactoryCore/Public/DifficultyState.h"
-#include "NansFactorsFactoryCore/Public/Operator/DifficultyOperator.h"
+#include "NansFactorsFactoryCore/Public/Factor.h"
+#include "NansFactorsFactoryCore/Public/FactorStack.h"
+#include "NansFactorsFactoryCore/Public/FactorState.h"
+#include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
-BEGIN_DEFINE_SPEC(DifficultyOperatorSpec,
-    "Nans.FactorsFactory.Core.DifficultyOperator.Spec",
+BEGIN_DEFINE_SPEC(FactorOperatorSpec,
+    "Nans.FactorsFactory.Core.FactorOperator.Spec",
     EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
-END_DEFINE_SPEC(DifficultyOperatorSpec) void DifficultyOperatorSpec::Define()
+END_DEFINE_SPEC(FactorOperatorSpec) void FactorOperatorSpec::Define()
 {
     Describe("Basic computation", [this]() {
         It("should compute with a null operator", [this]() {
