@@ -8,7 +8,7 @@ class INFactorInterface;
 class NANSFACTORSFACTORYCORE_API NNullFactorState : public NFactorState
 {
 public:
-    NNullFactorState();
-    virtual void AddFactor(const INFactorInterface* Factor) override;
-    virtual float Compute() override;
+	NNullFactorState();
+	virtual void AddFactor(TSharedPtr<INFactorInterface> Factor) override;
+	virtual float Compute() override;
 };

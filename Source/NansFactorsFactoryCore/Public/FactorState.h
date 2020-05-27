@@ -9,8 +9,9 @@ class NNullOperator;
 struct FNFactorStateOperator
 {
     FNFactorStateOperator();
-    FNFactorStateOperator(const INFactorInterface* Factor);
+    FNFactorStateOperator(TSharedPtr<INFactorInterface> _Factor);
 
+    TSharedPtr<INFactorInterface> Factor;
     float Value = 0.f;
     FName Reason = FName("");
     bool Activate = true;
@@ -24,7 +25,7 @@ public:
     virtual ~NFactorState() {}
     NFactorState() {}
     NFactorState(float _Time);
-    virtual void AddFactor(const INFactorInterface* Factor);
+    virtual void AddFactor(TSharedPtr<INFactorInterface> Factor);
     float GetTime() const;
     virtual float Compute();
     bool bDebug = false;

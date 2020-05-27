@@ -5,22 +5,22 @@
 class NFactorStack;
 class NFactorState;
 class INFactorInterface;
+class NTimeline;
 
 class NANSFACTORSFACTORYCORE_API NFactorsFactoryClient
 {
 public:
-    void CreateStack(FName StackName);
-    void RemoveStack(FName StackName);
-    NFactorState* GetState(FName StackName);
-    TArray<NFactorState*> GetStates(TArray<FName> StackNames);
-    void AddFactor(FName StackName, INFactorInterface* Factor);
-    void AddFactor(TArray<FName> StackNames, INFactorInterface* Factor);
-    void AddTime(float Seconds);
-    void SetDebug(const TArray<FName> StackNames, bool bDebug);
+	void CreateStack(FName StackName, TSharedPtr<NTimeline> Timeline);
+	void CreateStack(TArray<FName> StackNames, TSharedPtr<NTimeline> Timeline);
+	void RemoveStack(FName StackName);
+	NFactorState* GetState(FName StackName);
+	TArray<NFactorState*> GetStates(TArray<FName> StackNames);
+	void AddFactor(FName StackName, TSharedPtr<INFactorInterface> Factor);
+	void AddFactor(TArray<FName> StackNames, TSharedPtr<INFactorInterface> Factor);
+	void SetDebug(const TArray<FName> StackNames, bool bDebug);
 
 protected:
-    UPROPERTY()
-    TMap<FName, NFactorStack*> StacksList;
+	TMap<FName, TSharedPtr<NFactorStack>> StacksList;
 
 private:
 };

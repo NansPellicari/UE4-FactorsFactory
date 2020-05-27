@@ -11,12 +11,13 @@ FNFactorStateOperator::FNFactorStateOperator()
 {
     Operator = new NNullOperator();
 }
-FNFactorStateOperator::FNFactorStateOperator(const INFactorInterface* Factor)
+FNFactorStateOperator::FNFactorStateOperator(TSharedPtr<INFactorInterface> _Factor)
 {
+    Factor = _Factor;
     Value = Factor->GetFactorValue();
     Operator = Factor->GetOperator();
     Reason = Factor->GetReason();
-    Activate = Factor->IsActivate();
+    Activate = Factor->IsActivated();
 }
 
 NFactorState::NFactorState(float _Time)
@@ -24,10 +25,8 @@ NFactorState::NFactorState(float _Time)
     Time = _Time;
 }
 
-void NFactorState::AddFactor(const INFactorInterface* Factor)
+void NFactorState::AddFactor(TSharedPtr<INFactorInterface> Factor)
 {
-    mycheck(Time != -1.f);
-
     Operators.Add(FNFactorStateOperator(Factor));
 }
 
@@ -38,7 +37,6 @@ float NFactorState::GetTime() const
 
 float NFactorState::Compute()
 {
-    mycheck(Time != -1.f);
     // Reset the value
     FactorValue = 0;
     for (FNFactorStateOperator Operation : Operators)

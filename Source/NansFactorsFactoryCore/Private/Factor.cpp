@@ -3,12 +3,13 @@
 #include "Operator/FactorOperator.h"
 #include "Operator/Interfaces.h"
 
-NFactor::NFactor(float _FactorValue, IFactorOperator* _Operator, float _Duration, FName _Reason)
+NFactor::NFactor(float _FactorValue, IFactorOperator* _Operator, float _Duration, FName _Reason, float _Delay)
 {
     FactorValue = _FactorValue;
     Operator = _Operator;
     Duration = _Duration;
-    Reason = _Reason;
+    Label = _Reason;
+    Delay = _Delay;
     Id = ++NFactorGUID::sNextId;
 }
 
@@ -19,17 +20,17 @@ uint32 NFactor::GetUID() const
 
 FName NFactor::GetReason() const
 {
-    return Reason;
+    return GetEventLabel();
 }
 
-bool NFactor::IsActivate() const
+bool NFactor::IsActivated() const
 {
-    return Duration == 0 || DurationSinceActivation <= Duration;
+    return bIsActivated && !IsExpired();
 }
 
 IFactorOperator* NFactor::GetOperator() const
 {
-    if (!IsActivate())
+    if (!IsActivated())
     {
         return new NNullOperator();
     }
@@ -38,7 +39,7 @@ IFactorOperator* NFactor::GetOperator() const
 
 float NFactor::GetFactorValue() const
 {
-    if (!IsActivate())
+    if (!IsActivated())
     {
         return 0;
     }
@@ -47,5 +48,10 @@ float NFactor::GetFactorValue() const
 
 void NFactor::AddTime(float Time)
 {
-    DurationSinceActivation += Time;
+    NotifyAddTime(Time);
+}
+
+void NFactor::Activate(bool _bIsActivated)
+{
+    bIsActivated = _bIsActivated;
 }

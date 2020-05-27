@@ -16,8 +16,8 @@ public class NansFactorsFactoryUE4 : ModuleRules
             new string[]
             {
                 "Core",
-                // ... add other public dependencies that you statically link with here ...
-            }
+				// ... add other public dependencies that you statically link with here ...
+			}
             );
 
         PrivateDependencyModuleNames.AddRange(
@@ -35,8 +35,10 @@ public class NansFactorsFactoryUE4 : ModuleRules
                 "Kismet",
                 "KismetCompiler",
                 "InputCore",
-                "NansCommon",
-                "NansFactorsFactoryCore"
+                "NansTimelineSystemCore",
+                "NansFactorsFactoryCore",
+                "NansTimelineSystemUE4",
+                "NansUE4TestsHelpers"
             }
             );
     }

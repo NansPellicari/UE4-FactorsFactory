@@ -2,9 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "Factor/FactorAdapters.h"
-#include "FactorSettings.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
+#include "Settings/FactorSettings.h"
 
 #include "FactorFactory.generated.h"
 
@@ -17,28 +17,28 @@ class UNFactorAdapterAbstract;
 USTRUCT(BlueprintType)
 struct FNFactorStateResult
 {
-    GENERATED_USTRUCT_BODY()
+	GENERATED_USTRUCT_BODY()
 
-    FNFactorStateResult() {}
-    FNFactorStateResult(float _Amount, TArray<FName> _Reasons, float _Time) : Amount(_Amount), Reasons(_Reasons), Time(_Time) {}
+	FNFactorStateResult() {}
+	FNFactorStateResult(float _Amount, TArray<FName> _Reasons, float _Time) : Amount(_Amount), Reasons(_Reasons), Time(_Time) {}
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FactorsFactory")
-    float Amount;
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FactorsFactory")
-    TArray<FName> Reasons;
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FactorsFactory")
-    float Time;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FactorsFactory")
+	float Amount;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FactorsFactory")
+	TArray<FName> Reasons;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FactorsFactory")
+	float Time;
 };
 
 UCLASS(meta = (ScriptName = "FactorLibrary"))
 class NANSFACTORSFACTORYUE4_API UNFactorFactory : public UBlueprintFunctionLibrary
 {
-    GENERATED_BODY()
+	GENERATED_BODY()
 public:
-    static UNFactorClientAdapter* GetFactorClient(UObject* WorldContextObject);
-    static FNFactorStateResult GetFactorState(FName StackName, UNFactorClientAdapter* Client);
+	static UNFactorClientAdapter* GetFactorClient(UObject* WorldContextObject);
+	static FNFactorStateResult GetFactorState(FName StackName, UNFactorClientAdapter* Client);
 
-    // clang-format off
+	// clang-format off
     /**
      * My design decision here is to always retrieve a result (0 is a result),
      * even if the desired StackName does not (still) exists.
@@ -77,5 +77,5 @@ public:
     UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "FactorsFactory|Factory")
     static UNFactorAdapterAbstract* AddFactor(UObject* WorldContextObject, UNFactorAdapterAbstract* Factor);
 
-    // clang-format on
+	// clang-format on
 };

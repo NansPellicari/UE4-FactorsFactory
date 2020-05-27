@@ -1,3 +1,3 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "FactorSettings.h"
+#include "Settings/FactorSettings.h"

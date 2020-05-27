@@ -15,7 +15,8 @@ public class NansFactorsFactoryCore : ModuleRules
             {
                 "Core",
                 "CoreUObject",
-                "NansCoreHelpers"
+                "NansCoreHelpers",
+                "NansTimelineSystemCore"
             }
             );
     }

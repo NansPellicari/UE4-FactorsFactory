@@ -14,7 +14,7 @@ float NNullFactorState::Compute()
     return 0.f;
 }
 
-void NNullFactorState::AddFactor(const INFactorInterface* Factor)
+void NNullFactorState::AddFactor(TSharedPtr<INFactorInterface> Factor)
 {
     return;
 }

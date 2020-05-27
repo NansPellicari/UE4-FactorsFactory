@@ -29,7 +29,7 @@ float NResetOperator::Compute(float Lh, float Rh)
     mycheck(Factor != nullptr);
 
     INFactorInterface* ResetFactor = Factor;
-    while (MaxAttempt > 0 && (!ResetFactor->IsActivate() || OperatorUtils::IsOperatorWithStack(ResetFactor->GetOperator()) ||
+    while (MaxAttempt > 0 && (!ResetFactor->IsActivated() || OperatorUtils::IsOperatorWithStack(ResetFactor->GetOperator()) ||
                                  MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor))))
     {
         int32 ResetKey = KeyInStack - (Rh + (10 - MaxAttempt));
