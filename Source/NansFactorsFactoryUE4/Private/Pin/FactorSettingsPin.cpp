@@ -13,12 +13,24 @@ void SNFactorSettingsPin::Construct(const FArguments& InArgs, UEdGraphPin* InGra
 
 TSharedRef<SWidget> SNFactorSettingsPin::GetDefaultValueWidget()
 {
-	UFactorSettings::GetNames(CategoryList);
+	TArray<FNFactorSettings> Settings;
+	UFactorSettings::GetConfigs(Settings);
+	for (const auto& Setting : Settings)
+	{
+		CategoryList.Add(MakeShareable(new FName(Setting.Name)));
+	}
+
+	Settings.Empty();
 
 	TSharedPtr<FName> InitialSelectedName = GetSelectedName();
-	if (InitialSelectedName.IsValid())
+
+	// if no data selected, save the first one
+	// Note: Null val is possible if no configured timelines have been created.
+	if (!InitialSelectedName.IsValid() && CategoryList.Num() > 0 && CategoryList[0].IsValid())
 	{
-		SetPropertyWithName(*InitialSelectedName.Get());
+		InitialSelectedName = CategoryList[0];
+		SetPropertyWithName(*InitialSelectedName);
+		InitialSelectedName = GetSelectedName();
 	}
 
 	return SAssignNew(NameComboBox, SNameComboBox)	  // note you can display any widget here
@@ -49,7 +61,7 @@ void SNFactorSettingsPin::OnComboBoxOpening()
 void SNFactorSettingsPin::SetPropertyWithName(const FName& Name)
 {
 	check(GraphPinObj);
-	check(GraphPinObj->PinType.PinSubCategoryObject == FNFactorSettings::StaticStruct());
+	check(GraphPinObj->PinType.PinSubCategoryObject == FFactorStackAttribute::StaticStruct());
 
 	// To set the property we need to use a FString
 	// using this format: (MyPropertyName="My Value")
@@ -64,8 +76,6 @@ void SNFactorSettingsPin::SetPropertyWithName(const FName& Name)
 		const FScopedTransaction Transaction(
 			NSLOCTEXT("GraphEditor", "ChangeFactorSettingsPinValue", "Change Factor Settings Pin Value"));
 		GraphPinObj->Modify();
-
-		UE_LOG(LogTemp, Warning, TEXT("Verify values old: \"%s\" chosen: \"%s\""), *CurrentDefaultValue, *PinString);
 
 		if (PinString != GraphPinObj->GetDefaultAsString())
 		{
@@ -93,13 +103,13 @@ TSharedPtr<FName> SNFactorSettingsPin::GetSelectedName() const
 		}
 	}
 
-	return CategoryList[0];
+	return NULL;
 }
 
 void SNFactorSettingsPin::GetPropertyAsName(FName& OutName) const
 {
 	check(GraphPinObj);
-	check(GraphPinObj->PinType.PinSubCategoryObject == FNFactorSettings::StaticStruct());
+	check(GraphPinObj->PinType.PinSubCategoryObject == FFactorStackAttribute::StaticStruct());
 
 	// As we saw in the SNFactorSettingsPin::SetPropertyWithName()
 	// The value is saved in the format (MyPropertyName="My Value") as a FString.

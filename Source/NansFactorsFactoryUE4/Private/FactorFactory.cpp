@@ -21,29 +21,28 @@ UNFactorClientAdapter* UNFactorFactory::GetFactorClient(UObject* WorldContextObj
 	UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
 	if (!World) return nullptr;
 
-	UGameInstance* GI = World->GetGameInstance();
-	if (!myensureMsgf(GI, TEXT("Should have a game instance to works"))) return nullptr;
+	INFactorsFactoryGameInstance* GI = Cast<INFactorsFactoryGameInstance>(World->GetGameInstance());
+	mycheckf(GI != nullptr, TEXT("The game instance should implements INFactorsFactoryGameInstance to works"));
 
-	bool bIsImplementedFactorGI = GI->Implements<UNFactorsFactoryGameInstance>();
-	if (myensureMsgf(bIsImplementedFactorGI, TEXT("The game instance should implements INFactorsFactoryGameInstance to works")))
-	{
-		UNFactorClientAdapter* Client = INFactorsFactoryGameInstance::Execute_GetFactorsFactoryClient(GI);
-		return Client;
-	}
-	return nullptr;
+	UNFactorClientAdapter* Client = GI->GetFactorsFactoryClient();
+	return Client;
 }
 
-void UNFactorFactory::Debug(UObject* WorldContextObject, const TArray<FName> StackNames, const bool Debug)
+void UNFactorFactory::Debug(UObject* WorldContextObject, const TArray<FFactorStackAttribute> StackNames, const bool Debug)
 {
 	UNFactorClientAdapter* Client = GetFactorClient(WorldContextObject);
 	if (Client == nullptr) return;
-
-	Client->SetDebug(StackNames, Debug);
+	TArray<FName> Names;
+	for (const FFactorStackAttribute& StackName : StackNames)
+	{
+		Names.Add(StackName.Name);
+	}
+	Client->SetDebug(Names, Debug);
 }
 
-FNFactorStateResult UNFactorFactory::GetFactorState(FName StackName, UNFactorClientAdapter* Client)
+FNFactorStateResult UNFactorFactory::GetFactorState(FFactorStackAttribute StackName, UNFactorClientAdapter* Client)
 {
-	NFactorState* State = Client->GetState(StackName);
+	NFactorState* State = Client->GetState(StackName.Name);
 	TArray<FName> Reasons;
 	if (State == nullptr)
 	{
@@ -59,7 +58,7 @@ FNFactorStateResult UNFactorFactory::GetFactorState(FName StackName, UNFactorCli
 
 	return FNFactorStateResult(State->Compute(), Reasons, State->GetTime());
 }
-FNFactorStateResult UNFactorFactory::GetFactorState(UObject* WorldContextObject, FName StackName)
+FNFactorStateResult UNFactorFactory::GetFactorState(UObject* WorldContextObject, FFactorStackAttribute StackName)
 {
 	UNFactorClientAdapter* Client = GetFactorClient(WorldContextObject);
 	if (Client == nullptr) return FNFactorStateResult();
@@ -67,29 +66,30 @@ FNFactorStateResult UNFactorFactory::GetFactorState(UObject* WorldContextObject,
 	return UNFactorFactory::GetFactorState(StackName, Client);
 }
 
-TMap<FName, FNFactorStateResult> UNFactorFactory::GetFactorStates(UObject* WorldContextObject, TArray<FName> StackNames)
+TMap<FName, FNFactorStateResult> UNFactorFactory::GetFactorStates(
+	UObject* WorldContextObject, TArray<FFactorStackAttribute> StackNames)
 {
 	TMap<FName, FNFactorStateResult> Results;
 	UNFactorClientAdapter* Client = GetFactorClient(WorldContextObject);
 
 	if (Client == nullptr) return Results;
 
-	for (FName StackName : StackNames)
+	for (const FFactorStackAttribute& StackName : StackNames)
 	{
-		Results.Add(StackName, UNFactorFactory::GetFactorState(StackName, Client));
+		Results.Add(StackName.Name, UNFactorFactory::GetFactorState(StackName, Client));
 	}
 	return Results;
 }
 
-void UNFactorFactory::Clear(UObject* WorldContextObject, TArray<FName> StackNames)
+void UNFactorFactory::Clear(UObject* WorldContextObject, TArray<FFactorStackAttribute> StackNames)
 {
 	UNFactorClientAdapter* Client = GetFactorClient(WorldContextObject);
 
 	if (Client == nullptr) return;
 
-	for (FName StackName : StackNames)
+	for (const FFactorStackAttribute& StackName : StackNames)
 	{
-		Client->RemoveStack(StackName);
+		Client->RemoveStack(StackName.Name);
 	}
 }
 
@@ -99,7 +99,7 @@ UNFactorAdapterAbstract* UNFactorFactory::AddFactor(UObject* WorldContextObject,
 
 	if (Client == nullptr) return Factor;
 
-	Client->AddFactor(Factor->InStack, Factor);
+	Client->AddFactor(Factor->InStack.Name, Factor);
 
 	return Factor;
 }

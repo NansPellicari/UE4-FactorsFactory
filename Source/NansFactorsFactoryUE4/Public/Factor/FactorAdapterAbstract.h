@@ -1,9 +1,11 @@
 #pragma once
 
+#include "Attribute/FactorStackAttribute.h"
 #include "CoreMinimal.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
+#include "Settings/FactorSettings.h"
 
 #include "FactorAdapterAbstract.generated.h"
 
@@ -18,7 +20,7 @@ public:
 		{
 			Factor = MakeShareable(new NFactor(FactorValue, GetOperator(), Duration, Reason));
 		}
-		
+
 		return Factor;
 	}
 
@@ -27,17 +29,17 @@ public:
 		return new NNullOperator();
 	}
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FactorsFactory|Operation")
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
 	float FactorValue = 0.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FactorsFactory|Operation")
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
 	float Duration = 0.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FactorsFactory|Operation")
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
 	FName Reason = NAME_None;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FactorsFactory|Operation")
-	FName InStack = NAME_None;
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
+	FFactorStackAttribute InStack;
 
 protected:
 	TSharedPtr<NFactor> Factor;

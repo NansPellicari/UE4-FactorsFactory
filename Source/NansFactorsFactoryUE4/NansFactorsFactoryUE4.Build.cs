@@ -35,6 +35,7 @@ public class NansFactorsFactoryUE4 : ModuleRules
                 "Kismet",
                 "KismetCompiler",
                 "InputCore",
+                "NansCoreHelpers",
                 "NansTimelineSystemCore",
                 "NansFactorsFactoryCore",
                 "NansTimelineSystemUE4",
