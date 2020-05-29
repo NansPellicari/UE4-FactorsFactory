@@ -1,7 +1,7 @@
 #include "Factor.h"
 
 #include "FactorEvent.h"
-#include "NansTimelineSystemCore/public/TimelineEventBase.h"
+#include "NansTimelineSystemCore/public/Event.h"
 #include "Operator/FactorOperator.h"
 #include "Operator/Interfaces.h"
 
@@ -10,7 +10,7 @@ NFactor::NFactor(float _FactorValue,
 	float _Duration,
 	FName _Reason,
 	float _Delay,
-	TSharedPtr<NTimelineEventInterface> _Event)
+	TSharedPtr<NEventInterface> _Event)
 {
 	FactorValue = _FactorValue;
 	Operator = _Operator;
@@ -64,7 +64,7 @@ void NFactor::Activate(bool _bIsActivated)
 	bIsActivated = _bIsActivated;
 }
 
-TSharedPtr<NTimelineEventInterface> NFactor::GetEvent()
+TSharedPtr<NEventInterface> NFactor::GetEvent()
 {
 	return Event;
 }

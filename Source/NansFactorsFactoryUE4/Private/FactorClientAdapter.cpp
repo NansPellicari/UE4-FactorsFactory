@@ -5,7 +5,7 @@
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemUE4/Public/Attribute/ConfiguredTimeline.h"
-#include "NansTimelineSystemUE4/Public/Event/UnrealTimelineEventProxy.h"
+#include "NansTimelineSystemUE4/Public/Event/UnrealEventProxy.h"
 #include "NansTimelineSystemUE4/Public/TimelineBlueprintHelpers.h"
 #include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
 #include "Settings/FactorSettings.h"
@@ -24,7 +24,7 @@ void UNFactorClientAdapter::Init()
 	{
 		FConfiguredTimeline TimelineConf;
 		TimelineConf.Name = Conf.TimelineName;
-		UNTimelineManagerBaseDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, TimelineConf);
+		UNTimelineManagerDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, TimelineConf);
 		if (TimelineManager != nullptr)
 		{
 			CreateStack(Conf.Name, TimelineManager->GetTimeline());
@@ -43,7 +43,7 @@ void UNFactorClientAdapter::CreateStack(FName StackName, TSharedPtr<NTimelineInt
 		Warning,
 		TEXT("%s 3 %i"),
 		ANSI_TO_TCHAR(__FUNCTION__),
-		dynamic_cast<UnrealTimelineProxy*>(Timeline.Get()) != nullptr);
+		dynamic_cast<NUnrealTimelineProxy*>(Timeline.Get()) != nullptr);
 
 	Client->CreateStack(StackName, Timeline);
 }

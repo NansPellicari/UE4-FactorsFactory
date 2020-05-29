@@ -29,7 +29,7 @@ public:
 	{
 		return Factor.GetUID();
 	}
-	virtual TSharedPtr<NTimelineEventInterface> GetEvent()
+	virtual TSharedPtr<NEventInterface> GetEvent()
 	{
 		return Factor.GetEvent();
 	}

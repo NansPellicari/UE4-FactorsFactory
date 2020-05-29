@@ -4,7 +4,7 @@
 #include "FactorInterface.h"
 
 class IFactorOperator;
-class NTimelineEventInterface;
+class NEventInterface;
 
 namespace NFactorGUID
 {
@@ -19,18 +19,18 @@ public:
 		float _Duration,
 		FName Reason,
 		float _Delay = 0.f,
-		TSharedPtr<NTimelineEventInterface> _Event = NULL);
+		TSharedPtr<NEventInterface> _Event = NULL);
 	virtual ~NFactor();
 	virtual bool IsActivated() const override;
 	virtual IFactorOperator* GetOperator() const override;
 	virtual float GetFactorValue() const override;
 	virtual FName GetReason() const override;
 	virtual uint32 GetUID() const override;
-	virtual TSharedPtr<NTimelineEventInterface> GetEvent() override;
+	virtual TSharedPtr<NEventInterface> GetEvent() override;
 	void Activate(bool _bIsActivated);
 
 protected:
-	TSharedPtr<NTimelineEventInterface> Event;
+	TSharedPtr<NEventInterface> Event;
 	bool bIsActivated = true;
 	float FactorValue;
 	IFactorOperator* Operator;

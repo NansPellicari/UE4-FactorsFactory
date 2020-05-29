@@ -2,13 +2,13 @@
 
 #include "Attribute/FactorStackAttribute.h"
 #include "CoreMinimal.h"
+#include "Event/EventDecorator.h"
 #include "Event/FactorEventDecorator.h"
-#include "Event/TimelineEventDecorator.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
-#include "NansTimelineSystemUE4/Public/Event/UnrealTimelineEventProxy.h"
+#include "NansTimelineSystemUE4/Public/Event/UnrealEventProxy.h"
 #include "Settings/FactorSettings.h"
 
 #include "FactorAdapterAbstract.generated.h"
@@ -37,9 +37,8 @@ public:
 
 	virtual void Init()
 	{
-		Event = UNTimelineEventDecoratorFactory::CreateObject<UNFactorEventDecorator>(
-			this, UNFactorEventDecorator::StaticClass(), Reason);
-		TSharedPtr<NTimelineEventInterface> EventProxy = MakeShareable(new UnrealTimelineEventProxy(*Event));
+		Event = UNEventDecoratorFactory::CreateObject<UNFactorEventDecorator>(this, UNFactorEventDecorator::StaticClass(), Reason);
+		TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(*Event));
 		Factor = MakeShareable(new NFactor(FactorValue, GetConfiguredOperator(), Duration, Reason, Delay, EventProxy));
 	}
 
@@ -48,7 +47,7 @@ public:
 		return Factor;
 	}
 
-	virtual TSharedPtr<NTimelineEventInterface> GetEvent() override
+	virtual TSharedPtr<NEventInterface> GetEvent() override
 	{
 		return Factor->GetEvent();
 	};

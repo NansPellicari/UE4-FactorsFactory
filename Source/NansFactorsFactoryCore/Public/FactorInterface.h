@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NansTimelineSystemCore/public/TimelineEventBase.h"
+#include "NansTimelineSystemCore/public/Event.h"
 
 class IFactorOperator;
 
@@ -13,5 +13,5 @@ public:
 	virtual FName GetReason() const = 0;
 	virtual bool IsActivated() const = 0;
 	virtual uint32 GetUID() const = 0;
-	virtual TSharedPtr<NTimelineEventInterface> GetEvent() = 0;
+	virtual TSharedPtr<NEventInterface> GetEvent() = 0;
 };
