@@ -5,7 +5,7 @@
 
 class IFactorOperator;
 
-class NANSFACTORSFACTORYCORE_API INFactorInterface
+class NANSFACTORSFACTORYCORE_API NFactorInterface
 {
 public:
 	virtual IFactorOperator* GetOperator() const = 0;

@@ -14,7 +14,7 @@
 #include "FactorAdapterAbstract.generated.h"
 
 UCLASS(Abstract, Blueprintable)
-class NANSFACTORSFACTORYUE4_API UNFactorAdapterAbstract : public UObject, public INFactorInterface
+class NANSFACTORSFACTORYUE4_API UNFactorAdapterAbstract : public UObject, public NFactorInterface
 {
 	GENERATED_BODY()
 public:

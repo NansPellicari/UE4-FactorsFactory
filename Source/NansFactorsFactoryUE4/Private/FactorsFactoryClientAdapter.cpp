@@ -1,4 +1,4 @@
-#include "FactorClientAdapter.h"
+#include "FactorsFactoryClientAdapter.h"
 
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
@@ -10,9 +10,9 @@
 #include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
 #include "Settings/FactorSettings.h"
 
-UNFactorClientAdapter::UNFactorClientAdapter() {}
+UNFactorsFactoryClientAdapter::UNFactorsFactoryClientAdapter() {}
 
-void UNFactorClientAdapter::Init()
+void UNFactorsFactoryClientAdapter::Init()
 {
 	Client = MakeShareable(new NFactorsFactoryClient());
 
@@ -32,48 +32,42 @@ void UNFactorClientAdapter::Init()
 	}
 }
 
-void UNFactorClientAdapter::CreateStack(TArray<FName> StackNames, TSharedPtr<NTimelineInterface> Timeline)
+void UNFactorsFactoryClientAdapter::CreateStack(TArray<FName> StackNames, TSharedPtr<NTimelineInterface> Timeline)
 {
 	Client->CreateStack(StackNames, Timeline);
 }
 
-void UNFactorClientAdapter::CreateStack(FName StackName, TSharedPtr<NTimelineInterface> Timeline)
+void UNFactorsFactoryClientAdapter::CreateStack(FName StackName, TSharedPtr<NTimelineInterface> Timeline)
 {
-	UE_LOG(LogTemp,
-		Warning,
-		TEXT("%s 3 %i"),
-		ANSI_TO_TCHAR(__FUNCTION__),
-		dynamic_cast<NUnrealTimelineProxy*>(Timeline.Get()) != nullptr);
-
 	Client->CreateStack(StackName, Timeline);
 }
 
-void UNFactorClientAdapter::RemoveStack(FName StackName)
+void UNFactorsFactoryClientAdapter::RemoveStack(FName StackName)
 {
 	Client->RemoveStack(StackName);
 }
 
-NFactorState* UNFactorClientAdapter::GetState(FName StackName)
+NFactorState* UNFactorsFactoryClientAdapter::GetState(FName StackName)
 {
 	return Client->GetState(StackName);
 }
 
-TArray<NFactorState*> UNFactorClientAdapter::GetStates(TArray<FName> StackNames)
+TArray<NFactorState*> UNFactorsFactoryClientAdapter::GetStates(TArray<FName> StackNames)
 {
 	return Client->GetStates(StackNames);
 }
 
-void UNFactorClientAdapter::AddFactor(FName StackName, TSharedPtr<INFactorInterface> Factor)
+void UNFactorsFactoryClientAdapter::AddFactor(FName StackName, TSharedPtr<NFactorInterface> Factor)
 {
 	Client->AddFactor(StackName, Factor);
 }
 
-void UNFactorClientAdapter::SetDebug(const TArray<FName> StackNames, bool bDebug)
+void UNFactorsFactoryClientAdapter::SetDebug(const TArray<FName> StackNames, bool bDebug)
 {
 	Client->SetDebug(StackNames, bDebug);
 }
 
-void UNFactorClientAdapter::AddFactor(TArray<FName> StackNames, TSharedPtr<INFactorInterface> Factor)
+void UNFactorsFactoryClientAdapter::AddFactor(TArray<FName> StackNames, TSharedPtr<NFactorInterface> Factor)
 {
 	Client->AddFactor(StackNames, Factor);
 }

@@ -11,7 +11,7 @@
 #include "Engine/Blueprint.h"
 #include "Engine/BlueprintGeneratedClass.h"
 #include "Factor/FactorAdapterAbstract.h"
-#include "FactorFactory.h"
+#include "FactorsFactoryBlueprintHelpers.h"
 #include "GraphEditorActions.h"
 #include "K2Node_CallFunction.h"
 #include "K2Node_FactorOperator.h"
@@ -407,7 +407,7 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 
 	UK2Node_CallFunction* CallCreateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
 	CallCreateNode->FunctionReference.SetExternalMember(
-		GET_FUNCTION_NAME_CHECKED(UNFactorFactory, CreateFactor), UNFactorFactory::StaticClass());
+		GET_FUNCTION_NAME_CHECKED(UNFactorsFactoryBlueprintHelpers, CreateFactor), UNFactorsFactoryBlueprintHelpers::StaticClass());
 	CallCreateNode->AllocateDefaultPins();
 
 	CompilerContext.MessageLog.NotifyIntermediateObjectCreation(CallCreateNode, this);
@@ -577,7 +577,7 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 
 	UK2Node_CallFunction* CallAddFactorNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
 	CallAddFactorNode->FunctionReference.SetExternalMember(
-		GET_FUNCTION_NAME_CHECKED(UNFactorFactory, AddFactor), UNFactorFactory::StaticClass());
+		GET_FUNCTION_NAME_CHECKED(UNFactorsFactoryBlueprintHelpers, AddFactor), UNFactorsFactoryBlueprintHelpers::StaticClass());
 	CallAddFactorNode->AllocateDefaultPins();
 	CompilerContext.MessageLog.NotifyIntermediateObjectCreation(CallAddFactorNode, this);
 

@@ -3,7 +3,7 @@
 #include "Engine/GameInstance.h"
 #include "EngineGlobals.h"
 #include "Factor/FactorAdapters.h"
-#include "FactorFactory.h"
+#include "FactorsFactoryBlueprintHelpers.h"
 #include "Misc/AutomationTest.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
@@ -14,15 +14,15 @@
 
 #if WITH_DEV_AUTOMATION_TESTS
 
-BEGIN_DEFINE_SPEC(FactorFactorySpec,
-	"Nans.FactorsFactory.UE4.FactorFactory.Spec",
+BEGIN_DEFINE_SPEC(FactorsFactoryBlueprintHelpersSpec,
+	"Nans.FactorsFactory.UE4.FactorsFactoryBlueprintHelpers.Spec",
 	EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 UWorld* World;
 UFakeObject* FakeObject;
-END_DEFINE_SPEC(FactorFactorySpec)
-void FactorFactorySpec::Define()
+END_DEFINE_SPEC(FactorsFactoryBlueprintHelpersSpec)
+void FactorsFactoryBlueprintHelpersSpec::Define()
 {
-	Describe("How to use FactorFactory", [this]() {
+	Describe("How to use FactorsFactoryBlueprintHelpers", [this]() {
 		BeforeEach([this]() {
 			World = NTestWorld::CreateAndPlay(EWorldType::Game, true, NAME_None, UFactorFakeGameInstance::StaticClass());
 			FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
@@ -34,16 +34,16 @@ void FactorFactorySpec::Define()
 			TEST_NOT_NULL("FakeObject should be not null", FakeObject);
 			TEST_NOT_NULL("GEngine should still exists", GEngine);
 			TEST_NOT_NULL("World should still exists", FakeObject->GetWorld());
-			TEST_NOT_NULL("UNFactorClientAdapter should be retrieved", UNFactorFactory::GetFactorClient(FakeObject));
+			TEST_NOT_NULL("UNFactorsFactoryClientAdapter should be retrieved", UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject));
 			CollectGarbage(RF_NoFlags);
 			TEST_NOT_NULL("World should be not null", World);
 			TEST_NOT_NULL("World should still exists", FakeObject->GetWorld());
-			TEST_NOT_NULL("UNFactorClientAdapter should be retrieved", UNFactorFactory::GetFactorClient(FakeObject));
+			TEST_NOT_NULL("UNFactorsFactoryClientAdapter should be retrieved", UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject));
 			CollectGarbage(RF_NoFlags);
 		});
 
 		It("should instanciate a UNFactorAdapterBasic", [this]() {
-			UNFactorAdapterAbstract* MyObject = UNFactorFactory::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass());
+			UNFactorAdapterAbstract* MyObject = UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass());
 			TEST_NOT_NULL("Should not be null", MyObject);
 		});
 
@@ -54,7 +54,7 @@ void FactorFactorySpec::Define()
 
 				try
 				{
-					UNFactorFactory::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass());
+					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass());
 					TEST_TRUE("Should not be called", false);
 				}
 				catch (const TCHAR* e)
@@ -65,7 +65,7 @@ void FactorFactorySpec::Define()
 
 		// It("should Create and add a new Factor", [this]() {
 		// 	UNFactorAdapterBasic* MyObject =
-		// 		Cast<UNFactorAdapterBasic>(UNFactorFactory::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
+		// 		Cast<UNFactorAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
 		// 	TEST_NOT_NULL("Should not be null", MyObject);
 		// 	MyObject->FactorValue = 2.f;
 		// 	MyObject->Duration = 0;
@@ -73,7 +73,7 @@ void FactorFactorySpec::Define()
 		// 	MyObject->Operator = ENFactorOperator::Add;
 		// 	MyObject->InStack = FName("test1");
 
-		// 	UNFactorAdapterBasic* ObjectAdded = Cast<UNFactorAdapterBasic>(UNFactorFactory::AddFactor(FakeObject, MyObject));
+		// 	UNFactorAdapterBasic* ObjectAdded = Cast<UNFactorAdapterBasic>(UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject));
 		// 	TEST_EQ("Should be add and equals as itself...", ObjectAdded, MyObject);
 		// });
 
@@ -84,7 +84,7 @@ void FactorFactorySpec::Define()
 			// An error is thrown by the "myensureMsgf" function only in test env
 			// This global var is used to avoid this behavior.
 			GNAssertThrowError = false;
-			States = UNFactorFactory::GetFactorStates(FakeObject, Names);
+			States = UNFactorsFactoryBlueprintHelpers::GetFactorStates(FakeObject, Names);
 			GNAssertThrowError = true;
 
 			TEST_TRUE("And get some results", States.Num() > 0);
@@ -97,18 +97,18 @@ void FactorFactorySpec::Define()
 		// 	for (uint32 I = 0; I < 200; I++)
 		// 	{
 		// 		UNFactorAdapterBasic* MyObject =
-		// 			Cast<UNFactorAdapterBasic>(UNFactorFactory::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
+		// 			Cast<UNFactorAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
 		// 		MyObject->FactorValue = 2.f;
 		// 		MyObject->Duration = 0;
 		// 		MyObject->Reason = FName("Reason");
 		// 		MyObject->Operator = ENFactorOperator::Add;
 		// 		MyObject->InStack = Names[0];
 
-		// 		UNFactorFactory::AddFactor(FakeObject, MyObject);
+		// 		UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject);
 		// 	}
 
 		// 	TEST_TRUE("Yes it can without crashing", true);
-		// 	TMap<FName, FNFactorStateResult> States = UNFactorFactory::GetFactorStates(FakeObject, Names);
+		// 	TMap<FName, FNFactorStateResult> States = UNFactorsFactoryBlueprintHelpers::GetFactorStates(FakeObject, Names);
 		// 	TEST_TRUE("And get some results", States.Num() > 0);
 		// 	TEST_TRUE("And get a result for the stack 'test1'", States.Contains(Names[0]));
 
@@ -117,7 +117,7 @@ void FactorFactorySpec::Define()
 		// 	{
 		// 		TEST_EQ("And get a result", States[Names[0]].Amount, 400.f);
 		// 	}
-		// 	UNFactorFactory::Clear(FakeObject, Names);
+		// 	UNFactorsFactoryBlueprintHelpers::Clear(FakeObject, Names);
 		// });
 
 		// It("can add a lot of factor in one time AND in multiple Stacks", [this]() {
@@ -126,18 +126,18 @@ void FactorFactorySpec::Define()
 		// 	for (uint32 I = 0; I < 200; I++)
 		// 	{
 		// 		UNFactorAdapterBasic* MyObject =
-		// 			Cast<UNFactorAdapterBasic>(UNFactorFactory::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
+		// 			Cast<UNFactorAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
 		// 		MyObject->FactorValue = 2.f;
 		// 		MyObject->Duration = 0;
 		// 		MyObject->Reason = FName("Reason");
 		// 		MyObject->Operator = ENFactorOperator::Add;
 		// 		MyObject->InStack = Names[0];
 
-		// 		UNFactorFactory::AddFactor(FakeObject, MyObject);
+		// 		UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject);
 		// 	}
 
 		// 	TEST_TRUE("Yes it can create and add 200 diff without crashing", true);
-		// 	TMap<FName, FNFactorStateResult> States = UNFactorFactory::GetFactorStates(FakeObject, Names);
+		// 	TMap<FName, FNFactorStateResult> States = UNFactorsFactoryBlueprintHelpers::GetFactorStates(FakeObject, Names);
 		// 	TEST_TRUE("And get some results", States.Num() == 2);
 		// 	TEST_TRUE("And get a result for the stack 'test1'", States.Contains(Names[0]));
 		// 	TEST_TRUE("And get a result for the stack 'test2'", States.Contains(Names[1]));
@@ -148,7 +148,7 @@ void FactorFactorySpec::Define()
 		// 		TEST_EQ("And get a result", States[Names[0]].Amount, 400.f);
 		// 		TEST_EQ("And get a result", States[Names[1]].Amount, 400.f);
 		// 	}
-		// 	UNFactorFactory::Clear(FakeObject, Names);
+		// 	UNFactorsFactoryBlueprintHelpers::Clear(FakeObject, Names);
 		// });
 
 		// It("Should continue to works after garbage collects", [this]() {
@@ -156,19 +156,19 @@ void FactorFactorySpec::Define()
 
 		// 	for (uint32 I = 0; I < 2; I++)
 		// 	{
-		// 		UNFactorFactory::AddBasicFactor(FakeObject, Names, 2.f, ENFactorOperator::Add, 0, FName("Reason"));
+		// 		UNFactorsFactoryBlueprintHelpers::AddBasicFactor(FakeObject, Names, 2.f, ENFactorOperator::Add, 0, FName("Reason"));
 
 		// 		if (I == 1)
 		// 		{
 		// 			CollectGarbage(RF_NoFlags);
 		// 		}
 
-		// 		TMap<FName, FNFactorStateResult> States = UNFactorFactory::GetFactorStates(FakeObject, Names);
+		// 		TMap<FName, FNFactorStateResult> States = UNFactorsFactoryBlueprintHelpers::GetFactorStates(FakeObject, Names);
 		// 		UE_LOG(LogTemp, Display, TEXT("Count %d - Stack number  %d"), I, States.Num());
 		// 	}
 
 		// 	TEST_TRUE("Yes it can without crashing", true);
-		// 	UNFactorFactory::Clear(FakeObject, Names);
+		// 	UNFactorsFactoryBlueprintHelpers::Clear(FakeObject, Names);
 		// });
 
 		AfterEach([this]() {

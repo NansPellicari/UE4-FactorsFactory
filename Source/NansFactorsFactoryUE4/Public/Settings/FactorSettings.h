@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
-#include "NansTimelineSystemUE4/Public/Property/TimelineNameProperty.h"
 
 #include "FactorSettings.generated.h"
 

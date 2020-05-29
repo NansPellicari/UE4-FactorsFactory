@@ -1,6 +1,6 @@
 #include "FactorsFactoryGameInstance.h"
 
-UNFactorClientAdapter* INFactorsFactoryGameInstance::GetFactorsFactoryClient() const
+UNFactorsFactoryClientAdapter* INFactorsFactoryGameInstance::GetFactorsFactoryClient() const
 {
 	return nullptr;
 }

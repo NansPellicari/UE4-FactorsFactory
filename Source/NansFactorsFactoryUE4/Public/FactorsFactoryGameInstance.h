@@ -2,7 +2,7 @@
 
 #include "Attribute/FactorStackAttribute.h"
 #include "CoreMinimal.h"
-#include "FactorClientAdapter.h"
+#include "FactorsFactoryClientAdapter.h"
 #include "UObject/ObjectMacros.h"
 
 #include "FactorsFactoryGameInstance.generated.h"
@@ -17,5 +17,5 @@ class NANSFACTORSFACTORYUE4_API INFactorsFactoryGameInstance
 {
 	GENERATED_BODY()
 public:
-	virtual UNFactorClientAdapter* GetFactorsFactoryClient() const;
+	virtual UNFactorsFactoryClientAdapter* GetFactorsFactoryClient() const;
 };

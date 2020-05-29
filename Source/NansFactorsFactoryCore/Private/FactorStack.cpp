@@ -44,24 +44,20 @@ float NFactorStack::GetTime() const
 	return Timeline->GetCurrentTime();
 }
 
-INFactorInterface* NFactorStack::GetFactor(uint32 Key) const
+NFactorInterface* NFactorStack::GetFactor(uint32 Key) const
 {
 	mycheck(Name != NAME_None);
 	mycheck(Factors.IsValidIndex(Key));
 	return Factors[Key].Get();
 }
 
-void NFactorStack::AddFactor(TSharedPtr<INFactorInterface> Factor)
+void NFactorStack::AddFactor(TSharedPtr<NFactorInterface> Factor)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s 1"), ANSI_TO_TCHAR(__FUNCTION__));
 	mycheck(Name != NAME_None);
-	UE_LOG(LogTemp, Warning, TEXT("%s 2"), ANSI_TO_TCHAR(__FUNCTION__));
 	mycheck(Timeline.IsValid());
 	// This allow to notify time
 	Timeline->Attached(Factor->GetEvent());
-	UE_LOG(LogTemp, Warning, TEXT("%s 4"), ANSI_TO_TCHAR(__FUNCTION__));
 	Factors.Add(Factor);
-	UE_LOG(LogTemp, Warning, TEXT("%s 5"), ANSI_TO_TCHAR(__FUNCTION__));
 }
 
 bool NFactorStack::HasFlag(FString Flag) const
@@ -87,7 +83,7 @@ void NFactorStack::AddFactorsToState(NFactorState* State)
 {
 	for (int32 Index = 0; Index != Factors.Num(); ++Index)
 	{
-		TSharedPtr<INFactorInterface> Factor = Factors[Index];
+		TSharedPtr<NFactorInterface> Factor = Factors[Index];
 		if (!Factor.IsValid())
 		{
 			UE_LOG(LogTemp, Warning, TEXT("%s: Factor is invalid"), ANSI_TO_TCHAR(__FUNCTION__));

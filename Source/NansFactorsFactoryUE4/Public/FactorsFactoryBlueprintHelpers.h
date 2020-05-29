@@ -7,10 +7,10 @@
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "Settings/FactorSettings.h"
 
-#include "FactorFactory.generated.h"
+#include "FactorsFactoryBlueprintHelpers.generated.h"
 
 class IFactorOperator;
-class UNFactorClientAdapter;
+class UNFactorsFactoryClientAdapter;
 class UOperatorTest;
 class Factor;
 class UNFactorAdapterAbstract;
@@ -32,12 +32,12 @@ struct FNFactorStateResult
 };
 
 UCLASS(meta = (ScriptName = "FactorLibrary"))
-class NANSFACTORSFACTORYUE4_API UNFactorFactory : public UBlueprintFunctionLibrary
+class NANSFACTORSFACTORYUE4_API UNFactorsFactoryBlueprintHelpers : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:
-	static UNFactorClientAdapter* GetFactorClient(UObject* WorldContextObject);
-	static FNFactorStateResult GetFactorState(FFactorStackAttribute StackName, UNFactorClientAdapter* Client);
+	static UNFactorsFactoryClientAdapter* GetFactorClient(UObject* WorldContextObject);
+	static FNFactorStateResult GetFactorState(FFactorStackAttribute StackName, UNFactorsFactoryClientAdapter* Client);
 
 	// clang-format off
 	/**

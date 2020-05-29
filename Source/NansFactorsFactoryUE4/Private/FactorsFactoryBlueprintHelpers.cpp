@@ -1,11 +1,11 @@
-#include "FactorFactory.h"
+#include "FactorsFactoryBlueprintHelpers.h"
 
 #include "Engine.h"
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
 #include "Factor/FactorAdapters.h"
 #include "Factor/UnrealFactorProxy.h"
-#include "FactorClientAdapter.h"
+#include "FactorsFactoryClientAdapter.h"
 #include "FactorsFactoryGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
@@ -17,7 +17,7 @@
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
 #include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
 
-UNFactorClientAdapter* UNFactorFactory::GetFactorClient(UObject* WorldContextObject)
+UNFactorsFactoryClientAdapter* UNFactorsFactoryBlueprintHelpers::GetFactorClient(UObject* WorldContextObject)
 {
 	UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
 	if (!World) return nullptr;
@@ -25,13 +25,13 @@ UNFactorClientAdapter* UNFactorFactory::GetFactorClient(UObject* WorldContextObj
 	INFactorsFactoryGameInstance* GI = Cast<INFactorsFactoryGameInstance>(World->GetGameInstance());
 	mycheckf(GI != nullptr, TEXT("The game instance should implements INFactorsFactoryGameInstance to works"));
 
-	UNFactorClientAdapter* Client = GI->GetFactorsFactoryClient();
+	UNFactorsFactoryClientAdapter* Client = GI->GetFactorsFactoryClient();
 	return Client;
 }
 
-void UNFactorFactory::Debug(UObject* WorldContextObject, const TArray<FFactorStackAttribute> StackNames, const bool Debug)
+void UNFactorsFactoryBlueprintHelpers::Debug(UObject* WorldContextObject, const TArray<FFactorStackAttribute> StackNames, const bool Debug)
 {
-	UNFactorClientAdapter* Client = GetFactorClient(WorldContextObject);
+	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);
 	if (Client == nullptr) return;
 	TArray<FName> Names;
 	for (const FFactorStackAttribute& StackName : StackNames)
@@ -41,7 +41,7 @@ void UNFactorFactory::Debug(UObject* WorldContextObject, const TArray<FFactorSta
 	Client->SetDebug(Names, Debug);
 }
 
-FNFactorStateResult UNFactorFactory::GetFactorState(FFactorStackAttribute StackName, UNFactorClientAdapter* Client)
+FNFactorStateResult UNFactorsFactoryBlueprintHelpers::GetFactorState(FFactorStackAttribute StackName, UNFactorsFactoryClientAdapter* Client)
 {
 	NFactorState* State = Client->GetState(StackName.Name);
 	TArray<FName> Reasons;
@@ -59,32 +59,32 @@ FNFactorStateResult UNFactorFactory::GetFactorState(FFactorStackAttribute StackN
 
 	return FNFactorStateResult(State->Compute(), Reasons, State->GetTime());
 }
-FNFactorStateResult UNFactorFactory::GetFactorState(UObject* WorldContextObject, FFactorStackAttribute StackName)
+FNFactorStateResult UNFactorsFactoryBlueprintHelpers::GetFactorState(UObject* WorldContextObject, FFactorStackAttribute StackName)
 {
-	UNFactorClientAdapter* Client = GetFactorClient(WorldContextObject);
+	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);
 	if (Client == nullptr) return FNFactorStateResult();
 
-	return UNFactorFactory::GetFactorState(StackName, Client);
+	return UNFactorsFactoryBlueprintHelpers::GetFactorState(StackName, Client);
 }
 
-TMap<FName, FNFactorStateResult> UNFactorFactory::GetFactorStates(
+TMap<FName, FNFactorStateResult> UNFactorsFactoryBlueprintHelpers::GetFactorStates(
 	UObject* WorldContextObject, TArray<FFactorStackAttribute> StackNames)
 {
 	TMap<FName, FNFactorStateResult> Results;
-	UNFactorClientAdapter* Client = GetFactorClient(WorldContextObject);
+	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);
 
 	if (Client == nullptr) return Results;
 
 	for (const FFactorStackAttribute& StackName : StackNames)
 	{
-		Results.Add(StackName.Name, UNFactorFactory::GetFactorState(StackName, Client));
+		Results.Add(StackName.Name, UNFactorsFactoryBlueprintHelpers::GetFactorState(StackName, Client));
 	}
 	return Results;
 }
 
-void UNFactorFactory::Clear(UObject* WorldContextObject, TArray<FFactorStackAttribute> StackNames)
+void UNFactorsFactoryBlueprintHelpers::Clear(UObject* WorldContextObject, TArray<FFactorStackAttribute> StackNames)
 {
-	UNFactorClientAdapter* Client = GetFactorClient(WorldContextObject);
+	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);
 
 	if (Client == nullptr) return;
 
@@ -94,9 +94,9 @@ void UNFactorFactory::Clear(UObject* WorldContextObject, TArray<FFactorStackAttr
 	}
 }
 
-UNFactorAdapterAbstract* UNFactorFactory::AddFactor(UObject* WorldContextObject, UNFactorAdapterAbstract* Factor)
+UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::AddFactor(UObject* WorldContextObject, UNFactorAdapterAbstract* Factor)
 {
-	UNFactorClientAdapter* Client = GetFactorClient(WorldContextObject);
+	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);
 
 	if (Client == nullptr) return Factor;
 
@@ -106,8 +106,8 @@ UNFactorAdapterAbstract* UNFactorFactory::AddFactor(UObject* WorldContextObject,
 	return Factor;
 }
 
-UNFactorAdapterAbstract* UNFactorFactory::CreateFactor(UObject* WorldContextObject, UClass* Class)
+UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::CreateFactor(UObject* WorldContextObject, UClass* Class)
 {
-	UNFactorClientAdapter* Client = GetFactorClient(WorldContextObject);
+	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);
 	return Cast<UNFactorAdapterAbstract>(UGameplayStatics::SpawnObject(Class, Client));
 }

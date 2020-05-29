@@ -4,7 +4,7 @@
 #include "Factor/FactorAdapterAbstract.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 
-class NANSFACTORSFACTORYUE4_API UnrealFactorProxy : public INFactorInterface
+class NANSFACTORSFACTORYUE4_API UnrealFactorProxy : public NFactorInterface
 {
 public:
 	UNFactorAdapterAbstract& Factor;

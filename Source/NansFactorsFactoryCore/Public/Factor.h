@@ -11,7 +11,7 @@ namespace NFactorGUID
 	static uint32 sNextId = 0;
 }
 
-class NANSFACTORSFACTORYCORE_API NFactor : public INFactorInterface
+class NANSFACTORSFACTORYCORE_API NFactor : public NFactorInterface
 {
 public:
 	NFactor(float _FactorValue,

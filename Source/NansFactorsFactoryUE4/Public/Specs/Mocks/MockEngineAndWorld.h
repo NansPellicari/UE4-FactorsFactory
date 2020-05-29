@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FactorClientAdapter.h"
+#include "FactorsFactoryClientAdapter.h"
 #include "FactorsFactoryGameInstance.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeGameInstance.h"
@@ -34,14 +34,14 @@ class UFactorFakeGameInstance : public UFakeGameInstance, public INFactorsFactor
 public:
 	UFactorFakeGameInstance()
 	{
-		FactorsFactoryClient = NewObject<UNFactorClientAdapter>();
+		FactorsFactoryClient = NewObject<UNFactorsFactoryClientAdapter>();
 	}
-	virtual UNFactorClientAdapter* GetFactorsFactoryClient() const override
+	virtual UNFactorsFactoryClientAdapter* GetFactorsFactoryClient() const override
 	{
 		return FactorsFactoryClient;
 	}
 
 protected:
 	UPROPERTY()
-	UNFactorClientAdapter* FactorsFactoryClient;
+	UNFactorsFactoryClientAdapter* FactorsFactoryClient;
 };

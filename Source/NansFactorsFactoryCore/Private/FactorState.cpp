@@ -11,7 +11,7 @@ FNFactorStateOperator::FNFactorStateOperator()
 {
     Operator = new NNullOperator();
 }
-FNFactorStateOperator::FNFactorStateOperator(TSharedPtr<INFactorInterface> _Factor)
+FNFactorStateOperator::FNFactorStateOperator(TSharedPtr<NFactorInterface> _Factor)
 {
     Factor = _Factor;
     Value = Factor->GetFactorValue();
@@ -25,7 +25,7 @@ NFactorState::NFactorState(float _Time)
     Time = _Time;
 }
 
-void NFactorState::AddFactor(TSharedPtr<INFactorInterface> Factor)
+void NFactorState::AddFactor(TSharedPtr<NFactorInterface> Factor)
 {
     Operators.Add(FNFactorStateOperator(Factor));
 }

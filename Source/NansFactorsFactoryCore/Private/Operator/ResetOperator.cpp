@@ -14,7 +14,7 @@ IFactorOperator* NResetOperatorBase::NResetOperatorBase::GetInverse()
     return new NNullOperator();
 }
 
-FString NResetOperatorBase::GetResetIdFlag(INFactorInterface* Factor)
+FString NResetOperatorBase::GetResetIdFlag(NFactorInterface* Factor)
 {
     const FString Prefix = TEXT("Reset_list_");
     return FString::Format(TEXT("{0}{1}"), {Prefix, FString::FromInt(Factor->GetUID())});
@@ -24,11 +24,11 @@ float NResetOperator::Compute(float Lh, float Rh)
 {
     uint32 MaxAttempt = 10;
     float NullOperationResult = GetInverse()->Compute(Lh, Rh);
-    INFactorInterface* Factor = MyStack->GetFactor(KeyInStack);
+    NFactorInterface* Factor = MyStack->GetFactor(KeyInStack);
     // Means KeyInStack set is invalid
     mycheck(Factor != nullptr);
 
-    INFactorInterface* ResetFactor = Factor;
+    NFactorInterface* ResetFactor = Factor;
     while (MaxAttempt > 0 && (!ResetFactor->IsActivated() || OperatorUtils::IsOperatorWithStack(ResetFactor->GetOperator()) ||
                                  MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor))))
     {

@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-class INFactorInterface;
+class NFactorInterface;
 class IFactorOperatorWithStack;
 class NFactorState;
 class NTimelineInterface;
@@ -16,8 +16,8 @@ public:
 	void SetName(FName _Name);
 	FName GetName() const;
 	float GetTime() const;
-	INFactorInterface* GetFactor(uint32 Key) const;
-	void AddFactor(TSharedPtr<INFactorInterface> Factor);
+	NFactorInterface* GetFactor(uint32 Key) const;
+	void AddFactor(TSharedPtr<NFactorInterface> Factor);
 	bool HasFlag(FString Flag) const;
 	bool GetFlag(FString Flag) const;
 	void SetFlag(FString Flag, bool value);
@@ -27,7 +27,7 @@ public:
 protected:
 	TMap<FString, bool> IterationFlags;
 	TSharedPtr<NTimelineInterface> Timeline;
-	TArray<TSharedPtr<INFactorInterface>> Factors;
+	TArray<TSharedPtr<NFactorInterface>> Factors;
 	void AddFactorsToState(NFactorState* State);
 	FName Name;
 };

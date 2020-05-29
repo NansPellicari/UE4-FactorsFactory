@@ -3,14 +3,14 @@
 #include "CoreMinimal.h"
 #include "Operator/Interfaces.h"
 
-class INFactorInterface;
+class NFactorInterface;
 class NFactorStack;
 
 class NANSFACTORSFACTORYCORE_API NResetOperatorBase : public IFactorOperator
 {
 public:
     virtual IFactorOperator* GetInverse() override;
-    static FString GetResetIdFlag(INFactorInterface* Factor);
+    static FString GetResetIdFlag(NFactorInterface* Factor);
 };
 
 // TODO create ResetByReasonOperator ResetWithRangeOperator ResetAllOperator

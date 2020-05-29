@@ -61,7 +61,7 @@ TArray<NFactorState*> NFactorsFactoryClient::GetStates(TArray<FName> StackNames)
 	return States;
 }
 
-void NFactorsFactoryClient::AddFactor(TArray<FName> StackNames, TSharedPtr<INFactorInterface> Factor)
+void NFactorsFactoryClient::AddFactor(TArray<FName> StackNames, TSharedPtr<NFactorInterface> Factor)
 {
 	for (FName Name : StackNames)
 	{
@@ -69,7 +69,7 @@ void NFactorsFactoryClient::AddFactor(TArray<FName> StackNames, TSharedPtr<INFac
 	}
 }
 
-void NFactorsFactoryClient::AddFactor(FName StackName, TSharedPtr<INFactorInterface> Factor)
+void NFactorsFactoryClient::AddFactor(FName StackName, TSharedPtr<NFactorInterface> Factor)
 {
 	mycheck(StackName != NAME_None);
 	mycheckf(StacksList.Contains(StackName), TEXT("Stack %s does not exists"), *StackName.ToString());
