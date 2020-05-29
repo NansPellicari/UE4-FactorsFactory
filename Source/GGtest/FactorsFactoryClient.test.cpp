@@ -154,5 +154,5 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldDispatchTimeInStackAndFactors)
 	NFactorState* State = Client->GetStack()[Names[0]]->GetCurrentState();
 	// Time should be synchronized between client>stacks>factors
 	EXPECT_EQ(Timeline->GetCurrentTime(), State->GetTime());
-	EXPECT_EQ(Timeline->GetCurrentTime() - TickInterval, Factor->GetLocalTime());
+	EXPECT_EQ(Timeline->GetCurrentTime() - TickInterval, Factor->GetEvent()->GetLocalTime());
 }

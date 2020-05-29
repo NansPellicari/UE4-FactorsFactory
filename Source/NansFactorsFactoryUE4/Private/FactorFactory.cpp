@@ -4,6 +4,7 @@
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
 #include "Factor/FactorAdapters.h"
+#include "Factor/UnrealFactorProxy.h"
 #include "FactorClientAdapter.h"
 #include "FactorsFactoryGameInstance.h"
 #include "Kismet/GameplayStatics.h"
@@ -99,7 +100,8 @@ UNFactorAdapterAbstract* UNFactorFactory::AddFactor(UObject* WorldContextObject,
 
 	if (Client == nullptr) return Factor;
 
-	Client->AddFactor(Factor->InStack.Name, Factor);
+	Factor->Init();
+	Client->AddFactor(Factor->InStack.Name, MakeShareable(new UnrealFactorProxy(*Factor)));
 
 	return Factor;
 }

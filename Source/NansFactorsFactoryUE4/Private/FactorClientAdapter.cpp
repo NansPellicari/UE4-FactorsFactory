@@ -1,14 +1,18 @@
 #include "FactorClientAdapter.h"
 
-#include "Factor/FactorAdapterAbstract.h"
+#include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
+#include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemUE4/Public/Attribute/ConfiguredTimeline.h"
-#include "NansTimelineSystemUE4/Public/Manager/TimelineManagerBaseDecorator.h"
+#include "NansTimelineSystemUE4/Public/Event/UnrealTimelineEventProxy.h"
 #include "NansTimelineSystemUE4/Public/TimelineBlueprintHelpers.h"
+#include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
 #include "Settings/FactorSettings.h"
 
-UNFactorClientAdapter::UNFactorClientAdapter()
+UNFactorClientAdapter::UNFactorClientAdapter() {}
+
+void UNFactorClientAdapter::Init()
 {
 	Client = MakeShareable(new NFactorsFactoryClient());
 
@@ -20,17 +24,28 @@ UNFactorClientAdapter::UNFactorClientAdapter()
 	{
 		FConfiguredTimeline TimelineConf;
 		TimelineConf.Name = Conf.TimelineName;
-		UNTimelineManagerBaseDecorator* Timeline = UNTimelineBlueprintHelpers::GetTimeline(this, TimelineConf);
-		if (Timeline != nullptr)
+		UNTimelineManagerBaseDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, TimelineConf);
+		if (TimelineManager != nullptr)
 		{
-			CreateStack(Conf.Name, Timeline);
+			CreateStack(Conf.Name, TimelineManager->GetTimeline());
 		}
 	}
 }
 
-void UNFactorClientAdapter::CreateStack(FName StackName, UNTimelineManagerBaseDecorator* _Timeline)
+void UNFactorClientAdapter::CreateStack(TArray<FName> StackNames, TSharedPtr<NTimelineInterface> Timeline)
 {
-	Client->CreateStack(StackName, _Timeline->GetTimeline());
+	Client->CreateStack(StackNames, Timeline);
+}
+
+void UNFactorClientAdapter::CreateStack(FName StackName, TSharedPtr<NTimelineInterface> Timeline)
+{
+	UE_LOG(LogTemp,
+		Warning,
+		TEXT("%s 3 %i"),
+		ANSI_TO_TCHAR(__FUNCTION__),
+		dynamic_cast<UnrealTimelineProxy*>(Timeline.Get()) != nullptr);
+
+	Client->CreateStack(StackName, Timeline);
 }
 
 void UNFactorClientAdapter::RemoveStack(FName StackName)
@@ -48,9 +63,9 @@ TArray<NFactorState*> UNFactorClientAdapter::GetStates(TArray<FName> StackNames)
 	return Client->GetStates(StackNames);
 }
 
-void UNFactorClientAdapter::AddFactor(FName StackName, UNFactorAdapterAbstract* Factor)
+void UNFactorClientAdapter::AddFactor(FName StackName, TSharedPtr<INFactorInterface> Factor)
 {
-	Client->AddFactor(StackName, Factor->GetFactor());
+	Client->AddFactor(StackName, Factor);
 }
 
 void UNFactorClientAdapter::SetDebug(const TArray<FName> StackNames, bool bDebug)
@@ -58,7 +73,7 @@ void UNFactorClientAdapter::SetDebug(const TArray<FName> StackNames, bool bDebug
 	Client->SetDebug(StackNames, bDebug);
 }
 
-void UNFactorClientAdapter::AddFactor(TArray<FName> StackNames, UNFactorAdapterAbstract* Factor)
+void UNFactorClientAdapter::AddFactor(TArray<FName> StackNames, TSharedPtr<INFactorInterface> Factor)
 {
-	Client->AddFactor(StackNames, Factor->GetFactor());
+	Client->AddFactor(StackNames, Factor);
 }

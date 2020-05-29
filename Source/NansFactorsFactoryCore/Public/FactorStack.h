@@ -5,12 +5,12 @@
 class INFactorInterface;
 class IFactorOperatorWithStack;
 class NFactorState;
-class NTimeline;
+class NTimelineInterface;
 
 class NANSFACTORSFACTORYCORE_API NFactorStack
 {
 public:
-	NFactorStack(FName _Name, TSharedPtr<NTimeline> _Timeline);
+	NFactorStack(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
 	virtual ~NFactorStack();
 	void Reset();
 	void SetName(FName _Name);
@@ -26,7 +26,7 @@ public:
 
 protected:
 	TMap<FString, bool> IterationFlags;
-	TSharedPtr<NTimeline> Timeline;
+	TSharedPtr<NTimelineInterface> Timeline;
 	TArray<TSharedPtr<INFactorInterface>> Factors;
 	void AddFactorsToState(NFactorState* State);
 	FName Name;

@@ -16,7 +16,7 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithOneOperatorGiven)
 	float Time = 1;
 	NFactorState* FactorState = new NFactorState(Time);
 	INFactorInterface* Factor = new NFactor(2.f, new NAddOperator(), 0, FName("Exhausted"));
-	Factor->AddTime(Time);
+	Factor->GetEvent()->NotifyAddTime(Time);
 	FactorState->AddFactor(MakeShareable(Factor));
 	EXPECT_EQ(FactorState->Compute(), 2.f);
 }
@@ -31,7 +31,7 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithABunchOfOperatorsGiven)
 
 	for (auto Factor : Factors)
 	{
-		Factor->AddTime(Time);
+		Factor->GetEvent()->NotifyAddTime(Time);
 		FactorState->AddFactor(Factor);
 	}
 	EXPECT_EQ(FactorState->Compute(), 4.f);
@@ -51,7 +51,7 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithABunchOfOperatorsGivenA
 
 	for (auto Factor : Factors)
 	{
-		Factor->AddTime(Time);
+		Factor->GetEvent()->NotifyAddTime(Time);
 		FactorState->AddFactor(Factor);
 	}
 	EXPECT_EQ(FactorState->Compute(), 4.f);

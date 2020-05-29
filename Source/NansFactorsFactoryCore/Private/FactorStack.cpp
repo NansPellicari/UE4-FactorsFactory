@@ -21,7 +21,7 @@ void NFactorStack::Reset()
 	Factors.Empty();
 }
 
-NFactorStack::NFactorStack(FName _Name, TSharedPtr<NTimeline> _Timeline)
+NFactorStack::NFactorStack(FName _Name, TSharedPtr<NTimelineInterface> _Timeline)
 {
 	Name = _Name;
 	Timeline = _Timeline;
@@ -53,11 +53,15 @@ INFactorInterface* NFactorStack::GetFactor(uint32 Key) const
 
 void NFactorStack::AddFactor(TSharedPtr<INFactorInterface> Factor)
 {
+	UE_LOG(LogTemp, Warning, TEXT("%s 1"), ANSI_TO_TCHAR(__FUNCTION__));
 	mycheck(Name != NAME_None);
+	UE_LOG(LogTemp, Warning, TEXT("%s 2"), ANSI_TO_TCHAR(__FUNCTION__));
 	mycheck(Timeline.IsValid());
 	// This allow to notify time
-	Timeline->Attached(Factor);
+	Timeline->Attached(Factor->GetEvent());
+	UE_LOG(LogTemp, Warning, TEXT("%s 4"), ANSI_TO_TCHAR(__FUNCTION__));
 	Factors.Add(Factor);
+	UE_LOG(LogTemp, Warning, TEXT("%s 5"), ANSI_TO_TCHAR(__FUNCTION__));
 }
 
 bool NFactorStack::HasFlag(FString Flag) const

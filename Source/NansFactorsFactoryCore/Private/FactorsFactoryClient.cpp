@@ -15,7 +15,7 @@ void NFactorsFactoryClient::RemoveStack(FName StackName)
 	}
 }
 
-void NFactorsFactoryClient::CreateStack(FName StackName, TSharedPtr<NTimeline> _Timeline)
+void NFactorsFactoryClient::CreateStack(FName StackName, TSharedPtr<NTimelineInterface> _Timeline)
 {
 	if (myensureMsgf(!StacksList.Contains(StackName), TEXT("The stack \"%s\" has been already created"), *StackName.ToString()))
 	{
@@ -24,7 +24,7 @@ void NFactorsFactoryClient::CreateStack(FName StackName, TSharedPtr<NTimeline> _
 	}
 }
 
-void NFactorsFactoryClient::CreateStack(TArray<FName> StackNames, TSharedPtr<NTimeline> Timeline)
+void NFactorsFactoryClient::CreateStack(TArray<FName> StackNames, TSharedPtr<NTimelineInterface> Timeline)
 {
 	for (FName Name : StackNames)
 	{
@@ -75,7 +75,7 @@ void NFactorsFactoryClient::AddFactor(FName StackName, TSharedPtr<INFactorInterf
 	mycheckf(StacksList.Contains(StackName), TEXT("Stack %s does not exists"), *StackName.ToString());
 	TSharedPtr<NFactorStack> Stack = StacksList[StackName];
 
-	if (!Stack.IsValid())
+	if (!Stack.IsValid() || !Factor.IsValid())
 	{
 		return;
 	}
