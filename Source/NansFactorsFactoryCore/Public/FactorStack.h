@@ -16,7 +16,7 @@ public:
 	void SetName(FName _Name);
 	FName GetName() const;
 	float GetTime() const;
-	NFactorInterface* GetFactor(uint32 Key) const;
+	TSharedRef<NFactorInterface> GetFactor(uint32 Key) const;
 	void AddFactor(TSharedPtr<NFactorInterface> Factor);
 	bool HasFlag(FString Flag) const;
 	bool GetFlag(FString Flag) const;

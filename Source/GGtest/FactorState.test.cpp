@@ -6,6 +6,8 @@
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "gtest/gtest.h"
 
+#include <iostream>
+
 class NansFactorsFactoryCoreStateTest : public ::testing::Test
 {
 protected:

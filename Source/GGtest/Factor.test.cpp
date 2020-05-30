@@ -4,6 +4,8 @@
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "gtest/gtest.h"
 
+#include <iostream>
+
 class NansFactorsFactoryCoreFactorTest : public ::testing::Test
 {
 protected:

@@ -8,6 +8,8 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+#include <iostream>
+
 class FakeResetOperator : public NResetOperator
 {
 public:
@@ -38,8 +40,8 @@ class NansFactorsFactoryCoreResetOperatorTest : public ::testing::Test
 protected:
 	void SetUp() override
 	{
-		Timeline = new NTimeline(new MockTimelineManager());
-		FactorStack = new FakeFactorStack(FName("Dialog"), MakeShareable(Timeline));
+		Timeline = MakeShareable(new NTimeline(new MockTimelineManager()));
+		FactorStack = MakeShareable(new FakeFactorStack(FName("Dialog"), Timeline));
 
 		FactorStack->AddFactor(MakeShareable(new NFactor(2, new NAddOperator(), 0, FName("reason1"))));
 		FactorStack->AddFactor(MakeShareable(new NFactor(3, new NAddOperator(), 0, FName("reason2"))));
@@ -47,11 +49,11 @@ protected:
 
 	void TearDown() override
 	{
-		FactorStack->Reset();
+		FactorStack.Reset();
 	}
 
-	FakeFactorStack* FactorStack;
-	NTimeline* Timeline;
+	TSharedPtr<FakeFactorStack> FactorStack;
+	TSharedPtr<NTimeline> Timeline;
 };
 
 TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldCheckIfIsAnOperatorWithStackOrNot)

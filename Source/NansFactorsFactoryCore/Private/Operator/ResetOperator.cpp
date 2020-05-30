@@ -9,60 +9,64 @@
 
 const FName NResetOperator::Name(TEXT("Reset"));
 
-IFactorOperator* NResetOperatorBase::NResetOperatorBase::GetInverse()
+TSharedPtr<IFactorOperator> NResetOperatorBase::GetInverse()
 {
-    return new NNullOperator();
+	static TSharedPtr<IFactorOperator> Operator = MakeShareable(new NNullOperator());
+	return Operator;
 }
 
-FString NResetOperatorBase::GetResetIdFlag(NFactorInterface* Factor)
+FString NResetOperatorBase::GetResetIdFlag(TSharedRef<NFactorInterface> Factor)
 {
-    const FString Prefix = TEXT("Reset_list_");
-    return FString::Format(TEXT("{0}{1}"), {Prefix, FString::FromInt(Factor->GetUID())});
+	const FString Prefix = TEXT("Reset_list_");
+	return FString::Format(TEXT("{0}{1}"), {Prefix, FString::FromInt(Factor->GetUID())});
 }
 
 float NResetOperator::Compute(float Lh, float Rh)
 {
-    uint32 MaxAttempt = 10;
-    float NullOperationResult = GetInverse()->Compute(Lh, Rh);
-    NFactorInterface* Factor = MyStack->GetFactor(KeyInStack);
-    // Means KeyInStack set is invalid
-    mycheck(Factor != nullptr);
+	mycheck(MyStack != nullptr);
+	uint32 MaxAttempt = 10;
 
-    NFactorInterface* ResetFactor = Factor;
-    while (MaxAttempt > 0 && (!ResetFactor->IsActivated() || OperatorUtils::IsOperatorWithStack(ResetFactor->GetOperator()) ||
-                                 MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor))))
-    {
-        int32 ResetKey = KeyInStack - (Rh + (10 - MaxAttempt));
-        if (ResetKey < 0) return NullOperationResult;
-        ResetFactor = MyStack->GetFactor(ResetKey);
-        MaxAttempt--;
-    }
+	float NullOperationResult = GetInverse()->Compute(Lh, Rh);
+	TSharedRef<NFactorInterface> Factor = MyStack->GetFactor(KeyInStack);
 
-    if (ResetFactor == Factor)
-    {
-        return NullOperationResult;
-    }
+	TSharedRef<NFactorInterface> ResetFactor = Factor;
+	while (MaxAttempt > 0 && (!ResetFactor->IsActivated() || OperatorUtils::IsOperatorWithStack(ResetFactor->GetOperator()) ||
+								 MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor))))
+	{
+		int32 ResetKey = KeyInStack - (Rh + (10 - MaxAttempt));
+		if (ResetKey < 0) return NullOperationResult;
+		ResetFactor = MyStack->GetFactor(ResetKey);
+		MaxAttempt--;
+	}
 
-    if (!MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor)) ||
-        !MyStack->GetFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor)))
-    {
-        MyStack->SetFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor), true);
-    }
-    return ResetFactor->GetOperator()->GetInverse()->Compute(Lh, ResetFactor->GetFactorValue());
+	if (ResetFactor == Factor)
+	{
+		return NullOperationResult;
+	}
+
+	if (!MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor)) ||
+		!MyStack->GetFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor)))
+	{
+		MyStack->SetFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor), true);
+	}
+	return ResetFactor->GetOperator()->GetInverse()->Compute(Lh, ResetFactor->GetFactorValue());
 }
 
-IFactorOperator* NResetOperator::GetInverse()
+TSharedPtr<IFactorOperator> NResetOperator::GetInverse()
 {
-    return new NNullOperator();
+	static TSharedPtr<IFactorOperator> Operator = MakeShareable(new NNullOperator());
+	return Operator;
 }
 
 void NResetOperator::SetKeyInStack(uint32 Key)
 {
-    mycheck(MyStack != nullptr);
-    KeyInStack = Key;
+	mycheck(MyStack != nullptr);
+	KeyInStack = Key;
 }
 
 void NResetOperator::SetStack(NFactorStack* Stack)
 {
-    MyStack = Stack;
+	MyStack = Stack;
 }
+
+NResetOperator::~NResetOperator() {}

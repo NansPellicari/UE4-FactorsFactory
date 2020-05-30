@@ -14,8 +14,8 @@ class NansFactorsFactoryCoreStackTest : public ::testing::Test
 protected:
 	void SetUp() override
 	{
-		Timeline = new NTimeline(new MockTimelineManager());
-		FactorStack = new NFactorStack(FName("Dialog"), MakeShareable(Timeline));
+		Timeline = MakeShareable(new NTimeline(new MockTimelineManager()));
+		FactorStack = MakeShareable(new NFactorStack(FName("Dialog"), Timeline));
 
 		FactorStack->AddFactor(MakeShareable(new NFactor(2.f, new NAddOperator(), 0, FName("Exhausted"))));
 		FactorStack->AddFactor(MakeShareable(new NFactor(1.5f, new NMultiplyOperator(), 2, FName("Drunk"))));
@@ -24,11 +24,11 @@ protected:
 
 	void TearDown() override
 	{
-		FactorStack->Reset();
+		FactorStack.Reset();
 	}
 
-	NFactorStack* FactorStack;
-	NTimeline* Timeline;
+	TSharedPtr<NFactorStack> FactorStack;
+	TSharedPtr<NTimeline> Timeline;
 };
 
 TEST_F(NansFactorsFactoryCoreStackTest, ShouldRemovesEverySetFlagsAfterGettingTheCurrentState)

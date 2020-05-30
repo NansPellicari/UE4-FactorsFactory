@@ -8,50 +8,54 @@ const FName NDividerOperator::Name(TEXT("Divider"));
 
 float NNullOperator::Compute(float Lh, float Rh)
 {
-    return Lh;
+	return Lh;
 }
 
-IFactorOperator* NNullOperator::GetInverse()
+TSharedPtr<IFactorOperator> NNullOperator::GetInverse()
 {
-    return this;
+	return MakeShareable(this);
 }
 
 float NAddOperator::Compute(float Lh, float Rh)
 {
-    return Lh + Rh;
+	return Lh + Rh;
 }
 
-IFactorOperator* NAddOperator::GetInverse()
+TSharedPtr<IFactorOperator> NAddOperator::GetInverse()
 {
-    return new NSubsctractOperator();
+	static TSharedPtr<IFactorOperator> Operator = MakeShareable(new NSubsctractOperator());
+	return Operator;
 }
 
 float NSubsctractOperator::Compute(float Lh, float Rh)
 {
-    return Lh - Rh;
+	return Lh - Rh;
 }
 
-IFactorOperator* NSubsctractOperator::GetInverse()
+TSharedPtr<IFactorOperator> NSubsctractOperator::GetInverse()
 {
-    return new NAddOperator();
+	static TSharedPtr<IFactorOperator> Operator = MakeShareable(new NAddOperator());
+	return Operator;
 }
 
 float NMultiplyOperator::Compute(float Lh, float Rh)
 {
-    return Lh * Rh;
+	return Lh * Rh;
 }
 
-IFactorOperator* NMultiplyOperator::GetInverse()
+TSharedPtr<IFactorOperator> NMultiplyOperator::GetInverse()
 {
-    return new NDividerOperator();
+	static TSharedPtr<IFactorOperator> Operator = MakeShareable(new NDividerOperator());
+	return Operator;
 }
 
 float NDividerOperator::Compute(float Lh, float Rh)
 {
-    return Lh / Rh;
+	return Lh / Rh;
 }
 
-IFactorOperator* NDividerOperator::GetInverse()
+TSharedPtr<IFactorOperator> NDividerOperator::GetInverse()
 {
-    return new NMultiplyOperator();
+	static TSharedPtr<IFactorOperator> Operator = MakeShareable(new NMultiplyOperator());
+	return Operator;
 }

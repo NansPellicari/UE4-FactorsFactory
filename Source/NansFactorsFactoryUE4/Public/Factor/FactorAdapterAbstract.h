@@ -42,11 +42,6 @@ public:
 		Factor = MakeShareable(new NFactor(FactorValue, GetConfiguredOperator(), Duration, Reason, Delay, EventProxy));
 	}
 
-	TSharedPtr<NFactor> GetFactor()
-	{
-		return Factor;
-	}
-
 	virtual TSharedPtr<NEventInterface> GetEvent() override
 	{
 		return Factor->GetEvent();

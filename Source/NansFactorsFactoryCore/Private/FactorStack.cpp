@@ -10,7 +10,8 @@
 
 NFactorStack::~NFactorStack()
 {
-	Reset();
+	IterationFlags.Empty();
+	Factors.Empty();
 	Timeline.Reset();
 }
 
@@ -44,11 +45,12 @@ float NFactorStack::GetTime() const
 	return Timeline->GetCurrentTime();
 }
 
-NFactorInterface* NFactorStack::GetFactor(uint32 Key) const
+TSharedRef<NFactorInterface> NFactorStack::GetFactor(uint32 Key) const
 {
 	mycheck(Name != NAME_None);
 	mycheck(Factors.IsValidIndex(Key));
-	return Factors[Key].Get();
+
+	return Factors[Key].ToSharedRef();
 }
 
 void NFactorStack::AddFactor(TSharedPtr<NFactorInterface> Factor)
@@ -81,7 +83,7 @@ void NFactorStack::SetFlag(FString Flag, bool value)
 
 void NFactorStack::AddFactorsToState(NFactorState* State)
 {
-	for (int32 Index = 0; Index != Factors.Num(); ++Index)
+	for (int32 Index = 0; Index < Factors.Num(); ++Index)
 	{
 		TSharedPtr<NFactorInterface> Factor = Factors[Index];
 		if (!Factor.IsValid())
@@ -94,6 +96,7 @@ void NFactorStack::AddFactorsToState(NFactorState* State)
 		if (Operator != nullptr)
 		{
 			Operator->SetStack(this);
+
 			Operator->SetKeyInStack(Index);
 		}
 		State->AddFactor(Factor);
@@ -109,5 +112,6 @@ NFactorState* NFactorStack::GetCurrentState()
 	IterationFlags.Empty();
 
 	AddFactorsToState(State);
+
 	return State;
 }

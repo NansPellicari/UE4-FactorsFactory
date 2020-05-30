@@ -3,6 +3,8 @@
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "gtest/gtest.h"
 
+#include <iostream>
+
 class NansFactorsFactoryCoreOperatorTest : public ::testing::Test
 {
 protected:
@@ -14,7 +16,7 @@ TEST_F(NansFactorsFactoryCoreOperatorTest, ShouldComputeWithANullOperator)
 
 	EXPECT_EQ(Operator->GetName(), NNullOperator::Name);
 	EXPECT_EQ(Operator->Compute(1, 2), 1.f);
-	EXPECT_EQ(Operator, Operator->GetInverse());
+	EXPECT_EQ(Operator, Operator->GetInverse().Get());
 }
 
 TEST_F(NansFactorsFactoryCoreOperatorTest, ShouldComputeWithAnAddOperator)
