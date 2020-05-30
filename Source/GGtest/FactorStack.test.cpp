@@ -17,9 +17,9 @@ protected:
 		Timeline = MakeShareable(new NTimeline(new MockTimelineManager()));
 		FactorStack = MakeShareable(new NFactorStack(FName("Dialog"), Timeline));
 
-		FactorStack->AddFactor(MakeShareable(new NFactor(2.f, new NAddOperator(), 0, FName("Exhausted"))));
-		FactorStack->AddFactor(MakeShareable(new NFactor(1.5f, new NMultiplyOperator(), 2, FName("Drunk"))));
-		FactorStack->AddFactor(MakeShareable(new NFactor(2.f, new NAddOperator(), 10, FName("Psychologicaly attacked"))));
+		FactorStack->AddFactor(MakeShareable(new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"))));
+		FactorStack->AddFactor(MakeShareable(new NFactor(1.5f, MakeShareable(new NMultiplyOperator()), 2, FName("Drunk"))));
+		FactorStack->AddFactor(MakeShareable(new NFactor(2.f, MakeShareable(new NAddOperator()), 10, FName("Psychologicaly attacked"))));
 	}
 
 	void TearDown() override
@@ -27,7 +27,7 @@ protected:
 		FactorStack.Reset();
 	}
 
-	TSharedPtr<NFactorStack> FactorStack;
+	TSharedPtr<NFactorStackInterface> FactorStack;
 	TSharedPtr<NTimeline> Timeline;
 };
 
@@ -78,7 +78,7 @@ TEST_F(NansFactorsFactoryCoreStackTest, FactorStackShouldGetValidStateAndCompute
 {
 	Timeline->SetTickInterval(4.f);
 	Timeline->NotifyTick();
-	FactorStack->AddFactor(MakeShareable(new NFactor(4.f, new NAddOperator(), 1.f, FName("Exhausted"))));
+	FactorStack->AddFactor(MakeShareable(new NFactor(4.f, MakeShareable(new NAddOperator()), 1.f, FName("Exhausted"))));
 	auto State = FactorStack->GetCurrentState();
 	EXPECT_EQ(State->GetTime(), 4.f);
 	EXPECT_EQ(State->Compute(), 8.f);

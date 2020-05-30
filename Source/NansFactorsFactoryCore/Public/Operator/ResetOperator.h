@@ -4,17 +4,17 @@
 #include "Operator/Interfaces.h"
 
 class NFactorInterface;
-class NFactorStack;
+class NFactorStackInterface;
 
-class NANSFACTORSFACTORYCORE_API NResetOperatorBase : public IFactorOperator
+class NANSFACTORSFACTORYCORE_API NResetOperatorBase : public FactorOperatorInterface
 {
 public:
-	virtual TSharedPtr<IFactorOperator> GetInverse() override;
+	virtual TSharedPtr<FactorOperatorInterface> GetInverse() override;
 	static FString GetResetIdFlag(TSharedRef<NFactorInterface> Factor);
 };
 
 // TODO create ResetByReasonOperator ResetWithRangeOperator ResetAllOperator
-class NANSFACTORSFACTORYCORE_API NResetOperator : public NResetOperatorBase, public IFactorOperatorWithStack
+class NANSFACTORSFACTORYCORE_API NResetOperator : public NResetOperatorBase, public FactorOperatorInterfaceWithStack
 {
 public:
 	virtual ~NResetOperator();
@@ -24,11 +24,11 @@ public:
 		return Name;
 	}
 	virtual float Compute(float Lh, float Rh) override;
-	virtual TSharedPtr<IFactorOperator> GetInverse() override;
-	virtual void SetStack(NFactorStack* Stack) override;
+	virtual TSharedPtr<FactorOperatorInterface> GetInverse() override;
+	virtual void SetStack(NFactorStackInterface* Stack) override;
 	virtual void SetKeyInStack(uint32 Key) override;
 
 protected:
-	NFactorStack* MyStack;
+	NFactorStackInterface* MyStack;
 	uint32 KeyInStack;
 };

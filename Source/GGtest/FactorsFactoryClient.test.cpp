@@ -15,7 +15,7 @@
 class UNFakeFactorsFactoryClient : public NFactorsFactoryClient
 {
 public:
-	TMap<FName, TSharedPtr<NFactorStack>> GetStack()
+	TMap<FName, TSharedPtr<NFactorStackInterface>> GetStack()
 	{
 		return StacksList;
 	};
@@ -72,7 +72,7 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldAddAFactorToAStack)
 {
 	FName Name = FName("test");
 	Client->CreateStack(Name, Timeline);
-	Client->AddFactor(Name, MakeShareable(new NFactor(1, new NAddOperator(), 0, FName("reason1"))));
+	Client->AddFactor(Name, MakeShareable(new NFactor(1, MakeShareable(new NAddOperator()), 0, FName("reason1"))));
 	EXPECT_EQ(Client->GetStack()[Name]->GetFactor(0)->GetReason(), FName("reason1"));
 }
 
@@ -80,7 +80,7 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldAddANewFactorTo_2Stacks)
 {
 	TArray<FName> Names = {FName("test1"), FName("test2")};
 	Client->CreateStack(Names, Timeline);
-	Client->AddFactor(Names, MakeShareable(new NFactor(1, new NAddOperator(), 0, FName("reason1"))));
+	Client->AddFactor(Names, MakeShareable(new NFactor(1, MakeShareable(new NAddOperator()), 0, FName("reason1"))));
 	EXPECT_EQ(Client->GetStack()[Names[0]]->GetFactor(0), Client->GetStack()[Names[1]]->GetFactor(0));
 }
 
@@ -88,7 +88,7 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldGetAStackSStateAfterAddingFactor)
 {
 	FName Name = FName("test");
 	Client->CreateStack(Name, Timeline);
-	Client->AddFactor(Name, MakeShareable(new NFactor(1, new NAddOperator(), 0, FName("reason1"))));
+	Client->AddFactor(Name, MakeShareable(new NFactor(1, MakeShareable(new NAddOperator()), 0, FName("reason1"))));
 	EXPECT_NE(Client->GetState(Name), nullptr);
 }
 
@@ -96,7 +96,7 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldGetStackSStatesAfterAddingFactors
 {
 	TArray<FName> Names = {FName("test1"), FName("test2")};
 	Client->CreateStack(Names, Timeline);
-	Client->AddFactor(Names, MakeShareable(new NFactor(1, new NAddOperator(), 0, FName("reason1"))));
+	Client->AddFactor(Names, MakeShareable(new NFactor(1, MakeShareable(new NAddOperator()), 0, FName("reason1"))));
 	EXPECT_EQ(Client->GetStates(Names).Num(), 2);
 	EXPECT_EQ(Client->GetState(Names[0])->Compute(), 1.f);
 	EXPECT_EQ(Client->GetState(Names[1])->Compute(), 1.f);
@@ -105,7 +105,7 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldGetStackSStatesAfterAddingFactors
 TEST_F(NansFactorsFactoryCoreClientTest, CanTAddAFactorWithoutAPreviouslyCreatedStack)
 {
 	TArray<FName> Names = {FName("test1")};
-	NFactor* Factor = new NFactor(2.f, new NAddOperator(), 0, FName("Reason"));
+	NFactor* Factor = new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Reason"));
 	try
 	{
 		Client->AddFactor(Names, MakeShareable(Factor));
@@ -123,7 +123,7 @@ TEST_F(NansFactorsFactoryCoreClientTest, CanAddALotOfFactorInOneTime)
 
 	for (uint32 I = 0; I < 200; I++)
 	{
-		NFactor* Factor = new NFactor(2.f, new NAddOperator(), 0, FName("Reason"));
+		NFactor* Factor = new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Reason"));
 		Client->AddFactor(Names, MakeShareable(Factor));
 	}
 
@@ -148,10 +148,10 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldDispatchTimeInStackAndFactors)
 	float TickInterval = 1.f;
 	Timeline->SetTickInterval(TickInterval);
 	Timeline->NotifyTick();
-	NFactor* Factor = new NFactor(2.f, new NAddOperator(), 0, FName("Reason"));
+	NFactor* Factor = new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Reason"));
 	Client->AddFactor(Names, MakeShareable(Factor));
 	Timeline->NotifyTick();
-	NFactorState* State = Client->GetStack()[Names[0]]->GetCurrentState();
+	NFactorStateInterface* State = Client->GetStack()[Names[0]]->GetCurrentState();
 	// Time should be synchronized between client>stacks>factors
 	EXPECT_EQ(Timeline->GetCurrentTime(), State->GetTime());
 	EXPECT_EQ(Timeline->GetCurrentTime() - TickInterval, Factor->GetEvent()->GetLocalTime());

@@ -6,8 +6,6 @@
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "Operator/Interfaces.h"
 
-#include <typeinfo>
-
 NFactorStack::~NFactorStack()
 {
 	IterationFlags.Empty();
@@ -81,7 +79,7 @@ void NFactorStack::SetFlag(FString Flag, bool value)
 	IterationFlags.Add(Flag, value);
 }
 
-void NFactorStack::AddFactorsToState(NFactorState* State)
+void NFactorStack::AddFactorsToState(NFactorStateInterface* State)
 {
 	for (int32 Index = 0; Index < Factors.Num(); ++Index)
 	{
@@ -92,7 +90,7 @@ void NFactorStack::AddFactorsToState(NFactorState* State)
 			continue;
 		}
 
-		IFactorOperatorWithStack* Operator = dynamic_cast<IFactorOperatorWithStack*>(Factor->GetOperator());
+		FactorOperatorInterfaceWithStack* Operator = dynamic_cast<FactorOperatorInterfaceWithStack*>(Factor->GetOperator().Get());
 		if (Operator != nullptr)
 		{
 			Operator->SetStack(this);
@@ -103,7 +101,12 @@ void NFactorStack::AddFactorsToState(NFactorState* State)
 	}
 }
 
-NFactorState* NFactorStack::GetCurrentState()
+TArray<TSharedPtr<NFactorInterface>> NFactorStack::GetFactors() const
+{
+	return Factors;
+}
+
+NFactorStateInterface* NFactorStack::GetCurrentState()
 {
 	mycheckf(Name != NAME_None, TEXT("Should set a name before calling %s"), ANSI_TO_TCHAR(__FUNCTION__));
 	NFactorState* State = new NFactorState(GetTime());
@@ -114,4 +117,8 @@ NFactorState* NFactorStack::GetCurrentState()
 	AddFactorsToState(State);
 
 	return State;
+}
+void NFactorStack::Debug(bool _bDebug)
+{
+	bDebug = _bDebug;
 }

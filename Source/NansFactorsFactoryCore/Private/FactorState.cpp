@@ -9,7 +9,7 @@
 
 FNFactorStateOperator::FNFactorStateOperator()
 {
-	Operator = new NNullOperator();
+	Operator = MakeShareable(new NNullOperator());
 }
 FNFactorStateOperator::FNFactorStateOperator(TSharedPtr<NFactorInterface> _Factor)
 {
@@ -60,4 +60,9 @@ float NFactorState::Compute()
 const TArray<FNFactorStateOperator> NFactorState::GetOperators() const
 {
 	return Operators;
+}
+
+void NFactorState::Debug(bool _bDebug)
+{
+	bDebug = _bDebug;
 }

@@ -9,7 +9,7 @@ class NANSFACTORSFACTORYUE4_API UnrealFactorProxy : public NFactorInterface
 public:
 	UNFactorAdapterAbstract& Factor;
 	UnrealFactorProxy(UNFactorAdapterAbstract& _Factor) : Factor(_Factor) {}
-	virtual IFactorOperator* GetOperator() const
+	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const
 	{
 		return Factor.GetOperator();
 	}

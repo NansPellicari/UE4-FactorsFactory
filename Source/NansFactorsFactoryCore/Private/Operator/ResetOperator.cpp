@@ -9,9 +9,9 @@
 
 const FName NResetOperator::Name(TEXT("Reset"));
 
-TSharedPtr<IFactorOperator> NResetOperatorBase::GetInverse()
+TSharedPtr<FactorOperatorInterface> NResetOperatorBase::GetInverse()
 {
-	static TSharedPtr<IFactorOperator> Operator = MakeShareable(new NNullOperator());
+	static TSharedPtr<FactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
 	return Operator;
 }
 
@@ -30,7 +30,7 @@ float NResetOperator::Compute(float Lh, float Rh)
 	TSharedRef<NFactorInterface> Factor = MyStack->GetFactor(KeyInStack);
 
 	TSharedRef<NFactorInterface> ResetFactor = Factor;
-	while (MaxAttempt > 0 && (!ResetFactor->IsActivated() || OperatorUtils::IsOperatorWithStack(ResetFactor->GetOperator()) ||
+	while (MaxAttempt > 0 && (!ResetFactor->IsActivated() || OperatorUtils::IsOperatorWithStack(ResetFactor->GetOperator().Get()) ||
 								 MyStack->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactor))))
 	{
 		int32 ResetKey = KeyInStack - (Rh + (10 - MaxAttempt));
@@ -52,9 +52,9 @@ float NResetOperator::Compute(float Lh, float Rh)
 	return ResetFactor->GetOperator()->GetInverse()->Compute(Lh, ResetFactor->GetFactorValue());
 }
 
-TSharedPtr<IFactorOperator> NResetOperator::GetInverse()
+TSharedPtr<FactorOperatorInterface> NResetOperator::GetInverse()
 {
-	static TSharedPtr<IFactorOperator> Operator = MakeShareable(new NNullOperator());
+	static TSharedPtr<FactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
 	return Operator;
 }
 
@@ -64,7 +64,7 @@ void NResetOperator::SetKeyInStack(uint32 Key)
 	KeyInStack = Key;
 }
 
-void NResetOperator::SetStack(NFactorStack* Stack)
+void NResetOperator::SetStack(NFactorStackInterface* Stack)
 {
 	MyStack = Stack;
 }

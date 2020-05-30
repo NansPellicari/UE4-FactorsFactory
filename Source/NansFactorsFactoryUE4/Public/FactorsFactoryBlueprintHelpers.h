@@ -9,7 +9,7 @@
 
 #include "FactorsFactoryBlueprintHelpers.generated.h"
 
-class IFactorOperator;
+class FactorOperatorInterface;
 class UNFactorsFactoryClientAdapter;
 class UOperatorTest;
 class Factor;

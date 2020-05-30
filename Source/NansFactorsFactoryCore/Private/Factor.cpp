@@ -6,7 +6,7 @@
 #include "Operator/Interfaces.h"
 
 NFactor::NFactor(float _FactorValue,
-	IFactorOperator* _Operator,
+	TSharedPtr<FactorOperatorInterface> _Operator,
 	float _Duration,
 	FName _Reason,
 	float _Delay,
@@ -41,11 +41,11 @@ bool NFactor::IsActivated() const
 	return bIsActivated && Event.IsValid() && !Event->IsExpired();
 }
 
-IFactorOperator* NFactor::GetOperator() const
+TSharedPtr<FactorOperatorInterface> NFactor::GetOperator() const
 {
 	if (!IsActivated())
 	{
-		return new NNullOperator();
+		return MakeShareable(new NNullOperator());
 	}
 	return Operator;
 }

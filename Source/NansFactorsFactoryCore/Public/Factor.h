@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "FactorInterface.h"
 
-class IFactorOperator;
+class FactorOperatorInterface;
 class NEventInterface;
 
 namespace NFactorGUID
@@ -15,14 +15,14 @@ class NANSFACTORSFACTORYCORE_API NFactor : public NFactorInterface
 {
 public:
 	NFactor(float _FactorValue,
-		IFactorOperator* _Operator,
+		TSharedPtr<FactorOperatorInterface> _Operator,
 		float _Duration,
 		FName Reason,
 		float _Delay = 0.f,
 		TSharedPtr<NEventInterface> _Event = NULL);
 	virtual ~NFactor();
 	virtual bool IsActivated() const override;
-	virtual IFactorOperator* GetOperator() const override;
+	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const override;
 	virtual float GetFactorValue() const override;
 	virtual FName GetReason() const override;
 	virtual uint32 GetUID() const override;
@@ -33,7 +33,7 @@ protected:
 	TSharedPtr<NEventInterface> Event;
 	bool bIsActivated = true;
 	float FactorValue;
-	IFactorOperator* Operator;
+	TSharedPtr<FactorOperatorInterface> Operator;
 	/** TODO use FGuid::NewGuid().ToString() instead */
 	uint32 Id;
 };

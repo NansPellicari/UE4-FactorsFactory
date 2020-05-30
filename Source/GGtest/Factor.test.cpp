@@ -16,7 +16,7 @@ TEST_F(NansFactorsFactoryCoreFactorTest, EachNewFactorShouldHaveAFactorerentUUID
 	TMap<uint32, NFactor*> Factors;
 	for (int I = 0; I < 500; ++I)
 	{
-		NFactor* Factor = new NFactor(1.f, new NNullOperator(), 0, FName("Reason"));
+		NFactor* Factor = new NFactor(1.f, MakeShareable(new NNullOperator()), 0, FName("Reason"));
 		// A TMap as unique key compare to TMultiMap
 		Factors.Add(Factor->GetUID(), Factor);
 	}
@@ -26,7 +26,7 @@ TEST_F(NansFactorsFactoryCoreFactorTest, EachNewFactorShouldHaveAFactorerentUUID
 
 TEST_F(NansFactorsFactoryCoreFactorTest, ShouldBeAlwaysActivateIfItHasAnUndeterminatedDuration)
 {
-	NFactor* Factor = new NFactor(1.f, new NNullOperator(), 0, FName("Reason"));
+	NFactor* Factor = new NFactor(1.f, MakeShareable(new NNullOperator()), 0, FName("Reason"));
 	EXPECT_TRUE(Factor->IsActivated());
 	Factor->GetEvent()->NotifyAddTime(1000);
 	EXPECT_TRUE(Factor->IsActivated());
@@ -35,7 +35,7 @@ TEST_F(NansFactorsFactoryCoreFactorTest, ShouldBeAlwaysActivateIfItHasAnUndeterm
 
 TEST_F(NansFactorsFactoryCoreFactorTest, CanBeDeactivate)
 {
-	NFactor* Factor = new NFactor(1.f, new NNullOperator(), 0, FName("Reason"));
+	NFactor* Factor = new NFactor(1.f, MakeShareable(new NNullOperator()), 0, FName("Reason"));
 	EXPECT_TRUE(Factor->IsActivated());
 	Factor->GetEvent()->NotifyAddTime(1000.f);
 	EXPECT_TRUE(Factor->IsActivated());
@@ -46,7 +46,7 @@ TEST_F(NansFactorsFactoryCoreFactorTest, CanBeDeactivate)
 
 TEST_F(NansFactorsFactoryCoreFactorTest, ShouldBeDeactivateWhenItsDurationTimeIsReachedAndReturnANullOperator)
 {
-	NAddOperator* Operator = new NAddOperator();
+	TSharedPtr<NAddOperator> Operator = MakeShareable(new NAddOperator());
 	NFactor* Factor = new NFactor(1.f, Operator, 2.f, FName("Reason"));
 	EXPECT_TRUE(Factor->IsActivated());
 	EXPECT_EQ(Factor->GetOperator(), Operator);
@@ -56,5 +56,5 @@ TEST_F(NansFactorsFactoryCoreFactorTest, ShouldBeDeactivateWhenItsDurationTimeIs
 	EXPECT_FALSE(Factor->IsActivated());
 	EXPECT_NE(Factor->GetOperator(), Operator);
 	EXPECT_EQ(Factor->GetFactorValue(), 0);
-	EXPECT_NE(static_cast<NNullOperator*>(Factor->GetOperator()), nullptr);
+	EXPECT_NE(static_cast<NNullOperator*>(Factor->GetOperator().Get()), nullptr);
 }

@@ -47,12 +47,12 @@ public:
 		return Factor->GetEvent();
 	};
 
-	virtual IFactorOperator* GetConfiguredOperator() const
+	virtual TSharedPtr<FactorOperatorInterface> GetConfiguredOperator() const
 	{
-		return new NNullOperator();
+		return MakeShareable(new NNullOperator());
 	}
 
-	virtual IFactorOperator* GetOperator() const override
+	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const override
 	{
 		return Factor->GetOperator();
 	}

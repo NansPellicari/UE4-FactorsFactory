@@ -1,35 +1,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FactorStateInterface.h"
 
-class IFactorOperator;
+class FactorOperatorInterface;
 class NFactorInterface;
 class NNullOperator;
 
-struct FNFactorStateOperator
-{
-	FNFactorStateOperator();
-	FNFactorStateOperator(TSharedPtr<NFactorInterface> _Factor);
-
-	TSharedPtr<NFactorInterface> Factor;
-	float Value = 0.f;
-	FName Reason = FName("");
-	bool Activate = true;
-	IFactorOperator* Operator;
-	// TODO create  Serialize method which save Value + Operator class and value
-};
-
-class NANSFACTORSFACTORYCORE_API NFactorState
+class NANSFACTORSFACTORYCORE_API NFactorState : public NFactorStateInterface
 {
 public:
+	bool bDebug = false;
 	virtual ~NFactorState() {}
 	NFactorState() {}
 	NFactorState(float _Time);
-	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor);
-	float GetTime() const;
-	virtual float Compute();
-	bool bDebug = false;
-	const TArray<FNFactorStateOperator> GetOperators() const;
+	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override;
+	virtual float GetTime() const override;
+	virtual float Compute() override;
+	virtual void Debug(bool _bDebug) override;
+	virtual const TArray<FNFactorStateOperator> GetOperators() const override;
 	// TODO create a Serialize method which save Time + FactorValue +  Operators
 
 protected:

@@ -29,7 +29,8 @@ UNFactorsFactoryClientAdapter* UNFactorsFactoryBlueprintHelpers::GetFactorClient
 	return Client;
 }
 
-void UNFactorsFactoryBlueprintHelpers::Debug(UObject* WorldContextObject, const TArray<FFactorStackAttribute> StackNames, const bool Debug)
+void UNFactorsFactoryBlueprintHelpers::Debug(
+	UObject* WorldContextObject, const TArray<FFactorStackAttribute> StackNames, const bool Debug)
 {
 	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);
 	if (Client == nullptr) return;
@@ -41,9 +42,10 @@ void UNFactorsFactoryBlueprintHelpers::Debug(UObject* WorldContextObject, const 
 	Client->SetDebug(Names, Debug);
 }
 
-FNFactorStateResult UNFactorsFactoryBlueprintHelpers::GetFactorState(FFactorStackAttribute StackName, UNFactorsFactoryClientAdapter* Client)
+FNFactorStateResult UNFactorsFactoryBlueprintHelpers::GetFactorState(
+	FFactorStackAttribute StackName, UNFactorsFactoryClientAdapter* Client)
 {
-	NFactorState* State = Client->GetState(StackName.Name);
+	NFactorStateInterface* State = Client->GetState(StackName.Name);
 	TArray<FName> Reasons;
 	if (State == nullptr)
 	{

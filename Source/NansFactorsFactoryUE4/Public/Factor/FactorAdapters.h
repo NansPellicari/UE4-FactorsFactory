@@ -25,33 +25,38 @@ class NANSFACTORSFACTORYUE4_API UNFactorAdapterBasic : public UNFactorAdapterAbs
 	GENERATED_BODY()
 public:
 	// TODO Move This when Factory doesn't require anymore
-	static IFactorOperator* EnumToOperator(ENFactorOperator Enum)
+	static TSharedPtr<FactorOperatorInterface> EnumToOperator(ENFactorOperator Enum)
 	{
-		IFactorOperator* Op = new NNullOperator();
+		TSharedPtr<FactorOperatorInterface> Op;
 
 		if (Enum == ENFactorOperator::Add)
 		{
-			Op = new NAddOperator();
+			Op = MakeShareable(new NAddOperator());
 		}
 
 		if (Enum == ENFactorOperator::Sub)
 		{
-			Op = new NSubsctractOperator();
+			Op = MakeShareable(new NSubsctractOperator());
 		}
 
 		if (Enum == ENFactorOperator::Mul)
 		{
-			Op = new NMultiplyOperator();
+			Op = MakeShareable(new NMultiplyOperator());
 		}
 
 		if (Enum == ENFactorOperator::Div)
 		{
-			Op = new NDividerOperator();
+			Op = MakeShareable(new NDividerOperator());
 		}
 
 		if (Enum == ENFactorOperator::ResP)
 		{
-			Op = new NResetOperator();
+			Op = MakeShareable(new NResetOperator());
+		}
+
+		if (!Op.IsValid())
+		{
+			Op = MakeShareable(new NNullOperator());
 		}
 
 		return Op;
@@ -60,7 +65,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
 	ENFactorOperator Operator = ENFactorOperator::Null;
 
-	virtual IFactorOperator* GetConfiguredOperator() const override
+	virtual TSharedPtr<FactorOperatorInterface> GetConfiguredOperator() const override
 	{
 		return UNFactorAdapterBasic::EnumToOperator(Operator);
 	}

@@ -1,7 +1,8 @@
 #include "FactorsFactoryClientAdapter.h"
 
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
-#include "NansFactorsFactoryCore/Public/FactorState.h"
+#include "NansFactorsFactoryCore/Public/FactorStackInterface.h"
+#include "NansFactorsFactoryCore/Public/FactorStateInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemUE4/Public/Attribute/ConfiguredTimeline.h"
@@ -9,6 +10,8 @@
 #include "NansTimelineSystemUE4/Public/TimelineBlueprintHelpers.h"
 #include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
 #include "Settings/FactorSettings.h"
+#include "Stack/FactorStackDecorator.h"
+#include "Stack/UnrealFactorStackProxy.h"
 
 UNFactorsFactoryClientAdapter::UNFactorsFactoryClientAdapter() {}
 
@@ -18,7 +21,6 @@ void UNFactorsFactoryClientAdapter::Init()
 
 	TArray<FNFactorSettings> ConfigList;
 	UFactorSettings::GetConfigs(ConfigList);
-	UE_LOG(LogTemp, Warning, TEXT("%s"), ANSI_TO_TCHAR(__FUNCTION__));
 
 	for (auto& Conf : ConfigList)
 	{
@@ -34,12 +36,24 @@ void UNFactorsFactoryClientAdapter::Init()
 
 void UNFactorsFactoryClientAdapter::CreateStack(TArray<FName> StackNames, TSharedPtr<NTimelineInterface> Timeline)
 {
-	Client->CreateStack(StackNames, Timeline);
+	for (auto& Name : StackNames)
+	{
+		CreateStack(Name, Timeline);
+	}
 }
 
 void UNFactorsFactoryClientAdapter::CreateStack(FName StackName, TSharedPtr<NTimelineInterface> Timeline)
 {
-	Client->CreateStack(StackName, Timeline);
+	UNFactorStackDecorator* UStack = NewObject<UNFactorStackDecorator>(this);
+	UStack->Init(StackName, Timeline);
+	TSharedPtr<NFactorStackInterface> Stack = MakeShareable(new UNUnrealFactorStackProxy(*UStack));
+
+	AddStack(Stack);
+}
+
+void UNFactorsFactoryClientAdapter::AddStack(TSharedPtr<NFactorStackInterface> Stack)
+{
+	Client->AddStack(Stack);
 }
 
 void UNFactorsFactoryClientAdapter::RemoveStack(FName StackName)
@@ -47,12 +61,12 @@ void UNFactorsFactoryClientAdapter::RemoveStack(FName StackName)
 	Client->RemoveStack(StackName);
 }
 
-NFactorState* UNFactorsFactoryClientAdapter::GetState(FName StackName)
+NFactorStateInterface* UNFactorsFactoryClientAdapter::GetState(FName StackName)
 {
 	return Client->GetState(StackName);
 }
 
-TArray<NFactorState*> UNFactorsFactoryClientAdapter::GetStates(TArray<FName> StackNames)
+TArray<NFactorStateInterface*> UNFactorsFactoryClientAdapter::GetStates(TArray<FName> StackNames)
 {
 	return Client->GetStates(StackNames);
 }

@@ -3,11 +3,11 @@
 #include "CoreMinimal.h"
 #include "Operator/Interfaces.h"
 
-class NANSFACTORSFACTORYCORE_API NNullOperator : public IFactorOperator
+class NANSFACTORSFACTORYCORE_API NNullOperator : public FactorOperatorInterface
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;
-	virtual TSharedPtr<IFactorOperator> GetInverse() override;
+	virtual TSharedPtr<FactorOperatorInterface> GetInverse() override;
 	static const FName Name;
 	virtual const FName GetName() override
 	{
@@ -15,11 +15,11 @@ public:
 	}
 };
 
-class NANSFACTORSFACTORYCORE_API NAddOperator : public IFactorOperator
+class NANSFACTORSFACTORYCORE_API NAddOperator : public FactorOperatorInterface
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;
-	virtual TSharedPtr<IFactorOperator> GetInverse() override;
+	virtual TSharedPtr<FactorOperatorInterface> GetInverse() override;
 	static const FName Name;
 	virtual const FName GetName() override
 	{
@@ -27,11 +27,11 @@ public:
 	}
 };
 
-class NANSFACTORSFACTORYCORE_API NSubsctractOperator : public IFactorOperator
+class NANSFACTORSFACTORYCORE_API NSubsctractOperator : public FactorOperatorInterface
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;
-	virtual TSharedPtr<IFactorOperator> GetInverse() override;
+	virtual TSharedPtr<FactorOperatorInterface> GetInverse() override;
 	static const FName Name;
 	virtual const FName GetName() override
 	{
@@ -39,11 +39,11 @@ public:
 	}
 };
 
-class NANSFACTORSFACTORYCORE_API NMultiplyOperator : public IFactorOperator
+class NANSFACTORSFACTORYCORE_API NMultiplyOperator : public FactorOperatorInterface
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;
-	virtual TSharedPtr<IFactorOperator> GetInverse() override;
+	virtual TSharedPtr<FactorOperatorInterface> GetInverse() override;
 	static const FName Name;
 	virtual const FName GetName() override
 	{
@@ -51,11 +51,11 @@ public:
 	}
 };
 
-class NANSFACTORSFACTORYCORE_API NDividerOperator : public IFactorOperator
+class NANSFACTORSFACTORYCORE_API NDividerOperator : public FactorOperatorInterface
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;
-	virtual TSharedPtr<IFactorOperator> GetInverse() override;
+	virtual TSharedPtr<FactorOperatorInterface> GetInverse() override;
 	static const FName Name;
 	virtual const FName GetName() override
 	{
