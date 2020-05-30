@@ -21,5 +21,5 @@ public:
 	virtual bool GetFlag(FString Flag) const = 0;
 	virtual void SetFlag(FString Flag, bool Value) = 0;
 	virtual void Debug(bool _bDebug) = 0;
-	virtual NFactorStateInterface* GetCurrentState() = 0;
+	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) = 0;
 };

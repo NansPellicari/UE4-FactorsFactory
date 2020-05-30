@@ -27,11 +27,10 @@ class FakeFactorStack : public NFactorStack
 {
 public:
 	FakeFactorStack(FName _Name, TSharedPtr<NTimeline> _Timeline) : NFactorStack(_Name, _Timeline) {}
-	virtual NFactorStateInterface* GetCurrentState() override
+	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override
 	{
-		NFactorStateInterface* State = new NFactorState(0.f);
+		State.SetTime(0.f);
 		AddFactorsToState(State);
-		return State;
 	}
 };
 
@@ -86,7 +85,9 @@ TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheLastFactorSetInThe
 	FakeResetOperator* Operator = new FakeResetOperator();
 
 	FactorStack->AddFactor(MakeShareable(new NFactor(1, MakeShareable(Operator), 0, FName("Magic potion"))));
-	EXPECT_EQ(FactorStack->GetCurrentState()->Compute(), 2.f);
+	NFactorStateInterface* State = new NFactorState();
+	FactorStack->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->Compute(), 2.f);
 	EXPECT_TRUE(Operator->HasStack());
 	EXPECT_TRUE(Operator->GetKeyInStack() > 0);
 	EXPECT_TRUE(FactorStack->HasFlag(FakeResetOperator::GetResetIdFlag(FactorStack->GetFactor(1))));
@@ -99,7 +100,9 @@ TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheFirstFactorSetInTh
 
 	FactorStack->AddFactor(MakeShareable(new NFactor(2, MakeShareable(Operator), 0, FName("Magic potion"))));
 
-	EXPECT_EQ(FactorStack->GetCurrentState()->Compute(), 3.f);
+	NFactorStateInterface* State = new NFactorState();
+	FactorStack->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->Compute(), 3.f);
 	EXPECT_TRUE(FactorStack->HasFlag(FakeResetOperator::GetResetIdFlag(FactorStack->GetFactor(0))));
 }
 
@@ -110,8 +113,10 @@ TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheFirstAndLastFactor
 
 	FactorStack->AddFactor(MakeShareable(new NFactor(1, MakeShareable(Operator), 0, FName("Magic potion"))));
 	FactorStack->AddFactor(MakeShareable(new NFactor(2, MakeShareable(Operator), 0, FName("Magic potion"))));
+	NFactorStateInterface* State = new NFactorState();
+	FactorStack->SupplyStateWithCurrentData(*State);
 
-	EXPECT_EQ(FactorStack->GetCurrentState()->Compute(), 0.f);
+	EXPECT_EQ(State->Compute(), 0.f);
 	EXPECT_TRUE(FactorStack->HasFlag(FakeResetOperator::GetResetIdFlag(FactorStack->GetFactor(0))));
 	EXPECT_TRUE(FactorStack->HasFlag(FakeResetOperator::GetResetIdFlag(FactorStack->GetFactor(1))));
 }

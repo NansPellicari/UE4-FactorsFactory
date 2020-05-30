@@ -79,7 +79,7 @@ void NFactorStack::SetFlag(FString Flag, bool value)
 	IterationFlags.Add(Flag, value);
 }
 
-void NFactorStack::AddFactorsToState(NFactorStateInterface* State)
+void NFactorStack::AddFactorsToState(NFactorStateInterface& State)
 {
 	for (int32 Index = 0; Index < Factors.Num(); ++Index)
 	{
@@ -97,7 +97,7 @@ void NFactorStack::AddFactorsToState(NFactorStateInterface* State)
 
 			Operator->SetKeyInStack(Index);
 		}
-		State->AddFactor(Factor);
+		State.AddFactor(Factor);
 	}
 }
 
@@ -106,17 +106,16 @@ TArray<TSharedPtr<NFactorInterface>> NFactorStack::GetFactors() const
 	return Factors;
 }
 
-NFactorStateInterface* NFactorStack::GetCurrentState()
+void NFactorStack::SupplyStateWithCurrentData(NFactorStateInterface& State)
 {
 	mycheckf(Name != NAME_None, TEXT("Should set a name before calling %s"), ANSI_TO_TCHAR(__FUNCTION__));
-	NFactorState* State = new NFactorState(GetTime());
-	State->bDebug = bDebug;
+	State.Clear();
+	State.SetTime(GetTime());
+	State.Debug(bDebug);
 	// Need to reset it, values should depend on iteration scope
 	IterationFlags.Empty();
 
 	AddFactorsToState(State);
-
-	return State;
 }
 void NFactorStack::Debug(bool _bDebug)
 {

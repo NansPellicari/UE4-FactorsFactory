@@ -5,16 +5,16 @@
 
 NNullFactorState::NNullFactorState()
 {
-    NFactorState(0.f);
-    Operators.Add(FNFactorStateOperator());
+	Operators.Add(FNFactorStateOperator());
+	SetTime(0.f);
 }
 
 float NNullFactorState::Compute()
 {
-    return 0.f;
+	return 0.f;
 }
 
 void NNullFactorState::AddFactor(TSharedPtr<NFactorInterface> Factor)
 {
-    return;
+	return;
 }

@@ -23,7 +23,7 @@ public:
 	virtual bool GetFlag(FString Flag) const override;
 	virtual void SetFlag(FString Flag, bool Value) override;
 	virtual TArray<TSharedPtr<NFactorInterface>> GetFactors() const override;
-	virtual NFactorStateInterface* GetCurrentState() override;
+	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
 	virtual void Debug(bool _bDebug) override;
 
 protected:
@@ -31,6 +31,6 @@ protected:
 	TMap<FString, bool> IterationFlags;
 	TSharedPtr<NTimelineInterface> Timeline;
 	TArray<TSharedPtr<NFactorInterface>> Factors;
-	void AddFactorsToState(NFactorStateInterface* State);
+	void AddFactorsToState(NFactorStateInterface& State);
 	FName Name;
 };

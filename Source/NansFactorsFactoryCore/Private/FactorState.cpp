@@ -20,11 +20,6 @@ FNFactorStateOperator::FNFactorStateOperator(TSharedPtr<NFactorInterface> _Facto
 	Activate = Factor->IsActivated();
 }
 
-NFactorState::NFactorState(float _Time)
-{
-	Time = _Time;
-}
-
 void NFactorState::AddFactor(TSharedPtr<NFactorInterface> Factor)
 {
 	Operators.Add(FNFactorStateOperator(Factor));
@@ -33,6 +28,23 @@ void NFactorState::AddFactor(TSharedPtr<NFactorInterface> Factor)
 float NFactorState::GetTime() const
 {
 	return Time;
+}
+
+void NFactorState::SetTime(float _Time)
+{
+	Time = _Time;
+}
+
+void NFactorState::Clear()
+{
+	Operators.Empty();
+	Time = -1.f;
+	FactorValue = 0;
+}
+
+NFactorStateInterface* NFactorState::Clone()
+{
+	return new NFactorState(*this);
 }
 
 float NFactorState::Compute()

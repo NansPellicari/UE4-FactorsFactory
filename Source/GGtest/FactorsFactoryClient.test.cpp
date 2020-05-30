@@ -4,6 +4,7 @@
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryCore/Public/FactorStack.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
+#include "NansFactorsFactoryCore/Public/FactorStateInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
@@ -89,7 +90,9 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldGetAStackSStateAfterAddingFactor)
 	FName Name = FName("test");
 	Client->CreateStack(Name, Timeline);
 	Client->AddFactor(Name, MakeShareable(new NFactor(1, MakeShareable(new NAddOperator()), 0, FName("reason1"))));
-	EXPECT_NE(Client->GetState(Name), nullptr);
+	NFactorStateInterface* State = new NFactorState();
+	Client->GetState(Name, *State);
+    EXPECT_EQ(State->GetTime(), 0.f);
 }
 
 TEST_F(NansFactorsFactoryCoreClientTest, ShouldGetStackSStatesAfterAddingFactors)
@@ -97,9 +100,12 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldGetStackSStatesAfterAddingFactors
 	TArray<FName> Names = {FName("test1"), FName("test2")};
 	Client->CreateStack(Names, Timeline);
 	Client->AddFactor(Names, MakeShareable(new NFactor(1, MakeShareable(new NAddOperator()), 0, FName("reason1"))));
-	EXPECT_EQ(Client->GetStates(Names).Num(), 2);
-	EXPECT_EQ(Client->GetState(Names[0])->Compute(), 1.f);
-	EXPECT_EQ(Client->GetState(Names[1])->Compute(), 1.f);
+	EXPECT_EQ(Client->GetStates(Names, new NFactorState()).Num(), 2);
+	NFactorStateInterface* State = new NFactorState();
+	Client->GetState(Names[0], *State);
+	EXPECT_EQ(State->Compute(), 1.f);
+	Client->GetState(Names[1], *State);
+	EXPECT_EQ(State->Compute(), 1.f);
 }
 
 TEST_F(NansFactorsFactoryCoreClientTest, CanTAddAFactorWithoutAPreviouslyCreatedStack)
@@ -127,8 +133,9 @@ TEST_F(NansFactorsFactoryCoreClientTest, CanAddALotOfFactorInOneTime)
 		Client->AddFactor(Names, MakeShareable(Factor));
 	}
 
-	EXPECT_TRUE(true);
-	EXPECT_EQ(Client->GetState(Names[0])->Compute(), 400.f);
+	NFactorStateInterface* State = new NFactorState();
+    Client->GetState(Names[0], *State);
+	EXPECT_EQ(State->Compute(), 400.f);
 }
 
 TEST_F(NansFactorsFactoryCoreClientTest, ShouldRemoveAStack)
@@ -151,7 +158,8 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldDispatchTimeInStackAndFactors)
 	NFactor* Factor = new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Reason"));
 	Client->AddFactor(Names, MakeShareable(Factor));
 	Timeline->NotifyTick();
-	NFactorStateInterface* State = Client->GetStack()[Names[0]]->GetCurrentState();
+	NFactorStateInterface* State = new NFactorState();
+	Client->GetStack()[Names[0]]->SupplyStateWithCurrentData(*State);
 	// Time should be synchronized between client>stacks>factors
 	EXPECT_EQ(Timeline->GetCurrentTime(), State->GetTime());
 	EXPECT_EQ(Timeline->GetCurrentTime() - TickInterval, Factor->GetEvent()->GetLocalTime());

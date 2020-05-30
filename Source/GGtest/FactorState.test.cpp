@@ -16,7 +16,8 @@ protected:
 TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithOneOperatorGiven)
 {
 	float Time = 1;
-	NFactorStateInterface* FactorState = new NFactorState(Time);
+	NFactorStateInterface* FactorState = new NFactorState();
+	FactorState->SetTime(Time);
 	NFactorInterface* Factor = new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"));
 	Factor->GetEvent()->NotifyAddTime(Time);
 	FactorState->AddFactor(MakeShareable(Factor));
@@ -26,7 +27,8 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithOneOperatorGiven)
 TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithABunchOfOperatorsGiven)
 {
 	float Time = 1;
-	NFactorStateInterface* FactorState = new NFactorState(Time);
+	NFactorStateInterface* FactorState = new NFactorState();
+	FactorState->SetTime(Time);
 	TArray<TSharedPtr<NFactorInterface>> Factors;
 	Factors.Add(MakeShareable(new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"))));
 	Factors.Add(MakeShareable(new NFactor(2.f, MakeShareable(new NMultiplyOperator()), 0, FName("Infinite Drunk"))));
@@ -43,7 +45,8 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithABunchOfOperatorsGivenA
 {
 	// Should disable the 2nd operator
 	float Time = 3.f;
-	NFactorStateInterface* FactorState = new NFactorState(Time);
+	NFactorStateInterface* FactorState = new NFactorState();
+	FactorState->SetTime(Time);
 	// This to get extra infos on test results
 	// FactorState->bDebug = true;
 	TArray<TSharedPtr<NFactorInterface>> Factors;

@@ -13,10 +13,12 @@ public:
 	bool bDebug = false;
 	virtual ~NFactorState() {}
 	NFactorState() {}
-	NFactorState(float _Time);
 	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override;
 	virtual float GetTime() const override;
+	virtual void SetTime(float _Time) override;
 	virtual float Compute() override;
+	virtual void Clear() override;
+	virtual NFactorStateInterface* Clone() override;
 	virtual void Debug(bool _bDebug) override;
 	virtual const TArray<FNFactorStateOperator> GetOperators() const override;
 	// TODO create a Serialize method which save Time + FactorValue +  Operators

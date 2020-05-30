@@ -19,7 +19,8 @@ protected:
 
 		FactorStack->AddFactor(MakeShareable(new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"))));
 		FactorStack->AddFactor(MakeShareable(new NFactor(1.5f, MakeShareable(new NMultiplyOperator()), 2, FName("Drunk"))));
-		FactorStack->AddFactor(MakeShareable(new NFactor(2.f, MakeShareable(new NAddOperator()), 10, FName("Psychologicaly attacked"))));
+		FactorStack->AddFactor(
+			MakeShareable(new NFactor(2.f, MakeShareable(new NAddOperator()), 10, FName("Psychologicaly attacked"))));
 	}
 
 	void TearDown() override
@@ -35,7 +36,9 @@ TEST_F(NansFactorsFactoryCoreStackTest, ShouldRemovesEverySetFlagsAfterGettingTh
 {
 	FactorStack->SetName(FName("Test iteration flag"));
 	FactorStack->SetFlag("Flag", true);
-	FactorStack->GetCurrentState();
+	NFactorStateInterface* State = new NFactorState();
+	FactorStack->SupplyStateWithCurrentData(*State);
+
 	try
 	{
 		FactorStack->GetFlag("Flag");
@@ -51,7 +54,8 @@ TEST_F(NansFactorsFactoryCoreStackTest, FactorStackShouldGetValidStateAndCompute
 {
 	Timeline->SetTickInterval(1.f);
 	Timeline->NotifyTick();
-	auto State = FactorStack->GetCurrentState();
+	NFactorStateInterface* State = new NFactorState();
+	FactorStack->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->GetTime(), 1.f);
 	EXPECT_EQ(State->Compute(), 5.f);
 }
@@ -60,7 +64,8 @@ TEST_F(NansFactorsFactoryCoreStackTest, FactorStackShouldGetValidStateAndCompute
 {
 	Timeline->SetTickInterval(3.f);
 	Timeline->NotifyTick();
-	auto State = FactorStack->GetCurrentState();
+	NFactorStateInterface* State = new NFactorState();
+	FactorStack->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->GetTime(), 3.f);
 	EXPECT_EQ(State->Compute(), 4.f);
 }
@@ -69,7 +74,8 @@ TEST_F(NansFactorsFactoryCoreStackTest, FactorStackShouldGetValidStateAndCompute
 {
 	Timeline->SetTickInterval(10.1f);
 	Timeline->NotifyTick();
-	auto State = FactorStack->GetCurrentState();
+	NFactorStateInterface* State = new NFactorState();
+	FactorStack->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->GetTime(), 10.1f);
 	EXPECT_EQ(State->Compute(), 2.f);
 }
@@ -79,7 +85,8 @@ TEST_F(NansFactorsFactoryCoreStackTest, FactorStackShouldGetValidStateAndCompute
 	Timeline->SetTickInterval(4.f);
 	Timeline->NotifyTick();
 	FactorStack->AddFactor(MakeShareable(new NFactor(4.f, MakeShareable(new NAddOperator()), 1.f, FName("Exhausted"))));
-	auto State = FactorStack->GetCurrentState();
+	NFactorStateInterface* State = new NFactorState();
+	FactorStack->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->GetTime(), 4.f);
 	EXPECT_EQ(State->Compute(), 8.f);
 }
@@ -88,7 +95,8 @@ TEST_F(NansFactorsFactoryCoreStackTest, FactorStackShouldGetValidStateAndCompute
 {
 	Timeline->SetTickInterval(5.1f);
 	Timeline->NotifyTick();
-	auto State = FactorStack->GetCurrentState();
+	NFactorStateInterface* State = new NFactorState();
+	FactorStack->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->GetTime(), 5.1f);
 	EXPECT_EQ(State->Compute(), 4.f);
 }

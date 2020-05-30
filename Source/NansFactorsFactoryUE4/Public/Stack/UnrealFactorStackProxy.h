@@ -67,8 +67,8 @@ public:
 	{
 		Stack.Debug(_bDebug);
 	}
-	virtual NFactorStateInterface* GetCurrentState() override
+	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override
 	{
-		return Stack.GetCurrentState();
+		Stack.SupplyStateWithCurrentData(State);
 	}
 };

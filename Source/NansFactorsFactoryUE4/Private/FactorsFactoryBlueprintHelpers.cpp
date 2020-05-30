@@ -45,7 +45,8 @@ void UNFactorsFactoryBlueprintHelpers::Debug(
 FNFactorStateResult UNFactorsFactoryBlueprintHelpers::GetFactorState(
 	FFactorStackAttribute StackName, UNFactorsFactoryClientAdapter* Client)
 {
-	NFactorStateInterface* State = Client->GetState(StackName.Name);
+	NFactorStateInterface* State = new NFactorState();
+	Client->GetState(StackName.Name, *State);
 	TArray<FName> Reasons;
 	if (State == nullptr)
 	{

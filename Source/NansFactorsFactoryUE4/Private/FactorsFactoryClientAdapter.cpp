@@ -2,6 +2,7 @@
 
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorStackInterface.h"
+#include "NansFactorsFactoryCore/Public/FactorState.h"
 #include "NansFactorsFactoryCore/Public/FactorStateInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
@@ -61,14 +62,15 @@ void UNFactorsFactoryClientAdapter::RemoveStack(FName StackName)
 	Client->RemoveStack(StackName);
 }
 
-NFactorStateInterface* UNFactorsFactoryClientAdapter::GetState(FName StackName)
+void UNFactorsFactoryClientAdapter::GetState(FName StackName, NFactorStateInterface& State)
 {
-	return Client->GetState(StackName);
+	return Client->GetState(StackName, State);
 }
 
-TArray<NFactorStateInterface*> UNFactorsFactoryClientAdapter::GetStates(TArray<FName> StackNames)
+TArray<NFactorStateInterface*> UNFactorsFactoryClientAdapter::GetStates(
+	TArray<FName> StackNames, NFactorStateInterface* StateTemplate)
 {
-	return Client->GetStates(StackNames);
+	return Client->GetStates(StackNames, StateTemplate);
 }
 
 void UNFactorsFactoryClientAdapter::AddFactor(FName StackName, TSharedPtr<NFactorInterface> Factor)

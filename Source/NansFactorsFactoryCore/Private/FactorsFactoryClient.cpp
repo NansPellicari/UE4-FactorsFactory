@@ -44,32 +44,33 @@ void NFactorsFactoryClient::AddStack(TSharedPtr<NFactorStackInterface> Stack)
 	}
 }
 
-NFactorStateInterface* NFactorsFactoryClient::GetState(FName StackName)
+void NFactorsFactoryClient::GetState(FName StackName, NFactorStateInterface& State)
 {
-	NFactorStateInterface* State = new NNullFactorState();
-
 	if (StacksList.Contains(StackName))
 	{
 		TSharedPtr<NFactorStackInterface> Stack = StacksList[StackName];
 		mycheckf(Stack != nullptr, TEXT("The stack '%s' existed in the stack list but has been removed"), *StackName.ToString());
-		State = Stack->GetCurrentState();
+		Stack->SupplyStateWithCurrentData(State);
 	}
-
-	return State;
+	else
+	{
+		State = *(new NNullFactorState());
+	}
 }
 
-TArray<NFactorStateInterface*> NFactorsFactoryClient::GetStates(TArray<FName> StackNames)
+TArray<NFactorStateInterface*> NFactorsFactoryClient::GetStates(TArray<FName> StackNames, NFactorStateInterface* StateTemplate)
 {
 	TArray<NFactorStateInterface*> States;
 	for (FName Name : StackNames)
 	{
-		NFactorStateInterface* State = GetState(Name);
+		NFactorStateInterface* State = StateTemplate->Clone();
+		GetState(Name, *State);
 		if (State != nullptr)
 		{
 			States.Add(State);
 		}
 	}
-
+	StateTemplate = nullptr;
 	return States;
 }
 
