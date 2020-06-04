@@ -24,7 +24,6 @@ class NANSFACTORSFACTORYUE4_API UNFactorAdapterBasic : public UNFactorAdapterAbs
 {
 	GENERATED_BODY()
 public:
-	// TODO Move This when Factory doesn't require anymore
 	static TSharedPtr<FactorOperatorInterface> EnumToOperator(ENFactorOperator Enum)
 	{
 		TSharedPtr<FactorOperatorInterface> Op;

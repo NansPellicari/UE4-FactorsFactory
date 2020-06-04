@@ -84,7 +84,7 @@ public:
 protected:
 #if WITH_EDITOR
 	// TODO create a Pin available only in dev mode to switch this
-	bool bDebug = true;
+	bool bDebug = false;
 	void DebugConnectionPin(uint32 Step, const UEdGraphPin* PinA, const UEdGraphPin* PinB, const bool bSucceeded) const;
 #endif
 	/**

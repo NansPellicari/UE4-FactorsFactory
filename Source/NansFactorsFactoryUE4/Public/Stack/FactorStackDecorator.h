@@ -17,6 +17,8 @@
 #include "CoreMinimal.h"
 #include "NansFactorsFactoryCore/Public/FactorStack.h"
 #include "NansFactorsFactoryCore/Public/FactorStackInterface.h"
+#include "NansFactorsFactoryUE4/Public/Factor/FactorAdapterAbstract.h"
+#include "NansFactorsFactoryUE4/Public/Factor/UnrealFactorProxy.h"
 
 #include "FactorStackDecorator.generated.h"
 
@@ -56,6 +58,13 @@ public:
 	}
 	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override
 	{
+		auto Proxy = dynamic_cast<UnrealFactorProxy*>(Factor.Get());
+		mycheckf(Proxy != nullptr, TEXT("You should passed UnrealFactorProxy inherited stack only"));
+		mycheckf(Proxy->GetUnrealObject() != nullptr,
+			TEXT("You should instanciate your stack proxy with a UNFactorAdapterAbstract inherited stack"));
+
+		UEFactors.Add(Proxy->GetUnrealObject());
+
 		Stack->AddFactor(Factor);
 	}
 	virtual bool HasFlag(FString Flag) const override
@@ -81,6 +90,8 @@ public:
 
 protected:
 	TSharedPtr<NFactorStackInterface> Stack;
+	UPROPERTY()
+	TArray<UNFactorAdapterAbstract*> UEFactors;
 
 private:
 };

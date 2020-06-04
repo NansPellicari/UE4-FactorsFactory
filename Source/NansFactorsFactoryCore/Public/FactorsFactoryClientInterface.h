@@ -17,6 +17,7 @@ public:
 	virtual void GetState(FName StackName, NFactorStateInterface& State) = 0;
 	virtual TArray<NFactorStateInterface*> GetStates(TArray<FName> StackNames, NFactorStateInterface* StateTemplate) = 0;
 	virtual void AddFactor(FName StackName, TSharedPtr<NFactorInterface> Factor) = 0;
+	// TODO remove this !!!
 	virtual void AddFactor(TArray<FName> StackNames, TSharedPtr<NFactorInterface> Factor) = 0;
 	virtual void SetDebug(const TArray<FName> StackNames, bool bDebug) = 0;
 };

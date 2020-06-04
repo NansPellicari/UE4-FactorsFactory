@@ -2,35 +2,47 @@
 
 #include "CoreMinimal.h"
 #include "Factor/FactorAdapterAbstract.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 
 class NANSFACTORSFACTORYUE4_API UnrealFactorProxy : public NFactorInterface
 {
 public:
-	UNFactorAdapterAbstract& Factor;
-	UnrealFactorProxy(UNFactorAdapterAbstract& _Factor) : Factor(_Factor) {}
+	UNFactorAdapterAbstract* Factor;
+	UnrealFactorProxy(UNFactorAdapterAbstract* _Factor) : Factor(_Factor) {}
 	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const
 	{
-		return Factor.GetOperator();
+		mycheck(Factor != nullptr);
+		return Factor->GetOperator();
 	}
 	virtual float GetFactorValue() const
 	{
-		return Factor.GetFactorValue();
+		mycheck(Factor != nullptr);
+		return Factor->GetFactorValue();
 	}
 	virtual FName GetReason() const
 	{
-		return Factor.GetReason();
+		mycheck(Factor != nullptr);
+		return Factor->GetReason();
 	}
 	virtual bool IsActivated() const
 	{
-		return Factor.IsActivated();
+		mycheck(Factor != nullptr);
+		return Factor->IsActivated();
 	}
 	virtual uint32 GetUID() const
 	{
-		return Factor.GetUID();
+		mycheck(Factor != nullptr);
+		return Factor->GetUID();
 	}
 	virtual TSharedPtr<NEventInterface> GetEvent()
 	{
-		return Factor.GetEvent();
+		mycheck(Factor != nullptr);
+		return Factor->GetEvent();
+	}
+
+	virtual UNFactorAdapterAbstract* GetUnrealObject()
+	{
+		return Factor;
 	}
 };

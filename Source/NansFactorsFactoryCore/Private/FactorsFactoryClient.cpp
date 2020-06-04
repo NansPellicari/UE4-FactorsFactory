@@ -49,7 +49,7 @@ void NFactorsFactoryClient::GetState(FName StackName, NFactorStateInterface& Sta
 	if (StacksList.Contains(StackName))
 	{
 		TSharedPtr<NFactorStackInterface> Stack = StacksList[StackName];
-		mycheckf(Stack != nullptr, TEXT("The stack '%s' existed in the stack list but has been removed"), *StackName.ToString());
+		mycheckf(Stack.IsValid(), TEXT("The stack '%s' existed in the stack list but has been removed"), *StackName.ToString());
 		Stack->SupplyStateWithCurrentData(State);
 	}
 	else

@@ -1,5 +1,6 @@
 #include "FactorsFactoryClientAdapter.h"
 
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorStackInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
@@ -22,7 +23,6 @@ void UNFactorsFactoryClientAdapter::Init()
 
 	TArray<FNFactorSettings> ConfigList;
 	UFactorSettings::GetConfigs(ConfigList);
-
 	for (auto& Conf : ConfigList)
 	{
 		FConfiguredTimeline TimelineConf;
@@ -45,7 +45,7 @@ void UNFactorsFactoryClientAdapter::CreateStack(TArray<FName> StackNames, TShare
 
 void UNFactorsFactoryClientAdapter::CreateStack(FName StackName, TSharedPtr<NTimelineInterface> Timeline)
 {
-	UNFactorStackDecorator* UStack = NewObject<UNFactorStackDecorator>(this);
+	UNFactorStackDecorator* UStack = NewObject<UNFactorStackDecorator>(this, StackName);
 	UStack->Init(StackName, Timeline);
 	TSharedPtr<NFactorStackInterface> Stack = MakeShareable(new UNUnrealFactorStackProxy(*UStack));
 
@@ -54,6 +54,12 @@ void UNFactorsFactoryClientAdapter::CreateStack(FName StackName, TSharedPtr<NTim
 
 void UNFactorsFactoryClientAdapter::AddStack(TSharedPtr<NFactorStackInterface> Stack)
 {
+	auto Proxy = dynamic_cast<UNUnrealFactorStackProxy*>(Stack.Get());
+	mycheckf(Proxy != nullptr, TEXT("You should passed UNUnrealFactorStackProxy inherited stack only"));
+	mycheckf(Proxy->GetUnrealObject() != nullptr,
+		TEXT("You should instanciate your stack proxy with a UNFactorStackDecorator inherited stack"));
+
+	UEStacks.Add(Proxy->GetUnrealObject());
 	Client->AddStack(Stack);
 }
 

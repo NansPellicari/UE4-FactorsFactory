@@ -4,11 +4,12 @@
 #include "FactorsFactoryClientAdapter.h"
 #include "FactorsFactoryGameInstance.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "NansTimelineSystemUE4/Public/Specs/FakeTimelineGameInstance.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeGameInstance.h"
 
 #include "MockEngineAndWorld.generated.h"
 
-UCLASS()
+UCLASS(NotBlueprintable, NotPlaceable)
 class UMockObject : public UObject
 {
 	GENERATED_BODY()
@@ -27,14 +28,17 @@ private:
 	TSharedPtr<UWorld> Myworld;
 };
 
-UCLASS()
-class UFactorFakeGameInstance : public UFakeGameInstance, public INFactorsFactoryGameInstance
+UCLASS(NotBlueprintable, NotPlaceable)
+class UFactorFakeGameInstance : public UNFakeTimelineGameInstance, public INFactorsFactoryGameInstance
 {
 	GENERATED_BODY()
 public:
-	UFactorFakeGameInstance()
+	UFactorFakeGameInstance() {}
+	virtual void Init() override
 	{
-		FactorsFactoryClient = NewObject<UNFactorsFactoryClientAdapter>();
+		Super::Init();
+		FactorsFactoryClient = NewObject<UNFactorsFactoryClientAdapter>(this, FName("MyFakeFactorsFactoryClient"));
+		FactorsFactoryClient->Init();
 	}
 	virtual UNFactorsFactoryClientAdapter* GetFactorsFactoryClient() const override
 	{

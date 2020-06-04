@@ -16,63 +16,48 @@
 
 #include "CoreMinimal.h"
 #include "FactorStackInterface.h"
+#include "NansFactorsFactoryCore/Public/NullFactor.h"
 #include "Stack/FactorStackDecorator.h"
+#include "Stack/UnrealFactorStackProxy.h"
 
-class NANSFACTORSFACTORYUE4_API UNUnrealFactorStackProxy : public NFactorStackInterface
+class StubNullUnrealFactorStackProxy : public UNUnrealFactorStackProxy
 {
 public:
-	UNFactorStackDecorator& Stack;
-	UNUnrealFactorStackProxy(UNFactorStackDecorator& _Stack) : Stack(_Stack) {}
-	virtual void Reset() override
-	{
-		Stack.Reset();
-	}
-	virtual void SetName(FName _Name) override
-	{
-		Stack.SetName(_Name);
-	}
+	StubNullUnrealFactorStackProxy(UNFactorStackDecorator& _Stack) : UNUnrealFactorStackProxy(_Stack) {}
+
+	virtual void Reset() override {}
+	virtual void SetName(FName _Name) override {}
 	virtual FName GetName() const override
 	{
-		return Stack.GetName();
+		return NAME_None;
 	}
 	virtual float GetTime() const override
 	{
-		return Stack.GetTime();
+		return 0.f;
 	}
 	virtual TSharedRef<NFactorInterface> GetFactor(uint32 Key) const override
 	{
-		return Stack.GetFactor(Key);
+		static NFactorInterface* NullObj = new NNullFactor();
+		return MakeShareable(NullObj);
 	}
 	virtual TArray<TSharedPtr<NFactorInterface>> GetFactors() const override
 	{
-		return Stack.GetFactors();
+		return {};
 	}
-	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override
-	{
-		Stack.AddFactor(Factor);
-	}
+	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override {}
 	virtual bool HasFlag(FString Flag) const override
 	{
-		return Stack.HasFlag(Flag);
+		return false;
 	}
 	virtual bool GetFlag(FString Flag) const override
 	{
-		return Stack.GetFlag(Flag);
+		return false;
 	}
-	virtual void SetFlag(FString Flag, bool Value) override
-	{
-		Stack.SetFlag(Flag, Value);
-	}
-	virtual void Debug(bool _bDebug) override
-	{
-		Stack.Debug(_bDebug);
-	}
-	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override
-	{
-		Stack.SupplyStateWithCurrentData(State);
-	}
+	virtual void SetFlag(FString Flag, bool Value) override {}
+	virtual void Debug(bool _bDebug) override {}
+	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override {}
 	virtual UNFactorStackDecorator* GetUnrealObject() const
 	{
-		return &Stack;
+		return nullptr;
 	}
 };

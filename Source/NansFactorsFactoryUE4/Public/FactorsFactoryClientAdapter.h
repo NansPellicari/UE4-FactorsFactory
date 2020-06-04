@@ -10,7 +10,8 @@ class NFactorInterface;
 class NFactorStateInterface;
 class NFactorStackInterface;
 class NTimelineInterface;
-class NFactorsFactoryClient;
+class NFactorsFactoryClientInterface;
+class UNFactorStackDecorator;
 
 UCLASS(BlueprintType)
 class NANSFACTORSFACTORYUE4_API UNFactorsFactoryClientAdapter : public UObject, public NFactorsFactoryClientInterface
@@ -19,7 +20,7 @@ class NANSFACTORSFACTORYUE4_API UNFactorsFactoryClientAdapter : public UObject, 
 
 public:
 	UNFactorsFactoryClientAdapter();
-	void Init();
+	virtual void Init();
 	virtual void CreateStack(FName StackName, TSharedPtr<NTimelineInterface> Timeline) override;
 	virtual void CreateStack(TArray<FName> StackNames, TSharedPtr<NTimelineInterface> Timeline) override;
 	virtual void AddStack(TSharedPtr<NFactorStackInterface> Stack) override;
@@ -31,5 +32,7 @@ public:
 	virtual void SetDebug(const TArray<FName> StackNames, bool bDebug) override;
 
 protected:
-	TSharedPtr<NFactorsFactoryClient> Client;
+	TSharedPtr<NFactorsFactoryClientInterface> Client;
+	UPROPERTY()
+	TArray<UNFactorStackDecorator*> UEStacks;
 };

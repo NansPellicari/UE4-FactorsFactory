@@ -90,11 +90,12 @@ void NFactorStack::AddFactorsToState(NFactorStateInterface& State)
 			continue;
 		}
 
+		mycheck(Factor->GetOperator().IsValid());
+
 		FactorOperatorInterfaceWithStack* Operator = dynamic_cast<FactorOperatorInterfaceWithStack*>(Factor->GetOperator().Get());
 		if (Operator != nullptr)
 		{
 			Operator->SetStack(this);
-
 			Operator->SetKeyInStack(Index);
 		}
 		State.AddFactor(Factor);

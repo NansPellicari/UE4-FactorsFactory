@@ -104,13 +104,17 @@ UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::AddFactor(UObject* Wo
 	if (Client == nullptr) return Factor;
 
 	Factor->Init();
-	Client->AddFactor(Factor->InStack.Name, MakeShareable(new UnrealFactorProxy(*Factor)));
+	Client->AddFactor(Factor->InStack.Name, MakeShareable(new UnrealFactorProxy(Factor)));
 
 	return Factor;
 }
 
 UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::CreateFactor(UObject* WorldContextObject, UClass* Class)
 {
+	static uint32 FactorNum = 0;
 	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);
-	return Cast<UNFactorAdapterAbstract>(UGameplayStatics::SpawnObject(Class, Client));
+	FString Name = FString::Format(TEXT("Factor_{0}_"), {Class->GetFullName()});
+	Name.AppendInt(++FactorNum);
+
+	return NewObject<UNFactorAdapterAbstract>(Client, Class, FName(*Name));
 }
