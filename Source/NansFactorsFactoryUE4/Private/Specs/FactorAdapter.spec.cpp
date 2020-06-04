@@ -32,7 +32,7 @@ void FactorAdapterSpec::Define()
 			Operator = UNFactorAdapterBasic::EnumToOperator(ENFactorOperator::Mul);
 			TEST_NOT_NULL(TEXT("Should return a MultiplyOperator"), dynamic_cast<NMultiplyOperator*>(Operator.Get()));
 			Operator = UNFactorAdapterBasic::EnumToOperator(ENFactorOperator::Sub);
-			TEST_NOT_NULL(TEXT("Should return a SubsctractOperator"), dynamic_cast<NSubsctractOperator*>(Operator.Get()));
+			TEST_NOT_NULL(TEXT("Should return a SubsctractOperator"), dynamic_cast<NSubtractOperator*>(Operator.Get()));
 		});
 
 		It("Should transform an enum to an operator with operator property", [this]() {
@@ -53,7 +53,7 @@ void FactorAdapterSpec::Define()
 				TEXT("Should return a MultiplyOperator"), dynamic_cast<NMultiplyOperator*>(Factor->GetConfiguredOperator().Get()));
 			Factor->Operator = ENFactorOperator::Sub;
 			TEST_NOT_NULL(TEXT("Should return a SubsctractOperator"),
-				dynamic_cast<NSubsctractOperator*>(Factor->GetConfiguredOperator().Get()));
+				dynamic_cast<NSubtractOperator*>(Factor->GetConfiguredOperator().Get()));
 		});
 
 		AfterEach([this]() {});

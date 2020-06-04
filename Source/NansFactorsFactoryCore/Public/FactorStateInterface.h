@@ -16,7 +16,7 @@ struct FNFactorStateOperator
 	FName Reason = FName("");
 	bool Activate = true;
 	TSharedPtr<FactorOperatorInterface> Operator;
-	// TODO create  Serialize method which save Value + Operator class and value
+	// TODO create an UObject to serialize these Value + Operator class and value
 };
 
 class NANSFACTORSFACTORYCORE_API NFactorStateInterface

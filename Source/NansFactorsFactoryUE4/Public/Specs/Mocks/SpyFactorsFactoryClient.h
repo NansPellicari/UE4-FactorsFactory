@@ -46,11 +46,6 @@ public:
 		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
 		StubFactorsFactoryClient::AddFactor(StackName, Factor);
 	}
-	virtual void AddFactor(TArray<FName> StackNames, TSharedPtr<NFactorInterface> Factor) override
-	{
-		AddCall(FString::Format(TEXT("{0}_2"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::AddFactor(StackNames, Factor);
-	}
 	virtual void SetDebug(const TArray<FName> StackNames, bool bDebug) override
 	{
 		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));

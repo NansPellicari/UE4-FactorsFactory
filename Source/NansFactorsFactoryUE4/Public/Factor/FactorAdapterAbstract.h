@@ -1,15 +1,27 @@
+// Copyright 2020-present Nans Pellicari (nans.pellicari@gmail.com).
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #pragma once
 
 #include "Attribute/FactorStackAttribute.h"
 #include "CoreMinimal.h"
-#include "Event/EventDecorator.h"
-#include "Event/FactorEventDecorator.h"
-#include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
-#include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
-#include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
-#include "NansTimelineSystemUE4/Public/Event/UnrealEventProxy.h"
-#include "Settings/FactorSettings.h"
+
+class NEventInterface;
+class FactorOperatorInterface;
+class UNFactorEventDecorator;
+class NFactor;
 
 #include "FactorAdapterAbstract.generated.h"
 
@@ -35,47 +47,15 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
 	FFactorStackAttribute InStack;
 
-	virtual void Init()
-	{
-		Event = UNEventDecoratorFactory::CreateObject<UNFactorEventDecorator>(this, UNFactorEventDecorator::StaticClass(), Reason);
-		TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(*Event));
-		Factor = MakeShareable(new NFactor(FactorValue, GetConfiguredOperator(), Duration, Reason, Delay, EventProxy));
-	}
+	virtual void Init();
 
-	virtual TSharedPtr<NEventInterface> GetEvent() override
-	{
-		return Factor->GetEvent();
-	};
-
-	virtual TSharedPtr<FactorOperatorInterface> GetConfiguredOperator() const
-	{
-		return MakeShareable(new NNullOperator());
-	}
-
-	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const override
-	{
-		return Factor->GetOperator();
-	}
-
-	virtual float GetFactorValue() const override
-	{
-		return Factor->GetFactorValue();
-	}
-
-	virtual FName GetReason() const override
-	{
-		return Factor->GetReason();
-	}
-
-	virtual bool IsActivated() const override
-	{
-		return Factor->IsActivated();
-	}
-
-	virtual uint32 GetUID() const override
-	{
-		return Factor->GetUID();
-	}
+	virtual TSharedPtr<NEventInterface> GetEvent() override;
+	virtual TSharedPtr<FactorOperatorInterface> GetConfiguredOperator() const;
+	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const override;
+	virtual float GetFactorValue() const override;
+	virtual FName GetReason() const override;
+	virtual bool IsActivated() const override;
+	virtual uint32 GetUID() const override;
 
 protected:
 	TSharedPtr<NFactor> Factor;

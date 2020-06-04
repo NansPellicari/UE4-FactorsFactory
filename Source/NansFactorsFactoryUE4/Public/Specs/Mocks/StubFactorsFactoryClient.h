@@ -20,6 +20,5 @@ public:
 		return {};
 	}
 	virtual void AddFactor(FName StackName, TSharedPtr<NFactorInterface> Factor) override {}
-	virtual void AddFactor(TArray<FName> StackNames, TSharedPtr<NFactorInterface> Factor) override {}
 	virtual void SetDebug(const TArray<FName> StackNames, bool bDebug) override {}
 };

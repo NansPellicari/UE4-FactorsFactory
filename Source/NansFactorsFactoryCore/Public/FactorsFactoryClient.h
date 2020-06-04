@@ -19,7 +19,6 @@ public:
 	virtual void GetState(FName StackName, NFactorStateInterface& State) override;
 	virtual TArray<NFactorStateInterface*> GetStates(TArray<FName> StackNames, NFactorStateInterface* StateTemplate) override;
 	virtual void AddFactor(FName StackName, TSharedPtr<NFactorInterface> Factor) override;
-	virtual void AddFactor(TArray<FName> StackNames, TSharedPtr<NFactorInterface> Factor) override;
 	virtual void SetDebug(const TArray<FName> StackNames, bool bDebug) override;
 
 protected:

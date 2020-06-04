@@ -6,11 +6,11 @@
 `class `[`FactorOperatorInterfaceWithStack`](#classFactorOperatorInterfaceWithStack) | 
 `class `[`FakeFactorStack`](#classFakeFactorStack) | 
 `class `[`FakeResetOperator`](#classFakeResetOperator) | 
+`class `[`FakeTimelineManager`](#classFakeTimelineManager) | 
 `class `[`FNansFactorsFactoryCoreModule`](#classFNansFactorsFactoryCoreModule) | 
 `class `[`FNansFactorsFactoryUE4Module`](#classFNansFactorsFactoryUE4Module) | 
 `class `[`FNFactorSettingsPinFactory`](#classFNFactorSettingsPinFactory) | 
 `class `[`INFactorsFactoryGameInstance`](#classINFactorsFactoryGameInstance) | 
-`class `[`MockTimelineManager`](#classMockTimelineManager) | 
 `class `[`NAddOperator`](#classNAddOperator) | 
 `class `[`NansFactorsFactoryCore`](#classNansFactorsFactoryCore) | 
 `class `[`NansFactorsFactoryCoreClientTest`](#classNansFactorsFactoryCoreClientTest) | 
@@ -32,15 +32,24 @@
 `class `[`NFactorState`](#classNFactorState) | 
 `class `[`NFactorStateInterface`](#classNFactorStateInterface) | 
 `class `[`NMultiplyOperator`](#classNMultiplyOperator) | 
+`class `[`NNullFactor`](#classNNullFactor) | 
 `class `[`NNullFactorState`](#classNNullFactorState) | 
 `class `[`NNullOperator`](#classNNullOperator) | 
 `class `[`NResetOperator`](#classNResetOperator) | 
 `class `[`NResetOperatorBase`](#classNResetOperatorBase) | 
-`class `[`NSubsctractOperator`](#classNSubsctractOperator) | 
+`class `[`NStubTimeline`](#classNStubTimeline) | 
+`class `[`NSubtractOperator`](#classNSubtractOperator) | 
+`class `[`NUnrealFactorStackProxy`](#classNUnrealFactorStackProxy) | 
 `class `[`OperatorUtils`](#classOperatorUtils) | 
 `class `[`SNFactorSettingsPin`](#classSNFactorSettingsPin) | 
+`class `[`SpyFactorsFactoryClient`](#classSpyFactorsFactoryClient) | 
+`class `[`StubFactorsFactoryClient`](#classStubFactorsFactoryClient) | 
+`class `[`StubFactorStackNotWorking`](#classStubFactorStackNotWorking) | 
+`class `[`StubFactorState`](#classStubFactorState) | 
+`class `[`StubNullUnrealFactorStackProxy`](#classStubNullUnrealFactorStackProxy) | 
 `class `[`UFactorFakeGameInstance`](#classUFactorFakeGameInstance) | 
 `class `[`UFactorSettings`](#classUFactorSettings) | This allow to
+`class `[`UFakeFactorsFactoryClientAdapter`](#classUFakeFactorsFactoryClientAdapter) | 
 `class `[`UK2Node_FactorOperator`](#classUK2Node__FactorOperator) | 
 `class `[`UMockObject`](#classUMockObject) | 
 `class `[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract) | 
@@ -52,8 +61,7 @@
 `class `[`UNFactorsFactoryGameInstance`](#classUNFactorsFactoryGameInstance) | 
 `class `[`UNFactorStackDecorator`](#classUNFactorStackDecorator) | 
 `class `[`UNFakeFactorsFactoryClient`](#classUNFakeFactorsFactoryClient) | 
-`class `[`UnrealFactorProxy`](#classUnrealFactorProxy) | 
-`class `[`UNUnrealFactorStackProxy`](#classUNUnrealFactorStackProxy) | 
+`class `[`NUnrealFactorProxy`](#classNUnrealFactorProxy) | 
 `struct `[`FFactorStackAttribute`](#structFFactorStackAttribute) | 
 `struct `[`FNFactorSettings`](#structFNFactorSettings) | 
 `struct `[`FNFactorStateOperator`](#structFNFactorStateOperator) | 
@@ -104,13 +112,13 @@ class FakeFactorStack
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public inline  `[`FakeFactorStack`](#classFakeFactorStack_1a497c8e00840ed121b6d0bab0013bcfe5)`(FName _Name,TSharedPtr< NTimeline > _Timeline)` | 
-`public inline virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetCurrentState`](#classFakeFactorStack_1aa14dac7d57ad704c9f528240072ebaf3)`()` | 
+`public inline virtual void `[`SupplyStateWithCurrentData`](#classFakeFactorStack_1a1c75674ecfd3871eab0a7060330e0cf9)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
 
 ## Members
 
 #### `public inline  `[`FakeFactorStack`](#classFakeFactorStack_1a497c8e00840ed121b6d0bab0013bcfe5)`(FName _Name,TSharedPtr< NTimeline > _Timeline)` <a id="classFakeFactorStack_1a497c8e00840ed121b6d0bab0013bcfe5"></a>
 
-#### `public inline virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetCurrentState`](#classFakeFactorStack_1aa14dac7d57ad704c9f528240072ebaf3)`()` <a id="classFakeFactorStack_1aa14dac7d57ad704c9f528240072ebaf3"></a>
+#### `public inline virtual void `[`SupplyStateWithCurrentData`](#classFakeFactorStack_1a1c75674ecfd3871eab0a7060330e0cf9)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classFakeFactorStack_1a1c75674ecfd3871eab0a7060330e0cf9"></a>
 
 # class `FakeResetOperator` <a id="classFakeResetOperator"></a>
 
@@ -131,6 +139,20 @@ class FakeResetOperator
 #### `public inline uint32 `[`GetKeyInStack`](#classFakeResetOperator_1aa5de5e076a4e6e414837d935e9a0a182)`()` <a id="classFakeResetOperator_1aa5de5e076a4e6e414837d935e9a0a182"></a>
 
 #### `public inline bool `[`HasStack`](#classFakeResetOperator_1a8b998e15002e352ae61fd4973ede179b)`()` <a id="classFakeResetOperator_1a8b998e15002e352ae61fd4973ede179b"></a>
+
+# class `FakeTimelineManager` <a id="classFakeTimelineManager"></a>
+
+```
+class FakeTimelineManager
+  : public NTimelineManager
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
 
 # class `FNansFactorsFactoryCoreModule` <a id="classFNansFactorsFactoryCoreModule"></a>
 
@@ -201,20 +223,6 @@ class FNFactorSettingsPinFactory
 ## Members
 
 #### `public virtual `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter)` * `[`GetFactorsFactoryClient`](#classINFactorsFactoryGameInstance_1a2b28c233072fdb005682f1695ee06843)`() const` <a id="classINFactorsFactoryGameInstance_1a2b28c233072fdb005682f1695ee06843"></a>
-
-# class `MockTimelineManager` <a id="classMockTimelineManager"></a>
-
-```
-class MockTimelineManager
-  : public NTimelineManager
-```  
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-
-## Members
 
 # class `NAddOperator` <a id="classNAddOperator"></a>
 
@@ -551,10 +559,9 @@ class NFactorsFactoryClient
 `public virtual void `[`CreateStack`](#classNFactorsFactoryClient_1a60a4bc2c01813d816addfc4defb0ce67)`(TArray< FName > StackNames,TSharedPtr< NTimelineInterface > Timeline)` | 
 `public virtual void `[`AddStack`](#classNFactorsFactoryClient_1a2e39dacd5386ac3559dbdd84e9f87a95)`(TSharedPtr< `[`NFactorStackInterface`](#classNFactorStackInterface)` > Stack)` | 
 `public virtual void `[`RemoveStack`](#classNFactorsFactoryClient_1a4eb4cacb1a723b5d0614511a0599cee7)`(FName StackName)` | 
-`public virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetState`](#classNFactorsFactoryClient_1a3de705550f7385fdabf2bdb8ebb482a8)`(FName StackName)` | 
-`public virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classNFactorsFactoryClient_1a9f0a7933b063d951afce8d84acb2e3e9)`(TArray< FName > StackNames)` | 
+`public virtual void `[`GetState`](#classNFactorsFactoryClient_1a516dab8fdc847cb6fa6fac0da89b28ec)`(FName StackName,`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+`public virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classNFactorsFactoryClient_1ae06e437837c5ece1b269d2ac1e95657c)`(TArray< FName > StackNames,`[`NFactorStateInterface`](#classNFactorStateInterface)` * StateTemplate)` | 
 `public virtual void `[`AddFactor`](#classNFactorsFactoryClient_1af04e6201332f28ac9bed3487acd7258e)`(FName StackName,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
-`public virtual void `[`AddFactor`](#classNFactorsFactoryClient_1ac5d27d41195deaf7b2e72facb205d5e2)`(TArray< FName > StackNames,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
 `public virtual void `[`SetDebug`](#classNFactorsFactoryClient_1a09146ea3b5ab0efe9e29502987a17003)`(const TArray< FName > StackNames,bool bDebug)` | 
 `protected TMap< FName, TSharedPtr< `[`NFactorStackInterface`](#classNFactorStackInterface)` > > `[`StacksList`](#classNFactorsFactoryClient_1ac84777bf8fab0fe4358202a62c765967) | 
 
@@ -570,13 +577,11 @@ class NFactorsFactoryClient
 
 #### `public virtual void `[`RemoveStack`](#classNFactorsFactoryClient_1a4eb4cacb1a723b5d0614511a0599cee7)`(FName StackName)` <a id="classNFactorsFactoryClient_1a4eb4cacb1a723b5d0614511a0599cee7"></a>
 
-#### `public virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetState`](#classNFactorsFactoryClient_1a3de705550f7385fdabf2bdb8ebb482a8)`(FName StackName)` <a id="classNFactorsFactoryClient_1a3de705550f7385fdabf2bdb8ebb482a8"></a>
+#### `public virtual void `[`GetState`](#classNFactorsFactoryClient_1a516dab8fdc847cb6fa6fac0da89b28ec)`(FName StackName,`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classNFactorsFactoryClient_1a516dab8fdc847cb6fa6fac0da89b28ec"></a>
 
-#### `public virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classNFactorsFactoryClient_1a9f0a7933b063d951afce8d84acb2e3e9)`(TArray< FName > StackNames)` <a id="classNFactorsFactoryClient_1a9f0a7933b063d951afce8d84acb2e3e9"></a>
+#### `public virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classNFactorsFactoryClient_1ae06e437837c5ece1b269d2ac1e95657c)`(TArray< FName > StackNames,`[`NFactorStateInterface`](#classNFactorStateInterface)` * StateTemplate)` <a id="classNFactorsFactoryClient_1ae06e437837c5ece1b269d2ac1e95657c"></a>
 
 #### `public virtual void `[`AddFactor`](#classNFactorsFactoryClient_1af04e6201332f28ac9bed3487acd7258e)`(FName StackName,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classNFactorsFactoryClient_1af04e6201332f28ac9bed3487acd7258e"></a>
-
-#### `public virtual void `[`AddFactor`](#classNFactorsFactoryClient_1ac5d27d41195deaf7b2e72facb205d5e2)`(TArray< FName > StackNames,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classNFactorsFactoryClient_1ac5d27d41195deaf7b2e72facb205d5e2"></a>
 
 #### `public virtual void `[`SetDebug`](#classNFactorsFactoryClient_1a09146ea3b5ab0efe9e29502987a17003)`(const TArray< FName > StackNames,bool bDebug)` <a id="classNFactorsFactoryClient_1a09146ea3b5ab0efe9e29502987a17003"></a>
 
@@ -592,10 +597,9 @@ class NFactorsFactoryClient
 `public void `[`CreateStack`](#classNFactorsFactoryClientInterface_1afda952f109511b436a52e3947fb5e066)`(TArray< FName > StackNames,TSharedPtr< NTimelineInterface > Timeline)` | 
 `public void `[`AddStack`](#classNFactorsFactoryClientInterface_1a4522c8202d9fdb5c39a573d9ba81164a)`(TSharedPtr< `[`NFactorStackInterface`](#classNFactorStackInterface)` > Stack)` | 
 `public void `[`RemoveStack`](#classNFactorsFactoryClientInterface_1a9750ca39ed5e5cb77a9837e898d26196)`(FName StackName)` | 
-`public `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetState`](#classNFactorsFactoryClientInterface_1a57083f17d2dd252e51ebbbb629be0417)`(FName StackName)` | 
-`public TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classNFactorsFactoryClientInterface_1a4cd104a135919406fc568b7452920c8b)`(TArray< FName > StackNames)` | 
+`public void `[`GetState`](#classNFactorsFactoryClientInterface_1a2c3d5ba5979814a8cc493ef340a79588)`(FName StackName,`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+`public TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classNFactorsFactoryClientInterface_1a8d3b66cbeb7468065d3eb7f326ca9992)`(TArray< FName > StackNames,`[`NFactorStateInterface`](#classNFactorStateInterface)` * StateTemplate)` | 
 `public void `[`AddFactor`](#classNFactorsFactoryClientInterface_1a2fcd9465268c7e36d36f33ade58c3623)`(FName StackName,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
-`public void `[`AddFactor`](#classNFactorsFactoryClientInterface_1ab344000d68f3397a4abed3ced6fa2885)`(TArray< FName > StackNames,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
 `public void `[`SetDebug`](#classNFactorsFactoryClientInterface_1a40427f04cf0143a25f9844099209bf37)`(const TArray< FName > StackNames,bool bDebug)` | 
 
 ## Members
@@ -608,13 +612,11 @@ class NFactorsFactoryClient
 
 #### `public void `[`RemoveStack`](#classNFactorsFactoryClientInterface_1a9750ca39ed5e5cb77a9837e898d26196)`(FName StackName)` <a id="classNFactorsFactoryClientInterface_1a9750ca39ed5e5cb77a9837e898d26196"></a>
 
-#### `public `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetState`](#classNFactorsFactoryClientInterface_1a57083f17d2dd252e51ebbbb629be0417)`(FName StackName)` <a id="classNFactorsFactoryClientInterface_1a57083f17d2dd252e51ebbbb629be0417"></a>
+#### `public void `[`GetState`](#classNFactorsFactoryClientInterface_1a2c3d5ba5979814a8cc493ef340a79588)`(FName StackName,`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classNFactorsFactoryClientInterface_1a2c3d5ba5979814a8cc493ef340a79588"></a>
 
-#### `public TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classNFactorsFactoryClientInterface_1a4cd104a135919406fc568b7452920c8b)`(TArray< FName > StackNames)` <a id="classNFactorsFactoryClientInterface_1a4cd104a135919406fc568b7452920c8b"></a>
+#### `public TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classNFactorsFactoryClientInterface_1a8d3b66cbeb7468065d3eb7f326ca9992)`(TArray< FName > StackNames,`[`NFactorStateInterface`](#classNFactorStateInterface)` * StateTemplate)` <a id="classNFactorsFactoryClientInterface_1a8d3b66cbeb7468065d3eb7f326ca9992"></a>
 
 #### `public void `[`AddFactor`](#classNFactorsFactoryClientInterface_1a2fcd9465268c7e36d36f33ade58c3623)`(FName StackName,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classNFactorsFactoryClientInterface_1a2fcd9465268c7e36d36f33ade58c3623"></a>
-
-#### `public void `[`AddFactor`](#classNFactorsFactoryClientInterface_1ab344000d68f3397a4abed3ced6fa2885)`(TArray< FName > StackNames,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classNFactorsFactoryClientInterface_1ab344000d68f3397a4abed3ced6fa2885"></a>
 
 #### `public void `[`SetDebug`](#classNFactorsFactoryClientInterface_1a40427f04cf0143a25f9844099209bf37)`(const TArray< FName > StackNames,bool bDebug)` <a id="classNFactorsFactoryClientInterface_1a40427f04cf0143a25f9844099209bf37"></a>
 
@@ -641,14 +643,14 @@ class NFactorStack
 `public virtual bool `[`GetFlag`](#classNFactorStack_1a8d2ba6a3a6c13624c2d289266ab126c3)`(FString Flag) const` | 
 `public virtual void `[`SetFlag`](#classNFactorStack_1a3d62bbcb02c9c6e72e9039c15936e1ec)`(FString Flag,bool Value)` | 
 `public virtual TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`GetFactors`](#classNFactorStack_1a1c19bcd2252ebc2afb24e01917ce686d)`() const` | 
-`public virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetCurrentState`](#classNFactorStack_1a3ac5bc039e2276f311a2a9cf2e9cedcd)`()` | 
+`public virtual void `[`SupplyStateWithCurrentData`](#classNFactorStack_1ae5cdf97a96859bd0b8dbaf19086da71b)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
 `public virtual void `[`Debug`](#classNFactorStack_1acb9d2567eaf2dd9f1c25acb9888e4bb7)`(bool _bDebug)` | 
 `protected bool `[`bDebug`](#classNFactorStack_1a433b9bf07597be6f85c9d6e25a61a2c1) | 
 `protected TMap< FString, bool > `[`IterationFlags`](#classNFactorStack_1ab0883ade9b34b28403e371568d7de572) | 
 `protected TSharedPtr< NTimelineInterface > `[`Timeline`](#classNFactorStack_1a2644739de140ddc539da5a1c3d3ce452) | 
 `protected TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`Factors`](#classNFactorStack_1a4ec56071d7e68a5cf28ef3d4f5d87e60) | 
 `protected FName `[`Name`](#classNFactorStack_1a77470aff166c1c99b6fad3095082ef09) | 
-`protected void `[`AddFactorsToState`](#classNFactorStack_1a3aa4886fc0033bfda2dbde62fa684c67)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` * State)` | 
+`protected void `[`AddFactorsToState`](#classNFactorStack_1a99d323a4a60a270c20b53ed9a988a94a)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
 
 ## Members
 
@@ -676,7 +678,7 @@ class NFactorStack
 
 #### `public virtual TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`GetFactors`](#classNFactorStack_1a1c19bcd2252ebc2afb24e01917ce686d)`() const` <a id="classNFactorStack_1a1c19bcd2252ebc2afb24e01917ce686d"></a>
 
-#### `public virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetCurrentState`](#classNFactorStack_1a3ac5bc039e2276f311a2a9cf2e9cedcd)`()` <a id="classNFactorStack_1a3ac5bc039e2276f311a2a9cf2e9cedcd"></a>
+#### `public virtual void `[`SupplyStateWithCurrentData`](#classNFactorStack_1ae5cdf97a96859bd0b8dbaf19086da71b)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classNFactorStack_1ae5cdf97a96859bd0b8dbaf19086da71b"></a>
 
 #### `public virtual void `[`Debug`](#classNFactorStack_1acb9d2567eaf2dd9f1c25acb9888e4bb7)`(bool _bDebug)` <a id="classNFactorStack_1acb9d2567eaf2dd9f1c25acb9888e4bb7"></a>
 
@@ -690,7 +692,7 @@ class NFactorStack
 
 #### `protected FName `[`Name`](#classNFactorStack_1a77470aff166c1c99b6fad3095082ef09) <a id="classNFactorStack_1a77470aff166c1c99b6fad3095082ef09"></a>
 
-#### `protected void `[`AddFactorsToState`](#classNFactorStack_1a3aa4886fc0033bfda2dbde62fa684c67)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` * State)` <a id="classNFactorStack_1a3aa4886fc0033bfda2dbde62fa684c67"></a>
+#### `protected void `[`AddFactorsToState`](#classNFactorStack_1a99d323a4a60a270c20b53ed9a988a94a)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classNFactorStack_1a99d323a4a60a270c20b53ed9a988a94a"></a>
 
 # class `NFactorStackInterface` <a id="classNFactorStackInterface"></a>
 
@@ -709,7 +711,7 @@ class NFactorStack
 `public bool `[`GetFlag`](#classNFactorStackInterface_1a5616cad3df65a2f070c3906a02413da2)`(FString Flag) const` | 
 `public void `[`SetFlag`](#classNFactorStackInterface_1a67926a572f866b783734ab50bffb5f6c)`(FString Flag,bool Value)` | 
 `public void `[`Debug`](#classNFactorStackInterface_1a68956343f378061695a7042523a15b06)`(bool _bDebug)` | 
-`public `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetCurrentState`](#classNFactorStackInterface_1a89985da471ac114277a7d91fc964d5b5)`()` | 
+`public void `[`SupplyStateWithCurrentData`](#classNFactorStackInterface_1a03b0b1ccfc364b278ed5bf15ecff4a05)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
 
 ## Members
 
@@ -735,7 +737,7 @@ class NFactorStack
 
 #### `public void `[`Debug`](#classNFactorStackInterface_1a68956343f378061695a7042523a15b06)`(bool _bDebug)` <a id="classNFactorStackInterface_1a68956343f378061695a7042523a15b06"></a>
 
-#### `public `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetCurrentState`](#classNFactorStackInterface_1a89985da471ac114277a7d91fc964d5b5)`()` <a id="classNFactorStackInterface_1a89985da471ac114277a7d91fc964d5b5"></a>
+#### `public void `[`SupplyStateWithCurrentData`](#classNFactorStackInterface_1a03b0b1ccfc364b278ed5bf15ecff4a05)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classNFactorStackInterface_1a03b0b1ccfc364b278ed5bf15ecff4a05"></a>
 
 # class `NFactorState` <a id="classNFactorState"></a>
 
@@ -751,10 +753,12 @@ class NFactorState
 `public bool `[`bDebug`](#classNFactorState_1ac1565797048a0259d71bad1cb4995604) | 
 `public inline virtual  `[`~NFactorState`](#classNFactorState_1a11c5c3b35724ddba3db601ff3d2574e9)`()` | 
 `public inline  `[`NFactorState`](#classNFactorState_1a64392bc5f25117da90683127f38b3d61)`()` | 
-`public  `[`NFactorState`](#classNFactorState_1ac199aef10127fd7f756b2488bf1b394f)`(float _Time)` | 
 `public virtual void `[`AddFactor`](#classNFactorState_1a88263bca3e1d91d3a80a8a3c88aa4656)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
 `public virtual float `[`GetTime`](#classNFactorState_1aa4ab3543a7bb44e9a9763f544366fa84)`() const` | 
+`public virtual void `[`SetTime`](#classNFactorState_1abc83a57624e48afdd5223cb3b1aefe52)`(float _Time)` | 
 `public virtual float `[`Compute`](#classNFactorState_1a95f00f47091e4c1ab6d1e4cba3421e5a)`()` | 
+`public virtual void `[`Clear`](#classNFactorState_1a771c1b03cf365dcbab563f5afcd6a18c)`()` | 
+`public virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`Clone`](#classNFactorState_1a4b10802cf058fac577ba15f53ddaeae2)`()` | 
 `public virtual void `[`Debug`](#classNFactorState_1a30fba76e979ccc5f32482e512f31e805)`(bool _bDebug)` | 
 `public virtual const TArray< `[`FNFactorStateOperator`](#structFNFactorStateOperator)` > `[`GetOperators`](#classNFactorState_1a16096dbc1357e7723fa7388b887d46cb)`() const` | 
 `protected TArray< `[`FNFactorStateOperator`](#structFNFactorStateOperator)` > `[`Operators`](#classNFactorState_1a31de6655fee5eabd18207e137b7e34c0) | 
@@ -767,13 +771,17 @@ class NFactorState
 
 #### `public inline  `[`NFactorState`](#classNFactorState_1a64392bc5f25117da90683127f38b3d61)`()` <a id="classNFactorState_1a64392bc5f25117da90683127f38b3d61"></a>
 
-#### `public  `[`NFactorState`](#classNFactorState_1ac199aef10127fd7f756b2488bf1b394f)`(float _Time)` <a id="classNFactorState_1ac199aef10127fd7f756b2488bf1b394f"></a>
-
 #### `public virtual void `[`AddFactor`](#classNFactorState_1a88263bca3e1d91d3a80a8a3c88aa4656)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classNFactorState_1a88263bca3e1d91d3a80a8a3c88aa4656"></a>
 
 #### `public virtual float `[`GetTime`](#classNFactorState_1aa4ab3543a7bb44e9a9763f544366fa84)`() const` <a id="classNFactorState_1aa4ab3543a7bb44e9a9763f544366fa84"></a>
 
+#### `public virtual void `[`SetTime`](#classNFactorState_1abc83a57624e48afdd5223cb3b1aefe52)`(float _Time)` <a id="classNFactorState_1abc83a57624e48afdd5223cb3b1aefe52"></a>
+
 #### `public virtual float `[`Compute`](#classNFactorState_1a95f00f47091e4c1ab6d1e4cba3421e5a)`()` <a id="classNFactorState_1a95f00f47091e4c1ab6d1e4cba3421e5a"></a>
+
+#### `public virtual void `[`Clear`](#classNFactorState_1a771c1b03cf365dcbab563f5afcd6a18c)`()` <a id="classNFactorState_1a771c1b03cf365dcbab563f5afcd6a18c"></a>
+
+#### `public virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`Clone`](#classNFactorState_1a4b10802cf058fac577ba15f53ddaeae2)`()` <a id="classNFactorState_1a4b10802cf058fac577ba15f53ddaeae2"></a>
 
 #### `public virtual void `[`Debug`](#classNFactorState_1a30fba76e979ccc5f32482e512f31e805)`(bool _bDebug)` <a id="classNFactorState_1a30fba76e979ccc5f32482e512f31e805"></a>
 
@@ -788,8 +796,11 @@ class NFactorState
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public void `[`AddFactor`](#classNFactorStateInterface_1ac4dbe9b19f85305fb340de59e4313eba)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
+`public void `[`SetTime`](#classNFactorStateInterface_1a9b2deabbcd3cb647804979c63ac8874f)`(float _Time)` | 
 `public float `[`GetTime`](#classNFactorStateInterface_1a0db01ef0d3940a9ff8aa49df01d9368a)`() const` | 
 `public float `[`Compute`](#classNFactorStateInterface_1a612d26366bf252a9772d8edaa9deb1ee)`()` | 
+`public void `[`Clear`](#classNFactorStateInterface_1abe39d7de9f313f485f93d81ccf926fc8)`()` | 
+`public `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`Clone`](#classNFactorStateInterface_1a6a1adafbaf2963839d3c89c1ec459b0d)`()` | 
 `public void `[`Debug`](#classNFactorStateInterface_1a0da2fc0ac04e1d121dece2c20b4a9df9)`(bool _bDebug)` | 
 `public const TArray< `[`FNFactorStateOperator`](#structFNFactorStateOperator)` > `[`GetOperators`](#classNFactorStateInterface_1a69be6ed66d3ce8da4310169c24ba11f3)`() const` | 
 
@@ -797,9 +808,15 @@ class NFactorState
 
 #### `public void `[`AddFactor`](#classNFactorStateInterface_1ac4dbe9b19f85305fb340de59e4313eba)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classNFactorStateInterface_1ac4dbe9b19f85305fb340de59e4313eba"></a>
 
+#### `public void `[`SetTime`](#classNFactorStateInterface_1a9b2deabbcd3cb647804979c63ac8874f)`(float _Time)` <a id="classNFactorStateInterface_1a9b2deabbcd3cb647804979c63ac8874f"></a>
+
 #### `public float `[`GetTime`](#classNFactorStateInterface_1a0db01ef0d3940a9ff8aa49df01d9368a)`() const` <a id="classNFactorStateInterface_1a0db01ef0d3940a9ff8aa49df01d9368a"></a>
 
 #### `public float `[`Compute`](#classNFactorStateInterface_1a612d26366bf252a9772d8edaa9deb1ee)`()` <a id="classNFactorStateInterface_1a612d26366bf252a9772d8edaa9deb1ee"></a>
+
+#### `public void `[`Clear`](#classNFactorStateInterface_1abe39d7de9f313f485f93d81ccf926fc8)`()` <a id="classNFactorStateInterface_1abe39d7de9f313f485f93d81ccf926fc8"></a>
+
+#### `public `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`Clone`](#classNFactorStateInterface_1a6a1adafbaf2963839d3c89c1ec459b0d)`()` <a id="classNFactorStateInterface_1a6a1adafbaf2963839d3c89c1ec459b0d"></a>
 
 #### `public void `[`Debug`](#classNFactorStateInterface_1a0da2fc0ac04e1d121dece2c20b4a9df9)`(bool _bDebug)` <a id="classNFactorStateInterface_1a0da2fc0ac04e1d121dece2c20b4a9df9"></a>
 
@@ -827,6 +844,44 @@ class NMultiplyOperator
 #### `public virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetInverse`](#classNMultiplyOperator_1aa7f43a251189265f3e9854bcefc0ff90)`()` <a id="classNMultiplyOperator_1aa7f43a251189265f3e9854bcefc0ff90"></a>
 
 #### `public inline virtual const FName `[`GetName`](#classNMultiplyOperator_1a78841a13d056a1d79ca82d35db1f26d2)`()` <a id="classNMultiplyOperator_1a78841a13d056a1d79ca82d35db1f26d2"></a>
+
+# class `NNullFactor` <a id="classNNullFactor"></a>
+
+```
+class NNullFactor
+  : public NFactorInterface
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public  `[`NNullFactor`](#classNNullFactor_1ac678fc9c3221924765e25b616e64535f)`()` | 
+`public virtual  `[`~NNullFactor`](#classNNullFactor_1ab7706d4b6d849800a3fa36b72f2a53a1)`()` | 
+`public virtual bool `[`IsActivated`](#classNNullFactor_1a203b43905f73c92f4aefad98dcd12abc)`() const` | 
+`public virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetOperator`](#classNNullFactor_1a434dc317d4f8df8d41d0e4da8fd8899a)`() const` | 
+`public virtual float `[`GetFactorValue`](#classNNullFactor_1aef5b9c18b9956d0c67a6d9bdb099c05e)`() const` | 
+`public virtual FName `[`GetReason`](#classNNullFactor_1a594c2b021a81b851ae3fa50fbb043c96)`() const` | 
+`public virtual uint32 `[`GetUID`](#classNNullFactor_1a6e8a2447faa338e3e8234e8495e5103e)`() const` | 
+`public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classNNullFactor_1a43f8a6651c9d21afb190ddd43beec21d)`()` | 
+
+## Members
+
+#### `public  `[`NNullFactor`](#classNNullFactor_1ac678fc9c3221924765e25b616e64535f)`()` <a id="classNNullFactor_1ac678fc9c3221924765e25b616e64535f"></a>
+
+#### `public virtual  `[`~NNullFactor`](#classNNullFactor_1ab7706d4b6d849800a3fa36b72f2a53a1)`()` <a id="classNNullFactor_1ab7706d4b6d849800a3fa36b72f2a53a1"></a>
+
+#### `public virtual bool `[`IsActivated`](#classNNullFactor_1a203b43905f73c92f4aefad98dcd12abc)`() const` <a id="classNNullFactor_1a203b43905f73c92f4aefad98dcd12abc"></a>
+
+#### `public virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetOperator`](#classNNullFactor_1a434dc317d4f8df8d41d0e4da8fd8899a)`() const` <a id="classNNullFactor_1a434dc317d4f8df8d41d0e4da8fd8899a"></a>
+
+#### `public virtual float `[`GetFactorValue`](#classNNullFactor_1aef5b9c18b9956d0c67a6d9bdb099c05e)`() const` <a id="classNNullFactor_1aef5b9c18b9956d0c67a6d9bdb099c05e"></a>
+
+#### `public virtual FName `[`GetReason`](#classNNullFactor_1a594c2b021a81b851ae3fa50fbb043c96)`() const` <a id="classNNullFactor_1a594c2b021a81b851ae3fa50fbb043c96"></a>
+
+#### `public virtual uint32 `[`GetUID`](#classNNullFactor_1a6e8a2447faa338e3e8234e8495e5103e)`() const` <a id="classNNullFactor_1a6e8a2447faa338e3e8234e8495e5103e"></a>
+
+#### `public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classNNullFactor_1a43f8a6651c9d21afb190ddd43beec21d)`()` <a id="classNNullFactor_1a43f8a6651c9d21afb190ddd43beec21d"></a>
 
 # class `NNullFactorState` <a id="classNNullFactorState"></a>
 
@@ -930,10 +985,51 @@ class NResetOperatorBase
 
 #### `public virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetInverse`](#classNResetOperatorBase_1a6ff5195aa5c913fd5af7efc35ac4d265)`()` <a id="classNResetOperatorBase_1a6ff5195aa5c913fd5af7efc35ac4d265"></a>
 
-# class `NSubsctractOperator` <a id="classNSubsctractOperator"></a>
+# class `NStubTimeline` <a id="classNStubTimeline"></a>
 
 ```
-class NSubsctractOperator
+class NStubTimeline
+  : public NTimelineInterface
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline virtual bool `[`Attached`](#classNStubTimeline_1ab0d1ce4a454491240574a368e74bb191)`(TSharedPtr< NEventInterface > Event)` | 
+`public inline virtual void `[`Attached`](#classNStubTimeline_1a69be6a546f4d74898201c8f780502d0a)`(TArray< TSharedPtr< NEventInterface >> EventsCollection)` | 
+`public inline virtual void `[`SetTickInterval`](#classNStubTimeline_1ac7fa3d8b9579297debb50b4621220ce4)`(float _TickInterval)` | 
+`public inline virtual void `[`SetCurrentTime`](#classNStubTimeline_1ac03dbdadc518fe6a11d12e1bb767a9cf)`(float _CurrentTime)` | 
+`public inline virtual float `[`GetCurrentTime`](#classNStubTimeline_1a5c45401923026499eafecaf0bfc88db6)`() const` | 
+`public inline virtual void `[`SetLabel`](#classNStubTimeline_1a66af518d85ecb6327efdbc50b0f03446)`(FName _Label)` | 
+`public inline virtual FName `[`GetLabel`](#classNStubTimeline_1ac8cb99f70ee787fe02ee1a2d08487cfb)`() const` | 
+`public inline virtual void `[`Clear`](#classNStubTimeline_1a6a869c8b6fb586631a5d7b92bb5fa5d0)`()` | 
+`public inline virtual void `[`NotifyTick`](#classNStubTimeline_1a014ccfb1e008e8fce9bfc4caca38ca82)`()` | 
+
+## Members
+
+#### `public inline virtual bool `[`Attached`](#classNStubTimeline_1ab0d1ce4a454491240574a368e74bb191)`(TSharedPtr< NEventInterface > Event)` <a id="classNStubTimeline_1ab0d1ce4a454491240574a368e74bb191"></a>
+
+#### `public inline virtual void `[`Attached`](#classNStubTimeline_1a69be6a546f4d74898201c8f780502d0a)`(TArray< TSharedPtr< NEventInterface >> EventsCollection)` <a id="classNStubTimeline_1a69be6a546f4d74898201c8f780502d0a"></a>
+
+#### `public inline virtual void `[`SetTickInterval`](#classNStubTimeline_1ac7fa3d8b9579297debb50b4621220ce4)`(float _TickInterval)` <a id="classNStubTimeline_1ac7fa3d8b9579297debb50b4621220ce4"></a>
+
+#### `public inline virtual void `[`SetCurrentTime`](#classNStubTimeline_1ac03dbdadc518fe6a11d12e1bb767a9cf)`(float _CurrentTime)` <a id="classNStubTimeline_1ac03dbdadc518fe6a11d12e1bb767a9cf"></a>
+
+#### `public inline virtual float `[`GetCurrentTime`](#classNStubTimeline_1a5c45401923026499eafecaf0bfc88db6)`() const` <a id="classNStubTimeline_1a5c45401923026499eafecaf0bfc88db6"></a>
+
+#### `public inline virtual void `[`SetLabel`](#classNStubTimeline_1a66af518d85ecb6327efdbc50b0f03446)`(FName _Label)` <a id="classNStubTimeline_1a66af518d85ecb6327efdbc50b0f03446"></a>
+
+#### `public inline virtual FName `[`GetLabel`](#classNStubTimeline_1ac8cb99f70ee787fe02ee1a2d08487cfb)`() const` <a id="classNStubTimeline_1ac8cb99f70ee787fe02ee1a2d08487cfb"></a>
+
+#### `public inline virtual void `[`Clear`](#classNStubTimeline_1a6a869c8b6fb586631a5d7b92bb5fa5d0)`()` <a id="classNStubTimeline_1a6a869c8b6fb586631a5d7b92bb5fa5d0"></a>
+
+#### `public inline virtual void `[`NotifyTick`](#classNStubTimeline_1a014ccfb1e008e8fce9bfc4caca38ca82)`()` <a id="classNStubTimeline_1a014ccfb1e008e8fce9bfc4caca38ca82"></a>
+
+# class `NSubtractOperator` <a id="classNSubtractOperator"></a>
+
+```
+class NSubtractOperator
   : public FactorOperatorInterface
 ```  
 
@@ -941,17 +1037,76 @@ class NSubsctractOperator
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public virtual float `[`Compute`](#classNSubsctractOperator_1ab0d1823a3d03ea5b098e184416d6f442)`(float Lh,float Rh)` | 
-`public virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetInverse`](#classNSubsctractOperator_1af05c24d1f89beed95840c05615a3edbc)`()` | 
-`public inline virtual const FName `[`GetName`](#classNSubsctractOperator_1a5c21df39e32ffbb8de747c4cd97332d5)`()` | 
+`public virtual float `[`Compute`](#classNSubtractOperator_1a3e2ee7cd12d97cab09b52a59ad2580e3)`(float Lh,float Rh)` | 
+`public virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetInverse`](#classNSubtractOperator_1a4e416becb4a4bf33b1ee3444807e7289)`()` | 
+`public inline virtual const FName `[`GetName`](#classNSubtractOperator_1a78c46b462f7fd4a3993f5d8c3266da65)`()` | 
 
 ## Members
 
-#### `public virtual float `[`Compute`](#classNSubsctractOperator_1ab0d1823a3d03ea5b098e184416d6f442)`(float Lh,float Rh)` <a id="classNSubsctractOperator_1ab0d1823a3d03ea5b098e184416d6f442"></a>
+#### `public virtual float `[`Compute`](#classNSubtractOperator_1a3e2ee7cd12d97cab09b52a59ad2580e3)`(float Lh,float Rh)` <a id="classNSubtractOperator_1a3e2ee7cd12d97cab09b52a59ad2580e3"></a>
 
-#### `public virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetInverse`](#classNSubsctractOperator_1af05c24d1f89beed95840c05615a3edbc)`()` <a id="classNSubsctractOperator_1af05c24d1f89beed95840c05615a3edbc"></a>
+#### `public virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetInverse`](#classNSubtractOperator_1a4e416becb4a4bf33b1ee3444807e7289)`()` <a id="classNSubtractOperator_1a4e416becb4a4bf33b1ee3444807e7289"></a>
 
-#### `public inline virtual const FName `[`GetName`](#classNSubsctractOperator_1a5c21df39e32ffbb8de747c4cd97332d5)`()` <a id="classNSubsctractOperator_1a5c21df39e32ffbb8de747c4cd97332d5"></a>
+#### `public inline virtual const FName `[`GetName`](#classNSubtractOperator_1a78c46b462f7fd4a3993f5d8c3266da65)`()` <a id="classNSubtractOperator_1a78c46b462f7fd4a3993f5d8c3266da65"></a>
+
+# class `NUnrealFactorStackProxy` <a id="classNUnrealFactorStackProxy"></a>
+
+```
+class NUnrealFactorStackProxy
+  : public NFactorStackInterface
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` & `[`Stack`](#classNUnrealFactorStackProxy_1a70b0893df81aa86812b1aaa95e8ac601) | 
+`public inline  `[`NUnrealFactorStackProxy`](#classNUnrealFactorStackProxy_1a27ea7553a8bf9c78ebf72fe5e94302bd)`(`[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` & _Stack)` | 
+`public inline virtual void `[`Reset`](#classNUnrealFactorStackProxy_1af2dd6e2f80eb54797db048e6524009ec)`()` | 
+`public inline virtual void `[`SetName`](#classNUnrealFactorStackProxy_1a284c1c7098586593397eab341d16af82)`(FName _Name)` | 
+`public inline virtual FName `[`GetName`](#classNUnrealFactorStackProxy_1a1287578cc5fca0a70dfa72c562ddafbb)`() const` | 
+`public inline virtual float `[`GetTime`](#classNUnrealFactorStackProxy_1aa1042e5efaa76aaa4381f1a695bef2a0)`() const` | 
+`public inline virtual TSharedRef< `[`NFactorInterface`](#classNFactorInterface)` > `[`GetFactor`](#classNUnrealFactorStackProxy_1ac35315138690a892500970009ab6525b)`(uint32 Key) const` | 
+`public inline virtual TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`GetFactors`](#classNUnrealFactorStackProxy_1af8686ccddd9119236974027a839d4337)`() const` | 
+`public inline virtual void `[`AddFactor`](#classNUnrealFactorStackProxy_1af7082ec81d6096a31b77aaf701639bae)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
+`public inline virtual bool `[`HasFlag`](#classNUnrealFactorStackProxy_1aa5846b567283c55b008d11729bb863c1)`(FString Flag) const` | 
+`public inline virtual bool `[`GetFlag`](#classNUnrealFactorStackProxy_1acd0d2564bf8f8e189e93777619aedc58)`(FString Flag) const` | 
+`public inline virtual void `[`SetFlag`](#classNUnrealFactorStackProxy_1af1c8e807e9f698326fb96bbecca10f72)`(FString Flag,bool Value)` | 
+`public inline virtual void `[`Debug`](#classNUnrealFactorStackProxy_1a4679a6b7c497b2351f5b78a731f5b4a8)`(bool _bDebug)` | 
+`public inline virtual void `[`SupplyStateWithCurrentData`](#classNUnrealFactorStackProxy_1afb67ea805d29f1897ca1184576d2468e)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+`public inline virtual `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` * `[`GetUnrealObject`](#classNUnrealFactorStackProxy_1ab82ceddf4d246d3af74088ed677eb35e)`() const` | 
+
+## Members
+
+#### `public `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` & `[`Stack`](#classNUnrealFactorStackProxy_1a70b0893df81aa86812b1aaa95e8ac601) <a id="classNUnrealFactorStackProxy_1a70b0893df81aa86812b1aaa95e8ac601"></a>
+
+#### `public inline  `[`NUnrealFactorStackProxy`](#classNUnrealFactorStackProxy_1a27ea7553a8bf9c78ebf72fe5e94302bd)`(`[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` & _Stack)` <a id="classNUnrealFactorStackProxy_1a27ea7553a8bf9c78ebf72fe5e94302bd"></a>
+
+#### `public inline virtual void `[`Reset`](#classNUnrealFactorStackProxy_1af2dd6e2f80eb54797db048e6524009ec)`()` <a id="classNUnrealFactorStackProxy_1af2dd6e2f80eb54797db048e6524009ec"></a>
+
+#### `public inline virtual void `[`SetName`](#classNUnrealFactorStackProxy_1a284c1c7098586593397eab341d16af82)`(FName _Name)` <a id="classNUnrealFactorStackProxy_1a284c1c7098586593397eab341d16af82"></a>
+
+#### `public inline virtual FName `[`GetName`](#classNUnrealFactorStackProxy_1a1287578cc5fca0a70dfa72c562ddafbb)`() const` <a id="classNUnrealFactorStackProxy_1a1287578cc5fca0a70dfa72c562ddafbb"></a>
+
+#### `public inline virtual float `[`GetTime`](#classNUnrealFactorStackProxy_1aa1042e5efaa76aaa4381f1a695bef2a0)`() const` <a id="classNUnrealFactorStackProxy_1aa1042e5efaa76aaa4381f1a695bef2a0"></a>
+
+#### `public inline virtual TSharedRef< `[`NFactorInterface`](#classNFactorInterface)` > `[`GetFactor`](#classNUnrealFactorStackProxy_1ac35315138690a892500970009ab6525b)`(uint32 Key) const` <a id="classNUnrealFactorStackProxy_1ac35315138690a892500970009ab6525b"></a>
+
+#### `public inline virtual TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`GetFactors`](#classNUnrealFactorStackProxy_1af8686ccddd9119236974027a839d4337)`() const` <a id="classNUnrealFactorStackProxy_1af8686ccddd9119236974027a839d4337"></a>
+
+#### `public inline virtual void `[`AddFactor`](#classNUnrealFactorStackProxy_1af7082ec81d6096a31b77aaf701639bae)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classNUnrealFactorStackProxy_1af7082ec81d6096a31b77aaf701639bae"></a>
+
+#### `public inline virtual bool `[`HasFlag`](#classNUnrealFactorStackProxy_1aa5846b567283c55b008d11729bb863c1)`(FString Flag) const` <a id="classNUnrealFactorStackProxy_1aa5846b567283c55b008d11729bb863c1"></a>
+
+#### `public inline virtual bool `[`GetFlag`](#classNUnrealFactorStackProxy_1acd0d2564bf8f8e189e93777619aedc58)`(FString Flag) const` <a id="classNUnrealFactorStackProxy_1acd0d2564bf8f8e189e93777619aedc58"></a>
+
+#### `public inline virtual void `[`SetFlag`](#classNUnrealFactorStackProxy_1af1c8e807e9f698326fb96bbecca10f72)`(FString Flag,bool Value)` <a id="classNUnrealFactorStackProxy_1af1c8e807e9f698326fb96bbecca10f72"></a>
+
+#### `public inline virtual void `[`Debug`](#classNUnrealFactorStackProxy_1a4679a6b7c497b2351f5b78a731f5b4a8)`(bool _bDebug)` <a id="classNUnrealFactorStackProxy_1a4679a6b7c497b2351f5b78a731f5b4a8"></a>
+
+#### `public inline virtual void `[`SupplyStateWithCurrentData`](#classNUnrealFactorStackProxy_1afb67ea805d29f1897ca1184576d2468e)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classNUnrealFactorStackProxy_1afb67ea805d29f1897ca1184576d2468e"></a>
+
+#### `public inline virtual `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` * `[`GetUnrealObject`](#classNUnrealFactorStackProxy_1ab82ceddf4d246d3af74088ed677eb35e)`() const` <a id="classNUnrealFactorStackProxy_1ab82ceddf4d246d3af74088ed677eb35e"></a>
 
 # class `OperatorUtils` <a id="classOperatorUtils"></a>
 
@@ -1000,11 +1155,261 @@ class SNFactorSettingsPin
 
 #### `protected void `[`GetPropertyAsName`](#classSNFactorSettingsPin_1a871c4df19487070baf998598078db9f6)`(FName & OutName) const` <a id="classSNFactorSettingsPin_1a871c4df19487070baf998598078db9f6"></a>
 
+# class `SpyFactorsFactoryClient` <a id="classSpyFactorsFactoryClient"></a>
+
+```
+class SpyFactorsFactoryClient
+  : public StubFactorsFactoryClient
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public TMap< FString, uint32 > `[`MethodCalls`](#classSpyFactorsFactoryClient_1aedabeac8373579bab54ceed78cd5393c) | 
+`public inline  `[`SpyFactorsFactoryClient`](#classSpyFactorsFactoryClient_1a42d28a98d8bfa3a3b03419ce9b1a59ea)`()` | 
+`public inline virtual  `[`~SpyFactorsFactoryClient`](#classSpyFactorsFactoryClient_1ac0c4959181555eafc2aac4b99c61eeb7)`()` | 
+`public inline virtual void `[`CreateStack`](#classSpyFactorsFactoryClient_1afadc1d808dfba665691c578cd3969133)`(FName StackName,TSharedPtr< NTimelineInterface > Timeline)` | 
+`public inline virtual void `[`CreateStack`](#classSpyFactorsFactoryClient_1a9379be9a4b1429a7a98223459af4e592)`(TArray< FName > StackNames,TSharedPtr< NTimelineInterface > Timeline)` | 
+`public inline virtual void `[`AddStack`](#classSpyFactorsFactoryClient_1af75a598c1bb8d34df0ee69191f67a896)`(TSharedPtr< `[`NFactorStackInterface`](#classNFactorStackInterface)` > Stack)` | 
+`public inline virtual void `[`RemoveStack`](#classSpyFactorsFactoryClient_1a1fba0b3cb559ac751756b6b3d9d10a66)`(FName StackName)` | 
+`public inline virtual void `[`GetState`](#classSpyFactorsFactoryClient_1ae63ec8a067306392ae6ab194b7cc3146)`(FName StackName,`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+`public inline virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classSpyFactorsFactoryClient_1abbfeb4be905a33575eb613a5423c5ee0)`(TArray< FName > StackNames,`[`NFactorStateInterface`](#classNFactorStateInterface)` * StateTemplate)` | 
+`public inline virtual void `[`AddFactor`](#classSpyFactorsFactoryClient_1a08fca025d953a74911bd6a10d4457a85)`(FName StackName,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
+`public inline virtual void `[`SetDebug`](#classSpyFactorsFactoryClient_1a04e8d8c514f46b2c3c68582342240cc3)`(const TArray< FName > StackNames,bool bDebug)` | 
+`public inline void `[`Clear`](#classSpyFactorsFactoryClient_1a917febdef44ea3875aba8f990c109e3e)`()` | 
+`public inline uint32 `[`GetCall`](#classSpyFactorsFactoryClient_1ae5a0564ec95d4af0b161287964a10c85)`(FString FnName)` | 
+`protected inline void `[`AddCall`](#classSpyFactorsFactoryClient_1aed5b5e55a71ffeb054adec2d27983910)`(FString FnName)` | 
+
+## Members
+
+#### `public TMap< FString, uint32 > `[`MethodCalls`](#classSpyFactorsFactoryClient_1aedabeac8373579bab54ceed78cd5393c) <a id="classSpyFactorsFactoryClient_1aedabeac8373579bab54ceed78cd5393c"></a>
+
+#### `public inline  `[`SpyFactorsFactoryClient`](#classSpyFactorsFactoryClient_1a42d28a98d8bfa3a3b03419ce9b1a59ea)`()` <a id="classSpyFactorsFactoryClient_1a42d28a98d8bfa3a3b03419ce9b1a59ea"></a>
+
+#### `public inline virtual  `[`~SpyFactorsFactoryClient`](#classSpyFactorsFactoryClient_1ac0c4959181555eafc2aac4b99c61eeb7)`()` <a id="classSpyFactorsFactoryClient_1ac0c4959181555eafc2aac4b99c61eeb7"></a>
+
+#### `public inline virtual void `[`CreateStack`](#classSpyFactorsFactoryClient_1afadc1d808dfba665691c578cd3969133)`(FName StackName,TSharedPtr< NTimelineInterface > Timeline)` <a id="classSpyFactorsFactoryClient_1afadc1d808dfba665691c578cd3969133"></a>
+
+#### `public inline virtual void `[`CreateStack`](#classSpyFactorsFactoryClient_1a9379be9a4b1429a7a98223459af4e592)`(TArray< FName > StackNames,TSharedPtr< NTimelineInterface > Timeline)` <a id="classSpyFactorsFactoryClient_1a9379be9a4b1429a7a98223459af4e592"></a>
+
+#### `public inline virtual void `[`AddStack`](#classSpyFactorsFactoryClient_1af75a598c1bb8d34df0ee69191f67a896)`(TSharedPtr< `[`NFactorStackInterface`](#classNFactorStackInterface)` > Stack)` <a id="classSpyFactorsFactoryClient_1af75a598c1bb8d34df0ee69191f67a896"></a>
+
+#### `public inline virtual void `[`RemoveStack`](#classSpyFactorsFactoryClient_1a1fba0b3cb559ac751756b6b3d9d10a66)`(FName StackName)` <a id="classSpyFactorsFactoryClient_1a1fba0b3cb559ac751756b6b3d9d10a66"></a>
+
+#### `public inline virtual void `[`GetState`](#classSpyFactorsFactoryClient_1ae63ec8a067306392ae6ab194b7cc3146)`(FName StackName,`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classSpyFactorsFactoryClient_1ae63ec8a067306392ae6ab194b7cc3146"></a>
+
+#### `public inline virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classSpyFactorsFactoryClient_1abbfeb4be905a33575eb613a5423c5ee0)`(TArray< FName > StackNames,`[`NFactorStateInterface`](#classNFactorStateInterface)` * StateTemplate)` <a id="classSpyFactorsFactoryClient_1abbfeb4be905a33575eb613a5423c5ee0"></a>
+
+#### `public inline virtual void `[`AddFactor`](#classSpyFactorsFactoryClient_1a08fca025d953a74911bd6a10d4457a85)`(FName StackName,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classSpyFactorsFactoryClient_1a08fca025d953a74911bd6a10d4457a85"></a>
+
+#### `public inline virtual void `[`SetDebug`](#classSpyFactorsFactoryClient_1a04e8d8c514f46b2c3c68582342240cc3)`(const TArray< FName > StackNames,bool bDebug)` <a id="classSpyFactorsFactoryClient_1a04e8d8c514f46b2c3c68582342240cc3"></a>
+
+#### `public inline void `[`Clear`](#classSpyFactorsFactoryClient_1a917febdef44ea3875aba8f990c109e3e)`()` <a id="classSpyFactorsFactoryClient_1a917febdef44ea3875aba8f990c109e3e"></a>
+
+#### `public inline uint32 `[`GetCall`](#classSpyFactorsFactoryClient_1ae5a0564ec95d4af0b161287964a10c85)`(FString FnName)` <a id="classSpyFactorsFactoryClient_1ae5a0564ec95d4af0b161287964a10c85"></a>
+
+#### `protected inline void `[`AddCall`](#classSpyFactorsFactoryClient_1aed5b5e55a71ffeb054adec2d27983910)`(FString FnName)` <a id="classSpyFactorsFactoryClient_1aed5b5e55a71ffeb054adec2d27983910"></a>
+
+# class `StubFactorsFactoryClient` <a id="classStubFactorsFactoryClient"></a>
+
+```
+class StubFactorsFactoryClient
+  : public NFactorsFactoryClientInterface
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public TMap< FString, uint32 > `[`MethodCalls`](#classStubFactorsFactoryClient_1a849007059470fe74b244087948c36077) | 
+`public inline  `[`StubFactorsFactoryClient`](#classStubFactorsFactoryClient_1a7f886f00ddd0b875cec623eff9983003)`()` | 
+`public inline virtual  `[`~StubFactorsFactoryClient`](#classStubFactorsFactoryClient_1ae65ccb81b88b810118b2fa1101005d07)`()` | 
+`public inline virtual void `[`CreateStack`](#classStubFactorsFactoryClient_1aea772bf08bfdb689ea03d8d26a4f6a88)`(FName StackName,TSharedPtr< NTimelineInterface > Timeline)` | 
+`public inline virtual void `[`CreateStack`](#classStubFactorsFactoryClient_1a9162311648910fce225a7b8e21b7b3f8)`(TArray< FName > StackNames,TSharedPtr< NTimelineInterface > Timeline)` | 
+`public inline virtual void `[`AddStack`](#classStubFactorsFactoryClient_1a98b2113f64f03500d8644df39c7d8e32)`(TSharedPtr< `[`NFactorStackInterface`](#classNFactorStackInterface)` > Stack)` | 
+`public inline virtual void `[`RemoveStack`](#classStubFactorsFactoryClient_1aa1cb7e57fd957c7c509b1b15e81bee13)`(FName StackName)` | 
+`public inline virtual void `[`GetState`](#classStubFactorsFactoryClient_1a8bd8c0244fc3c78698899a59b8f5f8f6)`(FName StackName,`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+`public inline virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classStubFactorsFactoryClient_1a336dc989dff23742307520208d185126)`(TArray< FName > StackNames,`[`NFactorStateInterface`](#classNFactorStateInterface)` * StateTemplate)` | 
+`public inline virtual void `[`AddFactor`](#classStubFactorsFactoryClient_1a3addd49af1b77f009973942725aef907)`(FName StackName,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
+`public inline virtual void `[`SetDebug`](#classStubFactorsFactoryClient_1ad91b12b93fddbeffb99662e0134eed99)`(const TArray< FName > StackNames,bool bDebug)` | 
+
+## Members
+
+#### `public TMap< FString, uint32 > `[`MethodCalls`](#classStubFactorsFactoryClient_1a849007059470fe74b244087948c36077) <a id="classStubFactorsFactoryClient_1a849007059470fe74b244087948c36077"></a>
+
+#### `public inline  `[`StubFactorsFactoryClient`](#classStubFactorsFactoryClient_1a7f886f00ddd0b875cec623eff9983003)`()` <a id="classStubFactorsFactoryClient_1a7f886f00ddd0b875cec623eff9983003"></a>
+
+#### `public inline virtual  `[`~StubFactorsFactoryClient`](#classStubFactorsFactoryClient_1ae65ccb81b88b810118b2fa1101005d07)`()` <a id="classStubFactorsFactoryClient_1ae65ccb81b88b810118b2fa1101005d07"></a>
+
+#### `public inline virtual void `[`CreateStack`](#classStubFactorsFactoryClient_1aea772bf08bfdb689ea03d8d26a4f6a88)`(FName StackName,TSharedPtr< NTimelineInterface > Timeline)` <a id="classStubFactorsFactoryClient_1aea772bf08bfdb689ea03d8d26a4f6a88"></a>
+
+#### `public inline virtual void `[`CreateStack`](#classStubFactorsFactoryClient_1a9162311648910fce225a7b8e21b7b3f8)`(TArray< FName > StackNames,TSharedPtr< NTimelineInterface > Timeline)` <a id="classStubFactorsFactoryClient_1a9162311648910fce225a7b8e21b7b3f8"></a>
+
+#### `public inline virtual void `[`AddStack`](#classStubFactorsFactoryClient_1a98b2113f64f03500d8644df39c7d8e32)`(TSharedPtr< `[`NFactorStackInterface`](#classNFactorStackInterface)` > Stack)` <a id="classStubFactorsFactoryClient_1a98b2113f64f03500d8644df39c7d8e32"></a>
+
+#### `public inline virtual void `[`RemoveStack`](#classStubFactorsFactoryClient_1aa1cb7e57fd957c7c509b1b15e81bee13)`(FName StackName)` <a id="classStubFactorsFactoryClient_1aa1cb7e57fd957c7c509b1b15e81bee13"></a>
+
+#### `public inline virtual void `[`GetState`](#classStubFactorsFactoryClient_1a8bd8c0244fc3c78698899a59b8f5f8f6)`(FName StackName,`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classStubFactorsFactoryClient_1a8bd8c0244fc3c78698899a59b8f5f8f6"></a>
+
+#### `public inline virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classStubFactorsFactoryClient_1a336dc989dff23742307520208d185126)`(TArray< FName > StackNames,`[`NFactorStateInterface`](#classNFactorStateInterface)` * StateTemplate)` <a id="classStubFactorsFactoryClient_1a336dc989dff23742307520208d185126"></a>
+
+#### `public inline virtual void `[`AddFactor`](#classStubFactorsFactoryClient_1a3addd49af1b77f009973942725aef907)`(FName StackName,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classStubFactorsFactoryClient_1a3addd49af1b77f009973942725aef907"></a>
+
+#### `public inline virtual void `[`SetDebug`](#classStubFactorsFactoryClient_1ad91b12b93fddbeffb99662e0134eed99)`(const TArray< FName > StackNames,bool bDebug)` <a id="classStubFactorsFactoryClient_1ad91b12b93fddbeffb99662e0134eed99"></a>
+
+# class `StubFactorStackNotWorking` <a id="classStubFactorStackNotWorking"></a>
+
+```
+class StubFactorStackNotWorking
+  : public NFactorStackInterface
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`StubFactorStackNotWorking`](#classStubFactorStackNotWorking_1ab606ad1063cea0c7a77e84dd5ed579e6)`()` | 
+`public inline virtual void `[`Reset`](#classStubFactorStackNotWorking_1a6f13bb9b42b8fc608c6f238673632986)`()` | 
+`public inline virtual void `[`SetName`](#classStubFactorStackNotWorking_1a8da19870fd9e1e6ce4797f157e9dc9b0)`(FName _Name)` | 
+`public inline virtual FName `[`GetName`](#classStubFactorStackNotWorking_1a52572beebc890a9b574461e714597d3b)`() const` | 
+`public inline virtual float `[`GetTime`](#classStubFactorStackNotWorking_1a4e8949cba457ede630f5b33a7c79cf13)`() const` | 
+`public inline virtual TSharedRef< `[`NFactorInterface`](#classNFactorInterface)` > `[`GetFactor`](#classStubFactorStackNotWorking_1a769f556b1b8155c0d81046647c45895b)`(uint32 Key) const` | 
+`public inline virtual TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`GetFactors`](#classStubFactorStackNotWorking_1a977c92a46ecfbe16aa29ecf5e1f71c41)`() const` | 
+`public inline virtual void `[`AddFactor`](#classStubFactorStackNotWorking_1a99be7b2dc63ca967052d7a47510c7e91)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
+`public inline virtual bool `[`HasFlag`](#classStubFactorStackNotWorking_1af1bb3b1efd1cf4016d34a942724d2fa8)`(FString Flag) const` | 
+`public inline virtual bool `[`GetFlag`](#classStubFactorStackNotWorking_1a4937a468652ef635da4e0a1c85cfe0dc)`(FString Flag) const` | 
+`public inline virtual void `[`SetFlag`](#classStubFactorStackNotWorking_1a131d34bde8b62597905239ba49239975)`(FString Flag,bool Value)` | 
+`public inline virtual void `[`Debug`](#classStubFactorStackNotWorking_1a3c6f856a477885b78e24468cdeb67236)`(bool _bDebug)` | 
+`public inline virtual void `[`SupplyStateWithCurrentData`](#classStubFactorStackNotWorking_1af2f257b8b2f6e9170cb9efdfb78f3ae2)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+
+## Members
+
+#### `public inline  `[`StubFactorStackNotWorking`](#classStubFactorStackNotWorking_1ab606ad1063cea0c7a77e84dd5ed579e6)`()` <a id="classStubFactorStackNotWorking_1ab606ad1063cea0c7a77e84dd5ed579e6"></a>
+
+#### `public inline virtual void `[`Reset`](#classStubFactorStackNotWorking_1a6f13bb9b42b8fc608c6f238673632986)`()` <a id="classStubFactorStackNotWorking_1a6f13bb9b42b8fc608c6f238673632986"></a>
+
+#### `public inline virtual void `[`SetName`](#classStubFactorStackNotWorking_1a8da19870fd9e1e6ce4797f157e9dc9b0)`(FName _Name)` <a id="classStubFactorStackNotWorking_1a8da19870fd9e1e6ce4797f157e9dc9b0"></a>
+
+#### `public inline virtual FName `[`GetName`](#classStubFactorStackNotWorking_1a52572beebc890a9b574461e714597d3b)`() const` <a id="classStubFactorStackNotWorking_1a52572beebc890a9b574461e714597d3b"></a>
+
+#### `public inline virtual float `[`GetTime`](#classStubFactorStackNotWorking_1a4e8949cba457ede630f5b33a7c79cf13)`() const` <a id="classStubFactorStackNotWorking_1a4e8949cba457ede630f5b33a7c79cf13"></a>
+
+#### `public inline virtual TSharedRef< `[`NFactorInterface`](#classNFactorInterface)` > `[`GetFactor`](#classStubFactorStackNotWorking_1a769f556b1b8155c0d81046647c45895b)`(uint32 Key) const` <a id="classStubFactorStackNotWorking_1a769f556b1b8155c0d81046647c45895b"></a>
+
+#### `public inline virtual TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`GetFactors`](#classStubFactorStackNotWorking_1a977c92a46ecfbe16aa29ecf5e1f71c41)`() const` <a id="classStubFactorStackNotWorking_1a977c92a46ecfbe16aa29ecf5e1f71c41"></a>
+
+#### `public inline virtual void `[`AddFactor`](#classStubFactorStackNotWorking_1a99be7b2dc63ca967052d7a47510c7e91)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classStubFactorStackNotWorking_1a99be7b2dc63ca967052d7a47510c7e91"></a>
+
+#### `public inline virtual bool `[`HasFlag`](#classStubFactorStackNotWorking_1af1bb3b1efd1cf4016d34a942724d2fa8)`(FString Flag) const` <a id="classStubFactorStackNotWorking_1af1bb3b1efd1cf4016d34a942724d2fa8"></a>
+
+#### `public inline virtual bool `[`GetFlag`](#classStubFactorStackNotWorking_1a4937a468652ef635da4e0a1c85cfe0dc)`(FString Flag) const` <a id="classStubFactorStackNotWorking_1a4937a468652ef635da4e0a1c85cfe0dc"></a>
+
+#### `public inline virtual void `[`SetFlag`](#classStubFactorStackNotWorking_1a131d34bde8b62597905239ba49239975)`(FString Flag,bool Value)` <a id="classStubFactorStackNotWorking_1a131d34bde8b62597905239ba49239975"></a>
+
+#### `public inline virtual void `[`Debug`](#classStubFactorStackNotWorking_1a3c6f856a477885b78e24468cdeb67236)`(bool _bDebug)` <a id="classStubFactorStackNotWorking_1a3c6f856a477885b78e24468cdeb67236"></a>
+
+#### `public inline virtual void `[`SupplyStateWithCurrentData`](#classStubFactorStackNotWorking_1af2f257b8b2f6e9170cb9efdfb78f3ae2)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classStubFactorStackNotWorking_1af2f257b8b2f6e9170cb9efdfb78f3ae2"></a>
+
+# class `StubFactorState` <a id="classStubFactorState"></a>
+
+```
+class StubFactorState
+  : public NFactorStateInterface
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline virtual void `[`AddFactor`](#classStubFactorState_1af7288d917101aa3ab9ee8a63e64c5029)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
+`public inline virtual void `[`SetTime`](#classStubFactorState_1ae17bb6895959ab33cf80f380df091b0d)`(float _Time)` | 
+`public inline virtual float `[`GetTime`](#classStubFactorState_1a8a08b26b08388f3205c87833d4d697ba)`() const` | 
+`public inline virtual float `[`Compute`](#classStubFactorState_1ab0612aa2aa3a38875e072d6cb4c53c9f)`()` | 
+`public inline virtual void `[`Clear`](#classStubFactorState_1a7ade0f85d170522dd8af24492e8552c0)`()` | 
+`public inline virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`Clone`](#classStubFactorState_1a303c47d08d8d76450614331543374c75)`()` | 
+`public inline virtual void `[`Debug`](#classStubFactorState_1ae136c097ad182a21bbd98c892c6e951d)`(bool _bDebug)` | 
+`public inline virtual const TArray< `[`FNFactorStateOperator`](#structFNFactorStateOperator)` > `[`GetOperators`](#classStubFactorState_1a30f2f65ef1f2a6e856aa7f7535555849)`() const` | 
+
+## Members
+
+#### `public inline virtual void `[`AddFactor`](#classStubFactorState_1af7288d917101aa3ab9ee8a63e64c5029)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classStubFactorState_1af7288d917101aa3ab9ee8a63e64c5029"></a>
+
+#### `public inline virtual void `[`SetTime`](#classStubFactorState_1ae17bb6895959ab33cf80f380df091b0d)`(float _Time)` <a id="classStubFactorState_1ae17bb6895959ab33cf80f380df091b0d"></a>
+
+#### `public inline virtual float `[`GetTime`](#classStubFactorState_1a8a08b26b08388f3205c87833d4d697ba)`() const` <a id="classStubFactorState_1a8a08b26b08388f3205c87833d4d697ba"></a>
+
+#### `public inline virtual float `[`Compute`](#classStubFactorState_1ab0612aa2aa3a38875e072d6cb4c53c9f)`()` <a id="classStubFactorState_1ab0612aa2aa3a38875e072d6cb4c53c9f"></a>
+
+#### `public inline virtual void `[`Clear`](#classStubFactorState_1a7ade0f85d170522dd8af24492e8552c0)`()` <a id="classStubFactorState_1a7ade0f85d170522dd8af24492e8552c0"></a>
+
+#### `public inline virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`Clone`](#classStubFactorState_1a303c47d08d8d76450614331543374c75)`()` <a id="classStubFactorState_1a303c47d08d8d76450614331543374c75"></a>
+
+#### `public inline virtual void `[`Debug`](#classStubFactorState_1ae136c097ad182a21bbd98c892c6e951d)`(bool _bDebug)` <a id="classStubFactorState_1ae136c097ad182a21bbd98c892c6e951d"></a>
+
+#### `public inline virtual const TArray< `[`FNFactorStateOperator`](#structFNFactorStateOperator)` > `[`GetOperators`](#classStubFactorState_1a30f2f65ef1f2a6e856aa7f7535555849)`() const` <a id="classStubFactorState_1a30f2f65ef1f2a6e856aa7f7535555849"></a>
+
+# class `StubNullUnrealFactorStackProxy` <a id="classStubNullUnrealFactorStackProxy"></a>
+
+```
+class StubNullUnrealFactorStackProxy
+  : public NUnrealFactorStackProxy
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`StubNullUnrealFactorStackProxy`](#classStubNullUnrealFactorStackProxy_1ac6f011a3437559fe17bc694480605f16)`(`[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` & _Stack)` | 
+`public inline virtual void `[`Reset`](#classStubNullUnrealFactorStackProxy_1aaf62659fcd88eba5a87e5d25ea44f585)`()` | 
+`public inline virtual void `[`SetName`](#classStubNullUnrealFactorStackProxy_1acc8af1e9584815f82723502223384758)`(FName _Name)` | 
+`public inline virtual FName `[`GetName`](#classStubNullUnrealFactorStackProxy_1a53dd88b926ac1ab16cd7217f7c14e049)`() const` | 
+`public inline virtual float `[`GetTime`](#classStubNullUnrealFactorStackProxy_1a4d37e3a6474a1b8921320162f0c6ceda)`() const` | 
+`public inline virtual TSharedRef< `[`NFactorInterface`](#classNFactorInterface)` > `[`GetFactor`](#classStubNullUnrealFactorStackProxy_1ab95a0f2d2a9aa613cbb5acaf856dd09b)`(uint32 Key) const` | 
+`public inline virtual TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`GetFactors`](#classStubNullUnrealFactorStackProxy_1a3b299077f9d8546e7363569a87dd25d4)`() const` | 
+`public inline virtual void `[`AddFactor`](#classStubNullUnrealFactorStackProxy_1ac3238b5b5be2aa186bf4dfd59381ded6)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
+`public inline virtual bool `[`HasFlag`](#classStubNullUnrealFactorStackProxy_1a66b76ffc869b0538583c1b9d661fd456)`(FString Flag) const` | 
+`public inline virtual bool `[`GetFlag`](#classStubNullUnrealFactorStackProxy_1a577fee953b79a69e26ba4bcbd505a63f)`(FString Flag) const` | 
+`public inline virtual void `[`SetFlag`](#classStubNullUnrealFactorStackProxy_1aa7a55d7c7da7c457853cbfafabd8745f)`(FString Flag,bool Value)` | 
+`public inline virtual void `[`Debug`](#classStubNullUnrealFactorStackProxy_1aabb0a40857bc11d08b27bfe926729f0c)`(bool _bDebug)` | 
+`public inline virtual void `[`SupplyStateWithCurrentData`](#classStubNullUnrealFactorStackProxy_1a1970db942dd56c8279697f16a0b8447e)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+`public inline virtual `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` * `[`GetUnrealObject`](#classStubNullUnrealFactorStackProxy_1a8c2774908945bfd4625768b67b316a1f)`() const` | 
+
+## Members
+
+#### `public inline  `[`StubNullUnrealFactorStackProxy`](#classStubNullUnrealFactorStackProxy_1ac6f011a3437559fe17bc694480605f16)`(`[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` & _Stack)` <a id="classStubNullUnrealFactorStackProxy_1ac6f011a3437559fe17bc694480605f16"></a>
+
+#### `public inline virtual void `[`Reset`](#classStubNullUnrealFactorStackProxy_1aaf62659fcd88eba5a87e5d25ea44f585)`()` <a id="classStubNullUnrealFactorStackProxy_1aaf62659fcd88eba5a87e5d25ea44f585"></a>
+
+#### `public inline virtual void `[`SetName`](#classStubNullUnrealFactorStackProxy_1acc8af1e9584815f82723502223384758)`(FName _Name)` <a id="classStubNullUnrealFactorStackProxy_1acc8af1e9584815f82723502223384758"></a>
+
+#### `public inline virtual FName `[`GetName`](#classStubNullUnrealFactorStackProxy_1a53dd88b926ac1ab16cd7217f7c14e049)`() const` <a id="classStubNullUnrealFactorStackProxy_1a53dd88b926ac1ab16cd7217f7c14e049"></a>
+
+#### `public inline virtual float `[`GetTime`](#classStubNullUnrealFactorStackProxy_1a4d37e3a6474a1b8921320162f0c6ceda)`() const` <a id="classStubNullUnrealFactorStackProxy_1a4d37e3a6474a1b8921320162f0c6ceda"></a>
+
+#### `public inline virtual TSharedRef< `[`NFactorInterface`](#classNFactorInterface)` > `[`GetFactor`](#classStubNullUnrealFactorStackProxy_1ab95a0f2d2a9aa613cbb5acaf856dd09b)`(uint32 Key) const` <a id="classStubNullUnrealFactorStackProxy_1ab95a0f2d2a9aa613cbb5acaf856dd09b"></a>
+
+#### `public inline virtual TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`GetFactors`](#classStubNullUnrealFactorStackProxy_1a3b299077f9d8546e7363569a87dd25d4)`() const` <a id="classStubNullUnrealFactorStackProxy_1a3b299077f9d8546e7363569a87dd25d4"></a>
+
+#### `public inline virtual void `[`AddFactor`](#classStubNullUnrealFactorStackProxy_1ac3238b5b5be2aa186bf4dfd59381ded6)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classStubNullUnrealFactorStackProxy_1ac3238b5b5be2aa186bf4dfd59381ded6"></a>
+
+#### `public inline virtual bool `[`HasFlag`](#classStubNullUnrealFactorStackProxy_1a66b76ffc869b0538583c1b9d661fd456)`(FString Flag) const` <a id="classStubNullUnrealFactorStackProxy_1a66b76ffc869b0538583c1b9d661fd456"></a>
+
+#### `public inline virtual bool `[`GetFlag`](#classStubNullUnrealFactorStackProxy_1a577fee953b79a69e26ba4bcbd505a63f)`(FString Flag) const` <a id="classStubNullUnrealFactorStackProxy_1a577fee953b79a69e26ba4bcbd505a63f"></a>
+
+#### `public inline virtual void `[`SetFlag`](#classStubNullUnrealFactorStackProxy_1aa7a55d7c7da7c457853cbfafabd8745f)`(FString Flag,bool Value)` <a id="classStubNullUnrealFactorStackProxy_1aa7a55d7c7da7c457853cbfafabd8745f"></a>
+
+#### `public inline virtual void `[`Debug`](#classStubNullUnrealFactorStackProxy_1aabb0a40857bc11d08b27bfe926729f0c)`(bool _bDebug)` <a id="classStubNullUnrealFactorStackProxy_1aabb0a40857bc11d08b27bfe926729f0c"></a>
+
+#### `public inline virtual void `[`SupplyStateWithCurrentData`](#classStubNullUnrealFactorStackProxy_1a1970db942dd56c8279697f16a0b8447e)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classStubNullUnrealFactorStackProxy_1a1970db942dd56c8279697f16a0b8447e"></a>
+
+#### `public inline virtual `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` * `[`GetUnrealObject`](#classStubNullUnrealFactorStackProxy_1a8c2774908945bfd4625768b67b316a1f)`() const` <a id="classStubNullUnrealFactorStackProxy_1a8c2774908945bfd4625768b67b316a1f"></a>
+
 # class `UFactorFakeGameInstance` <a id="classUFactorFakeGameInstance"></a>
 
 ```
 class UFactorFakeGameInstance
-  : public UFakeGameInstance
+  : public UNFakeTimelineGameInstance
   : public INFactorsFactoryGameInstance
 ```  
 
@@ -1013,12 +1418,15 @@ class UFactorFakeGameInstance
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public inline  `[`UFactorFakeGameInstance`](#classUFactorFakeGameInstance_1ac703369180215869db8f91a53a1f1382)`()` | 
+`public inline virtual void `[`Init`](#classUFactorFakeGameInstance_1a620d20d8caeb6b208b9acb6d16dcc4c2)`()` | 
 `public inline virtual `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter)` * `[`GetFactorsFactoryClient`](#classUFactorFakeGameInstance_1af4ae95005be5ff5c2a9974579c6c631f)`() const` | 
 `protected `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter)` * `[`FactorsFactoryClient`](#classUFactorFakeGameInstance_1ad5f2dda28e59badba6fc3d2afc3d3832) | 
 
 ## Members
 
 #### `public inline  `[`UFactorFakeGameInstance`](#classUFactorFakeGameInstance_1ac703369180215869db8f91a53a1f1382)`()` <a id="classUFactorFakeGameInstance_1ac703369180215869db8f91a53a1f1382"></a>
+
+#### `public inline virtual void `[`Init`](#classUFactorFakeGameInstance_1a620d20d8caeb6b208b9acb6d16dcc4c2)`()` <a id="classUFactorFakeGameInstance_1a620d20d8caeb6b208b9acb6d16dcc4c2"></a>
 
 #### `public inline virtual `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter)` * `[`GetFactorsFactoryClient`](#classUFactorFakeGameInstance_1af4ae95005be5ff5c2a9974579c6c631f)`() const` <a id="classUFactorFakeGameInstance_1af4ae95005be5ff5c2a9974579c6c631f"></a>
 
@@ -1046,6 +1454,35 @@ Thanks to: [https://forums.unrealengine.com/development-discussion/c-gameplay-pr
 ## Members
 
 #### `public TArray< `[`FNFactorSettings`](#structFNFactorSettings)` > `[`CategoryNames`](#classUFactorSettings_1aa3e82d4ec785fb841541eaacabc904c3) <a id="classUFactorSettings_1aa3e82d4ec785fb841541eaacabc904c3"></a>
+
+# class `UFakeFactorsFactoryClientAdapter` <a id="classUFakeFactorsFactoryClientAdapter"></a>
+
+```
+class UFakeFactorsFactoryClientAdapter
+  : public UNFactorsFactoryClientAdapter
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`UFakeFactorsFactoryClientAdapter`](#classUFakeFactorsFactoryClientAdapter_1a3a2ab6cff7be48d165a0b24c2221bd44)`()` | 
+`public inline virtual void `[`Init`](#classUFakeFactorsFactoryClientAdapter_1af6918266d8dceda6c2b84cf732ca933f)`()` | 
+`public inline `[`SpyFactorsFactoryClient`](#classSpyFactorsFactoryClient)` * `[`GetSpy`](#classUFakeFactorsFactoryClientAdapter_1ae50e28f12a03975cec0e3ec37b4f9b09)`()` | 
+`public inline TArray< `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` * > `[`GetUEStacks`](#classUFakeFactorsFactoryClientAdapter_1af3d894bbb1adfb592b4e0c6cd2734060)`()` | 
+`public inline void `[`Clear`](#classUFakeFactorsFactoryClientAdapter_1aad3e32ea8b5a866bb644afe3e2d2721c)`()` | 
+
+## Members
+
+#### `public inline  `[`UFakeFactorsFactoryClientAdapter`](#classUFakeFactorsFactoryClientAdapter_1a3a2ab6cff7be48d165a0b24c2221bd44)`()` <a id="classUFakeFactorsFactoryClientAdapter_1a3a2ab6cff7be48d165a0b24c2221bd44"></a>
+
+#### `public inline virtual void `[`Init`](#classUFakeFactorsFactoryClientAdapter_1af6918266d8dceda6c2b84cf732ca933f)`()` <a id="classUFakeFactorsFactoryClientAdapter_1af6918266d8dceda6c2b84cf732ca933f"></a>
+
+#### `public inline `[`SpyFactorsFactoryClient`](#classSpyFactorsFactoryClient)` * `[`GetSpy`](#classUFakeFactorsFactoryClientAdapter_1ae50e28f12a03975cec0e3ec37b4f9b09)`()` <a id="classUFakeFactorsFactoryClientAdapter_1ae50e28f12a03975cec0e3ec37b4f9b09"></a>
+
+#### `public inline TArray< `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` * > `[`GetUEStacks`](#classUFakeFactorsFactoryClientAdapter_1af3d894bbb1adfb592b4e0c6cd2734060)`()` <a id="classUFakeFactorsFactoryClientAdapter_1af3d894bbb1adfb592b4e0c6cd2734060"></a>
+
+#### `public inline void `[`Clear`](#classUFakeFactorsFactoryClientAdapter_1aad3e32ea8b5a866bb644afe3e2d2721c)`()` <a id="classUFakeFactorsFactoryClientAdapter_1aad3e32ea8b5a866bb644afe3e2d2721c"></a>
 
 # class `UK2Node_FactorOperator` <a id="classUK2Node__FactorOperator"></a>
 
@@ -1333,23 +1770,23 @@ class UNFactorsFactoryClientAdapter
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public  `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter_1a9c56d9300d9ca48e9b5e8dd8456a1677)`()` | 
-`public void `[`Init`](#classUNFactorsFactoryClientAdapter_1ae232af08c5f91d5a428d09036e845c05)`()` | 
+`public virtual void `[`Init`](#classUNFactorsFactoryClientAdapter_1ae232af08c5f91d5a428d09036e845c05)`()` | 
 `public virtual void `[`CreateStack`](#classUNFactorsFactoryClientAdapter_1a161472f0233688a594aa84a2bd275cf9)`(FName StackName,TSharedPtr< NTimelineInterface > Timeline)` | 
 `public virtual void `[`CreateStack`](#classUNFactorsFactoryClientAdapter_1aa353be4f630c1f692597582bf438cc89)`(TArray< FName > StackNames,TSharedPtr< NTimelineInterface > Timeline)` | 
 `public virtual void `[`AddStack`](#classUNFactorsFactoryClientAdapter_1adde63733e603e138efca0890373d7d8f)`(TSharedPtr< `[`NFactorStackInterface`](#classNFactorStackInterface)` > Stack)` | 
 `public virtual void `[`RemoveStack`](#classUNFactorsFactoryClientAdapter_1a84486fbbe8fa5bfa362e2f1492a4f228)`(FName StackName)` | 
-`public virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetState`](#classUNFactorsFactoryClientAdapter_1ae11edf7ecbc266246265d765bbceaee9)`(FName StackName)` | 
-`public virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classUNFactorsFactoryClientAdapter_1aac14278db2d4c5008b7aa6b5bd742820)`(TArray< FName > StackNames)` | 
+`public virtual void `[`GetState`](#classUNFactorsFactoryClientAdapter_1a0110bce91a1a800193d89671ba4acdbd)`(FName StackName,`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+`public virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classUNFactorsFactoryClientAdapter_1a64f1029ab0ee2869b9563fcf32ecf015)`(TArray< FName > StackNames,`[`NFactorStateInterface`](#classNFactorStateInterface)` * StateTemplate)` | 
 `public virtual void `[`AddFactor`](#classUNFactorsFactoryClientAdapter_1ae0cdf01f75295ec16e8ea36af0d0d864)`(FName StackName,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
-`public virtual void `[`AddFactor`](#classUNFactorsFactoryClientAdapter_1aa2f192548a0c59ece7bb8a09051e8d56)`(TArray< FName > StackNames,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
 `public virtual void `[`SetDebug`](#classUNFactorsFactoryClientAdapter_1a017768670a500c620c024b526936e072)`(const TArray< FName > StackNames,bool bDebug)` | 
-`protected TSharedPtr< `[`NFactorsFactoryClient`](#classNFactorsFactoryClient)` > `[`Client`](#classUNFactorsFactoryClientAdapter_1af67fcbc5cd85dc08876ce79ef1bab4ca) | 
+`protected TSharedPtr< `[`NFactorsFactoryClientInterface`](#classNFactorsFactoryClientInterface)` > `[`Client`](#classUNFactorsFactoryClientAdapter_1a4c52e7da9a9094caaf10686dd2a5e6cc) | 
+`protected TArray< `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` * > `[`UEStacks`](#classUNFactorsFactoryClientAdapter_1aa048edb81591bdb20497ee1be38f7229) | 
 
 ## Members
 
 #### `public  `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter_1a9c56d9300d9ca48e9b5e8dd8456a1677)`()` <a id="classUNFactorsFactoryClientAdapter_1a9c56d9300d9ca48e9b5e8dd8456a1677"></a>
 
-#### `public void `[`Init`](#classUNFactorsFactoryClientAdapter_1ae232af08c5f91d5a428d09036e845c05)`()` <a id="classUNFactorsFactoryClientAdapter_1ae232af08c5f91d5a428d09036e845c05"></a>
+#### `public virtual void `[`Init`](#classUNFactorsFactoryClientAdapter_1ae232af08c5f91d5a428d09036e845c05)`()` <a id="classUNFactorsFactoryClientAdapter_1ae232af08c5f91d5a428d09036e845c05"></a>
 
 #### `public virtual void `[`CreateStack`](#classUNFactorsFactoryClientAdapter_1a161472f0233688a594aa84a2bd275cf9)`(FName StackName,TSharedPtr< NTimelineInterface > Timeline)` <a id="classUNFactorsFactoryClientAdapter_1a161472f0233688a594aa84a2bd275cf9"></a>
 
@@ -1359,17 +1796,17 @@ class UNFactorsFactoryClientAdapter
 
 #### `public virtual void `[`RemoveStack`](#classUNFactorsFactoryClientAdapter_1a84486fbbe8fa5bfa362e2f1492a4f228)`(FName StackName)` <a id="classUNFactorsFactoryClientAdapter_1a84486fbbe8fa5bfa362e2f1492a4f228"></a>
 
-#### `public virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetState`](#classUNFactorsFactoryClientAdapter_1ae11edf7ecbc266246265d765bbceaee9)`(FName StackName)` <a id="classUNFactorsFactoryClientAdapter_1ae11edf7ecbc266246265d765bbceaee9"></a>
+#### `public virtual void `[`GetState`](#classUNFactorsFactoryClientAdapter_1a0110bce91a1a800193d89671ba4acdbd)`(FName StackName,`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classUNFactorsFactoryClientAdapter_1a0110bce91a1a800193d89671ba4acdbd"></a>
 
-#### `public virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classUNFactorsFactoryClientAdapter_1aac14278db2d4c5008b7aa6b5bd742820)`(TArray< FName > StackNames)` <a id="classUNFactorsFactoryClientAdapter_1aac14278db2d4c5008b7aa6b5bd742820"></a>
+#### `public virtual TArray< `[`NFactorStateInterface`](#classNFactorStateInterface)` * > `[`GetStates`](#classUNFactorsFactoryClientAdapter_1a64f1029ab0ee2869b9563fcf32ecf015)`(TArray< FName > StackNames,`[`NFactorStateInterface`](#classNFactorStateInterface)` * StateTemplate)` <a id="classUNFactorsFactoryClientAdapter_1a64f1029ab0ee2869b9563fcf32ecf015"></a>
 
 #### `public virtual void `[`AddFactor`](#classUNFactorsFactoryClientAdapter_1ae0cdf01f75295ec16e8ea36af0d0d864)`(FName StackName,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classUNFactorsFactoryClientAdapter_1ae0cdf01f75295ec16e8ea36af0d0d864"></a>
 
-#### `public virtual void `[`AddFactor`](#classUNFactorsFactoryClientAdapter_1aa2f192548a0c59ece7bb8a09051e8d56)`(TArray< FName > StackNames,TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classUNFactorsFactoryClientAdapter_1aa2f192548a0c59ece7bb8a09051e8d56"></a>
-
 #### `public virtual void `[`SetDebug`](#classUNFactorsFactoryClientAdapter_1a017768670a500c620c024b526936e072)`(const TArray< FName > StackNames,bool bDebug)` <a id="classUNFactorsFactoryClientAdapter_1a017768670a500c620c024b526936e072"></a>
 
-#### `protected TSharedPtr< `[`NFactorsFactoryClient`](#classNFactorsFactoryClient)` > `[`Client`](#classUNFactorsFactoryClientAdapter_1af67fcbc5cd85dc08876ce79ef1bab4ca) <a id="classUNFactorsFactoryClientAdapter_1af67fcbc5cd85dc08876ce79ef1bab4ca"></a>
+#### `protected TSharedPtr< `[`NFactorsFactoryClientInterface`](#classNFactorsFactoryClientInterface)` > `[`Client`](#classUNFactorsFactoryClientAdapter_1a4c52e7da9a9094caaf10686dd2a5e6cc) <a id="classUNFactorsFactoryClientAdapter_1a4c52e7da9a9094caaf10686dd2a5e6cc"></a>
+
+#### `protected TArray< `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` * > `[`UEStacks`](#classUNFactorsFactoryClientAdapter_1aa048edb81591bdb20497ee1be38f7229) <a id="classUNFactorsFactoryClientAdapter_1aa048edb81591bdb20497ee1be38f7229"></a>
 
 # class `UNFactorsFactoryGameInstance` <a id="classUNFactorsFactoryGameInstance"></a>
 
@@ -1410,8 +1847,9 @@ class UNFactorStackDecorator
 `public inline virtual bool `[`GetFlag`](#classUNFactorStackDecorator_1a85066be4f66fd2e70e61c5be43b6baf3)`(FString Flag) const` | 
 `public inline virtual void `[`SetFlag`](#classUNFactorStackDecorator_1aca8d18dacb8ed3c94f252f3e25e9c588)`(FString Flag,bool Value)` | 
 `public inline virtual void `[`Debug`](#classUNFactorStackDecorator_1aba378f8f409e4f1139f30c393f4e5a3f)`(bool _bDebug)` | 
-`public inline virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetCurrentState`](#classUNFactorStackDecorator_1acbb1f50f6ba76e793b2bc38f11d9f481)`()` | 
+`public inline virtual void `[`SupplyStateWithCurrentData`](#classUNFactorStackDecorator_1aa19657a70da0f4abf542a17e22905ea5)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
 `protected TSharedPtr< `[`NFactorStackInterface`](#classNFactorStackInterface)` > `[`Stack`](#classUNFactorStackDecorator_1a25c45d18d80a7563cc29cd111d7fd795) | 
+`protected TArray< `[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` * > `[`UEFactors`](#classUNFactorStackDecorator_1a65e65be8742e1e430d308f245722e15b) | 
 
 ## Members
 
@@ -1441,9 +1879,11 @@ class UNFactorStackDecorator
 
 #### `public inline virtual void `[`Debug`](#classUNFactorStackDecorator_1aba378f8f409e4f1139f30c393f4e5a3f)`(bool _bDebug)` <a id="classUNFactorStackDecorator_1aba378f8f409e4f1139f30c393f4e5a3f"></a>
 
-#### `public inline virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetCurrentState`](#classUNFactorStackDecorator_1acbb1f50f6ba76e793b2bc38f11d9f481)`()` <a id="classUNFactorStackDecorator_1acbb1f50f6ba76e793b2bc38f11d9f481"></a>
+#### `public inline virtual void `[`SupplyStateWithCurrentData`](#classUNFactorStackDecorator_1aa19657a70da0f4abf542a17e22905ea5)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classUNFactorStackDecorator_1aa19657a70da0f4abf542a17e22905ea5"></a>
 
 #### `protected TSharedPtr< `[`NFactorStackInterface`](#classNFactorStackInterface)` > `[`Stack`](#classUNFactorStackDecorator_1a25c45d18d80a7563cc29cd111d7fd795) <a id="classUNFactorStackDecorator_1a25c45d18d80a7563cc29cd111d7fd795"></a>
+
+#### `protected TArray< `[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` * > `[`UEFactors`](#classUNFactorStackDecorator_1a65e65be8742e1e430d308f245722e15b) <a id="classUNFactorStackDecorator_1a65e65be8742e1e430d308f245722e15b"></a>
 
 # class `UNFakeFactorsFactoryClient` <a id="classUNFakeFactorsFactoryClient"></a>
 
@@ -1465,10 +1905,10 @@ class UNFakeFactorsFactoryClient
 
 #### `public inline void `[`Reset`](#classUNFakeFactorsFactoryClient_1adb4edbfedf44d87d422144ae76c68e42)`()` <a id="classUNFakeFactorsFactoryClient_1adb4edbfedf44d87d422144ae76c68e42"></a>
 
-# class `UnrealFactorProxy` <a id="classUnrealFactorProxy"></a>
+# class `NUnrealFactorProxy` <a id="classNUnrealFactorProxy"></a>
 
 ```
-class UnrealFactorProxy
+class NUnrealFactorProxy
   : public NFactorInterface
 ```  
 
@@ -1476,88 +1916,35 @@ class UnrealFactorProxy
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public `[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` & `[`Factor`](#classUnrealFactorProxy_1add91851130c1d72924db4216753d1557) | 
-`public inline  `[`UnrealFactorProxy`](#classUnrealFactorProxy_1a2c06a9a27ba52f2d9361e39d98527920)`(`[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` & _Factor)` | 
-`public inline virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetOperator`](#classUnrealFactorProxy_1a0d43675dfe47e0532bb27b49a81ac05f)`() const` | 
-`public inline virtual float `[`GetFactorValue`](#classUnrealFactorProxy_1ab9dcce6e38a685cfdfc6599acaa8cb79)`() const` | 
-`public inline virtual FName `[`GetReason`](#classUnrealFactorProxy_1a1117decfed06c52a3e15132b28df4afd)`() const` | 
-`public inline virtual bool `[`IsActivated`](#classUnrealFactorProxy_1ac0954b19b6e125ae4657a83742a06adf)`() const` | 
-`public inline virtual uint32 `[`GetUID`](#classUnrealFactorProxy_1a822d0d752f81bc0f854c181c96b446ab)`() const` | 
-`public inline virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classUnrealFactorProxy_1a0e037d6430ad22a6080e2ba5f1c61071)`()` | 
+`public `[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` * `[`Factor`](#classNUnrealFactorProxy_1aa7368e3678b0c6d44c8988e5c8f3323a) | 
+`public inline  `[`NUnrealFactorProxy`](#classNUnrealFactorProxy_1a88c3e15cb15b74dc04d57ef45342dd26)`(`[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` * _Factor)` | 
+`public inline virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetOperator`](#classNUnrealFactorProxy_1a0d43675dfe47e0532bb27b49a81ac05f)`() const` | 
+`public inline virtual float `[`GetFactorValue`](#classNUnrealFactorProxy_1ab9dcce6e38a685cfdfc6599acaa8cb79)`() const` | 
+`public inline virtual FName `[`GetReason`](#classNUnrealFactorProxy_1a1117decfed06c52a3e15132b28df4afd)`() const` | 
+`public inline virtual bool `[`IsActivated`](#classNUnrealFactorProxy_1ac0954b19b6e125ae4657a83742a06adf)`() const` | 
+`public inline virtual uint32 `[`GetUID`](#classNUnrealFactorProxy_1a822d0d752f81bc0f854c181c96b446ab)`() const` | 
+`public inline virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classNUnrealFactorProxy_1a0e037d6430ad22a6080e2ba5f1c61071)`()` | 
+`public inline virtual `[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` * `[`GetUnrealObject`](#classNUnrealFactorProxy_1a19ccf42f6482a15b88cf5097ae25d21e)`()` | 
 
 ## Members
 
-#### `public `[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` & `[`Factor`](#classUnrealFactorProxy_1add91851130c1d72924db4216753d1557) <a id="classUnrealFactorProxy_1add91851130c1d72924db4216753d1557"></a>
+#### `public `[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` * `[`Factor`](#classNUnrealFactorProxy_1aa7368e3678b0c6d44c8988e5c8f3323a) <a id="classNUnrealFactorProxy_1aa7368e3678b0c6d44c8988e5c8f3323a"></a>
 
-#### `public inline  `[`UnrealFactorProxy`](#classUnrealFactorProxy_1a2c06a9a27ba52f2d9361e39d98527920)`(`[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` & _Factor)` <a id="classUnrealFactorProxy_1a2c06a9a27ba52f2d9361e39d98527920"></a>
+#### `public inline  `[`NUnrealFactorProxy`](#classNUnrealFactorProxy_1a88c3e15cb15b74dc04d57ef45342dd26)`(`[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` * _Factor)` <a id="classNUnrealFactorProxy_1a88c3e15cb15b74dc04d57ef45342dd26"></a>
 
-#### `public inline virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetOperator`](#classUnrealFactorProxy_1a0d43675dfe47e0532bb27b49a81ac05f)`() const` <a id="classUnrealFactorProxy_1a0d43675dfe47e0532bb27b49a81ac05f"></a>
+#### `public inline virtual TSharedPtr< `[`FactorOperatorInterface`](#classFactorOperatorInterface)` > `[`GetOperator`](#classNUnrealFactorProxy_1a0d43675dfe47e0532bb27b49a81ac05f)`() const` <a id="classNUnrealFactorProxy_1a0d43675dfe47e0532bb27b49a81ac05f"></a>
 
-#### `public inline virtual float `[`GetFactorValue`](#classUnrealFactorProxy_1ab9dcce6e38a685cfdfc6599acaa8cb79)`() const` <a id="classUnrealFactorProxy_1ab9dcce6e38a685cfdfc6599acaa8cb79"></a>
+#### `public inline virtual float `[`GetFactorValue`](#classNUnrealFactorProxy_1ab9dcce6e38a685cfdfc6599acaa8cb79)`() const` <a id="classNUnrealFactorProxy_1ab9dcce6e38a685cfdfc6599acaa8cb79"></a>
 
-#### `public inline virtual FName `[`GetReason`](#classUnrealFactorProxy_1a1117decfed06c52a3e15132b28df4afd)`() const` <a id="classUnrealFactorProxy_1a1117decfed06c52a3e15132b28df4afd"></a>
+#### `public inline virtual FName `[`GetReason`](#classNUnrealFactorProxy_1a1117decfed06c52a3e15132b28df4afd)`() const` <a id="classNUnrealFactorProxy_1a1117decfed06c52a3e15132b28df4afd"></a>
 
-#### `public inline virtual bool `[`IsActivated`](#classUnrealFactorProxy_1ac0954b19b6e125ae4657a83742a06adf)`() const` <a id="classUnrealFactorProxy_1ac0954b19b6e125ae4657a83742a06adf"></a>
+#### `public inline virtual bool `[`IsActivated`](#classNUnrealFactorProxy_1ac0954b19b6e125ae4657a83742a06adf)`() const` <a id="classNUnrealFactorProxy_1ac0954b19b6e125ae4657a83742a06adf"></a>
 
-#### `public inline virtual uint32 `[`GetUID`](#classUnrealFactorProxy_1a822d0d752f81bc0f854c181c96b446ab)`() const` <a id="classUnrealFactorProxy_1a822d0d752f81bc0f854c181c96b446ab"></a>
+#### `public inline virtual uint32 `[`GetUID`](#classNUnrealFactorProxy_1a822d0d752f81bc0f854c181c96b446ab)`() const` <a id="classNUnrealFactorProxy_1a822d0d752f81bc0f854c181c96b446ab"></a>
 
-#### `public inline virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classUnrealFactorProxy_1a0e037d6430ad22a6080e2ba5f1c61071)`()` <a id="classUnrealFactorProxy_1a0e037d6430ad22a6080e2ba5f1c61071"></a>
+#### `public inline virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classNUnrealFactorProxy_1a0e037d6430ad22a6080e2ba5f1c61071)`()` <a id="classNUnrealFactorProxy_1a0e037d6430ad22a6080e2ba5f1c61071"></a>
 
-# class `UNUnrealFactorStackProxy` <a id="classUNUnrealFactorStackProxy"></a>
-
-```
-class UNUnrealFactorStackProxy
-  : public NFactorStackInterface
-```  
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` & `[`Stack`](#classUNUnrealFactorStackProxy_1a07705431dc35be4cc1645dc5f73f0289) | 
-`public inline  `[`UNUnrealFactorStackProxy`](#classUNUnrealFactorStackProxy_1a1ddaaa1b85a4b5296c766c6037207a35)`(`[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` & _Stack)` | 
-`public inline virtual void `[`Reset`](#classUNUnrealFactorStackProxy_1a518a29a44b57f39cbfff5a97a4821986)`()` | 
-`public inline virtual void `[`SetName`](#classUNUnrealFactorStackProxy_1aca95adc16b7c80ae91e890199096f92f)`(FName _Name)` | 
-`public inline virtual FName `[`GetName`](#classUNUnrealFactorStackProxy_1af8933bb3bbe5852cda31126c842533a0)`() const` | 
-`public inline virtual float `[`GetTime`](#classUNUnrealFactorStackProxy_1a036a22776d9482319abcf67948b847ec)`() const` | 
-`public inline virtual TSharedRef< `[`NFactorInterface`](#classNFactorInterface)` > `[`GetFactor`](#classUNUnrealFactorStackProxy_1ae2820f8ebb7b1beefe833772ddb4e1f1)`(uint32 Key) const` | 
-`public inline virtual TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`GetFactors`](#classUNUnrealFactorStackProxy_1a41d477db088e837d023f587dd769b55a)`() const` | 
-`public inline virtual void `[`AddFactor`](#classUNUnrealFactorStackProxy_1a8d85281156677b5b3a70510a3dfd8cff)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
-`public inline virtual bool `[`HasFlag`](#classUNUnrealFactorStackProxy_1a4a963743d7a83d3bcde31c757ad6a9fd)`(FString Flag) const` | 
-`public inline virtual bool `[`GetFlag`](#classUNUnrealFactorStackProxy_1a1d2785a6ad2f73261ca4af168142b4c6)`(FString Flag) const` | 
-`public inline virtual void `[`SetFlag`](#classUNUnrealFactorStackProxy_1aae2f415a1303f79498344aa014dbccbe)`(FString Flag,bool Value)` | 
-`public inline virtual void `[`Debug`](#classUNUnrealFactorStackProxy_1a39c04d60430ce77d56c3fe892fe32e2a)`(bool _bDebug)` | 
-`public inline virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetCurrentState`](#classUNUnrealFactorStackProxy_1a004f1259066e2b491ae0815d87b1cf75)`()` | 
-
-## Members
-
-#### `public `[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` & `[`Stack`](#classUNUnrealFactorStackProxy_1a07705431dc35be4cc1645dc5f73f0289) <a id="classUNUnrealFactorStackProxy_1a07705431dc35be4cc1645dc5f73f0289"></a>
-
-#### `public inline  `[`UNUnrealFactorStackProxy`](#classUNUnrealFactorStackProxy_1a1ddaaa1b85a4b5296c766c6037207a35)`(`[`UNFactorStackDecorator`](#classUNFactorStackDecorator)` & _Stack)` <a id="classUNUnrealFactorStackProxy_1a1ddaaa1b85a4b5296c766c6037207a35"></a>
-
-#### `public inline virtual void `[`Reset`](#classUNUnrealFactorStackProxy_1a518a29a44b57f39cbfff5a97a4821986)`()` <a id="classUNUnrealFactorStackProxy_1a518a29a44b57f39cbfff5a97a4821986"></a>
-
-#### `public inline virtual void `[`SetName`](#classUNUnrealFactorStackProxy_1aca95adc16b7c80ae91e890199096f92f)`(FName _Name)` <a id="classUNUnrealFactorStackProxy_1aca95adc16b7c80ae91e890199096f92f"></a>
-
-#### `public inline virtual FName `[`GetName`](#classUNUnrealFactorStackProxy_1af8933bb3bbe5852cda31126c842533a0)`() const` <a id="classUNUnrealFactorStackProxy_1af8933bb3bbe5852cda31126c842533a0"></a>
-
-#### `public inline virtual float `[`GetTime`](#classUNUnrealFactorStackProxy_1a036a22776d9482319abcf67948b847ec)`() const` <a id="classUNUnrealFactorStackProxy_1a036a22776d9482319abcf67948b847ec"></a>
-
-#### `public inline virtual TSharedRef< `[`NFactorInterface`](#classNFactorInterface)` > `[`GetFactor`](#classUNUnrealFactorStackProxy_1ae2820f8ebb7b1beefe833772ddb4e1f1)`(uint32 Key) const` <a id="classUNUnrealFactorStackProxy_1ae2820f8ebb7b1beefe833772ddb4e1f1"></a>
-
-#### `public inline virtual TArray< TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > > `[`GetFactors`](#classUNUnrealFactorStackProxy_1a41d477db088e837d023f587dd769b55a)`() const` <a id="classUNUnrealFactorStackProxy_1a41d477db088e837d023f587dd769b55a"></a>
-
-#### `public inline virtual void `[`AddFactor`](#classUNUnrealFactorStackProxy_1a8d85281156677b5b3a70510a3dfd8cff)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` <a id="classUNUnrealFactorStackProxy_1a8d85281156677b5b3a70510a3dfd8cff"></a>
-
-#### `public inline virtual bool `[`HasFlag`](#classUNUnrealFactorStackProxy_1a4a963743d7a83d3bcde31c757ad6a9fd)`(FString Flag) const` <a id="classUNUnrealFactorStackProxy_1a4a963743d7a83d3bcde31c757ad6a9fd"></a>
-
-#### `public inline virtual bool `[`GetFlag`](#classUNUnrealFactorStackProxy_1a1d2785a6ad2f73261ca4af168142b4c6)`(FString Flag) const` <a id="classUNUnrealFactorStackProxy_1a1d2785a6ad2f73261ca4af168142b4c6"></a>
-
-#### `public inline virtual void `[`SetFlag`](#classUNUnrealFactorStackProxy_1aae2f415a1303f79498344aa014dbccbe)`(FString Flag,bool Value)` <a id="classUNUnrealFactorStackProxy_1aae2f415a1303f79498344aa014dbccbe"></a>
-
-#### `public inline virtual void `[`Debug`](#classUNUnrealFactorStackProxy_1a39c04d60430ce77d56c3fe892fe32e2a)`(bool _bDebug)` <a id="classUNUnrealFactorStackProxy_1a39c04d60430ce77d56c3fe892fe32e2a"></a>
-
-#### `public inline virtual `[`NFactorStateInterface`](#classNFactorStateInterface)` * `[`GetCurrentState`](#classUNUnrealFactorStackProxy_1a004f1259066e2b491ae0815d87b1cf75)`()` <a id="classUNUnrealFactorStackProxy_1a004f1259066e2b491ae0815d87b1cf75"></a>
+#### `public inline virtual `[`UNFactorAdapterAbstract`](#classUNFactorAdapterAbstract)` * `[`GetUnrealObject`](#classNUnrealFactorProxy_1a19ccf42f6482a15b88cf5097ae25d21e)`()` <a id="classNUnrealFactorProxy_1a19ccf42f6482a15b88cf5097ae25d21e"></a>
 
 # struct `FFactorStackAttribute` <a id="structFFactorStackAttribute"></a>
 

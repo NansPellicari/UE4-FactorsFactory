@@ -27,7 +27,7 @@ public:
 	}
 };
 
-class NANSFACTORSFACTORYCORE_API NSubsctractOperator : public FactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NSubtractOperator : public FactorOperatorInterface
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;

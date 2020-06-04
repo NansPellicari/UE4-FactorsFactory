@@ -1,6 +1,6 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
-#include "Mock/MockTimelineManager.h"
+#include "Mock/FakeTimelineManager.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
@@ -39,7 +39,7 @@ class NansFactorsFactoryCoreResetOperatorTest : public ::testing::Test
 protected:
 	void SetUp() override
 	{
-		Timeline = MakeShareable(new NTimeline(new MockTimelineManager()));
+		Timeline = MakeShareable(new NTimeline(new FakeTimelineManager()));
 		FactorStack = MakeShareable(new FakeFactorStack(FName("Dialog"), Timeline));
 
 		FactorStack->AddFactor(MakeShareable(new NFactor(2, MakeShareable(new NAddOperator()), 0, FName("reason1"))));

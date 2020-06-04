@@ -39,15 +39,15 @@ TEST_F(NansFactorsFactoryCoreOperatorTest, ShouldComputeWithAnAddOperatorGetInve
 
 TEST_F(NansFactorsFactoryCoreOperatorTest, ShouldComputeWithASubsctractOperator)
 {
-	NSubsctractOperator* Operator = new NSubsctractOperator();
+	NSubtractOperator* Operator = new NSubtractOperator();
 
-	EXPECT_EQ(Operator->GetName(), NSubsctractOperator::Name);
+	EXPECT_EQ(Operator->GetName(), NSubtractOperator::Name);
 	EXPECT_EQ(Operator->Compute(1, 2), -1.f);
 }
 
 TEST_F(NansFactorsFactoryCoreOperatorTest, ShouldComputeWithASubsctractOperatorGetInverseReturnedObject)
 {
-	NSubsctractOperator* Operator = new NSubsctractOperator();
+	NSubtractOperator* Operator = new NSubtractOperator();
 
 	EXPECT_EQ(Operator->GetInverse()->Compute(1, 2), 3.f);
 }

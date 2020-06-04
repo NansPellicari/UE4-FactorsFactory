@@ -104,7 +104,7 @@ UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::AddFactor(UObject* Wo
 	if (Client == nullptr) return Factor;
 
 	Factor->Init();
-	Client->AddFactor(Factor->InStack.Name, MakeShareable(new UnrealFactorProxy(Factor)));
+	Client->AddFactor(Factor->InStack.Name, MakeShareable(new NUnrealFactorProxy(Factor)));
 
 	return Factor;
 }

@@ -47,15 +47,15 @@ void UNFactorsFactoryClientAdapter::CreateStack(FName StackName, TSharedPtr<NTim
 {
 	UNFactorStackDecorator* UStack = NewObject<UNFactorStackDecorator>(this, StackName);
 	UStack->Init(StackName, Timeline);
-	TSharedPtr<NFactorStackInterface> Stack = MakeShareable(new UNUnrealFactorStackProxy(*UStack));
+	TSharedPtr<NFactorStackInterface> Stack = MakeShareable(new NUnrealFactorStackProxy(*UStack));
 
 	AddStack(Stack);
 }
 
 void UNFactorsFactoryClientAdapter::AddStack(TSharedPtr<NFactorStackInterface> Stack)
 {
-	auto Proxy = dynamic_cast<UNUnrealFactorStackProxy*>(Stack.Get());
-	mycheckf(Proxy != nullptr, TEXT("You should passed UNUnrealFactorStackProxy inherited stack only"));
+	auto Proxy = dynamic_cast<NUnrealFactorStackProxy*>(Stack.Get());
+	mycheckf(Proxy != nullptr, TEXT("You should passed NUnrealFactorStackProxy inherited stack only"));
 	mycheckf(Proxy->GetUnrealObject() != nullptr,
 		TEXT("You should instanciate your stack proxy with a UNFactorStackDecorator inherited stack"));
 
@@ -89,7 +89,16 @@ void UNFactorsFactoryClientAdapter::SetDebug(const TArray<FName> StackNames, boo
 	Client->SetDebug(StackNames, bDebug);
 }
 
-void UNFactorsFactoryClientAdapter::AddFactor(TArray<FName> StackNames, TSharedPtr<NFactorInterface> Factor)
+void UNFactorsFactoryClientAdapter::Serialize(FArchive& Ar)
 {
-	Client->AddFactor(StackNames, Factor);
+	Super::Serialize(Ar);
+
+	// if (Ar.IsSaving())
+	// {
+	// 	for (auto Stack : UEStacks)
+	// 	{
+	// 		Stack->Serialize(Ar);
+	// 	}
+	// }
+	Ar << UEStacks;
 }

@@ -15,10 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NansFactorsFactoryCore/Public/FactorStack.h"
 #include "NansFactorsFactoryCore/Public/FactorStackInterface.h"
-#include "NansFactorsFactoryUE4/Public/Factor/FactorAdapterAbstract.h"
-#include "NansFactorsFactoryUE4/Public/Factor/UnrealFactorProxy.h"
 
 #include "FactorStackDecorator.generated.h"
 
@@ -28,70 +25,22 @@ class NANSFACTORSFACTORYUE4_API UNFactorStackDecorator : public UObject, public 
 	GENERATED_BODY()
 public:
 	UNFactorStackDecorator() {}
-	void Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline)
-	{
-		Stack = MakeShareable(new NFactorStack(_Name, _Timeline));
-	}
-	virtual void Reset() override
-	{
-		Stack->Reset();
-	}
-	virtual void SetName(FName _Name) override
-	{
-		Stack->SetName(_Name);
-	}
-	virtual FName GetName() const override
-	{
-		return Stack->GetName();
-	}
-	virtual float GetTime() const override
-	{
-		return Stack->GetTime();
-	}
-	virtual TSharedRef<NFactorInterface> GetFactor(uint32 Key) const override
-	{
-		return Stack->GetFactor(Key);
-	}
-	virtual TArray<TSharedPtr<NFactorInterface>> GetFactors() const override
-	{
-		return Stack->GetFactors();
-	}
-	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override
-	{
-		auto Proxy = dynamic_cast<UnrealFactorProxy*>(Factor.Get());
-		mycheckf(Proxy != nullptr, TEXT("You should passed UnrealFactorProxy inherited stack only"));
-		mycheckf(Proxy->GetUnrealObject() != nullptr,
-			TEXT("You should instanciate your stack proxy with a UNFactorAdapterAbstract inherited stack"));
-
-		UEFactors.Add(Proxy->GetUnrealObject());
-
-		Stack->AddFactor(Factor);
-	}
-	virtual bool HasFlag(FString Flag) const override
-	{
-		return Stack->HasFlag(Flag);
-	}
-	virtual bool GetFlag(FString Flag) const override
-	{
-		return Stack->GetFlag(Flag);
-	}
-	virtual void SetFlag(FString Flag, bool Value) override
-	{
-		Stack->SetFlag(Flag, Value);
-	}
-	virtual void Debug(bool _bDebug) override
-	{
-		Stack->Debug(_bDebug);
-	}
-	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override
-	{
-		Stack->SupplyStateWithCurrentData(State);
-	}
+	void Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
+	virtual void Reset() override;
+	virtual void SetName(FName _Name) override;
+	virtual FName GetName() const override;
+	virtual float GetTime() const override;
+	virtual TSharedRef<NFactorInterface> GetFactor(uint32 Key) const override;
+	virtual TArray<TSharedPtr<NFactorInterface>> GetFactors() const override;
+	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override;
+	virtual bool HasFlag(FString Flag) const override;
+	virtual bool GetFlag(FString Flag) const override;
+	virtual void SetFlag(FString Flag, bool Value) override;
+	virtual void Debug(bool _bDebug) override;
+	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
 
 protected:
 	TSharedPtr<NFactorStackInterface> Stack;
 	UPROPERTY()
 	TArray<UNFactorAdapterAbstract*> UEFactors;
-
-private:
 };

@@ -20,10 +20,10 @@
 #include "Stack/FactorStackDecorator.h"
 #include "Stack/UnrealFactorStackProxy.h"
 
-class StubNullUnrealFactorStackProxy : public UNUnrealFactorStackProxy
+class StubNullUnrealFactorStackProxy : public NUnrealFactorStackProxy
 {
 public:
-	StubNullUnrealFactorStackProxy(UNFactorStackDecorator& _Stack) : UNUnrealFactorStackProxy(_Stack) {}
+	StubNullUnrealFactorStackProxy(UNFactorStackDecorator& _Stack) : NUnrealFactorStackProxy(_Stack) {}
 
 	virtual void Reset() override {}
 	virtual void SetName(FName _Name) override {}

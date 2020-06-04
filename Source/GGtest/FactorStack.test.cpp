@@ -1,6 +1,6 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
-#include "Mock/MockTimelineManager.h"
+#include "Mock/FakeTimelineManager.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryCore/Public/FactorStack.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
@@ -14,7 +14,7 @@ class NansFactorsFactoryCoreStackTest : public ::testing::Test
 protected:
 	void SetUp() override
 	{
-		Timeline = MakeShareable(new NTimeline(new MockTimelineManager()));
+		Timeline = MakeShareable(new NTimeline(new FakeTimelineManager()));
 		FactorStack = MakeShareable(new NFactorStack(FName("Dialog"), Timeline));
 
 		FactorStack->AddFactor(MakeShareable(new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"))));

@@ -74,14 +74,6 @@ TArray<NFactorStateInterface*> NFactorsFactoryClient::GetStates(TArray<FName> St
 	return States;
 }
 
-void NFactorsFactoryClient::AddFactor(TArray<FName> StackNames, TSharedPtr<NFactorInterface> Factor)
-{
-	for (FName Name : StackNames)
-	{
-		AddFactor(Name, Factor);
-	}
-}
-
 void NFactorsFactoryClient::AddFactor(FName StackName, TSharedPtr<NFactorInterface> Factor)
 {
 	mycheck(StackName != NAME_None);
