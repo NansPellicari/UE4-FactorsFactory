@@ -68,9 +68,9 @@ public:
 	static void Debug(UObject* WorldContextObject, const TArray<FFactorStackAttribute> StackNames, const bool Debug);
 	
 	UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "FactorsFactory|Factory")
-	static UNFactorAdapterAbstract* CreateFactor(UObject* WorldContextObject, UClass* Class);
+	static UNFactorAdapterAbstract* CreateFactor(UObject* WorldContextObject, UClass* Class, FFactorStackAttribute Stack);
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "FactorsFactory|Factory")
-	static UNFactorAdapterAbstract* AddFactor(UObject* WorldContextObject, UNFactorAdapterAbstract* Factor);
+	static UNFactorAdapterAbstract* AddFactor(UObject* WorldContextObject, UNFactorAdapterAbstract* Factor, FFactorStackAttribute Stack);
 	// clang-format on
 };

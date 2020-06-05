@@ -13,6 +13,7 @@
 #include "Factor/FactorAdapterAbstract.h"
 #include "FactorsFactoryBlueprintHelpers.h"
 #include "GraphEditorActions.h"
+#include "K2Node_AssignmentStatement.h"
 #include "K2Node_CallFunction.h"
 #include "K2Node_FactorOperator.h"
 #include "K2Node_GenericCreateObject.h"
@@ -163,6 +164,7 @@ namespace
 }	 // namespace
 
 FName UK2Node_FactorOperator::ClassPinName(TEXT("FactorClass"));
+FName UK2Node_FactorOperator::StackPinName(TEXT("Stack"));
 FName UK2Node_FactorOperator::OuterPinName(TEXT("Outer"));
 FName UK2Node_FactorOperator::ObjectPinName(TEXT("FactorObject"));
 
@@ -226,10 +228,37 @@ void UK2Node_FactorOperator::GetMenuActions(FBlueprintActionDatabaseRegistrar& A
 	}
 }
 
+UClass* UK2Node_FactorOperator::GetInputClass() const
+{
+	return GetInputClass(FindClassPin());
+}
+
+UEdGraphPin* UK2Node_FactorOperator::FindClassPin() const
+{
+	UEdGraphPin* Pin = FindPinChecked(UK2Node_FactorOperator::ClassPinName);
+	check(Pin->Direction == EGPD_Input);
+	return Pin;
+}
+
 UEdGraphPin* UK2Node_FactorOperator::FindClassPin(const TArray<UEdGraphPin*>& FromPins) const
 {
 	UEdGraphPin* const* FoundPin = FromPins.FindByPredicate(
 		[](const UEdGraphPin* CurPin) { return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == ClassPinName; });
+
+	return FoundPin ? *FoundPin : nullptr;
+}
+
+UEdGraphPin* UK2Node_FactorOperator::FindStackPin() const
+{
+	UEdGraphPin* Pin = FindPinChecked(UK2Node_FactorOperator::StackPinName);
+	check(Pin->Direction == EGPD_Input);
+	return Pin;
+}
+
+UEdGraphPin* UK2Node_FactorOperator::FindStackPin(const TArray<UEdGraphPin*>& FromPins) const
+{
+	UEdGraphPin* const* FoundPin = FromPins.FindByPredicate(
+		[](const UEdGraphPin* CurPin) { return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == StackPinName; });
 
 	return FoundPin ? *FoundPin : nullptr;
 }
@@ -354,20 +383,25 @@ void UK2Node_FactorOperator::AllocateDefaultPins()
 	K2Schema->ConstructBasicPinTooltip(*ClassPin,
 		LOCTEXT("ClassPinDescription", "The class from which to access one or more default values."),
 		ClassPin->PinToolTip);
+	UEdGraphPin* StackPin =
+		CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Struct, FFactorStackAttribute::StaticStruct(), StackPinName);
+	K2Schema->ConstructBasicPinTooltip(
+		*StackPin, LOCTEXT("ClassPinDescription", "The stack from which the factor will be attached to."), StackPin->PinToolTip);
 
 	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, UNFactorAdapterAbstract::StaticClass(), UEdGraphSchema_K2::PN_ReturnValue);
 }
 
 #if WITH_EDITOR
 void UK2Node_FactorOperator::DebugConnectionPin(
-	uint32 Step, const UEdGraphPin* PinA, const UEdGraphPin* PinB, const bool bSucceeded) const
+	uint32 Step, const UEdGraphPin* PinA, const UEdGraphPin* PinB, const bool bSucceeded, const TCHAR* Type) const
 {
 	if (bDebug)
 	{
 		UE_LOG(LogTemp,
 			Display,
-			TEXT("%d - Connect %s->%s & %s->%s %i"),
+			TEXT("%d - %s %s->%s & %s->%s %i"),
 			Step,
+			Type,
 			*(PinA ? PinA->GetOwningNode()->GetName() : ""),
 			*(PinA ? PinA->GetName() : ""),
 			*(PinB ? PinB->GetOwningNode()->GetName() : ""),
@@ -377,6 +411,50 @@ void UK2Node_FactorOperator::DebugConnectionPin(
 }
 #endif	  // WITH_EDITOR
 
+bool UK2Node_FactorOperator::MovePinLinks(
+	UEdGraphPin* PinA, UEdGraphPin* PinB, class FKismetCompilerContext& CompilerContext, uint32& Step) const
+{
+	bool bSucceeded = PinA && PinB && CompilerContext.MovePinLinksToIntermediate(*PinA, *PinB).CanSafeConnect();
+
+#if WITH_EDITOR
+	DebugConnectionPin(++Step, PinA, PinB, bSucceeded, TEXT("move"));
+#endif
+
+	return bSucceeded;
+}
+
+bool UK2Node_FactorOperator::TryConnectPin(
+	UEdGraphPin* PinA, UEdGraphPin* PinB, class FKismetCompilerContext& CompilerContext, uint32& Step) const
+{
+	const UEdGraphSchema_K2* Schema = CompilerContext.GetSchema();
+	bool bSucceeded = true;
+	FPinConnectionResponse Response = Schema->CanCreateConnection(PinA, PinB);
+
+	if (!Response.CanSafeConnect())
+	{
+		bSucceeded = false;
+		CompilerContext.MessageLog.Warning(
+			*LOCTEXT("FactorOperator_PinConnection_Error",
+				"FactorOperator error when trying to connect pins @@->@@ & @@->@@. Message: @@ in @@")
+				 .ToString(),
+			*PinA->GetOwningNode()->GetName(),
+			*PinA->GetName(),
+			*PinB->GetOwningNode()->GetName(),
+			*PinB->GetName(),
+			*Response.Message.ToString(),
+			this);
+	}
+	else
+	{
+		bSucceeded &= Schema->TryCreateConnection(PinA, PinB);
+	}
+
+#if WITH_EDITOR
+	DebugConnectionPin(++Step, PinA, PinB, bSucceeded, TEXT("connect"));
+#endif
+	return bSucceeded;
+}
+
 void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
 {
 	Super::ExpandNode(CompilerContext, SourceGraph);
@@ -384,9 +462,17 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 	const UEdGraphSchema_K2* Schema = CompilerContext.GetSchema();
 
 	UClass* ClassType = GetInputClass();
+#if WITH_EDITOR
+	uint32 DebugStep = 0;
+#endif
 
 	UK2Node_FactorOperator* Node = this;
 	UEdGraphPin* ClassPin = FindClassPin();
+	UEdGraphPin* StackPin = FindStackPin();
+	UEdGraphPin* SpawnExecPin = GetExecPin();
+	UEdGraphPin* SpawnThenPin = GetThenPin();
+	bool bSucceeded = true;
+	UEdGraphPin* LastThen = nullptr;
 
 #if WITH_EDITOR
 	if (bDebug) UE_LOG(LogTemp, Display, TEXT(">>>>>>>>>> BEGIN: %s >>>>>>>>>>"), ANSI_TO_TCHAR(__FUNCTION__));
@@ -405,6 +491,30 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 		return;
 	}
 
+	// Create temp variable for stack which allows to connect to the blueprint helpers functions
+	UK2Node_TemporaryVariable* TempStackNode = CompilerContext.SpawnIntermediateNode<UK2Node_TemporaryVariable>(this, SourceGraph);
+	TempStackNode->VariableType = StackPin->PinType;
+	TempStackNode->AllocateDefaultPins();
+	CompilerContext.MessageLog.NotifyIntermediateObjectCreation(TempStackNode, this);
+	// Get the output pin
+	UEdGraphPin* TempStackOutput = TempStackNode->GetVariablePin();
+	// Create an assignement for the temp variable
+	UK2Node_AssignmentStatement* AssignmentNode = SourceGraph->CreateIntermediateNode<UK2Node_AssignmentStatement>();
+	AssignmentNode->AllocateDefaultPins();
+	CompilerContext.MessageLog.NotifyIntermediateObjectCreation(AssignmentNode, this);
+	AssignmentNode->GetVariablePin()->PinType = TempStackNode->GetVariablePin()->PinType;
+	AssignmentNode->GetVariablePin()->MakeLinkTo(TempStackNode->GetVariablePin());
+	AssignmentNode->GetValuePin()->PinType = TempStackNode->GetVariablePin()->PinType;
+
+	bSucceeded &= MovePinLinks(SpawnExecPin, AssignmentNode->GetExecPin(), CompilerContext, DebugStep);
+	bSucceeded &= MovePinLinks(SpawnThenPin, AssignmentNode->GetThenPin(), CompilerContext, DebugStep);
+	bSucceeded &= MovePinLinks(StackPin, AssignmentNode->GetValuePin(), CompilerContext, DebugStep);
+
+	if (bSucceeded)
+	{
+		LastThen = AssignmentNode->GetThenPin();
+	}
+
 	UK2Node_CallFunction* CallCreateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
 	CallCreateNode->FunctionReference.SetExternalMember(
 		GET_FUNCTION_NAME_CHECKED(UNFactorsFactoryBlueprintHelpers, CreateFactor), UNFactorsFactoryBlueprintHelpers::StaticClass());
@@ -412,28 +522,16 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 
 	CompilerContext.MessageLog.NotifyIntermediateObjectCreation(CallCreateNode, this);
 
-	UEdGraphPin* CallExecPin = nullptr;
-	bool bSucceeded = true;
-	// connect exe
-	{
-		UEdGraphPin* SpawnExecPin = GetExecPin();
-		CallExecPin = CallCreateNode->GetExecPin();
-		bSucceeded &=
-			SpawnExecPin && CallExecPin && CompilerContext.MovePinLinksToIntermediate(*SpawnExecPin, *CallExecPin).CanSafeConnect();
-
-#if WITH_EDITOR
-		DebugConnectionPin(1, SpawnExecPin, CallExecPin, bSucceeded);
-#endif
-	}
+	UEdGraphPin* CallExecPin = CallCreateNode->GetExecPin();
 
 	// connect class
 	{
 		UEdGraphPin* CallClassPin = CallCreateNode->FindPin(FName("Class"), EGPD_Input);
-		bSucceeded &=
-			ClassPin && CallClassPin && CompilerContext.MovePinLinksToIntermediate(*ClassPin, *CallClassPin).CanSafeConnect();
+		UEdGraphPin* CallStackPin = CallCreateNode->FindPin(FName("Stack"), EGPD_Input);
+
+		bSucceeded &= MovePinLinks(ClassPin, CallClassPin, CompilerContext, DebugStep);
 
 #if WITH_EDITOR
-		DebugConnectionPin(2, ClassPin, CallClassPin, bSucceeded);
 		if (bDebug)
 		{
 			UE_LOG(LogTemp,
@@ -446,10 +544,11 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 				*(ClassPin ? ClassPin->DefaultObject->GetName() : ""));
 		}
 #endif
+
+		bSucceeded &= TryConnectPin(TempStackOutput, CallStackPin, CompilerContext, DebugStep);
 	}
 
 	UEdGraphPin* CallResultPin = nullptr;
-	UEdGraphPin* LastThen = nullptr;
 	// connect result
 	{
 		UEdGraphPin* SpawnResultPin = GetResultPin();
@@ -460,41 +559,38 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 		{
 			CallResultPin->PinType = SpawnResultPin->PinType;
 		}
-		bSucceeded &= SpawnResultPin && CallResultPin &&
-					  CompilerContext.MovePinLinksToIntermediate(*SpawnResultPin, *CallResultPin).CanSafeConnect();
+
+		bSucceeded &= MovePinLinks(SpawnResultPin, CallResultPin, CompilerContext, DebugStep);
 
 #if WITH_EDITOR
-		DebugConnectionPin(3, SpawnResultPin, CallResultPin, bSucceeded);
-
 		if (bDebug)
 		{
 			UE_LOG(LogTemp,
 				Display,
 				TEXT("3A - classname retrieve from %s>>pin->PinType is %s"),
 				*(CallCreateNode ? CallCreateNode->GetName() : ""),
-				*(ClassPin ? CallResultPin->PinType.PinSubCategoryObject.Get()->GetName() : ""));
+				*(CallResultPin ? CallResultPin->PinType.PinSubCategoryObject.Get()->GetName() : ""));
 		}
 #endif
 	}
 
 	// assign exposed values and connect then
 	{
-		LastThen = CallCreateNode->GetThenPin();
-		UEdGraphPin* SpawnNodeThen = GetThenPin();
-		bSucceeded &=
-			SpawnNodeThen && LastThen && CompilerContext.MovePinLinksToIntermediate(*SpawnNodeThen, *LastThen).CanSafeConnect();
+		bSucceeded &= MovePinLinks(LastThen, CallCreateNode->GetThenPin(), CompilerContext, DebugStep);
+		bSucceeded &= TryConnectPin(LastThen, CallExecPin, CompilerContext, DebugStep);
 
-#if WITH_EDITOR
-		DebugConnectionPin(4, SpawnNodeThen, LastThen, bSucceeded);
-#endif
+		if (bSucceeded)
+		{
+			LastThen = CallCreateNode->GetThenPin();
+		}
 	}
 
 	// For container properties,
 	// return a local copy of the container so that the original cannot be modified.
 	for (UEdGraphPin* Pin : Pins)
 	{
-		if (Pin == nullptr || Pin->Direction != EGPD_Input || Pin->PinName == ClassPinName || Pin->PinName == OuterPinName ||
-			Pin->PinName == ClassPinName)
+		if (Pin == nullptr || Pin->Direction != EGPD_Input || Pin->PinName == ClassPinName || Pin->PinName == StackPinName ||
+			Pin->PinName == OuterPinName)
 			continue;
 
 		UProperty* BoundProperty = FindField<UProperty>(ClassType, Pin->PinName);
@@ -534,12 +630,12 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 			// clang-format on
 		}
 #endif
-		bSucceeded2 = CompilerContext.MovePinLinksToIntermediate(*Pin, *VariableVarToSetPin).CanSafeConnect();
+		bSucceeded2 &= MovePinLinks(Pin, VariableVarToSetPin, CompilerContext, DebugStep);
 		bSucceeded3 &= bSucceeded2;
 #if WITH_EDITOR
 		if (bDebug) UE_LOG(LogTemp, Display, TEXT("    1 - Connecting %s: %i "), *VariableVarToSetPin->GetName(), bSucceeded2);
 #endif
-		bSucceeded2 = TryConnectPin(CompilerContext, CallResultPin, ObjectVarToSetPin);
+		bSucceeded2 &= TryConnectPin(CallResultPin, ObjectVarToSetPin, CompilerContext, DebugStep);
 		bSucceeded3 &= bSucceeded2;
 #if WITH_EDITOR
 		if (bDebug) UE_LOG(LogTemp, Display, TEXT("    2 - Connecting %s: %i"), *ObjectVarToSetPin->GetName(), bSucceeded2);
@@ -547,8 +643,8 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 
 		if (bSucceeded3)
 		{
-			bSucceeded2 = CompilerContext.MovePinLinksToIntermediate(*LastThen, *ThenVarToSetPin).CanSafeConnect();
-			bSucceeded2 = TryConnectPin(CompilerContext, LastThen, ExecVarToSetPin);
+			bSucceeded2 &= MovePinLinks(LastThen, ThenVarToSetPin, CompilerContext, DebugStep);
+			bSucceeded2 &= TryConnectPin(LastThen, ExecVarToSetPin, CompilerContext, DebugStep);
 			bSucceeded3 = bSucceeded2;
 			if (bSucceeded2)
 			{
@@ -583,25 +679,13 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 
 	// Move pin values from this node to the function library
 	UEdGraphPin* CallAddFactorPin = CallAddFactorNode->FindPin(TEXT("Factor"));
-	bSucceeded &= CompilerContext.GetSchema()->TryCreateConnection(CallResultPin, CallAddFactorPin);
+	UEdGraphPin* CallAddStackPin = CallAddFactorNode->FindPin(TEXT("Stack"));
 
-#if WITH_EDITOR
-	DebugConnectionPin(1, CallResultPin, CallAddFactorPin, bSucceeded);
-#endif
-
-	bSucceeded &= CallAddFactorNode->GetThenPin() && LastThen &&
-				  CompilerContext.MovePinLinksToIntermediate(*LastThen, *CallAddFactorNode->GetThenPin()).CanSafeConnect();
-
-#if WITH_EDITOR
-	DebugConnectionPin(2, LastThen, CallAddFactorNode->GetThenPin(), bSucceeded);
-#endif
-
+	bSucceeded &= TryConnectPin(CallResultPin, CallAddFactorPin, CompilerContext, DebugStep);
+	bSucceeded &= TryConnectPin(TempStackOutput, CallAddStackPin, CompilerContext, DebugStep);
+	bSucceeded &= MovePinLinks(LastThen, CallAddFactorNode->GetThenPin(), CompilerContext, DebugStep);
+	bSucceeded &= TryConnectPin(LastThen, CallAddFactorNode->GetExecPin(), CompilerContext, DebugStep);
 	bSucceeded &= CompilerContext.GetSchema()->TryCreateConnection(LastThen, CallAddFactorNode->GetExecPin());
-
-#if WITH_EDITOR
-	DebugConnectionPin(2, LastThen, CallAddFactorNode->GetExecPin(), bSucceeded);
-#endif
-
 	BreakAllNodeLinks();
 
 	if (!bSucceeded)
@@ -611,33 +695,6 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 #if WITH_EDITOR
 	if (bDebug) UE_LOG(LogTemp, Display, TEXT("<<<<<<<< END: %s <<<<<<<<"), ANSI_TO_TCHAR(__FUNCTION__));
 #endif
-}
-
-bool UK2Node_FactorOperator::TryConnectPin(FKismetCompilerContext& CompilerContext, UEdGraphPin* PinA, UEdGraphPin* PinB) const
-{
-	const UEdGraphSchema_K2* Schema = CompilerContext.GetSchema();
-	bool bSucceeded = true;
-	FPinConnectionResponse Response = Schema->CanCreateConnection(PinA, PinB);
-
-	if (!Response.CanSafeConnect())
-	{
-		bSucceeded = false;
-		CompilerContext.MessageLog.Warning(
-			*LOCTEXT("FactorOperator_PinConnection_Error",
-				"FactorOperator error when trying to connect pins @@->@@ & @@->@@. Message: @@ in @@")
-				 .ToString(),
-			*PinA->GetOwningNode()->GetName(),
-			*PinA->GetName(),
-			*PinB->GetOwningNode()->GetName(),
-			*PinB->GetName(),
-			*Response.Message.ToString(),
-			this);
-	}
-	else
-	{
-		bSucceeded &= Schema->TryCreateConnection(PinA, PinB);
-	}
-	return bSucceeded;
 }
 
 void UK2Node_FactorOperator::OnBlueprintClassModified(UBlueprint* TargetBlueprint)
@@ -762,6 +819,7 @@ void UK2Node_FactorOperator::OnClassPinChanged()
 		UEdGraphPin* OldPin = OldPins[PinIndex];
 		if (OldPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Exec ||
 			(OldPin->Direction == EGPD_Input && OldPin->PinName == ClassPinName) ||
+			(OldPin->Direction == EGPD_Input && OldPin->PinName == StackPinName) ||
 			(OldPin->Direction == EGPD_Input && OldPin->PinName == OuterPinName))
 		{
 #if WITH_EDITOR

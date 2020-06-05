@@ -44,9 +44,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
 	FName Reason = NAME_None;
 
-	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
-	FFactorStackAttribute InStack;
-
 	virtual void Init();
 
 	virtual TSharedPtr<NEventInterface> GetEvent() override;

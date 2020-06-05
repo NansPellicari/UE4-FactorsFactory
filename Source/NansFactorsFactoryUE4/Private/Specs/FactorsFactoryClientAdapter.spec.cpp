@@ -65,7 +65,7 @@ void FactorsFactoryClientAdapterSpec::Define()
 			TEST_EQ(
 				"Calls SpyFactorsFactoryClient::AddStack once", Client->GetSpy()->GetCall("SpyFactorsFactoryClient::AddStack"), 1);
 			TEST_EQ("Save 1 object in stacks", Client->GetUEStacks().Num(), 1);
-			TEST_NOT_NULL("Save an unreal object in stacks", Client->GetUEStacks()[0]);
+			TEST_NOT_NULL("Save an unreal object in stacks", Client->GetUEStacks()[StackName]);
 			StubFactorState* State = new StubFactorState();
 			Client->GetState(StackName, *State);
 			TEST_EQ(

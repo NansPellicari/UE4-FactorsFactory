@@ -50,8 +50,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 		});
 
 		It("Should instanciate a UNFactorAdapterBasic", [this]() {
-			UNFactorAdapterAbstract* MyObject =
-				UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass());
+			UNFactorAdapterAbstract* MyObject = UNFactorsFactoryBlueprintHelpers::CreateFactor(
+				FakeObject, UNFactorAdapterBasic::StaticClass(), FFactorStackAttribute());
 			TEST_NOT_NULL("Should not be null", MyObject);
 		});
 
@@ -62,7 +62,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 				try
 				{
-					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass());
+					UNFactorsFactoryBlueprintHelpers::CreateFactor(
+						FakeObject, UNFactorAdapterBasic::StaticClass(), FFactorStackAttribute());
 					TEST_TRUE("Should not be called", false);
 				}
 				catch (const TCHAR* e)
@@ -74,19 +75,19 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 		It("Should Create and add a new Factor", [this]() {
 			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject);
 			Client->CreateStack(FName("test1"), StubTimeline);
+			FFactorStackAttribute StackConf = FFactorStackAttribute(FName("test1"));
 
 			UNFactorAdapterBasic* MyObject = Cast<UNFactorAdapterBasic>(
-				UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
+				UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass(), StackConf));
 
 			TEST_NOT_NULL("Should not be null", MyObject);
 			MyObject->FactorValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = FName("Reason");
 			MyObject->Operator = ENFactorOperator::Add;
-			MyObject->InStack = FName("test1");
 
 			UNFactorAdapterBasic* ObjectAdded =
-				Cast<UNFactorAdapterBasic>(UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject));
+				Cast<UNFactorAdapterBasic>(UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject, StackConf));
 			TEST_EQ("Should be add and equals as itself...", ObjectAdded, MyObject);
 		});
 
@@ -111,13 +112,12 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 			FName Reason = FName("A temp object");
 			UNFactorAdapterBasic* MyObject = Cast<UNFactorAdapterBasic>(
-				UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
+				UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass(), Names[0]));
 			MyObject->FactorValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = Reason;
 			MyObject->Operator = ENFactorOperator::Add;
-			MyObject->InStack = Names[0];
-			UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject);
+			UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject, Names[0]);
 
 			FNFactorStateResult State = UNFactorsFactoryBlueprintHelpers::GetFactorState(FakeObject, Names[0]);
 			TEST_GT("First has a state with an amount of 2", State.Amount, 0);
@@ -139,14 +139,13 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			for (uint32 I = 0; I < 200; I++)
 			{
 				UNFactorAdapterBasic* MyObject = Cast<UNFactorAdapterBasic>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
+					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass(), Names[0]));
 				MyObject->FactorValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
 				MyObject->Operator = ENFactorOperator::Add;
-				MyObject->InStack = Names[0];
 
-				UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject);
+				UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject, Names[0]);
 			}
 
 			TEST_TRUE("Yes it can without crashing", true);
@@ -170,14 +169,13 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			for (uint32 I = 0; I < 200; I++)
 			{
 				UNFactorAdapterBasic* MyObject = Cast<UNFactorAdapterBasic>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
+					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass(), Names[0]));
 				MyObject->FactorValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
 				MyObject->Operator = ENFactorOperator::Add;
-				MyObject->InStack = I % 2 ? Names[0] : Names[1];
 
-				UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject);
+				UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject, I % 2 ? Names[0] : Names[1]);
 			}
 
 			TEST_TRUE("Yes it can create and add 200 diff without crashing", true);
@@ -203,13 +201,12 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			for (uint32 I = 0; I < 100; I++)
 			{
 				UNFactorAdapterBasic* MyObject = Cast<UNFactorAdapterBasic>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass()));
+					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass(), Names[0]));
 				MyObject->FactorValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
 				MyObject->Operator = ENFactorOperator::Add;
-				MyObject->InStack = I % 2 ? Names[0] : Names[1];
-				UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject);
+				UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject, I % 2 ? Names[0] : Names[1]);
 
 				// Launch GC at each 10th's iteration
 				if (I > 0 && I % 10 == 0)

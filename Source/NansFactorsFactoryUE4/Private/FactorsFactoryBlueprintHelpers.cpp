@@ -97,19 +97,21 @@ void UNFactorsFactoryBlueprintHelpers::Clear(UObject* WorldContextObject, TArray
 	}
 }
 
-UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::AddFactor(UObject* WorldContextObject, UNFactorAdapterAbstract* Factor)
+UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::AddFactor(
+	UObject* WorldContextObject, UNFactorAdapterAbstract* Factor, FFactorStackAttribute Stack)
 {
 	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);
 
 	if (Client == nullptr) return Factor;
 
 	Factor->Init();
-	Client->AddFactor(Factor->InStack.Name, MakeShareable(new NUnrealFactorProxy(Factor)));
+	Client->AddFactor(Stack.Name, MakeShareable(new NUnrealFactorProxy(Factor)));
 
 	return Factor;
 }
 
-UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::CreateFactor(UObject* WorldContextObject, UClass* Class)
+UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::CreateFactor(
+	UObject* WorldContextObject, UClass* Class, FFactorStackAttribute Stack)
 {
 	static uint32 FactorNum = 0;
 	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);

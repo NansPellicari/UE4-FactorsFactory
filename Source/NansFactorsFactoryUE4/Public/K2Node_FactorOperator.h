@@ -54,29 +54,22 @@ public:
 public:
 	/** Class pin name */
 	static FName ClassPinName;
+	/** Stack pin name */
+	static FName StackPinName;
 	/** Object pin name */
 	static FName ObjectPinName;
 	/** Outer pin name */
 	static FName OuterPinName;
 
-	bool TryConnectPin(FKismetCompilerContext& CompilerContext, UEdGraphPin* PinA, UEdGraphPin* PinB) const;
-
 	/** Finds and returns the class input pin from the current set of pins. */
-	UEdGraphPin* FindClassPin() const
-	{
-		UEdGraphPin* Pin = FindPinChecked(UK2Node_FactorOperator::ClassPinName);
-		check(Pin->Direction == EGPD_Input);
-		return Pin;
-	}
+	UEdGraphPin* FindClassPin() const;
+	UEdGraphPin* FindStackPin() const;
 	UEdGraphPin* GetResultPin() const;
 	UEdGraphPin* GetThenPin() const;
 	UEdGraphPin* GetOuterPin() const;
 
 	/** Retrieves the current input class type. */
-	UClass* GetInputClass() const
-	{
-		return GetInputClass(FindClassPin());
-	}
+	UClass* GetInputClass() const;
 
 	void OnBlueprintClassModified(UBlueprint* TargetBlueprint);
 	void ClearDelegates();
@@ -85,14 +78,25 @@ protected:
 #if WITH_EDITOR
 	// TODO create a Pin available only in dev mode to switch this
 	bool bDebug = false;
-	void DebugConnectionPin(uint32 Step, const UEdGraphPin* PinA, const UEdGraphPin* PinB, const bool bSucceeded) const;
+	void DebugConnectionPin(
+		uint32 Step, const UEdGraphPin* PinA, const UEdGraphPin* PinB, const bool bSucceeded, const TCHAR* Type) const;
 #endif
+
+	bool MovePinLinks(UEdGraphPin* PinA, UEdGraphPin* PinB, class FKismetCompilerContext& CompilerContext, uint32& Step) const;
+	bool TryConnectPin(UEdGraphPin* PinA, UEdGraphPin* PinB, class FKismetCompilerContext& CompilerContext, uint32& Step) const;
 	/**
 	 * Finds and returns the class input pin.
 	 *
 	 * @param FromPins	A list of pins to search.
 	 */
 	UEdGraphPin* FindClassPin(const TArray<UEdGraphPin*>& FromPins) const;
+
+	/**
+	 * Finds and returns the stack input pin.
+	 *
+	 * @param FromPins	A list of pins to search.
+	 */
+	UEdGraphPin* FindStackPin(const TArray<UEdGraphPin*>& FromPins) const;
 
 	/**
 	 * Determines the input class type from the given pin.
