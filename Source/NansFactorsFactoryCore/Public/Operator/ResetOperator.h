@@ -6,15 +6,15 @@
 class NFactorInterface;
 class NFactorStackInterface;
 
-class NANSFACTORSFACTORYCORE_API NResetOperatorBase : public FactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NResetOperatorBase : public NFactorOperatorInterface
 {
 public:
-	virtual TSharedPtr<FactorOperatorInterface> GetInverse() override;
+	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
 	static FString GetResetIdFlag(TSharedRef<NFactorInterface> Factor);
 };
 
 // TODO create ResetByReasonOperator ResetWithRangeOperator ResetAllOperator
-class NANSFACTORSFACTORYCORE_API NResetOperator : public NResetOperatorBase, public FactorOperatorInterfaceWithStack
+class NANSFACTORSFACTORYCORE_API NResetOperator : public NResetOperatorBase, public NFactorOperatorInterfaceWithStack
 {
 public:
 	virtual ~NResetOperator();
@@ -24,7 +24,7 @@ public:
 		return Name;
 	}
 	virtual float Compute(float Lh, float Rh) override;
-	virtual TSharedPtr<FactorOperatorInterface> GetInverse() override;
+	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
 	virtual void SetStack(NFactorStackInterface* Stack) override;
 	virtual void SetKeyInStack(uint32 Key) override;
 

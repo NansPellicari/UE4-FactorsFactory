@@ -18,12 +18,12 @@
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 
-TSharedPtr<FactorOperatorInterface> NUnrealFactorProxy::GetOperator() const
+TSharedPtr<NFactorOperatorInterface> NUnrealFactorProxy::GetOperator() const
 {
 	mycheck(Factor != nullptr);
 	return Factor->GetOperator();
 }
-void NUnrealFactorProxy::SetOperator(TSharedPtr<FactorOperatorInterface> _Operator)
+void NUnrealFactorProxy::SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator)
 {
 	mycheck(Factor != nullptr);
 	return Factor->SetOperator(_Operator);

@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "FactorStateInterface.h"
 
-class FactorOperatorInterface;
+class NFactorOperatorInterface;
 class NFactorInterface;
 class NNullOperator;
 

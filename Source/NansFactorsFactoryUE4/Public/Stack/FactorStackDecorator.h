@@ -93,7 +93,7 @@ public:
 	UNFactorAdapterAbstract* CreateFactor(const UClass* Class);
 
 	// BEGIN NFactorStackInterface override
-	virtual void Reset() override;
+	virtual void Clear() override;
 	virtual void SetName(FName _Name) override;
 	virtual FName GetName() const override;
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;

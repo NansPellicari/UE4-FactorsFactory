@@ -4,15 +4,15 @@
 
 class NFactorStackInterface;
 
-class FactorOperatorInterface
+class NFactorOperatorInterface
 {
 public:
 	virtual float Compute(float Lh, float Rh) = 0;
-	virtual TSharedPtr<FactorOperatorInterface> GetInverse() = 0;
+	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() = 0;
 	virtual const FName GetName() = 0;
 };
 
-class FactorOperatorInterfaceWithStack
+class NFactorOperatorInterfaceWithStack
 {
 public:
 	virtual void SetStack(NFactorStackInterface* Stack) = 0;
@@ -25,6 +25,6 @@ public:
 	template <typename T>
 	static bool IsOperatorWithStack(T Operator)
 	{
-		return dynamic_cast<FactorOperatorInterfaceWithStack*>(Operator) != nullptr;
+		return dynamic_cast<NFactorOperatorInterfaceWithStack*>(Operator) != nullptr;
 	}
 };

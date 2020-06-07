@@ -4,7 +4,7 @@
 #include "FactorStackInterface.h"
 
 class NFactorInterface;
-class FactorOperatorInterfaceWithStack;
+class NFactorOperatorInterfaceWithStack;
 class NFactorState;
 class NTimelineInterface;
 
@@ -13,7 +13,7 @@ class NANSFACTORSFACTORYCORE_API NFactorStack : public NFactorStackInterface
 public:
 	NFactorStack(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
 	virtual ~NFactorStack();
-	virtual void Reset() override;
+	virtual void Clear() override;
 	virtual void SetName(FName _Name) override;
 	virtual FName GetName() const override;
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;

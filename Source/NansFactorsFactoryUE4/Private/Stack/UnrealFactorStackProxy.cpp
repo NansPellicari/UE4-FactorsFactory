@@ -16,9 +16,9 @@
 
 #include "Stack/FactorStackDecorator.h"
 
-void NUnrealFactorStackProxy::Reset()
+void NUnrealFactorStackProxy::Clear()
 {
-	Stack.Reset();
+	Stack.Clear();
 }
 void NUnrealFactorStackProxy::SetName(FName _Name)
 {

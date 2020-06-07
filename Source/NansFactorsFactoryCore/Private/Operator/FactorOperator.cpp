@@ -11,7 +11,7 @@ float NNullOperator::Compute(float Lh, float Rh)
 	return Lh;
 }
 
-TSharedPtr<FactorOperatorInterface> NNullOperator::GetInverse()
+TSharedPtr<NFactorOperatorInterface> NNullOperator::GetInverse()
 {
 	return MakeShareable(this);
 }
@@ -21,9 +21,9 @@ float NAddOperator::Compute(float Lh, float Rh)
 	return Lh + Rh;
 }
 
-TSharedPtr<FactorOperatorInterface> NAddOperator::GetInverse()
+TSharedPtr<NFactorOperatorInterface> NAddOperator::GetInverse()
 {
-	static TSharedPtr<FactorOperatorInterface> Operator = MakeShareable(new NSubtractOperator());
+	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NSubtractOperator());
 	return Operator;
 }
 
@@ -32,9 +32,9 @@ float NSubtractOperator::Compute(float Lh, float Rh)
 	return Lh - Rh;
 }
 
-TSharedPtr<FactorOperatorInterface> NSubtractOperator::GetInverse()
+TSharedPtr<NFactorOperatorInterface> NSubtractOperator::GetInverse()
 {
-	static TSharedPtr<FactorOperatorInterface> Operator = MakeShareable(new NAddOperator());
+	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NAddOperator());
 	return Operator;
 }
 
@@ -43,9 +43,9 @@ float NMultiplyOperator::Compute(float Lh, float Rh)
 	return Lh * Rh;
 }
 
-TSharedPtr<FactorOperatorInterface> NMultiplyOperator::GetInverse()
+TSharedPtr<NFactorOperatorInterface> NMultiplyOperator::GetInverse()
 {
-	static TSharedPtr<FactorOperatorInterface> Operator = MakeShareable(new NDividerOperator());
+	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NDividerOperator());
 	return Operator;
 }
 
@@ -54,8 +54,8 @@ float NDividerOperator::Compute(float Lh, float Rh)
 	return Lh / Rh;
 }
 
-TSharedPtr<FactorOperatorInterface> NDividerOperator::GetInverse()
+TSharedPtr<NFactorOperatorInterface> NDividerOperator::GetInverse()
 {
-	static TSharedPtr<FactorOperatorInterface> Operator = MakeShareable(new NMultiplyOperator());
+	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NMultiplyOperator());
 	return Operator;
 }

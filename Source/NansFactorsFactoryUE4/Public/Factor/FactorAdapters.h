@@ -19,7 +19,7 @@
 
 #include "FactorAdapters.generated.h"
 
-class FactorOperatorInterface;
+class NFactorOperatorInterface;
 
 UENUM(BlueprintType)
 enum class ENFactorOperator : uint8
@@ -40,10 +40,10 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
 	ENFactorOperator Operator = ENFactorOperator::Null;
 
-	static TSharedPtr<FactorOperatorInterface> EnumToOperator(ENFactorOperator Enum);
+	static TSharedPtr<NFactorOperatorInterface> EnumToOperator(ENFactorOperator Enum);
 
 	// BEGIN UNFactorAdapterAbstract override
-	virtual TSharedPtr<FactorOperatorInterface> GetConfiguredOperator() const override;
+	virtual TSharedPtr<NFactorOperatorInterface> GetConfiguredOperator() const override;
 	// END UNFactorAdapterAbstract override
 
 	// BEGIN UObject override

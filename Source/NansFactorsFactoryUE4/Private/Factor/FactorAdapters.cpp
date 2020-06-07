@@ -18,9 +18,9 @@
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
 #include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
 
-TSharedPtr<FactorOperatorInterface> UNFactorAdapterBasic::EnumToOperator(ENFactorOperator Enum)
+TSharedPtr<NFactorOperatorInterface> UNFactorAdapterBasic::EnumToOperator(ENFactorOperator Enum)
 {
-	TSharedPtr<FactorOperatorInterface> Op;
+	TSharedPtr<NFactorOperatorInterface> Op;
 
 	if (Enum == ENFactorOperator::Add)
 	{
@@ -55,7 +55,7 @@ TSharedPtr<FactorOperatorInterface> UNFactorAdapterBasic::EnumToOperator(ENFacto
 	return Op;
 }
 
-TSharedPtr<FactorOperatorInterface> UNFactorAdapterBasic::GetConfiguredOperator() const
+TSharedPtr<NFactorOperatorInterface> UNFactorAdapterBasic::GetConfiguredOperator() const
 {
 	return UNFactorAdapterBasic::EnumToOperator(Operator);
 }

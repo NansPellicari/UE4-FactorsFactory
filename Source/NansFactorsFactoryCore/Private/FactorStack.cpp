@@ -13,7 +13,7 @@ NFactorStack::~NFactorStack()
 	Timeline.Reset();
 }
 
-void NFactorStack::Reset()
+void NFactorStack::Clear()
 {
 	Name = NAME_None;
 	IterationFlags.Empty();
@@ -97,7 +97,7 @@ void NFactorStack::AddFactorsToState(NFactorStateInterface& State)
 
 		mycheck(Factor->GetOperator().IsValid());
 
-		FactorOperatorInterfaceWithStack* Operator = dynamic_cast<FactorOperatorInterfaceWithStack*>(Factor->GetOperator().Get());
+		NFactorOperatorInterfaceWithStack* Operator = dynamic_cast<NFactorOperatorInterfaceWithStack*>(Factor->GetOperator().Get());
 		if (Operator != nullptr)
 		{
 			Operator->SetStack(this);

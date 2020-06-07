@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "FactorInterface.h"
 
-class FactorOperatorInterface;
+class NFactorOperatorInterface;
 class NEventInterface;
 
 namespace NFactorGUID
@@ -15,15 +15,15 @@ class NANSFACTORSFACTORYCORE_API NFactor : public NFactorInterface
 {
 public:
 	NFactor(float _FactorValue,
-		TSharedPtr<FactorOperatorInterface> _Operator,
+		TSharedPtr<NFactorOperatorInterface> _Operator,
 		float _Duration,
 		FName Reason,
 		float _Delay = 0.f,
 		TSharedPtr<NEventInterface> _Event = NULL);
 	virtual ~NFactor();
 	virtual bool IsActivated() const override;
-	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const override;
-	virtual void SetOperator(TSharedPtr<FactorOperatorInterface> _Operator) override;
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override;
+	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) override;
 	virtual float GetFactorValue() const override;
 	virtual FName GetReason() const override;
 	virtual void SetFactorValue(float _Value) override;
@@ -35,5 +35,5 @@ protected:
 	TSharedPtr<NEventInterface> Event;
 	bool bIsActivated = true;
 	float FactorValue;
-	TSharedPtr<FactorOperatorInterface> Operator;
+	TSharedPtr<NFactorOperatorInterface> Operator;
 };

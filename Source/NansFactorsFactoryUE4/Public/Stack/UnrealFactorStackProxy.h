@@ -24,7 +24,7 @@ class NANSFACTORSFACTORYUE4_API NUnrealFactorStackProxy : public NFactorStackInt
 public:
 	UNFactorStackDecorator& Stack;
 	NUnrealFactorStackProxy(UNFactorStackDecorator& _Stack) : Stack(_Stack) {}
-	virtual void Reset() override;
+	virtual void Clear() override;
 	virtual void SetName(FName _Name) override;
 	virtual FName GetName() const override;
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;

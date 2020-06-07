@@ -25,7 +25,7 @@ class StubNullUnrealFactorStackProxy : public NUnrealFactorStackProxy
 public:
 	StubNullUnrealFactorStackProxy(UNFactorStackDecorator& _Stack) : NUnrealFactorStackProxy(_Stack) {}
 
-	virtual void Reset() override {}
+	virtual void Clear() override {}
 	virtual void SetName(FName _Name) override {}
 	virtual FName GetName() const override
 	{

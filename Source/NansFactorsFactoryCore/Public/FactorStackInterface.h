@@ -10,7 +10,7 @@ class NTimelineInterface;
 class NANSFACTORSFACTORYCORE_API NFactorStackInterface
 {
 public:
-	virtual void Reset() = 0;
+	virtual void Clear() = 0;
 	virtual void SetName(FName _Name) = 0;
 	virtual FName GetName() const = 0;
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const = 0;

@@ -19,7 +19,7 @@
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 
 class NEventInterface;
-class FactorOperatorInterface;
+class NFactorOperatorInterface;
 class UNFactorEventDecorator;
 class NFactor;
 
@@ -46,12 +46,12 @@ public:
 
 	virtual void Init();
 	virtual void Init(UNFactorEventDecorator* _Event);
-	virtual TSharedPtr<FactorOperatorInterface> GetConfiguredOperator() const;
+	virtual TSharedPtr<NFactorOperatorInterface> GetConfiguredOperator() const;
 
 	// BEGIN NFactorInterface override
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
-	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const override;
-	virtual void SetOperator(TSharedPtr<FactorOperatorInterface> _Operator) override;
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override;
+	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) override;
 	virtual float GetFactorValue() const override;
 	virtual FName GetReason() const override;
 	virtual bool IsActivated() const override;

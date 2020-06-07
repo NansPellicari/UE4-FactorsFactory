@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "FactorInterface.h"
 
-class FactorOperatorInterface;
+class NFactorOperatorInterface;
 class NEventInterface;
 
 class NANSFACTORSFACTORYCORE_API NNullFactor : public NFactorInterface
@@ -12,8 +12,8 @@ public:
 	NNullFactor();
 	virtual ~NNullFactor();
 	virtual bool IsActivated() const override;
-	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const override;
-	virtual void SetOperator(TSharedPtr<FactorOperatorInterface> _Operator) override;
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override;
+	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) override;
 	virtual float GetFactorValue() const override;
 	virtual void SetFactorValue(float _Value) override;
 	virtual FName GetReason() const override;

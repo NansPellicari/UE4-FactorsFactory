@@ -10,11 +10,11 @@ bool NNullFactor::IsActivated() const
 {
 	return false;
 }
-TSharedPtr<FactorOperatorInterface> NNullFactor::GetOperator() const
+TSharedPtr<NFactorOperatorInterface> NNullFactor::GetOperator() const
 {
 	return nullptr;
 }
-void NNullFactor::SetOperator(TSharedPtr<FactorOperatorInterface> _Operator) {}
+void NNullFactor::SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) {}
 float NNullFactor::GetFactorValue() const
 {
 	return 0.f;

@@ -21,7 +21,7 @@ public:
 		return StacksList;
 	};
 
-	void Reset()
+	void Clear()
 	{
 		StacksList.Empty();
 	}
@@ -38,7 +38,7 @@ protected:
 
 	void TearDown() override
 	{
-		Client->Reset();
+		Client->Clear();
 	}
 
 	UNFakeFactorsFactoryClient* Client;

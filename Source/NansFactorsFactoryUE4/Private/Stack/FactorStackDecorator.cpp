@@ -59,9 +59,9 @@ void UNFactorStackDecorator::Init(FName _Name, TSharedPtr<NTimelineInterface> _T
 {
 	Stack = MakeShareable(new NFactorStack(_Name, _Timeline));
 }
-void UNFactorStackDecorator::Reset()
+void UNFactorStackDecorator::Clear()
 {
-	Stack->Reset();
+	Stack->Clear();
 }
 void UNFactorStackDecorator::SetName(FName _Name)
 {
@@ -155,7 +155,7 @@ void UNFactorStackDecorator::Serialize(FArchive& Ar)
 
 	if (Ar.IsLoading())
 	{
-		Stack->Reset();
+		Stack->Clear();
 		Stack->SetName(SavedName);
 		SavedName = NAME_None;
 	}

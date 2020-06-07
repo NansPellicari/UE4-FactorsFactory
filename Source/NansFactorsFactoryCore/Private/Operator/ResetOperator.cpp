@@ -9,9 +9,9 @@
 
 const FName NResetOperator::Name(TEXT("Reset"));
 
-TSharedPtr<FactorOperatorInterface> NResetOperatorBase::GetInverse()
+TSharedPtr<NFactorOperatorInterface> NResetOperatorBase::GetInverse()
 {
-	static TSharedPtr<FactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
+	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
 	return Operator;
 }
 
@@ -52,9 +52,9 @@ float NResetOperator::Compute(float Lh, float Rh)
 	return ResetFactor->GetOperator()->GetInverse()->Compute(Lh, ResetFactor->GetFactorValue());
 }
 
-TSharedPtr<FactorOperatorInterface> NResetOperator::GetInverse()
+TSharedPtr<NFactorOperatorInterface> NResetOperator::GetInverse()
 {
-	static TSharedPtr<FactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
+	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
 	return Operator;
 }
 

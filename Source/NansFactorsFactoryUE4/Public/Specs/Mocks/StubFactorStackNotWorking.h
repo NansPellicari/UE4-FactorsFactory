@@ -25,7 +25,7 @@ class StubFactorStackNotWorking : public NFactorStackInterface
 public:
 	// clang-format off
 	StubFactorStackNotWorking() {}
-	virtual void Reset() override {}
+	virtual void Clear() override {}
 	virtual void SetName(FName _Name) override {}
 	virtual FName GetName() const override {  return NAME_None; }
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override { return nullptr; }

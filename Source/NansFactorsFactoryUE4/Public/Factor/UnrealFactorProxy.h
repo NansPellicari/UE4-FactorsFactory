@@ -10,8 +10,8 @@ class NANSFACTORSFACTORYUE4_API NUnrealFactorProxy : public NFactorInterface
 public:
 	UNFactorAdapterAbstract* Factor;
 	NUnrealFactorProxy(UNFactorAdapterAbstract* _Factor) : Factor(_Factor) {}
-	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const override;
-	virtual void SetOperator(TSharedPtr<FactorOperatorInterface> _Operator) override;
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override;
+	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) override;
 	virtual float GetFactorValue() const override;
 	virtual void SetFactorValue(float _Value) override;
 	virtual FName GetReason() const override;

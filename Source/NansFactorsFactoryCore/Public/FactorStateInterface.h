@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-class FactorOperatorInterface;
+class NFactorOperatorInterface;
 class NFactorInterface;
 class NNullOperator;
 
@@ -15,7 +15,7 @@ struct FNFactorStateOperator
 	float Value = 0.f;
 	FName Reason = FName("");
 	bool Activate = true;
-	TSharedPtr<FactorOperatorInterface> Operator;
+	TSharedPtr<NFactorOperatorInterface> Operator;
 	// TODO create an UObject to serialize these Value + Operator class and value
 };
 

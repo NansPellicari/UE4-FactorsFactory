@@ -41,17 +41,17 @@ TSharedPtr<NEventInterface> UNFactorAdapterAbstract::GetEvent()
 	return Factor->GetEvent();
 }
 
-TSharedPtr<FactorOperatorInterface> UNFactorAdapterAbstract::GetConfiguredOperator() const
+TSharedPtr<NFactorOperatorInterface> UNFactorAdapterAbstract::GetConfiguredOperator() const
 {
 	return MakeShareable(new NNullOperator());
 }
 
-TSharedPtr<FactorOperatorInterface> UNFactorAdapterAbstract::GetOperator() const
+TSharedPtr<NFactorOperatorInterface> UNFactorAdapterAbstract::GetOperator() const
 {
 	return Factor->GetOperator();
 }
 
-void UNFactorAdapterAbstract::SetOperator(TSharedPtr<FactorOperatorInterface> _Operator)
+void UNFactorAdapterAbstract::SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator)
 {
 	Factor->SetOperator(_Operator);
 }
