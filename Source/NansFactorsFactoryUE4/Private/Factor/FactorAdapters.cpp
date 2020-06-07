@@ -59,3 +59,15 @@ TSharedPtr<FactorOperatorInterface> UNFactorAdapterBasic::GetConfiguredOperator(
 {
 	return UNFactorAdapterBasic::EnumToOperator(Operator);
 }
+
+void UNFactorAdapterBasic::Serialize(FArchive& Ar)
+{
+	Super::Serialize(Ar);
+
+	Ar << Operator;
+
+	if (Ar.IsLoading() && Factor.IsValid())
+	{
+		SetOperator(GetConfiguredOperator());
+	}
+}

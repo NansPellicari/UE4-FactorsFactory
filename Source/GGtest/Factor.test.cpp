@@ -1,6 +1,7 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
+#include "NansFactorsFactoryCore/Public/NullFactor.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "gtest/gtest.h"
 
@@ -13,7 +14,7 @@ protected:
 
 TEST_F(NansFactorsFactoryCoreFactorTest, EachNewFactorShouldHaveAFactorerentUUID)
 {
-	TMap<uint32, NFactor*> Factors;
+	TMap<FString, NFactor*> Factors;
 	for (int I = 0; I < 500; ++I)
 	{
 		NFactor* Factor = new NFactor(1.f, MakeShareable(new NNullOperator()), 0, FName("Reason"));
@@ -24,6 +25,20 @@ TEST_F(NansFactorsFactoryCoreFactorTest, EachNewFactorShouldHaveAFactorerentUUID
 	Factors.Empty();
 }
 
+TEST_F(NansFactorsFactoryCoreFactorTest, NullFactorShouldAlwaysReturnNullValues)
+{
+	NNullFactor* Factor = new NNullFactor();
+	EXPECT_FALSE(Factor->IsActivated());
+	EXPECT_EQ(Factor->GetEvent(), nullptr);
+	EXPECT_EQ(Factor->GetReason(), NAME_None);
+	EXPECT_EQ(Factor->GetFactorValue(), 0.f);
+	Factor->SetFactorValue(10.f);
+	EXPECT_EQ(Factor->GetFactorValue(), 0.f);
+	EXPECT_EQ(Factor->GetOperator(), nullptr);
+	EXPECT_TRUE(Factor->GetUID().IsEmpty());
+	Factor->SetOperator(MakeShareable(new NAddOperator()));
+	EXPECT_EQ(Factor->GetOperator(), nullptr);
+}
 TEST_F(NansFactorsFactoryCoreFactorTest, ShouldBeAlwaysActivateIfItHasAnUndeterminatedDuration)
 {
 	NFactor* Factor = new NFactor(1.f, MakeShareable(new NNullOperator()), 0, FName("Reason"));

@@ -13,6 +13,7 @@ public:
 	virtual void Reset() = 0;
 	virtual void SetName(FName _Name) = 0;
 	virtual FName GetName() const = 0;
+	virtual TSharedPtr<NTimelineInterface> GetTimeline() const = 0;
 	virtual float GetTime() const = 0;
 	virtual TSharedRef<NFactorInterface> GetFactor(uint32 Key) const = 0;
 	virtual TArray<TSharedPtr<NFactorInterface>> GetFactors() const = 0;

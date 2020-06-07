@@ -41,7 +41,14 @@ public:
 	ENFactorOperator Operator = ENFactorOperator::Null;
 
 	static TSharedPtr<FactorOperatorInterface> EnumToOperator(ENFactorOperator Enum);
+
+	// BEGIN UNFactorAdapterAbstract override
 	virtual TSharedPtr<FactorOperatorInterface> GetConfiguredOperator() const override;
+	// END UNFactorAdapterAbstract override
+
+	// BEGIN UObject override
+	virtual void Serialize(FArchive& Ar);
+	// END UObject override
 };
 
 // TODO Create an ENUM to choose behaviors (all, last, number)

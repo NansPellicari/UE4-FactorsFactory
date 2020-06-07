@@ -50,8 +50,10 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 		});
 
 		It("Should instanciate a UNFactorAdapterBasic", [this]() {
+			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject);
+			Client->CreateStack(FName("test1"), StubTimeline);
 			UNFactorAdapterAbstract* MyObject = UNFactorsFactoryBlueprintHelpers::CreateFactor(
-				FakeObject, UNFactorAdapterBasic::StaticClass(), FFactorStackAttribute());
+				FakeObject, UNFactorAdapterBasic::StaticClass(), FFactorStackAttribute(FName("test1")));
 			TEST_NOT_NULL("Should not be null", MyObject);
 		});
 

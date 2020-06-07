@@ -7,7 +7,7 @@
 
 #include "FactorsFactoryGameInstance.generated.h"
 
-UINTERFACE()
+UINTERFACE(MinimalAPI, BlueprintType)
 class UNFactorsFactoryGameInstance : public UInterface
 {
 	GENERATED_BODY()

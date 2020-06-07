@@ -37,6 +37,11 @@ void NFactorStack::SetName(FName _Name)
 	Name = _Name;
 }
 
+TSharedPtr<NTimelineInterface> NFactorStack::GetTimeline() const
+{
+	return Timeline;
+}
+
 float NFactorStack::GetTime() const
 {
 	mycheck(Name != NAME_None);

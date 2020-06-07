@@ -8,7 +8,6 @@
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineInterface.h"
-#include "NullFactorState.h"
 
 void NFactorsFactoryClient::RemoveStack(FName StackName)
 {
@@ -23,7 +22,7 @@ void NFactorsFactoryClient::CreateStack(FName StackName, TSharedPtr<NTimelineInt
 	if (myensureMsgf(!StacksList.Contains(StackName), TEXT("The stack \"%s\" has been already created"), *StackName.ToString()))
 	{
 		TSharedPtr<NFactorStackInterface> Stack = MakeShareable(new NFactorStack(StackName, _Timeline));
-		StacksList.Add(StackName, Stack);
+		AddStack(Stack);
 	}
 }
 
@@ -51,10 +50,6 @@ void NFactorsFactoryClient::GetState(FName StackName, NFactorStateInterface& Sta
 		TSharedPtr<NFactorStackInterface> Stack = StacksList[StackName];
 		mycheckf(Stack.IsValid(), TEXT("The stack '%s' existed in the stack list but has been removed"), *StackName.ToString());
 		Stack->SupplyStateWithCurrentData(State);
-	}
-	else
-	{
-		State = *(new NNullFactorState());
 	}
 }
 

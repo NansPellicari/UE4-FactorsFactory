@@ -28,6 +28,12 @@ FName NUnrealFactorStackProxy::GetName() const
 {
 	return Stack.GetName();
 }
+
+TSharedPtr<NTimelineInterface> NUnrealFactorStackProxy::GetTimeline() const
+{
+	return Stack.GetTimeline();
+}
+
 float NUnrealFactorStackProxy::GetTime() const
 {
 	return Stack.GetTime();

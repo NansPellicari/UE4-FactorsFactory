@@ -24,17 +24,18 @@ class NANSFACTORSFACTORYUE4_API NUnrealFactorStackProxy : public NFactorStackInt
 public:
 	UNFactorStackDecorator& Stack;
 	NUnrealFactorStackProxy(UNFactorStackDecorator& _Stack) : Stack(_Stack) {}
-	virtual void Reset();
-	virtual void SetName(FName _Name);
-	virtual FName GetName() const;
-	virtual float GetTime() const;
-	virtual TSharedRef<NFactorInterface> GetFactor(uint32 Key) const;
-	virtual TArray<TSharedPtr<NFactorInterface>> GetFactors() const;
-	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor);
-	virtual bool HasFlag(FString Flag) const;
-	virtual bool GetFlag(FString Flag) const;
-	virtual void SetFlag(FString Flag, bool Value);
-	virtual void Debug(bool _bDebug);
-	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State);
+	virtual void Reset() override;
+	virtual void SetName(FName _Name) override;
+	virtual FName GetName() const override;
+	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;
+	virtual float GetTime() const override;
+	virtual TSharedRef<NFactorInterface> GetFactor(uint32 Key) const override;
+	virtual TArray<TSharedPtr<NFactorInterface>> GetFactors() const override;
+	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override;
+	virtual bool HasFlag(FString Flag) const override;
+	virtual bool GetFlag(FString Flag) const override;
+	virtual void SetFlag(FString Flag, bool Value) override;
+	virtual void Debug(bool _bDebug) override;
+	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
 	virtual UNFactorStackDecorator* GetUnrealObject() const;
 };

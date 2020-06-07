@@ -28,6 +28,7 @@ public:
 	virtual void Reset() override {}
 	virtual void SetName(FName _Name) override {}
 	virtual FName GetName() const override {  return NAME_None; }
+	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override { return nullptr; }
 	virtual float GetTime() const override { return -1.f; }
 	virtual TSharedRef<NFactorInterface> GetFactor(uint32 Key) const override {
         static NFactorInterface* NullObj = new NNullFactor();

@@ -16,6 +16,7 @@ public:
 	virtual void Reset() override;
 	virtual void SetName(FName _Name) override;
 	virtual FName GetName() const override;
+	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;
 	virtual float GetTime() const override;
 	virtual TSharedRef<NFactorInterface> GetFactor(uint32 Key) const override;
 	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override;

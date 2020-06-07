@@ -100,6 +100,14 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldGetAStackSStateAfterAddingFactor)
 	EXPECT_EQ(State->GetTime(), 0.f);
 }
 
+TEST_F(NansFactorsFactoryCoreClientTest, ShouldNotGetAStateFromAnNonExistantStack)
+{
+	FName Name = FName("test");
+	NFactorStateInterface* State = new NFactorState();
+	Client->GetState(Name, *State);
+	EXPECT_EQ(State->GetTime(), -1.f);
+}
+
 TEST_F(NansFactorsFactoryCoreClientTest, ShouldGetStackSStatesAfterAddingFactors)
 {
 	TArray<FName> Names = {FName("test1"), FName("test2")};

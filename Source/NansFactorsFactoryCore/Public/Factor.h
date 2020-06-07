@@ -23,9 +23,11 @@ public:
 	virtual ~NFactor();
 	virtual bool IsActivated() const override;
 	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const override;
+	virtual void SetOperator(TSharedPtr<FactorOperatorInterface> _Operator) override;
 	virtual float GetFactorValue() const override;
 	virtual FName GetReason() const override;
-	virtual uint32 GetUID() const override;
+	virtual void SetFactorValue(float _Value) override;
+	virtual const FString GetUID() const override;
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
 	void Activate(bool _bIsActivated);
 
@@ -34,6 +36,4 @@ protected:
 	bool bIsActivated = true;
 	float FactorValue;
 	TSharedPtr<FactorOperatorInterface> Operator;
-	/** TODO use FGuid::NewGuid().ToString() instead */
-	uint32 Id;
 };

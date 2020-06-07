@@ -18,7 +18,7 @@ TSharedPtr<FactorOperatorInterface> NResetOperatorBase::GetInverse()
 FString NResetOperatorBase::GetResetIdFlag(TSharedRef<NFactorInterface> Factor)
 {
 	const FString Prefix = TEXT("Reset_list_");
-	return FString::Format(TEXT("{0}{1}"), {Prefix, FString::FromInt(Factor->GetUID())});
+	return FString::Format(TEXT("{0}{1}"), {Prefix, Factor->GetUID()});
 }
 
 float NResetOperator::Compute(float Lh, float Rh)

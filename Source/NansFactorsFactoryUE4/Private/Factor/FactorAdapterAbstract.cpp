@@ -26,7 +26,12 @@
 
 void UNFactorAdapterAbstract::Init()
 {
-	Event = UNEventDecoratorFactory::CreateObject<UNFactorEventDecorator>(this, UNFactorEventDecorator::StaticClass(), Reason);
+	Init(UNEventDecoratorFactory::CreateObject<UNFactorEventDecorator>(this, UNFactorEventDecorator::StaticClass(), Reason));
+}
+
+void UNFactorAdapterAbstract::Init(UNFactorEventDecorator* _Event)
+{
+	Event = _Event;
 	TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(*Event));
 	Factor = MakeShareable(new NFactor(FactorValue, GetConfiguredOperator(), Duration, Reason, Delay, EventProxy));
 }
@@ -46,6 +51,11 @@ TSharedPtr<FactorOperatorInterface> UNFactorAdapterAbstract::GetOperator() const
 	return Factor->GetOperator();
 }
 
+void UNFactorAdapterAbstract::SetOperator(TSharedPtr<FactorOperatorInterface> _Operator)
+{
+	Factor->SetOperator(_Operator);
+}
+
 float UNFactorAdapterAbstract::GetFactorValue() const
 {
 	return Factor->GetFactorValue();
@@ -56,12 +66,34 @@ FName UNFactorAdapterAbstract::GetReason() const
 	return Factor->GetReason();
 }
 
+void UNFactorAdapterAbstract::SetFactorValue(float _Value)
+{
+	Factor->SetFactorValue(_Value);
+}
+
 bool UNFactorAdapterAbstract::IsActivated() const
 {
 	return Factor->IsActivated();
 }
 
-uint32 UNFactorAdapterAbstract::GetUID() const
+const FString UNFactorAdapterAbstract::GetUID() const
 {
 	return Factor->GetUID();
+}
+
+void UNFactorAdapterAbstract::Serialize(FArchive& Ar)
+{
+	Super::Serialize(Ar);
+
+	if (Ar.IsSaving() && Factor.IsValid())
+	{
+		FactorValue = Factor->GetFactorValue();
+	}
+
+	Ar << FactorValue;
+
+	if (Ar.IsLoading() && Factor.IsValid())
+	{
+		SetFactorValue(FactorValue);
+	}
 }

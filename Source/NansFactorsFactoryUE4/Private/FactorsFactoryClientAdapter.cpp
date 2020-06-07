@@ -1,5 +1,6 @@
 #include "FactorsFactoryClientAdapter.h"
 
+#include "Factor/FactorAdapterAbstract.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorStackInterface.h"
@@ -43,6 +44,12 @@ void UNFactorsFactoryClientAdapter::CreateStack(TArray<FName> StackNames, TShare
 	}
 }
 
+UNFactorAdapterAbstract* UNFactorsFactoryClientAdapter::CreateFactor(const FName& StackName, const UClass* Class)
+{
+	mycheckf(UEStacks.Contains(StackName), TEXT("The stack %s doesn't exists!"), *StackName.ToString());
+	return UEStacks[StackName]->CreateFactor(Class);
+}
+
 void UNFactorsFactoryClientAdapter::CreateStack(FName StackName, TSharedPtr<NTimelineInterface> Timeline)
 {
 	UNFactorStackDecorator* UStack = NewObject<UNFactorStackDecorator>(this, StackName);
@@ -59,7 +66,7 @@ void UNFactorsFactoryClientAdapter::AddStack(TSharedPtr<NFactorStackInterface> S
 	mycheckf(Proxy->GetUnrealObject() != nullptr,
 		TEXT("You should instanciate your stack proxy with a UNFactorStackDecorator inherited stack"));
 
-	UEStacks.Add(Proxy->GetUnrealObject());
+	UEStacks.Add(Proxy->GetName(), Proxy->GetUnrealObject());
 	Client->AddStack(Stack);
 }
 
@@ -91,14 +98,26 @@ void UNFactorsFactoryClientAdapter::SetDebug(const TArray<FName> StackNames, boo
 
 void UNFactorsFactoryClientAdapter::Serialize(FArchive& Ar)
 {
-	Super::Serialize(Ar);
+	if (Ar.IsSaving())
+	{
+		UEStacks.GetKeys(UEStacksNames);
+	}
 
-	// if (Ar.IsSaving())
-	// {
-	// 	for (auto Stack : UEStacks)
-	// 	{
-	// 		Stack->Serialize(Ar);
-	// 	}
-	// }
-	Ar << UEStacks;
+	if (Ar.IsLoading())
+	{
+		// Refresh stacks data, in case data has been set from previous load or during game play.
+		UEStacks.Empty();
+		Init();
+	}
+
+	Ar << UEStacksNames;
+
+	for (const FName& Name : UEStacksNames)
+	{
+		mycheckf(UEStacks.Contains(Name), TEXT("The stack \"%s\" doesn't exists anymore"), *Name.ToString());
+
+		UNFactorStackDecorator* Stack = UEStacks[Name];
+		Stack->Serialize(Ar);
+	}
+	UEStacksNames.Empty();
 }

@@ -23,11 +23,22 @@ TSharedPtr<FactorOperatorInterface> NUnrealFactorProxy::GetOperator() const
 	mycheck(Factor != nullptr);
 	return Factor->GetOperator();
 }
+void NUnrealFactorProxy::SetOperator(TSharedPtr<FactorOperatorInterface> _Operator)
+{
+	mycheck(Factor != nullptr);
+	return Factor->SetOperator(_Operator);
+}
 
 float NUnrealFactorProxy::GetFactorValue() const
 {
 	mycheck(Factor != nullptr);
 	return Factor->GetFactorValue();
+}
+
+void NUnrealFactorProxy::SetFactorValue(float _Value)
+{
+	mycheck(Factor != nullptr);
+	return Factor->SetFactorValue(_Value);
 }
 
 FName NUnrealFactorProxy::GetReason() const
@@ -42,7 +53,7 @@ bool NUnrealFactorProxy::IsActivated() const
 	return Factor->IsActivated();
 }
 
-uint32 NUnrealFactorProxy::GetUID() const
+const FString NUnrealFactorProxy::GetUID() const
 {
 	mycheck(Factor != nullptr);
 	return Factor->GetUID();

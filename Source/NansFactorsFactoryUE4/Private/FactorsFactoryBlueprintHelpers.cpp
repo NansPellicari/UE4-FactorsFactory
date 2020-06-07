@@ -12,7 +12,6 @@
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
-#include "NansFactorsFactoryCore/Public/NullFactorState.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
 #include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
@@ -48,10 +47,6 @@ FNFactorStateResult UNFactorsFactoryBlueprintHelpers::GetFactorState(
 	NFactorStateInterface* State = new NFactorState();
 	Client->GetState(StackName.Name, *State);
 	TArray<FName> Reasons;
-	if (State == nullptr)
-	{
-		State = new NNullFactorState();
-	}
 
 	const TArray<FNFactorStateOperator> Operators = State->GetOperators();
 	for (FNFactorStateOperator Op : Operators)
@@ -113,10 +108,7 @@ UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::AddFactor(
 UNFactorAdapterAbstract* UNFactorsFactoryBlueprintHelpers::CreateFactor(
 	UObject* WorldContextObject, UClass* Class, FFactorStackAttribute Stack)
 {
-	static uint32 FactorNum = 0;
 	UNFactorsFactoryClientAdapter* Client = GetFactorClient(WorldContextObject);
-	FString Name = FString::Format(TEXT("Factor_{0}_"), {Class->GetFullName()});
-	Name.AppendInt(++FactorNum);
-
-	return NewObject<UNFactorAdapterAbstract>(Client, Class, FName(*Name));
+	mycheckf(Client != nullptr, TEXT("It's not possible to create a factor without a FactorsFactory client!"));
+	return Client->CreateFactor(Stack.Name, Class);
 }

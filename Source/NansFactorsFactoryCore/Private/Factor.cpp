@@ -14,11 +14,10 @@ NFactor::NFactor(float _FactorValue,
 {
 	FactorValue = _FactorValue;
 	Operator = _Operator;
-	Id = ++NFactorGUID::sNextId;
 	Event = _Event;
 	if (!_Event.IsValid())
 	{
-		Event = MakeShareable(new NFactorEvent(Id));
+		Event = MakeShareable(new NFactorEvent());
 	}
 
 	Event->SetEventLabel(_Reason);
@@ -26,9 +25,14 @@ NFactor::NFactor(float _FactorValue,
 	Event->SetDelay(_Delay);
 }
 
-uint32 NFactor::GetUID() const
+const FString NFactor::GetUID() const
 {
-	return Id;
+	return Event->GetUID();
+}
+
+void NFactor::SetOperator(TSharedPtr<FactorOperatorInterface> _Operator)
+{
+	Operator = _Operator;
 }
 
 FName NFactor::GetReason() const
@@ -57,6 +61,11 @@ float NFactor::GetFactorValue() const
 		return 0;
 	}
 	return FactorValue;
+}
+
+void NFactor::SetFactorValue(float _Value)
+{
+	FactorValue = _Value;
 }
 
 void NFactor::Activate(bool _bIsActivated)

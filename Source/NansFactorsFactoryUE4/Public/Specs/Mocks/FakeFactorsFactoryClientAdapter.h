@@ -21,7 +21,7 @@ public:
 	{
 		return dynamic_cast<SpyFactorsFactoryClient*>(Client.Get());
 	}
-	TArray<UNFactorStackDecorator*> GetUEStacks()
+	TMap<FName, UNFactorStackDecorator*> GetUEStacks()
 	{
 		return UEStacks;
 	}

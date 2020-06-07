@@ -17,6 +17,43 @@
 #include "NansFactorsFactoryCore/Public/FactorStack.h"
 #include "NansFactorsFactoryUE4/Public/Factor/FactorAdapterAbstract.h"
 #include "NansFactorsFactoryUE4/Public/Factor/UnrealFactorProxy.h"
+#include "NansTimelineSystemUE4/Public/TimelineDecorator.h"
+#include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
+
+void FNFactorRecord::Serialize(FArchive& Ar, UNFactorStackDecorator* Stack)
+{
+	if (Ar.IsSaving() && Factor != nullptr)
+	{
+		Factor->Serialize(Ar);
+	}
+
+	if (Ar.IsLoading() && !FactorClassName.IsEmpty())
+	{
+		auto EventRecord = GetEventRecord(Stack);
+		UClass* Class = FindObject<UClass>(ANY_PACKAGE, *FactorClassName);
+		Factor = Stack->CreateFactor(Class);
+		UNFactorEventDecorator* Event = Cast<UNFactorEventDecorator>(EventRecord.Event);
+		mycheckf(Event != nullptr,
+			TEXT("Problems occured during serialization of FNFactorRecord,"
+				 "The associated event has not been found for UID %s"),
+			*UId);
+
+		Factor->Init(Event);
+		Factor->Serialize(Ar);
+	}
+}
+
+FNEventRecord& FNFactorRecord::GetEventRecord(UNFactorStackDecorator* Stack)
+{
+	auto UTimeline = Stack->GetUnrealTimeline();
+	auto EventRecord = UTimeline->GetEventRecord(UId);
+	mycheckf(EventRecord != nullptr,
+		TEXT("Problems occured during serialization of FNFactorRecord,"
+			 "The associated event record has not been found for UID %s"),
+		*UId);
+
+	return *EventRecord;
+}
 
 void UNFactorStackDecorator::Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline)
 {
@@ -34,9 +71,24 @@ FName UNFactorStackDecorator::GetName() const
 {
 	return Stack->GetName();
 }
+
+TSharedPtr<NTimelineInterface> UNFactorStackDecorator::GetTimeline() const
+{
+	return Stack->GetTimeline();
+}
+
 float UNFactorStackDecorator::GetTime() const
 {
 	return Stack->GetTime();
+}
+UNFactorAdapterAbstract* UNFactorStackDecorator::CreateFactor(const UClass* Class)
+{
+	static uint32 FactorNum = 0;
+
+	FString Name = FString::Format(TEXT("Factor_{0}_"), {Class->GetFullName()});
+	Name.AppendInt(++FactorNum);
+
+	return NewObject<UNFactorAdapterAbstract>(this, Class, FName(*Name));
 }
 TSharedRef<NFactorInterface> UNFactorStackDecorator::GetFactor(uint32 Key) const
 {
@@ -53,7 +105,7 @@ void UNFactorStackDecorator::AddFactor(TSharedPtr<NFactorInterface> Factor)
 	mycheckf(Proxy->GetUnrealObject() != nullptr,
 		TEXT("You should instanciate your stack proxy with a UNFactorAdapterAbstract inherited stack"));
 
-	UEFactors.Add(Proxy->GetUnrealObject());
+	FactorStore.Add(FNFactorRecord(Proxy->GetUnrealObject()));
 
 	Stack->AddFactor(Factor);
 }
@@ -76,4 +128,47 @@ void UNFactorStackDecorator::Debug(bool _bDebug)
 void UNFactorStackDecorator::SupplyStateWithCurrentData(NFactorStateInterface& State)
 {
 	Stack->SupplyStateWithCurrentData(State);
+}
+
+UNTimelineDecorator* UNFactorStackDecorator::GetUnrealTimeline()
+{
+	auto UnrealTimeline = dynamic_cast<NUnrealTimelineProxy*>(Stack->GetTimeline().Get());
+	mycheckf(UnrealTimeline != nullptr, TEXT("A factor Stack shoulmd work only with a NUnrealTimelineProxy object"));
+	return UnrealTimeline->GetUnrealObject();
+}
+
+void UNFactorStackDecorator::Serialize(FArchive& Ar)
+{
+	// Remove actual factor to avoid cumulate old factors + new factors currenlty earned
+	if (Ar.IsSaving())
+	{
+		SavedName = Stack->GetName();
+	}
+
+	if (Ar.IsLoading())
+	{
+		FactorStore.Empty();
+	}
+
+	Ar << FactorStore;
+	Ar << SavedName;
+
+	if (Ar.IsLoading())
+	{
+		Stack->Reset();
+		Stack->SetName(SavedName);
+		SavedName = NAME_None;
+	}
+
+	if (FactorStore.Num() > 0)
+	{
+		for (FNFactorRecord& Record : FactorStore)
+		{
+			Record.Serialize(Ar, this);
+			if (Ar.IsLoading() && Record.Factor != nullptr)
+			{
+				Stack->AddFactor(MakeShareable(new NUnrealFactorProxy(Record.Factor)));
+			}
+		}
+	}
 }

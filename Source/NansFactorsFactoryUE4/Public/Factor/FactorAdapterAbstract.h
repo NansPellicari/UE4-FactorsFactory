@@ -45,18 +45,27 @@ public:
 	FName Reason = NAME_None;
 
 	virtual void Init();
-
-	virtual TSharedPtr<NEventInterface> GetEvent() override;
+	virtual void Init(UNFactorEventDecorator* _Event);
 	virtual TSharedPtr<FactorOperatorInterface> GetConfiguredOperator() const;
+
+	// BEGIN NFactorInterface override
+	virtual TSharedPtr<NEventInterface> GetEvent() override;
 	virtual TSharedPtr<FactorOperatorInterface> GetOperator() const override;
+	virtual void SetOperator(TSharedPtr<FactorOperatorInterface> _Operator) override;
 	virtual float GetFactorValue() const override;
 	virtual FName GetReason() const override;
 	virtual bool IsActivated() const override;
-	virtual uint32 GetUID() const override;
+	virtual void SetFactorValue(float _Value) override;
+	virtual const FString GetUID() const override;
+	// END NFactorInterface override
+
+	// BEGIN UObject override
+	virtual void Serialize(FArchive& Ar);
+	// END UObject override
 
 protected:
 	TSharedPtr<NFactor> Factor;
 
-	UPROPERTY()
+	UPROPERTY(SkipSerialization)
 	UNFactorEventDecorator* Event;
 };

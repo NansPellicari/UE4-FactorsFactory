@@ -31,6 +31,11 @@ public:
 	{
 		return NAME_None;
 	}
+	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override
+	{
+		return nullptr;
+	}
+
 	virtual float GetTime() const override
 	{
 		return 0.f;

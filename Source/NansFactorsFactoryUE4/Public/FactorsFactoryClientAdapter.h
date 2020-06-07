@@ -7,6 +7,7 @@
 #include "FactorsFactoryClientAdapter.generated.h"
 
 class NFactorInterface;
+class UNFactorAdapterAbstract;
 class NFactorStateInterface;
 class NFactorStackInterface;
 class NTimelineInterface;
@@ -21,6 +22,8 @@ class NANSFACTORSFACTORYUE4_API UNFactorsFactoryClientAdapter : public UObject, 
 public:
 	UNFactorsFactoryClientAdapter();
 	virtual void Init();
+	UNFactorAdapterAbstract* CreateFactor(const FName& StackName, const UClass* Class);
+
 	// BEGIN NFactorsFactoryClientInterface override
 	virtual void CreateStack(FName StackName, TSharedPtr<NTimelineInterface> Timeline) override;
 	virtual void CreateStack(TArray<FName> StackNames, TSharedPtr<NTimelineInterface> Timeline) override;
@@ -37,6 +40,14 @@ public:
 	// END UObject override
 protected:
 	TSharedPtr<NFactorsFactoryClientInterface> Client;
-	UPROPERTY()
-	TArray<UNFactorStackDecorator*> UEStacks;
+	UPROPERTY(SkipSerialization)
+	TMap<FName, UNFactorStackDecorator*> UEStacks;
+
+	/**
+	 * This parameter is usefull only for serialization,
+	 * it allows to keep the same stack list order
+	 * for save & load to maintain data serialization's order consistency.
+	 */
+	UPROPERTY(SaveGame)
+	TArray<FName> UEStacksNames;
 };

@@ -14,17 +14,20 @@ TSharedPtr<FactorOperatorInterface> NNullFactor::GetOperator() const
 {
 	return nullptr;
 }
+void NNullFactor::SetOperator(TSharedPtr<FactorOperatorInterface> _Operator) {}
 float NNullFactor::GetFactorValue() const
 {
 	return 0.f;
 }
+void NNullFactor::SetFactorValue(float _Value) {}
 FName NNullFactor::GetReason() const
 {
 	return NAME_None;
 }
-uint32 NNullFactor::GetUID() const
+const FString NNullFactor::GetUID() const
 {
-	return 0;
+	static const FString ID = "";
+	return ID;
 }
 TSharedPtr<NEventInterface> NNullFactor::GetEvent()
 {
