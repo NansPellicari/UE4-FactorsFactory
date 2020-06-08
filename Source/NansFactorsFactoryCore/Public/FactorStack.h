@@ -12,6 +12,7 @@ class NANSFACTORSFACTORYCORE_API NFactorStack : public NFactorStackInterface
 {
 public:
 	NFactorStack(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
+	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
 	virtual ~NFactorStack();
 	virtual void Clear() override;
 	virtual void SetName(FName _Name) override;

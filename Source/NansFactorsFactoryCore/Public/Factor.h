@@ -20,6 +20,7 @@ public:
 		FName Reason,
 		float _Delay = 0.f,
 		TSharedPtr<NEventInterface> _Event = NULL);
+	NFactor(float _FactorValue, TSharedPtr<NFactorOperatorInterface> _Operator, TSharedPtr<NEventInterface> _Event);
 	virtual ~NFactor();
 	virtual bool IsActivated() const override;
 	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override;

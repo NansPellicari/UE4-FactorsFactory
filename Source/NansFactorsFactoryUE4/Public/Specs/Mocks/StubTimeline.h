@@ -1,11 +1,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NansTimelineSystemCore/Public/EventInterface.h"
 #include "NansTimelineSystemCore/Public/TimelineInterface.h"
 
 class NStubTimeline : public NTimelineInterface
 {
 public:
+	FEventDelegate EventExpired;
+	virtual ~NStubTimeline()
+	{
+		EventExpired.Clear();
+	}
+
 	virtual bool Attached(TSharedPtr<NEventInterface> Event) override
 	{
 		return true;
@@ -24,4 +31,8 @@ public:
 	}
 	virtual void Clear() override {}
 	virtual void NotifyTick() override {}
+	virtual FEventDelegate& OnEventExpired() override
+	{
+		return EventExpired;
+	};
 };

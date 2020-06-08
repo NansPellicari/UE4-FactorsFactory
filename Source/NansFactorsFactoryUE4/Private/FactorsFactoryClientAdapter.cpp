@@ -55,7 +55,6 @@ void UNFactorsFactoryClientAdapter::CreateStack(FName StackName, TSharedPtr<NTim
 	UNFactorStackDecorator* UStack = NewObject<UNFactorStackDecorator>(this, StackName);
 	UStack->Init(StackName, Timeline);
 	TSharedPtr<NFactorStackInterface> Stack = MakeShareable(new NUnrealFactorStackProxy(*UStack));
-
 	AddStack(Stack);
 }
 
@@ -105,6 +104,10 @@ void UNFactorsFactoryClientAdapter::Serialize(FArchive& Ar)
 
 	if (Ar.IsLoading())
 	{
+		for (auto& It : UEStacks)
+		{
+			It.Value->ConditionalBeginDestroy();
+		}
 		// Refresh stacks data, in case data has been set from previous load or during game play.
 		UEStacks.Empty();
 		Init();

@@ -26,14 +26,16 @@
 
 void UNFactorAdapterAbstract::Init()
 {
-	Init(UNEventDecoratorFactory::CreateObject<UNFactorEventDecorator>(this, UNFactorEventDecorator::StaticClass(), Reason));
+	Event = UNEventDecoratorFactory::CreateObject<UNFactorEventDecorator>(this, UNFactorEventDecorator::StaticClass(), Reason);
+	TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(*Event));
+	Factor = MakeShareable(new NFactor(FactorValue, GetConfiguredOperator(), Duration, Reason, Delay, EventProxy));
 }
 
 void UNFactorAdapterAbstract::Init(UNFactorEventDecorator* _Event)
 {
 	Event = _Event;
 	TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(*Event));
-	Factor = MakeShareable(new NFactor(FactorValue, GetConfiguredOperator(), Duration, Reason, Delay, EventProxy));
+	Factor = MakeShareable(new NFactor(FactorValue, GetConfiguredOperator(), EventProxy));
 }
 
 TSharedPtr<NEventInterface> UNFactorAdapterAbstract::GetEvent()

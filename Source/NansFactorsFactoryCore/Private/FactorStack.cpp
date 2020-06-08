@@ -24,6 +24,19 @@ NFactorStack::NFactorStack(FName _Name, TSharedPtr<NTimelineInterface> _Timeline
 {
 	Name = _Name;
 	Timeline = _Timeline;
+	_Timeline->OnEventExpired().AddRaw(this, &NFactorStack::OnTimelineEventExpired);
+}
+
+void NFactorStack::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index)
+{
+	const FString& UId = Event->GetUID();
+	int32 FactorIndex =
+		Factors.IndexOfByPredicate([UId](const TSharedPtr<NFactorInterface> Record) { return Record->GetUID() == UId; });
+
+	// It could be an event from an another stack or an another type
+	if (FactorIndex == INDEX_NONE) return;
+
+	Factors.RemoveAt(FactorIndex);
 }
 
 FName NFactorStack::GetName() const
@@ -60,8 +73,11 @@ void NFactorStack::AddFactor(TSharedPtr<NFactorInterface> Factor)
 {
 	mycheck(Name != NAME_None);
 	mycheck(Timeline.IsValid());
-	// This allow to notify time
-	Timeline->Attached(Factor->GetEvent());
+	if (Factor->GetEvent().IsValid())
+	{
+		// This allow to notify time
+		Timeline->Attached(Factor->GetEvent());
+	}
 	Factors.Add(Factor);
 }
 

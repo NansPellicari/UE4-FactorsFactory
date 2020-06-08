@@ -70,6 +70,5 @@ TEST_F(NansFactorsFactoryCoreFactorTest, ShouldBeDeactivateWhenItsDurationTimeIs
 	EXPECT_TRUE(Factor->GetEvent()->IsExpired());
 	EXPECT_FALSE(Factor->IsActivated());
 	EXPECT_NE(Factor->GetOperator(), Operator);
-	EXPECT_EQ(Factor->GetFactorValue(), 0);
 	EXPECT_NE(static_cast<NNullOperator*>(Factor->GetOperator().Get()), nullptr);
 }

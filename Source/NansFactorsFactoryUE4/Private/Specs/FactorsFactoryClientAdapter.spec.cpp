@@ -20,7 +20,6 @@ BEGIN_DEFINE_SPEC(FactorsFactoryClientAdapterSpec,
 	EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
 
 UFakeFactorsFactoryClientAdapter* Client;
-TSharedPtr<NStubTimeline> StubTimeline;
 END_DEFINE_SPEC(FactorsFactoryClientAdapterSpec)
 void FactorsFactoryClientAdapterSpec::Define()
 {
@@ -61,6 +60,7 @@ void FactorsFactoryClientAdapterSpec::Define()
 
 		It("Should use its embeded client's methods for the most part", [this]() {
 			FName StackName("MyName");
+			TSharedPtr<NStubTimeline> StubTimeline = MakeShareable(new NStubTimeline());
 			Client->CreateStack(StackName, StubTimeline);
 			TEST_EQ(
 				"Calls SpyFactorsFactoryClient::AddStack once", Client->GetSpy()->GetCall("SpyFactorsFactoryClient::AddStack"), 1);

@@ -7,6 +7,8 @@
 #include "Misc/AutomationTest.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
+#include "NansTimelineSystemUE4/Public/Manager/LevelLifeTimelineManager.h"
+#include "NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "NansUE4TestsHelpers/Public/Helpers/TestWorld.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeObject.h"

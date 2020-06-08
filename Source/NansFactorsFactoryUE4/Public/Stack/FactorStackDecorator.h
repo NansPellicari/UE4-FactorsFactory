@@ -24,6 +24,7 @@
 class UNFactorAdapterAbstract;
 class NUnrealTimelineProxy;
 class UNTimelineDecorator;
+class NEventInterface;
 
 /**
  * This struct is a record object used for savegame or get user feedbacks
@@ -91,6 +92,8 @@ public:
 	UNFactorStackDecorator() {}
 	void Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
 	UNFactorAdapterAbstract* CreateFactor(const UClass* Class);
+	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
+	TArray<FNFactorRecord> GetFactorStore() const;
 
 	// BEGIN NFactorStackInterface override
 	virtual void Clear() override;
@@ -110,6 +113,7 @@ public:
 
 	// BEGIN UObject override
 	virtual void Serialize(FArchive& Ar);
+	virtual void BeginDestroy() override;
 	// END UObject override
 
 protected:

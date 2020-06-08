@@ -53,7 +53,7 @@ float NFactorState::Compute()
 	FactorValue = 0;
 	for (FNFactorStateOperator Operation : Operators)
 	{
-		float Value = Operation.Operator->Compute(FactorValue, Operation.Value);
+		float Value = Operation.Activate ? Operation.Operator->Compute(FactorValue, Operation.Value) : FactorValue;
 		if (bDebug)
 		{
 			UE_LOG(LogTemp,

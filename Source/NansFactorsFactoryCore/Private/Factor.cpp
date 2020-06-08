@@ -5,6 +5,13 @@
 #include "Operator/FactorOperator.h"
 #include "Operator/Interfaces.h"
 
+NFactor::NFactor(float _FactorValue, TSharedPtr<NFactorOperatorInterface> _Operator, TSharedPtr<NEventInterface> _Event)
+{
+	FactorValue = _FactorValue;
+	Operator = _Operator;
+	Event = _Event;
+}
+
 NFactor::NFactor(float _FactorValue,
 	TSharedPtr<NFactorOperatorInterface> _Operator,
 	float _Duration,
@@ -56,10 +63,6 @@ TSharedPtr<NFactorOperatorInterface> NFactor::GetOperator() const
 
 float NFactor::GetFactorValue() const
 {
-	if (!IsActivated())
-	{
-		return 0;
-	}
 	return FactorValue;
 }
 
