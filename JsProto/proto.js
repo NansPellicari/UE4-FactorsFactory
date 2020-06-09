@@ -104,14 +104,14 @@ class ResetOperator extends AbstractOperatorWithStack {
 		let maxAttempt = 10;
 		const resetList = ResetOperator.resetList[this.stack.id];
 		// console.log(this.stack, this.key, this.stack.get(this.key))
-		let diff = this.stack.get(this.key);
-		if (diff.getOperator() !== this) {
+		let unit = this.stack.get(this.key);
+		if (unit.getOperator() !== this) {
 			throw new Error(
 				"the key or stack passed to the ResetOperator is not valid"
 			);
 		}
 
-		let resetFactor = diff;
+		let resetFactor = unit;
 		let id = resetFactor.id;
 		const valReset = rh;
 		let nullOpRes = new NullOperator().compute(lh, rh);
@@ -132,7 +132,7 @@ class ResetOperator extends AbstractOperatorWithStack {
 			maxAttempt--;
 		}
 
-		if (resetFactor === diff) {
+		if (resetFactor === unit) {
 			console.error("reset can't be found");
 			return nullOpRes;
 		}
@@ -171,7 +171,7 @@ class ResetOperator extends AbstractOperatorWithStack {
 	static resetList = {};
 }
 
-class Factor {
+class FactorUnit {
 	constructor(val, operator, duration) {
 		this.val = val;
 		if (!(operator instanceof AbstractOperator)) {
@@ -245,7 +245,7 @@ class FactorState {
 	}
 }
 
-class FactorStack {
+class Factor {
 	constructor() {
 		this.stack = [];
 		this.time = 0;
@@ -258,8 +258,8 @@ class FactorStack {
 
 	addTime(time) {
 		this.time += time;
-		for (let diff of this.stack) {
-			diff.addTime(time);
+		for (let unit of this.stack) {
+			unit.addTime(time);
 		}
 	}
 
@@ -276,22 +276,22 @@ class FactorStack {
 		this.iterationFlags = {};
 
 		for (let key in this.stack) {
-			let diff = this.stack[key];
-			if (diff.getOperator() instanceof AbstractOperatorWithStack) {
-				diff.getOperator().setStack(this);
-				diff.getOperator().setKeyInStack(key);
+			let unit = this.stack[key];
+			if (unit.getOperator() instanceof AbstractOperatorWithStack) {
+				unit.getOperator().setStack(this);
+				unit.getOperator().setKeyInStack(key);
 			}
-			state.add(diff.getVal(), diff.getOperator());
+			state.add(unit.getVal(), unit.getOperator());
 		}
 		return state;
 	}
 }
 
-const diffsStack = new FactorStack();
-// for now it work only for point, but should be great to create a stack different for time duration (on QTE for ex.)
-diffsStack.add(new Factor(2, new AddOperator()));
-diffsStack.add(new Factor(1.5, new MultiplyOperator(), 2));
-diffsStack.add(new Factor(2, new AddOperator(), 10));
+const factor = new Factor();
+// for now it work only for point, but should be great to create a stack uniterent for time duration (on QTE for ex.)
+factor.add(new FactorUnit(2, new AddOperator()));
+factor.add(new FactorUnit(1.5, new MultiplyOperator(), 2));
+factor.add(new FactorUnit(2, new AddOperator(), 10));
 
 // simulate game loop
 let time = 0;
@@ -299,13 +299,13 @@ setInterval(() => {
 	// console.log('current time', time)
 
 	if (time == "4") {
-		diffsStack.add(new Factor(2, new ResetOperator(), 4));
+		factor.add(new FactorUnit(2, new ResetOperator(), 4));
 	}
 	if (time == "6") {
-		diffsStack.add(new Factor(1, new ResetOperator(), 5));
+		factor.add(new FactorUnit(1, new ResetOperator(), 5));
 	}
-	diffsStack.addTime(1);
-	const state = diffsStack.getCurrentState();
+	factor.addTime(1);
+	const state = factor.getCurrentState();
 	console.log("time:", state.getTime());
 	console.log("point: ", state.compute());
 	time++;

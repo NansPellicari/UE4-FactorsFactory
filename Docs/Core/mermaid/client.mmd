@@ -1,25 +1,25 @@
 classDiagram
 IFactorsFactoryGameInstance --> NFactorsFactoryClient
-NFactorsFactoryClient *-- FactorStackArray
-FactorStackArray <|.. FactorStask1
-FactorStackArray <|.. FactorStask2
-FactorStackArray <|.. FactorStask3
-FactorStackArray <|.. FactorStask4
-FactorStackArray <|.. FactorStask5
+NFactorsFactoryClient *-- FactorArray
+FactorArray <|.. Factor1
+FactorArray <|.. Factor2
+FactorArray <|.. Factor3
+FactorArray <|.. Factor4
+FactorArray <|.. Factor5
 
-class FactorStask1 {
+class Factor1 {
     &lt;&lt;For Action&gt;&gt;
 }
-class FactorStask2 {
+class Factor2 {
     &lt;&lt;For Dialog&gt;&gt;
 }
-class FactorStask3 {
-    &lt;&lt;For Alignment CNV&gt;&gt;
+class Factor3 {
+    &lt;&lt;For Alignment BENEVOLENT&gt;&gt;
 }
-class FactorStask4 {
-    &lt;&lt;For Alignment CSV&gt;&gt;
+class Factor4 {
+    &lt;&lt;For Alignment EVIL&gt;&gt;
 }
-class FactorStask5 {
+class Factor5 {
     &lt;&lt;For Alignment NEUTRAL&gt;&gt;
 }
 
@@ -30,7 +30,7 @@ class IFactorsFactoryGameInstance {
 
 class NFactorsFactoryClient {
     &lt;&lt;public&gt;&gt;
-    +CreateStack(FString StackName) void
-    +GetFactor(TArray&lt;FString&gt; StackNames) TArray&lt;FactorState&gt;
-    +AddFactor(TArray&lt;FString&gt; StackNames, Factor) void
+    +CreateFactor(FString Name) void
+    +GetFactor(TArray&lt;FString&gt; Names) TArray&lt;FactorState&gt;
+    +AddFactor(TArray&lt;FString&gt; Names, Factor) void
 }

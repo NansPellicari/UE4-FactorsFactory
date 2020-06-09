@@ -1,128 +1,156 @@
-# Factor System
+# Factors Factory
 
-## Why this repo?
+Ease and centralized your **factors**<sup>1</sup> management, **retrieve** them to get some player **feedbacks/stats** and **serialized** them for **save/load game**.
 
-### To get a factors factory plugins of course!
+> <sup>1</sup> A **factor** is a simple stack composed of **unit** objects which embed a **value**, an **operation** instruction and **lifetime** details. It can be used for **Malus** or **Bonus** factor, **difficulty**, ... >> more details in the [What is a factor?](#23-what-is-a-factor) section.
 
-And here it is! I'm glad you are here and I hope your uses will ease by this documentation.  
-I try to create the most documentation as I can to help you using or extending it for your needs, and if it's not clear enough, send me some feedbacks on my [repo](https://github.com/NansPellicari/UE4-NansFactorsFactory), I'll be glad to help you!
+|                                                                                                       <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217"></a>                                                                                                       |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| I've decided to make all the code I developed for my games free to use and open source.<br> I am a true believer in the mindset that sharing and collaborating makes the world a better place.<br> The thing is: I'm fulltime dedicated to my project and these open source plugins, for coding I need a looooot of coffee, so please, help me to get my drug :stuck_out_tongue_closed_eyes: !! |
 
-### To see how to use some Unreal libraries
+<!-- TOC -->
 
-Cool, this is why I made this plugin free!  
-At the age of its creation, there was a deep lack of documentation on somes Unreal (very helpfull) libraries.  
-I've struggled too much digging on the code, forums, blogs or wikis to not share what I've found for people who planned to struggled too :D !  
-Then I hope:
+-   [1. Requirements](#1-requirements)
+-   [2. Usages](#2-usages)
+    -   [2.1. Many factors](#21-many-factors)
+    -   [2.2. When & Where? Ease of use](#22-when--where-ease-of-use)
+    -   [2.3. What is a factor?](#23-what-is-a-factor)
+        -   [2.3.1. - UNIT](#231---unit)
+        -   [2.3.2. - FACTOR (a stack of units)](#232---factor-a-stack-of-units)
+        -   [2.3.3. - STATE](#233---state)
+-   [3. How to install it?](#3-how-to-install-it)
+-   [4. How should I use?](#4-how-should-i-use)
+    -   [4.1. As designer](#41-as-designer)
+    -   [4.2. As developper](#42-as-developper)
+        -   [4.2.1. Implementation details](#421-implementation-details)
+-   [5. How can I extend it?](#5-how-can-i-extend-it)
+    -   [5.1. As designer](#51-as-designer)
+    -   [5.2. As developper](#52-as-developper)
+-   [6. Bonus](#6-bonus)
+    -   [6.1. How to run tests quickly](#61-how-to-run-tests-quickly)
+-   [7. Notes](#7-notes)
+-   [8. Contributing and Supporting](#8-contributing-and-supporting)
 
--   it'll helps you in your Epic's journey
--   I don't miss too much in code implementations! Otherwise I'll be so glad if you want to help me:
+<!-- /TOC -->
 
-### To help me
+**>> For developers:**
 
-#### Github contribution
+-   [Developers docs](./Docs/Developers.md)
 
-#### Coffee contribution
+<a id="markdown-1-requirements" name="1-requirements"></a>
 
-## What is it for?
+## 1. Requirements
 
-It is designed to add some **factors** (malus or bonus) on skills, ability or whatever, **to the player** depending on events, actors, spawns, or whatever he **meet**.
+-   [NansUE4TestsHelpers](https://github.com/NansPellicari/NansUE4TestsHelpers) (free UE4 plugins)
+-   [NansCoreHelpers](https://github.com/NansPellicari/UE4-NansCoreHelpers) (free UE4 plugins)
+-   [NansTimelineSystem](https://github.com/NansPellicari/UE4-NansTimelineSystem) (free UE4 plugins)
 
-The factors factory helps to add/get/reset factors **where** and **when** you want and **organized** them.
+<a id="markdown-2-usages" name="2-usages"></a>
 
-### Organized?
+## 2. Usages
 
-By that I mean **categorized** them.  
+I used this to get a **malus/bonus** system, a **difficulty** factor and an **xp** counter,... sky is the limit!  
+The factors factory helps you to create any factor and update or retrieve it **where** and **when** you want.
+
+### 2.2. Many factors
+
 For instance in my game I didn't want to have:
 
 -   the **same** difficulty **factor** for an **AIMING** ability and for a **SOCIAL** skill
 -   the same **timeline** for factors: some needs to work during the **level process** (eg "Oh player is drunk, for 1 minutes during the game session he should be affected! :confused: Alcohol ravages..."), others during the **real life timeline** (eg. "Hey bro, thanks to your fidelity, I give you 2 days of bonus on social interactions :kissing_heart:"), etc...  
     See below to see possiblities.
 
-So basically a Factor is attached to a **Category** (a named STACK as we see below) and also to a **Timeline**.
+So basically a Factor as a **name** and it is attached to a **Timeline** and can be **updated** in **any moment** and **everywhere**.
 
-> **Be aware of**: When a timeline ends, all attached factors will be removed. Be worried if you reference a factor (not a recommended behavior BTW).
+> **Be aware of**: When a timeline ends, all attached factors will be reset.
 
-### When & Where? Ease of use
+<a id="markdown-23-what-is-a-factor" name="23-what-is-a-factor"></a>
 
-As a designer and a developper I wanted to:
+### 2.1. What is a factor?
 
-| Needs                                                                                                              | What is my solution                                                                                                                                                                                                                                            |
-| ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Create a factor in any moment and in every single part of the game (eg. Behavior tree, Blueprint, c++ classes,...) | **1** single **API entry point** saved in the **Game Instance**                                                                                                                                                                                                |
-| Don't have to use my brain too much...                                                                             | **2 mains blueprints nodes** to manage all of this (**adding & getting**), getting a factor always return a value (see my considerations [here](./Source/NansFactorsFactoryUE4/Public/FactorsFactoryBlueprintHelpers.h))                                                        |
-| Easily extend it later                                                                                             | Simple architecture in isolated plugins, use a bunch of interfaces (more "as if" interface cause of c++ limitation) and a lot of tests/specs (see below or [code](./Source/NansFactorsFactoryCore/Private/Specs/Factor.spec.cpp) directly) to avoid regression |
+In this plugin I categorized factor in **3 units of work**:
 
-### What is a factor?
+<a id="markdown-231---unit" name="231---unit"></a>
 
-I like to categorize factor in **3 units of work**:
+#### 2.1.1. - UNIT
 
-#### 1 - UNIT
-
-This is what designers or developpers want to **add to the player** as a **malus** or a **bonus**.  
+This is what designers or developpers want to **add on the fly** as a factor's variator.  
 Eg.
 
-> 1. Player eat a rotten fruit = **add** a malus of **2** on **ACTION** capacities.
-> 2. Player drink alcohol = **multiply** all factor's by **4** **malus** on **SPEECH** and **REFLEXES** capacities.
-> 3. Player make a benevolent action = **add** a bonus of **10** on **SOCIAL** skill.
+> 1. Player eat a rotten fruit = **reduce** the **ACTION** capacity's **factor** to **2** after **100 secs** of digestion.
+> 2. Player drink alcohol = **divide** actual factor by **4** on **SPEECH** capacity after **50 secs** of absorption.
+> 3. Player make a benevolent action = **add** a bonus of **10** on **SOCIAL** skill's **factor**.
 
 A factor **UNIT** is basically composed of:
 
-| A Reason                                                                                            | A Value                                | An Operator                                                                                    | A Duration                                                                                                                                | A Timeline Label                                   |
-| --------------------------------------------------------------------------------------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| Is the **Why** this factor appears (can be used to send feedback to player, to make some stats,...) | **What** amount/degree of factor it is | **How** the value is computed with previous factors in the same category (or stack, see below) | Duration of this factor applies (it's use [NullOperator](./Source/NansFactorsFactoryCore/Private/Operator/FactorOperator.cpp) after that) | To indicates on which timeline this factor lies on |
+| A Reason                                                                                            | A Value                                | An Operator                                                                                  | A Duration                                                                                                   | A Delay                                     |
+| --------------------------------------------------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
+| Is the **Why** this factor appears (can be used to send feedback to player, to make some stats,...) | **What** amount/degree of factor it is | **How** the value is computed with previous units in the same category (or stack, see below) | Duration of this unit is applied (it is removed for computation after that but saved for stats or feedbacks) | To schedule the start before a unit applies |
 | **Using last examples:**                                                                            |
-| 1. eat rotten fruit                                                                                 | 2                                      | Add                                                                                            | 300sec                                                                                                                                    | level                                              |
-| 2. drunk                                                                                            | 4                                      | Multiply                                                                                       | 200sec                                                                                                                                    | level                                              |
-| 3. benevolent action                                                                                | 10                                     | Substract (the inverse of **adding** a **factor**)                                             | 2 days (you can convert in seconds...)                                                                                                    | world                                              |
+| 1. eat rotten fruit                                                                                 | 2                                      | Substract (**reduce** = **malus** = the inverse of **adding** a **bonus**)                   | 300secs                                                                                                      | 100secs                                     |
+| 2. drunk                                                                                            | 4                                      | Divide                                                                                       | 200sec                                                                                                       | 50secs                                      |
+| 3. benevolent action                                                                                | 10                                     | Add                                                                                          | 2 days (you can convert in seconds... :smirk:)                                                               | 0                                           |
 
-#### 2 - STACK
+<a id="markdown-232---factor-a-stack-of-units" name="232---factor-a-stack-of-units"></a>
 
-This represents a **category** of factor (eg. **ACTION**, **ELOQUENCE**, **REFLEXE**, **SociaL**, **WhatEver**... you decide). As designer or developper you can create an **infinite list** of categories (stack) add add as many factors you want.  
-A stack can be created **on the fly**, just in adding a new factor.  
-Aside of the **categorized ability**, it register every factor you've add, so you can use it to:
+#### 2.1.2. - FACTOR
+
+A factor is **named** (eg. **ACTION**, **ELOQUENCE**, **REFLEXE**, **SociaL**, **WhatEver**... you decide) to retrieve them easily.  
+As designer or developper you can create an **infinite list** of factor add add as many units you want.  
+All factors are created in **project settings**.  
+A factor relies on a timeline (configured in **project settings** too).  
+A factor is a **stack of units**, it saved them no matters their lifetime (for computation) so you can use it to:
 
 -   sends reports
 -   gives feedbacks to the player afterwards
--   saves on saved games
--   or whatever you want.
+-   save them on saved games
 
-#### 3 - STATE
+<a id="markdown-233---state" name="233---state"></a>
 
-This is the **factor** you can play with as a designer or a developer.  
-Every time you ask to get a state, you will have a static state of the factor amount, reasons list on the asked category(ies) (stack(s)).
+#### 2.1.3. - STATE
 
-## How to install it?
+This is the **state** of a factor at a given time.  
+Every time you ask to get a state, you will have a static state of the factor value, reasons list implied on computation (all units reasons reduce to get a unique reasons list), and the current time you asked for it (depending on the timeline paradigm).
 
-## How should I use?
+<a id="markdown-22-when--where-ease-of-use" name="22-when--where-ease-of-use"></a>
 
-### As designer
+### 2.3. When & Where? Ease of use
 
-### As developper
+As a designer and a developper I wanted to:
 
-#### Implementation details
+| Needs                                                                                                              | What is my solution                                                                                                                                                       |
+| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Update a factor in any moment and in every single part of the game (eg. Behavior tree, Blueprint, c++ classes,...) | **1** single **API entry point** saved in the **Game Instance**                                                                                                           |
+| Don't have to use my brain too much...                                                                             | **3 mains blueprints nodes** to manage all of this (**create** units & **get** factor's value).                                                                           |
+| Easily extend it later                                                                                             | Simple architecture in isolated plugins, use a bunch of interfaces and a lot of tests/specs (see below :exclamation: need details here :exclamation:) to avoid regression |
 
--   there is a [proto in javascript](../JsProto/proto.js) to test quickly the system
--   Core [Class diagram](./Docs/Core/ClassDiagram.md)
+<a id="markdown-3-how-to-install-it" name="3-how-to-install-it"></a>
 
-## How can I extend it?
+## 3. Step by step guide
 
-### As designer
+<a id="markdown-6-bonus" name="6-bonus"></a>
 
-### As developper
+## 6. Bonus
 
-## Bonus
+<a id="markdown-61-how-to-run-tests-quickly" name="61-how-to-run-tests-quickly"></a>
 
-### How to run tests quickly
+### 6.1. How to run tests quickly
 
-## Notes
+<a id="markdown-7-notes" name="7-notes"></a>
+
+## 7. Notes
 
 The clang-file as been inspired by this really helpull gist: https://gist.github.com/intinig/9bba3a3faee80250b781bf916a4ab8b7
 
-## Improvements
+<a id="markdown-8-contributing-and-supporting" name="8-contributing-and-supporting"></a>
 
-### > Core testing by Google Test
+## 8. Contributing and Supporting
 
-For my game projects I can use this repo to get GGtests: `git@github.com:NansPellicari/UE4-GoogleTest.git`  
-(For procedure see: `https://github.com/NansPellicari/UE4WithGoogle`)  
-But i'm stuck trying to create GGtests in plugins.
-It seems to be a problem with the **gmock** lib which can't be compiled in shared DLL, but my knowledge in c++, the Engine builder and GGtest are too low. Here a clue maybe: https://groups.google.com/forum/#!topic/googlemock/Ejyq8M736Ec
+I've decided to make all the code I developed for my games free to use and open source.  
+I am a true believer in the mindset that sharing and collaborating makes the world a better place.  
+I'll be very glad if you decided to help me to follow my dream.
+
+| How?                                                                                                                                                                               |                                                                                         With                                                                                         |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| **Donating**<br> Because I'm an independant developer/creator and for now I don't have<br> any income, I need money to support my daily needs (coffeeeeee).                        | <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217" ></a> |
+| **Contributing**<br> You are very welcome if you want to contribute. I explain [here](./CONTRIBUTING.md) in details what<br> is the most comfortable way to me you can contribute. |                                                                         [CONTRIBUTING.md](./CONTRIBUTING.md)                                                                         |
