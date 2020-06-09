@@ -1,7 +1,7 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
 #include "Mock/FakeTimelineManager.h"
-#include "NansFactorsFactoryCore/Public/Factor.h"
+#include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
@@ -13,20 +13,20 @@
 class FakeResetOperator : public NResetOperator
 {
 public:
-	uint32 GetKeyInStack()
+	uint32 GetKeyInFactor()
 	{
-		return KeyInStack;
+		return KeyInFactor;
 	}
-	bool HasStack()
+	bool HasFactor()
 	{
-		return MyStack != nullptr;
+		return MyFactor != nullptr;
 	}
 };
 
-class FakeFactorStack : public NFactorStack
+class FakeFactor : public NFactor
 {
 public:
-	FakeFactorStack(FName _Name, TSharedPtr<NTimeline> _Timeline) : NFactorStack(_Name, _Timeline) {}
+	FakeFactor(FName _Name, TSharedPtr<NTimeline> _Timeline) : NFactor(_Name, _Timeline) {}
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override
 	{
 		State.SetTime(0.f);
@@ -40,83 +40,83 @@ protected:
 	void SetUp() override
 	{
 		Timeline = MakeShareable(new NTimeline(new FakeTimelineManager()));
-		FactorStack = MakeShareable(new FakeFactorStack(FName("Dialog"), Timeline));
+		Factor = MakeShareable(new FakeFactor(FName("Dialog"), Timeline));
 
-		FactorStack->AddFactor(MakeShareable(new NFactor(2, MakeShareable(new NAddOperator()), 0, FName("reason1"))));
-		FactorStack->AddFactor(MakeShareable(new NFactor(3, MakeShareable(new NAddOperator()), 0, FName("reason2"))));
+		Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2, MakeShareable(new NAddOperator()), 0, FName("reason1"))));
+		Factor->AddFactorUnit(MakeShareable(new NFactorUnit(3, MakeShareable(new NAddOperator()), 0, FName("reason2"))));
 	}
 
 	void TearDown() override
 	{
-		FactorStack.Reset();
+		Factor.Reset();
 	}
 
-	TSharedPtr<FakeFactorStack> FactorStack;
+	TSharedPtr<FakeFactor> Factor;
 	TSharedPtr<NTimeline> Timeline;
 };
 
-TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldCheckIfIsAnOperatorWithStackOrNot)
+TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldCheckIfIsAnOperatorWithFactorOrNot)
 {
 	// Some factors to be reset
 	FakeResetOperator* Operator = new FakeResetOperator();
 	EXPECT_EQ(Operator->GetName(), NResetOperator::Name);
-	EXPECT_FALSE(OperatorUtils::IsOperatorWithStack(new NNullOperator()));
-	EXPECT_TRUE(OperatorUtils::IsOperatorWithStack(Operator));
+	EXPECT_FALSE(OperatorUtils::IsOperatorWithFactor(new NNullOperator()));
+	EXPECT_TRUE(OperatorUtils::IsOperatorWithFactor(Operator));
 }
 
-TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldTriggerAnErrorIfTryingToSetAKeyBeforeHavingAStack)
+TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldTriggerAnErrorIfTryingToSetAKeyBeforeHavingAFactor)
 {
 	// Some factors to be reset
 	FakeResetOperator* Operator = new FakeResetOperator();
 	try
 	{
-		Operator->SetKeyInStack(0);
+		Operator->SetKeyInFactor(0);
 		EXPECT_TRUE(false);
 	}
 	catch (const TCHAR* e)
 	{
-		EXPECT_STREQ(TCHAR_TO_ANSI(e), "MyStack != nullptr");
+		EXPECT_STREQ(TCHAR_TO_ANSI(e), "MyFactor != nullptr");
 	}
 }
 
-TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheLastFactorSetInTheStack)
+TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheLastFactorUnitSetInTheFactor)
 {
 	// Some factors to be reset
 	FakeResetOperator* Operator = new FakeResetOperator();
 
-	FactorStack->AddFactor(MakeShareable(new NFactor(1, MakeShareable(Operator), 0, FName("Magic potion"))));
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(1, MakeShareable(Operator), 0, FName("Magic potion"))));
 	NFactorStateInterface* State = new NFactorState();
-	FactorStack->SupplyStateWithCurrentData(*State);
+	Factor->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->Compute(), 2.f);
-	EXPECT_TRUE(Operator->HasStack());
-	EXPECT_TRUE(Operator->GetKeyInStack() > 0);
-	EXPECT_TRUE(FactorStack->HasFlag(FakeResetOperator::GetResetIdFlag(FactorStack->GetFactor(1))));
+	EXPECT_TRUE(Operator->HasFactor());
+	EXPECT_TRUE(Operator->GetKeyInFactor() > 0);
+	EXPECT_TRUE(Factor->HasFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(1))));
 }
 
-TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheFirstFactorSetInTheStack)
+TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheFirstFactorUnitSetInTheFactor)
 {
 	// Some factors to be reset
 	FakeResetOperator* Operator = new FakeResetOperator();
 
-	FactorStack->AddFactor(MakeShareable(new NFactor(2, MakeShareable(Operator), 0, FName("Magic potion"))));
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2, MakeShareable(Operator), 0, FName("Magic potion"))));
 
 	NFactorStateInterface* State = new NFactorState();
-	FactorStack->SupplyStateWithCurrentData(*State);
+	Factor->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->Compute(), 3.f);
-	EXPECT_TRUE(FactorStack->HasFlag(FakeResetOperator::GetResetIdFlag(FactorStack->GetFactor(0))));
+	EXPECT_TRUE(Factor->HasFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(0))));
 }
 
-TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheFirstAndLastFactorSetInTheStack)
+TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheFirstAndLastFactorUnitSetInTheFactor)
 {
 	// Some factors to be reset
 	FakeResetOperator* Operator = new FakeResetOperator();
 
-	FactorStack->AddFactor(MakeShareable(new NFactor(1, MakeShareable(Operator), 0, FName("Magic potion"))));
-	FactorStack->AddFactor(MakeShareable(new NFactor(2, MakeShareable(Operator), 0, FName("Magic potion"))));
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(1, MakeShareable(Operator), 0, FName("Magic potion"))));
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2, MakeShareable(Operator), 0, FName("Magic potion"))));
 	NFactorStateInterface* State = new NFactorState();
-	FactorStack->SupplyStateWithCurrentData(*State);
+	Factor->SupplyStateWithCurrentData(*State);
 
 	EXPECT_EQ(State->Compute(), 0.f);
-	EXPECT_TRUE(FactorStack->HasFlag(FakeResetOperator::GetResetIdFlag(FactorStack->GetFactor(0))));
-	EXPECT_TRUE(FactorStack->HasFlag(FakeResetOperator::GetResetIdFlag(FactorStack->GetFactor(1))));
+	EXPECT_TRUE(Factor->HasFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(0))));
+	EXPECT_TRUE(Factor->HasFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(1))));
 }

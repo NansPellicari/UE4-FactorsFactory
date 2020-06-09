@@ -1,8 +1,8 @@
-#include "Attribute/FactorStackAttribute.h"
+#include "Attribute/FactorAttribute.h"
 #include "Engine/Engine.h"
 #include "Engine/GameInstance.h"
 #include "EngineGlobals.h"
-#include "Factor/FactorAdapters.h"
+#include "FactorUnit/FactorUnitAdapters.h"
 #include "FactorsFactoryBlueprintHelpers.h"
 #include "Misc/AutomationTest.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
@@ -30,32 +30,32 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 	Describe("How to use FactorsFactoryBlueprintHelpers", [this]() {
 		BeforeEach([this]() {
 			UE_LOG(LogTemp, Display, TEXT("-- Create World --"));
-			World = NTestWorld::CreateAndPlay(EWorldType::Game, true, NAME_None, UFactorFakeGameInstance::StaticClass());
+			World = NTestWorld::CreateAndPlay(EWorldType::Game, true, NAME_None, UFactorUnitFakeGameInstance::StaticClass());
 			FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 			FakeObject->SetMyWorld(World);
 			StubTimeline = MakeShareable(new NStubTimeline());
 		});
 
-		It("Should get GetFactorClient even after Garbage collects", [this]() {
+		It("Should get GetFactorUnitClient even after Garbage collects", [this]() {
 			TEST_TRUE("World should still exists", World != nullptr);
 			TEST_NOT_NULL("FakeObject should be not null", FakeObject);
 			TEST_NOT_NULL("GEngine should still exists", GEngine);
 			TEST_NOT_NULL("World should still exists", FakeObject->GetWorld());
 			TEST_NOT_NULL(
-				"UNFactorsFactoryClientAdapter should be retrieved", UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject));
+				"UNFactorsFactoryClientAdapter should be retrieved", UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject));
 			CollectGarbage(RF_NoFlags);
 			TEST_NOT_NULL("World should be not null", World);
 			TEST_NOT_NULL("World should still exists", FakeObject->GetWorld());
 			TEST_NOT_NULL(
-				"UNFactorsFactoryClientAdapter should be retrieved", UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject));
+				"UNFactorsFactoryClientAdapter should be retrieved", UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject));
 			CollectGarbage(RF_NoFlags);
 		});
 
-		It("Should instanciate a UNFactorAdapterBasic", [this]() {
-			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject);
-			Client->CreateStack(FName("test1"), StubTimeline);
-			UNFactorAdapterAbstract* MyObject = UNFactorsFactoryBlueprintHelpers::CreateFactor(
-				FakeObject, UNFactorAdapterBasic::StaticClass(), FFactorStackAttribute(FName("test1")));
+		It("Should instanciate a UNFactorUnitAdapterBasic", [this]() {
+			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
+			Client->CreateFactor(FName("test1"), StubTimeline);
+			UNFactorUnitAdapterAbstract* MyObject = UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+				FakeObject, UNFactorUnitAdapterBasic::StaticClass(), FFactorAttribute(FName("test1")));
 			TEST_NOT_NULL("Should not be null", MyObject);
 		});
 
@@ -66,8 +66,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 				try
 				{
-					UNFactorsFactoryBlueprintHelpers::CreateFactor(
-						FakeObject, UNFactorAdapterBasic::StaticClass(), FFactorStackAttribute());
+					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+						FakeObject, UNFactorUnitAdapterBasic::StaticClass(), FFactorAttribute());
 					TEST_TRUE("Should not be called", false);
 				}
 				catch (const TCHAR* e)
@@ -76,27 +76,27 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 				}
 			});
 
-		It("Should Create and add a new Factor", [this]() {
-			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject);
-			Client->CreateStack(FName("test1"), StubTimeline);
-			FFactorStackAttribute StackConf = FFactorStackAttribute(FName("test1"));
+		It("Should Create and add a new FactorUnit", [this]() {
+			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
+			Client->CreateFactor(FName("test1"), StubTimeline);
+			FFactorAttribute FactorConf = FFactorAttribute(FName("test1"));
 
-			UNFactorAdapterBasic* MyObject = Cast<UNFactorAdapterBasic>(
-				UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass(), StackConf));
+			UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(
+				UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapterBasic::StaticClass(), FactorConf));
 
 			TEST_NOT_NULL("Should not be null", MyObject);
-			MyObject->FactorValue = 2.f;
+			MyObject->FactorUnitValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = FName("Reason");
 			MyObject->Operator = ENFactorOperator::Add;
 
-			UNFactorAdapterBasic* ObjectAdded =
-				Cast<UNFactorAdapterBasic>(UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject, StackConf));
+			UNFactorUnitAdapterBasic* ObjectAdded =
+				Cast<UNFactorUnitAdapterBasic>(UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, FactorConf));
 			TEST_EQ("Should be add and equals as itself...", ObjectAdded, MyObject);
 		});
 
 		It("Should get a results even if the asked stack not exists", [this]() {
-			TArray<FFactorStackAttribute> Names = {FFactorStackAttribute(FName("Im not existing"))};
+			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("Im not existing"))};
 			TMap<FName, FNFactorStateResult> States;
 
 			// An exception is thrown by the "myensureMsgf" function only in test env
@@ -110,18 +110,18 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 		});
 
 		It("Can clear stacks", [this]() {
-			TArray<FFactorStackAttribute> Names = {FFactorStackAttribute(FName("test1"))};
-			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject);
-			Client->CreateStack(Names[0].Name, StubTimeline);
+			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("test1"))};
+			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
+			Client->CreateFactor(Names[0].Name, StubTimeline);
 
 			FName Reason = FName("A temp object");
-			UNFactorAdapterBasic* MyObject = Cast<UNFactorAdapterBasic>(
-				UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass(), Names[0]));
-			MyObject->FactorValue = 2.f;
+			UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(
+				UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+			MyObject->FactorUnitValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = Reason;
 			MyObject->Operator = ENFactorOperator::Add;
-			UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject, Names[0]);
+			UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, Names[0]);
 
 			FNFactorStateResult State = UNFactorsFactoryBlueprintHelpers::GetFactorState(FakeObject, Names[0]);
 			TEST_GT("First has a state with an amount of 2", State.Amount, 0);
@@ -136,20 +136,20 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 		});
 
 		It("Can add a lot of factor in one time", [this]() {
-			TArray<FFactorStackAttribute> Names = {FFactorStackAttribute(FName("test1"))};
-			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject);
-			Client->CreateStack(Names[0].Name, StubTimeline);
+			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("test1"))};
+			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
+			Client->CreateFactor(Names[0].Name, StubTimeline);
 
 			for (uint32 I = 0; I < 200; I++)
 			{
-				UNFactorAdapterBasic* MyObject = Cast<UNFactorAdapterBasic>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass(), Names[0]));
-				MyObject->FactorValue = 2.f;
+				UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(
+					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
 				MyObject->Operator = ENFactorOperator::Add;
 
-				UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject, Names[0]);
+				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, Names[0]);
 			}
 
 			TEST_TRUE("Yes it can without crashing", true);
@@ -165,21 +165,21 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			UNFactorsFactoryBlueprintHelpers::Clear(FakeObject, Names);
 		});
 
-		It("Can add a lot of factor in one time AND in multiple Stacks", [this]() {
-			TArray<FFactorStackAttribute> Names = {FFactorStackAttribute(FName("test1")), FFactorStackAttribute(FName("test2"))};
-			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject);
-			Client->CreateStack({Names[0].Name, Names[1].Name}, StubTimeline);
+		It("Can add a lot of factor in one time AND in multiple Factors", [this]() {
+			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("test1")), FFactorAttribute(FName("test2"))};
+			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
+			Client->CreateFactor({Names[0].Name, Names[1].Name}, StubTimeline);
 
 			for (uint32 I = 0; I < 200; I++)
 			{
-				UNFactorAdapterBasic* MyObject = Cast<UNFactorAdapterBasic>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass(), Names[0]));
-				MyObject->FactorValue = 2.f;
+				UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(
+					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
 				MyObject->Operator = ENFactorOperator::Add;
 
-				UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject, I % 2 ? Names[0] : Names[1]);
+				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, I % 2 ? Names[0] : Names[1]);
 			}
 
 			TEST_TRUE("Yes it can create and add 200 diff without crashing", true);
@@ -198,19 +198,19 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 		});
 
 		It("Should continue to works after garbage collects", [this]() {
-			TArray<FFactorStackAttribute> Names = {FFactorStackAttribute(FName("test1")), FFactorStackAttribute(FName("test2"))};
-			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorClient(FakeObject);
-			Client->CreateStack({Names[0].Name, Names[1].Name}, StubTimeline);
+			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("test1")), FFactorAttribute(FName("test2"))};
+			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
+			Client->CreateFactor({Names[0].Name, Names[1].Name}, StubTimeline);
 
 			for (uint32 I = 0; I < 100; I++)
 			{
-				UNFactorAdapterBasic* MyObject = Cast<UNFactorAdapterBasic>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactor(FakeObject, UNFactorAdapterBasic::StaticClass(), Names[0]));
-				MyObject->FactorValue = 2.f;
+				UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(
+					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
 				MyObject->Operator = ENFactorOperator::Add;
-				UNFactorsFactoryBlueprintHelpers::AddFactor(FakeObject, MyObject, I % 2 ? Names[0] : Names[1]);
+				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, I % 2 ? Names[0] : Names[1]);
 
 				// Launch GC at each 10th's iteration
 				if (I > 0 && I % 10 == 0)

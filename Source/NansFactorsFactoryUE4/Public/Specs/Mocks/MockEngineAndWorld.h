@@ -29,11 +29,11 @@ private:
 };
 
 UCLASS(NotBlueprintable, NotPlaceable)
-class UFactorFakeGameInstance : public UNFakeTimelineGameInstance, public INFactorsFactoryGameInstance
+class UFactorUnitFakeGameInstance : public UNFakeTimelineGameInstance, public INFactorsFactoryGameInstance
 {
 	GENERATED_BODY()
 public:
-	UFactorFakeGameInstance() {}
+	UFactorUnitFakeGameInstance() {}
 	virtual void Init() override
 	{
 		Super::Init();

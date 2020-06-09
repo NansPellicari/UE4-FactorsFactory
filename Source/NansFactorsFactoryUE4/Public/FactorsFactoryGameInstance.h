@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Attribute/FactorStackAttribute.h"
+#include "Attribute/FactorAttribute.h"
 #include "CoreMinimal.h"
 #include "FactorsFactoryClientAdapter.h"
 #include "UObject/ObjectMacros.h"

@@ -14,26 +14,26 @@
 
 #pragma once
 
-#include "Attribute/FactorStackAttribute.h"
+#include "Attribute/FactorAttribute.h"
 #include "CoreMinimal.h"
-#include "NansFactorsFactoryCore/Public/FactorInterface.h"
+#include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
 
 class NEventInterface;
 class NFactorOperatorInterface;
 class UNFactorEventDecorator;
-class NFactor;
+class NFactorUnit;
 
-#include "FactorAdapterAbstract.generated.h"
+#include "FactorUnitAdapterAbstract.generated.h"
 
 UCLASS(Abstract, Blueprintable)
-class NANSFACTORSFACTORYUE4_API UNFactorAdapterAbstract : public UObject, public NFactorInterface
+class NANSFACTORSFACTORYUE4_API UNFactorUnitAdapterAbstract : public UObject, public NFactorUnitInterface
 {
 	GENERATED_BODY()
 public:
-	UNFactorAdapterAbstract() {}
+	UNFactorUnitAdapterAbstract() {}
 
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
-	float FactorValue = 0.f;
+	float FactorUnitValue = 0.f;
 
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
 	float Duration = 0.f;
@@ -48,23 +48,23 @@ public:
 	virtual void Init(UNFactorEventDecorator* _Event);
 	virtual TSharedPtr<NFactorOperatorInterface> GetConfiguredOperator() const;
 
-	// BEGIN NFactorInterface override
+	// BEGIN NFactorUnitInterface override
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
 	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override;
 	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) override;
-	virtual float GetFactorValue() const override;
+	virtual float GetFactorUnitValue() const override;
 	virtual FName GetReason() const override;
 	virtual bool IsActivated() const override;
-	virtual void SetFactorValue(float _Value) override;
+	virtual void SetFactorUnitValue(float _Value) override;
 	virtual const FString GetUID() const override;
-	// END NFactorInterface override
+	// END NFactorUnitInterface override
 
 	// BEGIN UObject override
 	virtual void Serialize(FArchive& Ar);
 	// END UObject override
 
 protected:
-	TSharedPtr<NFactor> Factor;
+	TSharedPtr<NFactorUnit> FactorUnit;
 
 	UPROPERTY(SkipSerialization)
 	UNFactorEventDecorator* Event;

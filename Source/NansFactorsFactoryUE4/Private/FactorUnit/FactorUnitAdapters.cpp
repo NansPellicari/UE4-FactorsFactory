@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "Factor/FactorAdapters.h"
+#include "FactorUnit/FactorUnitAdapters.h"
 
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
 #include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
 
-TSharedPtr<NFactorOperatorInterface> UNFactorAdapterBasic::EnumToOperator(ENFactorOperator Enum)
+TSharedPtr<NFactorOperatorInterface> UNFactorUnitAdapterBasic::EnumToOperator(ENFactorOperator Enum)
 {
 	TSharedPtr<NFactorOperatorInterface> Op;
 
@@ -55,18 +55,18 @@ TSharedPtr<NFactorOperatorInterface> UNFactorAdapterBasic::EnumToOperator(ENFact
 	return Op;
 }
 
-TSharedPtr<NFactorOperatorInterface> UNFactorAdapterBasic::GetConfiguredOperator() const
+TSharedPtr<NFactorOperatorInterface> UNFactorUnitAdapterBasic::GetConfiguredOperator() const
 {
-	return UNFactorAdapterBasic::EnumToOperator(Operator);
+	return UNFactorUnitAdapterBasic::EnumToOperator(Operator);
 }
 
-void UNFactorAdapterBasic::Serialize(FArchive& Ar)
+void UNFactorUnitAdapterBasic::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 
 	Ar << Operator;
 
-	if (Ar.IsLoading() && Factor.IsValid())
+	if (Ar.IsLoading() && FactorUnit.IsValid())
 	{
 		SetOperator(GetConfiguredOperator());
 	}

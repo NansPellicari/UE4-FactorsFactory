@@ -11,45 +11,45 @@ public:
 
 	SpyFactorsFactoryClient() {}
 	virtual ~SpyFactorsFactoryClient() {}
-	virtual void CreateStack(FName StackName, TSharedPtr<NTimelineInterface> Timeline) override
+	virtual void CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> Timeline) override
 	{
 		AddCall(FString::Format(TEXT("{0}_1"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::CreateStack(StackName, Timeline);
+		StubFactorsFactoryClient::CreateFactor(FactorName, Timeline);
 	}
-	virtual void CreateStack(TArray<FName> StackNames, TSharedPtr<NTimelineInterface> Timeline) override
+	virtual void CreateFactor(TArray<FName> FactorNames, TSharedPtr<NTimelineInterface> Timeline) override
 	{
 		AddCall(FString::Format(TEXT("{0}_2"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::CreateStack(StackNames, Timeline);
+		StubFactorsFactoryClient::CreateFactor(FactorNames, Timeline);
 	}
-	virtual void AddStack(TSharedPtr<NFactorStackInterface> Stack) override
+	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override
 	{
 		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::AddStack(Stack);
+		StubFactorsFactoryClient::AddFactor(Factor);
 	}
-	virtual void RemoveStack(FName StackName) override
+	virtual void RemoveFactor(FName FactorName) override
 	{
 		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::RemoveStack(StackName);
+		StubFactorsFactoryClient::RemoveFactor(FactorName);
 	}
-	virtual void GetState(FName StackName, NFactorStateInterface& State) override
+	virtual void GetState(FName FactorName, NFactorStateInterface& State) override
 	{
 		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::GetState(StackName, State);
+		StubFactorsFactoryClient::GetState(FactorName, State);
 	}
-	virtual TArray<NFactorStateInterface*> GetStates(TArray<FName> StackNames, NFactorStateInterface* StateTemplate) override
+	virtual TArray<NFactorStateInterface*> GetStates(TArray<FName> FactorNames, NFactorStateInterface* StateTemplate) override
 	{
 		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		return StubFactorsFactoryClient::GetStates(StackNames, StateTemplate);
+		return StubFactorsFactoryClient::GetStates(FactorNames, StateTemplate);
 	}
-	virtual void AddFactor(FName StackName, TSharedPtr<NFactorInterface> Factor) override
+	virtual void AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) override
 	{
 		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::AddFactor(StackName, Factor);
+		StubFactorsFactoryClient::AddFactorUnit(FactorName, FactorUnit);
 	}
-	virtual void SetDebug(const TArray<FName> StackNames, bool bDebug) override
+	virtual void SetDebug(const TArray<FName> FactorNames, bool bDebug) override
 	{
 		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::SetDebug(StackNames, bDebug);
+		StubFactorsFactoryClient::SetDebug(FactorNames, bDebug);
 	}
 	void Clear()
 	{

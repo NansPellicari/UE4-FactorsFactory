@@ -61,7 +61,7 @@ void SNFactorSettingsPin::OnComboBoxOpening()
 void SNFactorSettingsPin::SetPropertyWithName(const FName& Name)
 {
 	check(GraphPinObj);
-	check(GraphPinObj->PinType.PinSubCategoryObject == FFactorStackAttribute::StaticStruct());
+	check(GraphPinObj->PinType.PinSubCategoryObject == FFactorAttribute::StaticStruct());
 
 	// To set the property we need to use a FString
 	// using this format: (MyPropertyName="My Value")
@@ -74,7 +74,7 @@ void SNFactorSettingsPin::SetPropertyWithName(const FName& Name)
 	if (CurrentDefaultValue != PinString)
 	{
 		const FScopedTransaction Transaction(
-			NSLOCTEXT("GraphEditor", "ChangeFactorSettingsPinValue", "Change Factor Settings Pin Value"));
+			NSLOCTEXT("GraphEditor", "ChangeFactorSettingsPinValue", "Change FactorUnit Settings Pin Value"));
 		GraphPinObj->Modify();
 
 		if (PinString != GraphPinObj->GetDefaultAsString())
@@ -109,7 +109,7 @@ TSharedPtr<FName> SNFactorSettingsPin::GetSelectedName() const
 void SNFactorSettingsPin::GetPropertyAsName(FName& OutName) const
 {
 	check(GraphPinObj);
-	check(GraphPinObj->PinType.PinSubCategoryObject == FFactorStackAttribute::StaticStruct());
+	check(GraphPinObj->PinType.PinSubCategoryObject == FFactorAttribute::StaticStruct());
 
 	// As we saw in the SNFactorSettingsPin::SetPropertyWithName()
 	// The value is saved in the format (MyPropertyName="My Value") as a FString.

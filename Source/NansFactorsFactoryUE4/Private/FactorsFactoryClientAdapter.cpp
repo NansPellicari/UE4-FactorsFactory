@@ -1,9 +1,9 @@
 #include "FactorsFactoryClientAdapter.h"
 
-#include "Factor/FactorAdapterAbstract.h"
+#include "FactorUnit/FactorUnitAdapterAbstract.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
+#include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
-#include "NansFactorsFactoryCore/Public/FactorStackInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
 #include "NansFactorsFactoryCore/Public/FactorStateInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
@@ -13,8 +13,8 @@
 #include "NansTimelineSystemUE4/Public/TimelineBlueprintHelpers.h"
 #include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
 #include "Settings/FactorSettings.h"
-#include "Stack/FactorStackDecorator.h"
-#include "Stack/UnrealFactorStackProxy.h"
+#include "Factor/FactorDecorator.h"
+#include "Factor/UnrealFactorProxy.h"
 
 UNFactorsFactoryClientAdapter::UNFactorsFactoryClientAdapter() {}
 
@@ -31,96 +31,96 @@ void UNFactorsFactoryClientAdapter::Init()
 		UNTimelineManagerDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, TimelineConf);
 		if (TimelineManager != nullptr)
 		{
-			CreateStack(Conf.Name, TimelineManager->GetTimeline());
+			CreateFactor(Conf.Name, TimelineManager->GetTimeline());
 		}
 	}
 }
 
-void UNFactorsFactoryClientAdapter::CreateStack(TArray<FName> StackNames, TSharedPtr<NTimelineInterface> Timeline)
+void UNFactorsFactoryClientAdapter::CreateFactor(TArray<FName> FactorNames, TSharedPtr<NTimelineInterface> Timeline)
 {
-	for (auto& Name : StackNames)
+	for (auto& Name : FactorNames)
 	{
-		CreateStack(Name, Timeline);
+		CreateFactor(Name, Timeline);
 	}
 }
 
-UNFactorAdapterAbstract* UNFactorsFactoryClientAdapter::CreateFactor(const FName& StackName, const UClass* Class)
+UNFactorUnitAdapterAbstract* UNFactorsFactoryClientAdapter::CreateFactorUnit(const FName& FactorName, const UClass* Class)
 {
-	mycheckf(UEStacks.Contains(StackName), TEXT("The stack %s doesn't exists!"), *StackName.ToString());
-	return UEStacks[StackName]->CreateFactor(Class);
+	mycheckf(UEFactors.Contains(FactorName), TEXT("The stack %s doesn't exists!"), *FactorName.ToString());
+	return UEFactors[FactorName]->CreateFactorUnit(Class);
 }
 
-void UNFactorsFactoryClientAdapter::CreateStack(FName StackName, TSharedPtr<NTimelineInterface> Timeline)
+void UNFactorsFactoryClientAdapter::CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> Timeline)
 {
-	UNFactorStackDecorator* UStack = NewObject<UNFactorStackDecorator>(this, StackName);
-	UStack->Init(StackName, Timeline);
-	TSharedPtr<NFactorStackInterface> Stack = MakeShareable(new NUnrealFactorStackProxy(*UStack));
-	AddStack(Stack);
+	UNFactorDecorator* UFactor = NewObject<UNFactorDecorator>(this, FactorName);
+	UFactor->Init(FactorName, Timeline);
+	TSharedPtr<NFactorInterface> Factor = MakeShareable(new NUnrealFactorProxy(*UFactor));
+	AddFactor(Factor);
 }
 
-void UNFactorsFactoryClientAdapter::AddStack(TSharedPtr<NFactorStackInterface> Stack)
+void UNFactorsFactoryClientAdapter::AddFactor(TSharedPtr<NFactorInterface> Factor)
 {
-	auto Proxy = dynamic_cast<NUnrealFactorStackProxy*>(Stack.Get());
-	mycheckf(Proxy != nullptr, TEXT("You should passed NUnrealFactorStackProxy inherited stack only"));
+	auto Proxy = dynamic_cast<NUnrealFactorProxy*>(Factor.Get());
+	mycheckf(Proxy != nullptr, TEXT("You should passed NUnrealFactorProxy inherited stack only"));
 	mycheckf(Proxy->GetUnrealObject() != nullptr,
-		TEXT("You should instanciate your stack proxy with a UNFactorStackDecorator inherited stack"));
+		TEXT("You should instanciate your stack proxy with a UNFactorDecorator inherited stack"));
 
-	UEStacks.Add(Proxy->GetName(), Proxy->GetUnrealObject());
-	Client->AddStack(Stack);
+	UEFactors.Add(Proxy->GetName(), Proxy->GetUnrealObject());
+	Client->AddFactor(Factor);
 }
 
-void UNFactorsFactoryClientAdapter::RemoveStack(FName StackName)
+void UNFactorsFactoryClientAdapter::RemoveFactor(FName FactorName)
 {
-	Client->RemoveStack(StackName);
+	Client->RemoveFactor(FactorName);
 }
 
-void UNFactorsFactoryClientAdapter::GetState(FName StackName, NFactorStateInterface& State)
+void UNFactorsFactoryClientAdapter::GetState(FName FactorName, NFactorStateInterface& State)
 {
-	return Client->GetState(StackName, State);
+	return Client->GetState(FactorName, State);
 }
 
 TArray<NFactorStateInterface*> UNFactorsFactoryClientAdapter::GetStates(
-	TArray<FName> StackNames, NFactorStateInterface* StateTemplate)
+	TArray<FName> FactorNames, NFactorStateInterface* StateTemplate)
 {
-	return Client->GetStates(StackNames, StateTemplate);
+	return Client->GetStates(FactorNames, StateTemplate);
 }
 
-void UNFactorsFactoryClientAdapter::AddFactor(FName StackName, TSharedPtr<NFactorInterface> Factor)
+void UNFactorsFactoryClientAdapter::AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
-	Client->AddFactor(StackName, Factor);
+	Client->AddFactorUnit(FactorName, FactorUnit);
 }
 
-void UNFactorsFactoryClientAdapter::SetDebug(const TArray<FName> StackNames, bool bDebug)
+void UNFactorsFactoryClientAdapter::SetDebug(const TArray<FName> FactorNames, bool bDebug)
 {
-	Client->SetDebug(StackNames, bDebug);
+	Client->SetDebug(FactorNames, bDebug);
 }
 
 void UNFactorsFactoryClientAdapter::Serialize(FArchive& Ar)
 {
 	if (Ar.IsSaving())
 	{
-		UEStacks.GetKeys(UEStacksNames);
+		UEFactors.GetKeys(UEFactorsNames);
 	}
 
 	if (Ar.IsLoading())
 	{
-		for (auto& It : UEStacks)
+		for (auto& It : UEFactors)
 		{
 			It.Value->ConditionalBeginDestroy();
 		}
 		// Refresh stacks data, in case data has been set from previous load or during game play.
-		UEStacks.Empty();
+		UEFactors.Empty();
 		Init();
 	}
 
-	Ar << UEStacksNames;
+	Ar << UEFactorsNames;
 
-	for (const FName& Name : UEStacksNames)
+	for (const FName& Name : UEFactorsNames)
 	{
-		mycheckf(UEStacks.Contains(Name), TEXT("The stack \"%s\" doesn't exists anymore"), *Name.ToString());
+		mycheckf(UEFactors.Contains(Name), TEXT("The stack \"%s\" doesn't exists anymore"), *Name.ToString());
 
-		UNFactorStackDecorator* Stack = UEStacks[Name];
-		Stack->Serialize(Ar);
+		UNFactorDecorator* Factor = UEFactors[Name];
+		Factor->Serialize(Ar);
 	}
-	UEStacksNames.Empty();
+	UEFactorsNames.Empty();
 }

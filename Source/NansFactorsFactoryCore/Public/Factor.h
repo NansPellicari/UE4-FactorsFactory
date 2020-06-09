@@ -3,38 +3,37 @@
 #include "CoreMinimal.h"
 #include "FactorInterface.h"
 
-class NFactorOperatorInterface;
+class NFactorUnitInterface;
+class NFactorOperatorInterfaceWithFactor;
+class NFactorState;
+class NTimelineInterface;
 class NEventInterface;
-
-namespace NFactorGUID
-{
-	static uint32 sNextId = 0;
-}
 
 class NANSFACTORSFACTORYCORE_API NFactor : public NFactorInterface
 {
 public:
-	NFactor(float _FactorValue,
-		TSharedPtr<NFactorOperatorInterface> _Operator,
-		float _Duration,
-		FName Reason,
-		float _Delay = 0.f,
-		TSharedPtr<NEventInterface> _Event = NULL);
-	NFactor(float _FactorValue, TSharedPtr<NFactorOperatorInterface> _Operator, TSharedPtr<NEventInterface> _Event);
+	NFactor(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
+	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
 	virtual ~NFactor();
-	virtual bool IsActivated() const override;
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override;
-	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) override;
-	virtual float GetFactorValue() const override;
-	virtual FName GetReason() const override;
-	virtual void SetFactorValue(float _Value) override;
-	virtual const FString GetUID() const override;
-	virtual TSharedPtr<NEventInterface> GetEvent() override;
-	void Activate(bool _bIsActivated);
+	virtual void Clear() override;
+	virtual void SetName(FName _Name) override;
+	virtual FName GetName() const override;
+	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;
+	virtual float GetTime() const override;
+	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
+	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
+	virtual bool HasFlag(FString Flag) const override;
+	virtual bool GetFlag(FString Flag) const override;
+	virtual void SetFlag(FString Flag, bool Value) override;
+	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override;
+	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
+	virtual void Debug(bool _bDebug) override;
 
 protected:
-	TSharedPtr<NEventInterface> Event;
-	bool bIsActivated = true;
-	float FactorValue;
-	TSharedPtr<NFactorOperatorInterface> Operator;
+	bool bDebug = false;
+	TMap<FString, bool> IterationFlags;
+	TSharedPtr<NTimelineInterface> Timeline;
+	TArray<TSharedPtr<NFactorUnitInterface>> Factors;
+	void AddFactorsToState(NFactorStateInterface& State);
+	FName Name;
 };

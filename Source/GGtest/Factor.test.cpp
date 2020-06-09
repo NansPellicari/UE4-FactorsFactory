@@ -1,74 +1,102 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
+#include "Mock/FakeTimelineManager.h"
+#include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
-#include "NansFactorsFactoryCore/Public/NullFactor.h"
+#include "NansFactorsFactoryCore/Public/FactorState.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
+#include "NansTimelineSystemCore/Public/Timeline.h"
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
-
-#include <iostream>
 
 class NansFactorsFactoryCoreFactorTest : public ::testing::Test
 {
 protected:
+	void SetUp() override
+	{
+		Timeline = MakeShareable(new NTimeline(new FakeTimelineManager()));
+		Factor = MakeShareable(new NFactor(FName("Dialog"), Timeline));
+
+		Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"))));
+		Factor->AddFactorUnit(MakeShareable(new NFactorUnit(1.5f, MakeShareable(new NMultiplyOperator()), 2, FName("Drunk"))));
+		Factor->AddFactorUnit(
+			MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 10, FName("Psychologicaly attacked"))));
+	}
+
+	void TearDown() override
+	{
+		Factor.Reset();
+	}
+
+	TSharedPtr<NFactorInterface> Factor;
+	TSharedPtr<NTimeline> Timeline;
 };
 
-TEST_F(NansFactorsFactoryCoreFactorTest, EachNewFactorShouldHaveAFactorerentUUID)
+TEST_F(NansFactorsFactoryCoreFactorTest, ShouldRemovesEverySetFlagsAfterGettingTheCurrentState)
 {
-	TMap<FString, NFactor*> Factors;
-	for (int I = 0; I < 500; ++I)
+	Factor->SetName(FName("Test iteration flag"));
+	Factor->SetFlag("Flag", true);
+	NFactorStateInterface* State = new NFactorState();
+	Factor->SupplyStateWithCurrentData(*State);
+
+	try
 	{
-		NFactor* Factor = new NFactor(1.f, MakeShareable(new NNullOperator()), 0, FName("Reason"));
-		// A TMap as unique key compare to TMultiMap
-		Factors.Add(Factor->GetUID(), Factor);
+		Factor->GetFlag("Flag");
+		ASSERT_FALSE(true);
 	}
-	EXPECT_EQ(Factors.Num(), 500);
-	Factors.Empty();
+	catch (const TCHAR* e)
+	{
+		EXPECT_STREQ(TCHAR_TO_ANSI(e), "IterationFlags.Contains(Flag)");
+	}
 }
 
-TEST_F(NansFactorsFactoryCoreFactorTest, NullFactorShouldAlwaysReturnNullValues)
+TEST_F(NansFactorsFactoryCoreFactorTest, FactorShouldGetValidStateAndComputeCorrectlyWhen1secPassed)
 {
-	NNullFactor* Factor = new NNullFactor();
-	EXPECT_FALSE(Factor->IsActivated());
-	EXPECT_EQ(Factor->GetEvent(), nullptr);
-	EXPECT_EQ(Factor->GetReason(), NAME_None);
-	EXPECT_EQ(Factor->GetFactorValue(), 0.f);
-	Factor->SetFactorValue(10.f);
-	EXPECT_EQ(Factor->GetFactorValue(), 0.f);
-	EXPECT_EQ(Factor->GetOperator(), nullptr);
-	EXPECT_TRUE(Factor->GetUID().IsEmpty());
-	Factor->SetOperator(MakeShareable(new NAddOperator()));
-	EXPECT_EQ(Factor->GetOperator(), nullptr);
-}
-TEST_F(NansFactorsFactoryCoreFactorTest, ShouldBeAlwaysActivateIfItHasAnUndeterminatedDuration)
-{
-	NFactor* Factor = new NFactor(1.f, MakeShareable(new NNullOperator()), 0, FName("Reason"));
-	EXPECT_TRUE(Factor->IsActivated());
-	Factor->GetEvent()->NotifyAddTime(1000);
-	EXPECT_TRUE(Factor->IsActivated());
-	EXPECT_EQ(Factor->GetReason(), FName("Reason"));
+	Timeline->SetTickInterval(1.f);
+	Timeline->NotifyTick();
+	NFactorStateInterface* State = new NFactorState();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 1.f);
+	EXPECT_EQ(State->Compute(), 5.f);
 }
 
-TEST_F(NansFactorsFactoryCoreFactorTest, CanBeDeactivate)
+TEST_F(NansFactorsFactoryCoreFactorTest, FactorShouldGetValidStateAndComputeCorrectlyWhen3secsPassed)
 {
-	NFactor* Factor = new NFactor(1.f, MakeShareable(new NNullOperator()), 0, FName("Reason"));
-	EXPECT_TRUE(Factor->IsActivated());
-	Factor->GetEvent()->NotifyAddTime(1000.f);
-	EXPECT_TRUE(Factor->IsActivated());
-	Factor->Activate(false);
-	EXPECT_FALSE(Factor->IsActivated());
-	EXPECT_FALSE(Factor->GetEvent()->IsExpired());
+	Timeline->SetTickInterval(3.f);
+	Timeline->NotifyTick();
+	NFactorStateInterface* State = new NFactorState();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 3.f);
+	EXPECT_EQ(State->Compute(), 4.f);
 }
 
-TEST_F(NansFactorsFactoryCoreFactorTest, ShouldBeDeactivateWhenItsDurationTimeIsReachedAndReturnANullOperator)
+TEST_F(NansFactorsFactoryCoreFactorTest, FactorShouldGetValidStateAndComputeCorrectlyWhen10_1secsPassed)
 {
-	TSharedPtr<NAddOperator> Operator = MakeShareable(new NAddOperator());
-	NFactor* Factor = new NFactor(1.f, Operator, 2.f, FName("Reason"));
-	EXPECT_TRUE(Factor->IsActivated());
-	EXPECT_EQ(Factor->GetOperator(), Operator);
-	EXPECT_EQ(Factor->GetFactorValue(), 1.f);
-	Factor->GetEvent()->NotifyAddTime(2.1f);
-	EXPECT_TRUE(Factor->GetEvent()->IsExpired());
-	EXPECT_FALSE(Factor->IsActivated());
-	EXPECT_NE(Factor->GetOperator(), Operator);
-	EXPECT_NE(static_cast<NNullOperator*>(Factor->GetOperator().Get()), nullptr);
+	Timeline->SetTickInterval(10.1f);
+	Timeline->NotifyTick();
+	NFactorStateInterface* State = new NFactorState();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 10.1f);
+	EXPECT_EQ(State->Compute(), 2.f);
+}
+
+TEST_F(NansFactorsFactoryCoreFactorTest, FactorShouldGetValidStateAndComputeCorrectlyWhen4secsPassed)
+{
+	Timeline->SetTickInterval(4.f);
+	Timeline->NotifyTick();
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(4.f, MakeShareable(new NAddOperator()), 1.f, FName("Exhausted"))));
+	NFactorStateInterface* State = new NFactorState();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 4.f);
+	EXPECT_EQ(State->Compute(), 8.f);
+}
+
+TEST_F(NansFactorsFactoryCoreFactorTest, FactorShouldGetValidStateAndComputeCorrectlyWhen5_1secsPassed)
+{
+	Timeline->SetTickInterval(5.1f);
+	Timeline->NotifyTick();
+	NFactorStateInterface* State = new NFactorState();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 5.1f);
+	EXPECT_EQ(State->Compute(), 4.f);
 }

@@ -1,6 +1,6 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
-#include "NansFactorsFactoryCore/Public/Factor.h"
+#include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
@@ -18,9 +18,9 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithOneOperatorGiven)
 	float Time = 1;
 	NFactorStateInterface* FactorState = new NFactorState();
 	FactorState->SetTime(Time);
-	NFactorInterface* Factor = new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"));
-	Factor->GetEvent()->NotifyAddTime(Time);
-	FactorState->AddFactor(MakeShareable(Factor));
+	NFactorUnitInterface* FactorUnit = new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"));
+	FactorUnit->GetEvent()->NotifyAddTime(Time);
+	FactorState->AddFactorUnit(MakeShareable(FactorUnit));
 	EXPECT_EQ(FactorState->Compute(), 2.f);
 }
 
@@ -29,14 +29,14 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithABunchOfOperatorsGiven)
 	float Time = 1;
 	NFactorStateInterface* FactorState = new NFactorState();
 	FactorState->SetTime(Time);
-	TArray<TSharedPtr<NFactorInterface>> Factors;
-	Factors.Add(MakeShareable(new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"))));
-	Factors.Add(MakeShareable(new NFactor(2.f, MakeShareable(new NMultiplyOperator()), 0, FName("Infinite Drunk"))));
+	TArray<TSharedPtr<NFactorUnitInterface>> Factors;
+	Factors.Add(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"))));
+	Factors.Add(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NMultiplyOperator()), 0, FName("Infinite Drunk"))));
 
-	for (auto Factor : Factors)
+	for (auto FactorUnit : Factors)
 	{
-		Factor->GetEvent()->NotifyAddTime(Time);
-		FactorState->AddFactor(Factor);
+		FactorUnit->GetEvent()->NotifyAddTime(Time);
+		FactorState->AddFactorUnit(FactorUnit);
 	}
 	EXPECT_EQ(FactorState->Compute(), 4.f);
 }
@@ -49,15 +49,15 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithABunchOfOperatorsGivenA
 	FactorState->SetTime(Time);
 	// This to get extra infos on test results
 	// FactorState->bDebug = true;
-	TArray<TSharedPtr<NFactorInterface>> Factors;
-	Factors.Add(MakeShareable(new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"))));
-	Factors.Add(MakeShareable(new NFactor(2.f, MakeShareable(new NMultiplyOperator()), 2, FName("Drunk"))));
-	Factors.Add(MakeShareable(new NFactor(2.f, MakeShareable(new NAddOperator()), 0, FName("Afraid"))));
+	TArray<TSharedPtr<NFactorUnitInterface>> Factors;
+	Factors.Add(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"))));
+	Factors.Add(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NMultiplyOperator()), 2, FName("Drunk"))));
+	Factors.Add(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Afraid"))));
 
-	for (auto Factor : Factors)
+	for (auto FactorUnit : Factors)
 	{
-		Factor->GetEvent()->NotifyAddTime(Time);
-		FactorState->AddFactor(Factor);
+		FactorUnit->GetEvent()->NotifyAddTime(Time);
+		FactorState->AddFactorUnit(FactorUnit);
 	}
 	EXPECT_EQ(FactorState->Compute(), 4.f);
 	EXPECT_EQ(FactorState->Compute(), 4.f);

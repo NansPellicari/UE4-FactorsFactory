@@ -4,7 +4,7 @@
 #include "FactorStateInterface.h"
 
 class NFactorOperatorInterface;
-class NFactorInterface;
+class NFactorUnitInterface;
 class NNullOperator;
 
 class NANSFACTORSFACTORYCORE_API NFactorState : public NFactorStateInterface
@@ -13,7 +13,7 @@ public:
 	bool bDebug = false;
 	virtual ~NFactorState() {}
 	NFactorState() {}
-	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override;
+	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
 	virtual float GetTime() const override;
 	virtual void SetTime(float _Time) override;
 	virtual float Compute() override;
@@ -26,8 +26,8 @@ protected:
 	TArray<FNFactorStateOperator> Operators;
 
 private:
-	// Factor 0 means no factor
-	float FactorValue = 0.f;
+	// FactorUnit 0 means no factor
+	float FactorUnitValue = 0.f;
 	// This value means it has not been initiliazed
 	float Time = -1.f;
 };

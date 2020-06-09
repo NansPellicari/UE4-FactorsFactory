@@ -18,9 +18,9 @@ public:
 	{
 		Client = MakeShareable(new NFactorsFactoryClient());
 	}
-	TMap<FName, UNFactorStackDecorator*> GetUEStacks()
+	TMap<FName, UNFactorDecorator*> GetUEFactors()
 	{
-		return UEStacks;
+		return UEFactors;
 	}
 	void Clear()
 	{

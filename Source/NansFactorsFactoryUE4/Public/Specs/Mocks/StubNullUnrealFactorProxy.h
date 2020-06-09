@@ -15,15 +15,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FactorStackInterface.h"
-#include "NansFactorsFactoryCore/Public/NullFactor.h"
-#include "Stack/FactorStackDecorator.h"
-#include "Stack/UnrealFactorStackProxy.h"
+#include "FactorInterface.h"
+#include "NansFactorsFactoryCore/Public/NullFactorUnit.h"
+#include "Factor/FactorDecorator.h"
+#include "Factor/UnrealFactorProxy.h"
 
-class StubNullUnrealFactorStackProxy : public NUnrealFactorStackProxy
+class StubNullUnrealFactorProxy : public NUnrealFactorProxy
 {
 public:
-	StubNullUnrealFactorStackProxy(UNFactorStackDecorator& _Stack) : NUnrealFactorStackProxy(_Stack) {}
+	StubNullUnrealFactorProxy(UNFactorDecorator& _Factor) : NUnrealFactorProxy(_Factor) {}
 
 	virtual void Clear() override {}
 	virtual void SetName(FName _Name) override {}
@@ -40,16 +40,16 @@ public:
 	{
 		return 0.f;
 	}
-	virtual TSharedRef<NFactorInterface> GetFactor(uint32 Key) const override
+	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override
 	{
-		static NFactorInterface* NullObj = new NNullFactor();
+		static NFactorUnitInterface* NullObj = new NNullFactorUnit();
 		return MakeShareable(NullObj);
 	}
-	virtual TArray<TSharedPtr<NFactorInterface>> GetFactors() const override
+	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override
 	{
 		return {};
 	}
-	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override {}
+	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override {}
 	virtual bool HasFlag(FString Flag) const override
 	{
 		return false;
@@ -61,7 +61,7 @@ public:
 	virtual void SetFlag(FString Flag, bool Value) override {}
 	virtual void Debug(bool _bDebug) override {}
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override {}
-	virtual UNFactorStackDecorator* GetUnrealObject() const
+	virtual UNFactorDecorator* GetUnrealObject() const
 	{
 		return nullptr;
 	}

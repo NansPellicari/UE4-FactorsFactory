@@ -15,9 +15,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FactorAdapterAbstract.h"
+#include "FactorUnitAdapterAbstract.h"
 
-#include "FactorAdapters.generated.h"
+#include "FactorUnitAdapters.generated.h"
 
 class NFactorOperatorInterface;
 
@@ -33,7 +33,7 @@ enum class ENFactorOperator : uint8
 };
 
 UCLASS(BlueprintType)
-class NANSFACTORSFACTORYUE4_API UNFactorAdapterBasic : public UNFactorAdapterAbstract
+class NANSFACTORSFACTORYUE4_API UNFactorUnitAdapterBasic : public UNFactorUnitAdapterAbstract
 {
 	GENERATED_BODY()
 public:
@@ -42,9 +42,9 @@ public:
 
 	static TSharedPtr<NFactorOperatorInterface> EnumToOperator(ENFactorOperator Enum);
 
-	// BEGIN UNFactorAdapterAbstract override
+	// BEGIN UNFactorUnitAdapterAbstract override
 	virtual TSharedPtr<NFactorOperatorInterface> GetConfiguredOperator() const override;
-	// END UNFactorAdapterAbstract override
+	// END UNFactorUnitAdapterAbstract override
 
 	// BEGIN UObject override
 	virtual void Serialize(FArchive& Ar);
@@ -53,7 +53,7 @@ public:
 
 // TODO Create an ENUM to choose behaviors (all, last, number)
 UCLASS(BlueprintType)
-class NANSFACTORSFACTORYUE4_API UNFactorAdapterResetFromReason : public UNFactorAdapterAbstract
+class NANSFACTORSFACTORYUE4_API UNFactorUnitAdapterResetFromReason : public UNFactorUnitAdapterAbstract
 {
 	GENERATED_BODY()
 public:

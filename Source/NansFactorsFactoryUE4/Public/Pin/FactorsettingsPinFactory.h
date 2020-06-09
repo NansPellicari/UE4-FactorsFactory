@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Attribute/FactorStackAttribute.h"
+#include "Attribute/FactorAttribute.h"
 #include "EdGraph/EdGraphPin.h"
 #include "EdGraph/EdGraphSchema.h"
 #include "EdGraphSchema_K2.h"
@@ -17,7 +17,7 @@ class FNFactorSettingsPinFactory : public FGraphPanelPinFactory
 		 * Check if pin is struct, and then check if that pin is of struct type we want customize
 		 */
 		if (InPin->PinType.PinCategory == K2Schema->PC_Struct &&
-			InPin->PinType.PinSubCategoryObject == FFactorStackAttribute::StaticStruct())
+			InPin->PinType.PinSubCategoryObject == FFactorAttribute::StaticStruct())
 		{
 			return SNew(SNFactorSettingsPin, InPin);	// and return our customized pin widget ;).
 		}

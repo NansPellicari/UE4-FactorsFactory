@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 
-class NFactorStackInterface;
+class NFactorInterface;
 
 class NFactorOperatorInterface
 {
@@ -12,19 +12,19 @@ public:
 	virtual const FName GetName() = 0;
 };
 
-class NFactorOperatorInterfaceWithStack
+class NFactorOperatorInterfaceWithFactor
 {
 public:
-	virtual void SetStack(NFactorStackInterface* Stack) = 0;
-	virtual void SetKeyInStack(uint32 Key) = 0;
+	virtual void SetFactor(NFactorInterface* Factor) = 0;
+	virtual void SetKeyInFactor(uint32 Key) = 0;
 };
 
 class OperatorUtils
 {
 public:
 	template <typename T>
-	static bool IsOperatorWithStack(T Operator)
+	static bool IsOperatorWithFactor(T Operator)
 	{
-		return dynamic_cast<NFactorOperatorInterfaceWithStack*>(Operator) != nullptr;
+		return dynamic_cast<NFactorOperatorInterfaceWithFactor*>(Operator) != nullptr;
 	}
 };

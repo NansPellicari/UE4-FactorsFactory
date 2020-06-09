@@ -54,8 +54,8 @@ public:
 public:
 	/** Class pin name */
 	static FName ClassPinName;
-	/** Stack pin name */
-	static FName StackPinName;
+	/** Factor pin name */
+	static FName FactorPinName;
 	/** Object pin name */
 	static FName ObjectPinName;
 	/** Outer pin name */
@@ -63,7 +63,7 @@ public:
 
 	/** Finds and returns the class input pin from the current set of pins. */
 	UEdGraphPin* FindClassPin() const;
-	UEdGraphPin* FindStackPin() const;
+	UEdGraphPin* FindFactorPin() const;
 	UEdGraphPin* GetResultPin() const;
 	UEdGraphPin* GetThenPin() const;
 	UEdGraphPin* GetOuterPin() const;
@@ -96,7 +96,7 @@ protected:
 	 *
 	 * @param FromPins	A list of pins to search.
 	 */
-	UEdGraphPin* FindStackPin(const TArray<UEdGraphPin*>& FromPins) const;
+	UEdGraphPin* FindFactorPin(const TArray<UEdGraphPin*>& FromPins) const;
 
 	/**
 	 * Determines the input class type from the given pin.

@@ -15,13 +15,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NansFactorsFactoryCore/Public/FactorStackInterface.h"
+#include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
+#include "NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitAdapterAbstract.h"
 #include "NansTimelineSystemUE4/Public/Event/EventRecord.h"
 
-#include "FactorStackDecorator.generated.h"
+#include "FactorDecorator.generated.h"
 
-class UNFactorAdapterAbstract;
 class NUnrealTimelineProxy;
 class UNTimelineDecorator;
 class NEventInterface;
@@ -30,23 +30,23 @@ class NEventInterface;
  * This struct is a record object used for savegame or get user feedbacks
  */
 USTRUCT()
-struct NANSFACTORSFACTORYUE4_API FNFactorRecord
+struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 {
-	friend class UNFactorStackDecorator;
+	friend class UNFactorDecorator;
 	GENERATED_USTRUCT_BODY()
 
-	FNFactorRecord() {}
-	FNFactorRecord(UNFactorAdapterAbstract* _Factor)
+	FNFactorUnitRecord() {}
+	FNFactorUnitRecord(UNFactorUnitAdapterAbstract* _FactorUnit)
 	{
-		Factor = _Factor;
-		UId = Factor->GetUID();
-		OperatorName = Factor->GetOperator()->GetName();
-		Value = Factor->GetFactorValue();
+		FactorUnit = _FactorUnit;
+		UId = FactorUnit->GetUID();
+		OperatorName = FactorUnit->GetOperator()->GetName();
+		Value = FactorUnit->GetFactorUnitValue();
 	}
 
-	/** The UNFactorAdapterAbstract object */
+	/** The UNFactorUnitAdapterAbstract object */
 	UPROPERTY(SkipSerialization)
-	UNFactorAdapterAbstract* Factor = nullptr;
+	UNFactorUnitAdapterAbstract* FactorUnit = nullptr;
 	/** The time it as been attached to the timeline in secs (differ to UNEventDecorator::StartedAt) */
 	UPROPERTY(SkipSerialization)
 	FString UId = FString("");
@@ -58,22 +58,22 @@ struct NANSFACTORSFACTORYUE4_API FNFactorRecord
 	float Value = -1.f;
 	/** This is used only during serialization, it allow to re-instance the object on load */
 	UPROPERTY(SkipSerialization)
-	FString FactorClassName = FString("");
+	FString FactorUnitClassName = FString("");
 
-	FNEventRecord& GetEventRecord(UNFactorStackDecorator* Stack);
+	FNEventRecord& GetEventRecord(UNFactorDecorator* Factor);
 
 	/** It manages Event object saving and loading */
-	void Serialize(FArchive& Ar, UNFactorStackDecorator* Stack);
+	void Serialize(FArchive& Ar, UNFactorDecorator* Factor);
 
-	/** Just save basic data, see FNFactorRecord::Serialize() to see how Factor object is managed */
-	friend FArchive& operator<<(FArchive& Ar, FNFactorRecord& Record)
+	/** Just save basic data, see FNFactorUnitRecord::Serialize() to see how FactorUnit object is managed */
+	friend FArchive& operator<<(FArchive& Ar, FNFactorUnitRecord& Record)
 	{
 		if (Ar.IsSaving())
 		{
-			Record.FactorClassName = Record.Factor != nullptr ? Record.Factor->GetClass()->GetPathName() : FString("");
+			Record.FactorUnitClassName = Record.FactorUnit != nullptr ? Record.FactorUnit->GetClass()->GetPathName() : FString("");
 		}
 
-		Ar << Record.FactorClassName;
+		Ar << Record.FactorUnitClassName;
 		Ar << Record.UId;
 		Ar << Record.OperatorName;
 		Ar << Record.Value;
@@ -83,32 +83,32 @@ struct NANSFACTORSFACTORYUE4_API FNFactorRecord
 };
 
 UCLASS()
-class NANSFACTORSFACTORYUE4_API UNFactorStackDecorator : public UObject, public NFactorStackInterface
+class NANSFACTORSFACTORYUE4_API UNFactorDecorator : public UObject, public NFactorInterface
 {
-	friend struct FNFactorRecord;
+	friend struct FNFactorUnitRecord;
 	GENERATED_BODY()
 public:
-	UNFactorStackDecorator() {}
+	UNFactorDecorator() {}
 	void Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
-	UNFactorAdapterAbstract* CreateFactor(const UClass* Class);
+	UNFactorUnitAdapterAbstract* CreateFactorUnit(const UClass* Class);
 	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
-	TArray<FNFactorRecord> GetFactorStore() const;
+	TArray<FNFactorUnitRecord> GetFactorUnitStore() const;
 
-	// BEGIN NFactorStackInterface override
+	// BEGIN NFactorInterface override
 	virtual void Clear() override;
 	virtual void SetName(FName _Name) override;
 	virtual FName GetName() const override;
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;
 	virtual float GetTime() const override;
-	virtual TSharedRef<NFactorInterface> GetFactor(uint32 Key) const override;
-	virtual TArray<TSharedPtr<NFactorInterface>> GetFactors() const override;
-	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override;
+	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
+	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override;
+	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
 	virtual bool HasFlag(FString Flag) const override;
 	virtual bool GetFlag(FString Flag) const override;
 	virtual void SetFlag(FString Flag, bool Value) override;
 	virtual void Debug(bool _bDebug) override;
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
-	// END NFactorStackInterface override
+	// END NFactorInterface override
 
 	// BEGIN UObject override
 	virtual void Serialize(FArchive& Ar);
@@ -116,9 +116,9 @@ public:
 	// END UObject override
 
 protected:
-	TSharedPtr<NFactorStackInterface> Stack;
+	TSharedPtr<NFactorInterface> Factor;
 	UPROPERTY()
-	TArray<FNFactorRecord> FactorStore;
+	TArray<FNFactorUnitRecord> FactorUnitStore;
 
 	UPROPERTY(SaveGame)
 	FName SavedName;

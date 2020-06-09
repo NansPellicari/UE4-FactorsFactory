@@ -12,10 +12,10 @@ struct FNFactorSettings
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsStacks")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors")
 	FName Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsStacks")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors")
 	FName TimelineName;
 };
 
@@ -26,7 +26,7 @@ struct FNFactorSettings
  *
  * @see https://github.com/NansPellicari/UE4-HowTo-CustomPin to get more examples.
  */
-UCLASS(config = Game, defaultconfig, meta = (DisplayName = "Factors Stacks"))
+UCLASS(config = Game, defaultconfig, meta = (DisplayName = "Factors Factors"))
 class NANSFACTORSFACTORYUE4_API UFactorSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()

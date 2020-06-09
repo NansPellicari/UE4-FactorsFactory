@@ -14,58 +14,63 @@
 
 #include "Factor/UnrealFactorProxy.h"
 
-#include "Factor/FactorAdapterAbstract.h"
-#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
-#include "NansFactorsFactoryCore/Public/FactorInterface.h"
+#include "Factor/FactorDecorator.h"
 
-TSharedPtr<NFactorOperatorInterface> NUnrealFactorProxy::GetOperator() const
+void NUnrealFactorProxy::Clear()
 {
-	mycheck(Factor != nullptr);
-	return Factor->GetOperator();
+	Factor.Clear();
 }
-void NUnrealFactorProxy::SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator)
+void NUnrealFactorProxy::SetName(FName _Name)
 {
-	mycheck(Factor != nullptr);
-	return Factor->SetOperator(_Operator);
+	Factor.SetName(_Name);
 }
-
-float NUnrealFactorProxy::GetFactorValue() const
+FName NUnrealFactorProxy::GetName() const
 {
-	mycheck(Factor != nullptr);
-	return Factor->GetFactorValue();
+	return Factor.GetName();
 }
 
-void NUnrealFactorProxy::SetFactorValue(float _Value)
+TSharedPtr<NTimelineInterface> NUnrealFactorProxy::GetTimeline() const
 {
-	mycheck(Factor != nullptr);
-	return Factor->SetFactorValue(_Value);
+	return Factor.GetTimeline();
 }
 
-FName NUnrealFactorProxy::GetReason() const
+float NUnrealFactorProxy::GetTime() const
 {
-	mycheck(Factor != nullptr);
-	return Factor->GetReason();
+	return Factor.GetTime();
 }
-
-bool NUnrealFactorProxy::IsActivated() const
+TSharedRef<NFactorUnitInterface> NUnrealFactorProxy::GetFactorUnit(uint32 Key) const
 {
-	mycheck(Factor != nullptr);
-	return Factor->IsActivated();
+	return Factor.GetFactorUnit(Key);
 }
-
-const FString NUnrealFactorProxy::GetUID() const
+TArray<TSharedPtr<NFactorUnitInterface>> NUnrealFactorProxy::GetFactors() const
 {
-	mycheck(Factor != nullptr);
-	return Factor->GetUID();
+	return Factor.GetFactors();
 }
-
-TSharedPtr<NEventInterface> NUnrealFactorProxy::GetEvent()
+void NUnrealFactorProxy::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
-	mycheck(Factor != nullptr);
-	return Factor->GetEvent();
+	Factor.AddFactorUnit(FactorUnit);
 }
-
-UNFactorAdapterAbstract* NUnrealFactorProxy::GetUnrealObject()
+bool NUnrealFactorProxy::HasFlag(FString Flag) const
 {
-	return Factor;
+	return Factor.HasFlag(Flag);
+}
+bool NUnrealFactorProxy::GetFlag(FString Flag) const
+{
+	return Factor.GetFlag(Flag);
+}
+void NUnrealFactorProxy::SetFlag(FString Flag, bool Value)
+{
+	Factor.SetFlag(Flag, Value);
+}
+void NUnrealFactorProxy::Debug(bool _bDebug)
+{
+	Factor.Debug(_bDebug);
+}
+void NUnrealFactorProxy::SupplyStateWithCurrentData(NFactorStateInterface& State)
+{
+	Factor.SupplyStateWithCurrentData(State);
+}
+UNFactorDecorator* NUnrealFactorProxy::GetUnrealObject() const
+{
+	return &Factor;
 }

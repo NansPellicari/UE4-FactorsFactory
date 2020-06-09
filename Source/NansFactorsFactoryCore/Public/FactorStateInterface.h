@@ -3,15 +3,15 @@
 #include "CoreMinimal.h"
 
 class NFactorOperatorInterface;
-class NFactorInterface;
+class NFactorUnitInterface;
 class NNullOperator;
 
 struct FNFactorStateOperator
 {
 	FNFactorStateOperator();
-	FNFactorStateOperator(TSharedPtr<NFactorInterface> _Factor);
+	FNFactorStateOperator(TSharedPtr<NFactorUnitInterface> _FactorUnit);
 
-	TSharedPtr<NFactorInterface> Factor;
+	TSharedPtr<NFactorUnitInterface> FactorUnit;
 	float Value = 0.f;
 	FName Reason = FName("");
 	bool Activate = true;
@@ -21,7 +21,7 @@ struct FNFactorStateOperator
 class NANSFACTORSFACTORYCORE_API NFactorStateInterface
 {
 public:
-	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) = 0;
+	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) = 0;
 	virtual void SetTime(float _Time) = 0;
 	virtual float GetTime() const = 0;
 	virtual float Compute() = 0;

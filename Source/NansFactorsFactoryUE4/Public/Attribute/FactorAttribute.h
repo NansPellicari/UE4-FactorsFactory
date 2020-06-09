@@ -2,16 +2,16 @@
 
 #include "CoreMinimal.h"
 
-#include "FactorStackAttribute.generated.h"
+#include "FactorAttribute.generated.h"
 
 USTRUCT(BlueprintType)
-struct FFactorStackAttribute
+struct FFactorAttribute
 {
 	GENERATED_BODY()
 
 public:
-	FFactorStackAttribute() {}
-	FFactorStackAttribute(FName _Name) : Name(_Name) {}
+	FFactorAttribute() {}
+	FFactorAttribute(FName _Name) : Name(_Name) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactory")
 	FName Name;

@@ -1,6 +1,6 @@
 #include "FactorState.h"
 
-#include "Factor.h"
+#include "FactorUnit.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "Operator/FactorOperator.h"
 #include "Operator/Interfaces.h"
@@ -11,18 +11,18 @@ FNFactorStateOperator::FNFactorStateOperator()
 {
 	Operator = MakeShareable(new NNullOperator());
 }
-FNFactorStateOperator::FNFactorStateOperator(TSharedPtr<NFactorInterface> _Factor)
+FNFactorStateOperator::FNFactorStateOperator(TSharedPtr<NFactorUnitInterface> _FactorUnit)
 {
-	Factor = _Factor;
-	Value = Factor->GetFactorValue();
-	Operator = Factor->GetOperator();
-	Reason = Factor->GetReason();
-	Activate = Factor->IsActivated();
+	FactorUnit = _FactorUnit;
+	Value = FactorUnit->GetFactorUnitValue();
+	Operator = FactorUnit->GetOperator();
+	Reason = FactorUnit->GetReason();
+	Activate = FactorUnit->IsActivated();
 }
 
-void NFactorState::AddFactor(TSharedPtr<NFactorInterface> Factor)
+void NFactorState::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
-	Operators.Add(FNFactorStateOperator(Factor));
+	Operators.Add(FNFactorStateOperator(FactorUnit));
 }
 
 float NFactorState::GetTime() const
@@ -39,7 +39,7 @@ void NFactorState::Clear()
 {
 	Operators.Empty();
 	Time = -1.f;
-	FactorValue = 0;
+	FactorUnitValue = 0;
 }
 
 NFactorStateInterface* NFactorState::Clone()
@@ -50,23 +50,23 @@ NFactorStateInterface* NFactorState::Clone()
 float NFactorState::Compute()
 {
 	// Reset the value
-	FactorValue = 0;
+	FactorUnitValue = 0;
 	for (FNFactorStateOperator Operation : Operators)
 	{
-		float Value = Operation.Activate ? Operation.Operator->Compute(FactorValue, Operation.Value) : FactorValue;
+		float Value = Operation.Activate ? Operation.Operator->Compute(FactorUnitValue, Operation.Value) : FactorUnitValue;
 		if (bDebug)
 		{
 			UE_LOG(LogTemp,
 				Warning,
 				TEXT("Compute with Previous value: %f - Operator: %s - Operation Value: %f - results to: %f"),
-				FactorValue,
+				FactorUnitValue,
 				*Operation.Operator->GetName().ToString(),
 				Operation.Value,
 				Value);
 		}
-		FactorValue = Value;
+		FactorUnitValue = Value;
 	}
-	return FactorValue;
+	return FactorUnitValue;
 }
 
 const TArray<FNFactorStateOperator> NFactorState::GetOperators() const

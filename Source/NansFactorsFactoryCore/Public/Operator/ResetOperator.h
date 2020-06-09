@@ -3,18 +3,18 @@
 #include "CoreMinimal.h"
 #include "Operator/Interfaces.h"
 
+class NFactorUnitInterface;
 class NFactorInterface;
-class NFactorStackInterface;
 
 class NANSFACTORSFACTORYCORE_API NResetOperatorBase : public NFactorOperatorInterface
 {
 public:
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
-	static FString GetResetIdFlag(TSharedRef<NFactorInterface> Factor);
+	static FString GetResetIdFlag(TSharedRef<NFactorUnitInterface> FactorUnit);
 };
 
 // TODO create ResetByReasonOperator ResetWithRangeOperator ResetAllOperator
-class NANSFACTORSFACTORYCORE_API NResetOperator : public NResetOperatorBase, public NFactorOperatorInterfaceWithStack
+class NANSFACTORSFACTORYCORE_API NResetOperator : public NResetOperatorBase, public NFactorOperatorInterfaceWithFactor
 {
 public:
 	virtual ~NResetOperator();
@@ -25,10 +25,10 @@ public:
 	}
 	virtual float Compute(float Lh, float Rh) override;
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
-	virtual void SetStack(NFactorStackInterface* Stack) override;
-	virtual void SetKeyInStack(uint32 Key) override;
+	virtual void SetFactor(NFactorInterface* Factor) override;
+	virtual void SetKeyInFactor(uint32 Key) override;
 
 protected:
-	NFactorStackInterface* MyStack;
-	uint32 KeyInStack;
+	NFactorInterface* MyFactor;
+	uint32 KeyInFactor;
 };

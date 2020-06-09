@@ -1,62 +1,62 @@
 #include "FactorsFactoryClient.h"
 
+#include "FactorUnitInterface.h"
+#include "Factor.h"
 #include "FactorInterface.h"
-#include "FactorStack.h"
-#include "FactorStackInterface.h"
 #include "FactorState.h"
 #include "FactorStateInterface.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineInterface.h"
 
-void NFactorsFactoryClient::RemoveStack(FName StackName)
+void NFactorsFactoryClient::RemoveFactor(FName FactorName)
 {
-	if (myensureMsgf(StacksList.Contains(StackName), TEXT("The stack \"%s\" does not exists"), *StackName.ToString()))
+	if (myensureMsgf(FactorsList.Contains(FactorName), TEXT("The stack \"%s\" does not exists"), *FactorName.ToString()))
 	{
-		StacksList.Remove(StackName);
+		FactorsList.Remove(FactorName);
 	}
 }
 
-void NFactorsFactoryClient::CreateStack(FName StackName, TSharedPtr<NTimelineInterface> _Timeline)
+void NFactorsFactoryClient::CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> _Timeline)
 {
-	if (myensureMsgf(!StacksList.Contains(StackName), TEXT("The stack \"%s\" has been already created"), *StackName.ToString()))
+	if (myensureMsgf(!FactorsList.Contains(FactorName), TEXT("The stack \"%s\" has been already created"), *FactorName.ToString()))
 	{
-		TSharedPtr<NFactorStackInterface> Stack = MakeShareable(new NFactorStack(StackName, _Timeline));
-		AddStack(Stack);
+		TSharedPtr<NFactorInterface> Factor = MakeShareable(new NFactor(FactorName, _Timeline));
+		AddFactor(Factor);
 	}
 }
 
-void NFactorsFactoryClient::CreateStack(TArray<FName> StackNames, TSharedPtr<NTimelineInterface> Timeline)
+void NFactorsFactoryClient::CreateFactor(TArray<FName> FactorNames, TSharedPtr<NTimelineInterface> Timeline)
 {
-	for (FName Name : StackNames)
+	for (FName Name : FactorNames)
 	{
-		CreateStack(Name, Timeline);
+		CreateFactor(Name, Timeline);
 	}
 }
 
-void NFactorsFactoryClient::AddStack(TSharedPtr<NFactorStackInterface> Stack)
+void NFactorsFactoryClient::AddFactor(TSharedPtr<NFactorInterface> Factor)
 {
 	if (myensureMsgf(
-			!StacksList.Contains(Stack->GetName()), TEXT("The stack \"%s\" has been already added"), *Stack->GetName().ToString()))
+			!FactorsList.Contains(Factor->GetName()), TEXT("The stack \"%s\" has been already added"), *Factor->GetName().ToString()))
 	{
-		StacksList.Add(Stack->GetName(), Stack);
+		FactorsList.Add(Factor->GetName(), Factor);
 	}
 }
 
-void NFactorsFactoryClient::GetState(FName StackName, NFactorStateInterface& State)
+void NFactorsFactoryClient::GetState(FName FactorName, NFactorStateInterface& State)
 {
-	if (StacksList.Contains(StackName))
+	if (FactorsList.Contains(FactorName))
 	{
-		TSharedPtr<NFactorStackInterface> Stack = StacksList[StackName];
-		mycheckf(Stack.IsValid(), TEXT("The stack '%s' existed in the stack list but has been removed"), *StackName.ToString());
-		Stack->SupplyStateWithCurrentData(State);
+		TSharedPtr<NFactorInterface> Factor = FactorsList[FactorName];
+		mycheckf(Factor.IsValid(), TEXT("The stack '%s' existed in the stack list but has been removed"), *FactorName.ToString());
+		Factor->SupplyStateWithCurrentData(State);
 	}
 }
 
-TArray<NFactorStateInterface*> NFactorsFactoryClient::GetStates(TArray<FName> StackNames, NFactorStateInterface* StateTemplate)
+TArray<NFactorStateInterface*> NFactorsFactoryClient::GetStates(TArray<FName> FactorNames, NFactorStateInterface* StateTemplate)
 {
 	TArray<NFactorStateInterface*> States;
-	for (FName Name : StackNames)
+	for (FName Name : FactorNames)
 	{
 		NFactorStateInterface* State = StateTemplate->Clone();
 		GetState(Name, *State);
@@ -69,30 +69,30 @@ TArray<NFactorStateInterface*> NFactorsFactoryClient::GetStates(TArray<FName> St
 	return States;
 }
 
-void NFactorsFactoryClient::AddFactor(FName StackName, TSharedPtr<NFactorInterface> Factor)
+void NFactorsFactoryClient::AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
-	mycheck(StackName != NAME_None);
-	mycheckf(StacksList.Contains(StackName), TEXT("Stack %s does not exists"), *StackName.ToString());
-	TSharedPtr<NFactorStackInterface> Stack = StacksList[StackName];
+	mycheck(FactorName != NAME_None);
+	mycheckf(FactorsList.Contains(FactorName), TEXT("Factor %s does not exists"), *FactorName.ToString());
+	TSharedPtr<NFactorInterface> Factor = FactorsList[FactorName];
 
-	if (!Stack.IsValid() || !Factor.IsValid())
+	if (!Factor.IsValid() || !FactorUnit.IsValid())
 	{
 		return;
 	}
-	Stack->AddFactor(Factor);
+	Factor->AddFactorUnit(FactorUnit);
 }
 
-void NFactorsFactoryClient::SetDebug(const TArray<FName> StackNames, bool bDebug)
+void NFactorsFactoryClient::SetDebug(const TArray<FName> FactorNames, bool bDebug)
 {
-	for (FName StackName : StackNames)
+	for (FName FactorName : FactorNames)
 	{
-		mycheckf(StacksList.Contains(StackName), TEXT("Stack %s does not exists"), *StackName.ToString());
+		mycheckf(FactorsList.Contains(FactorName), TEXT("Factor %s does not exists"), *FactorName.ToString());
 
 		if (!ensureMsgf(
-				StacksList.Contains(StackName), TEXT("Can not debug an inexistant stack named \"%s\""), *StackName.ToString()))
+				FactorsList.Contains(FactorName), TEXT("Can not debug an inexistant stack named \"%s\""), *FactorName.ToString()))
 			return;
 
-		TSharedPtr<NFactorStackInterface> Stack = StacksList[StackName];
-		Stack->Debug(bDebug);
+		TSharedPtr<NFactorInterface> Factor = FactorsList[FactorName];
+		Factor->Debug(bDebug);
 	}
 }

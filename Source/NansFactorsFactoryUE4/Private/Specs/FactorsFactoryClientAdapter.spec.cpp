@@ -1,17 +1,17 @@
-#include "Attribute/FactorStackAttribute.h"
-#include "Factor/FactorAdapters.h"
+#include "Attribute/FactorAttribute.h"
+#include "FactorUnit/FactorUnitAdapters.h"
 #include "Misc/AutomationTest.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
-#include "NansFactorsFactoryCore/Public/FactorStackInterface.h"
-#include "NansFactorsFactoryCore/Public/NullFactor.h"
+#include "NansFactorsFactoryCore/Public/FactorInterface.h"
+#include "NansFactorsFactoryCore/Public/NullFactorUnit.h"
 #include "NansFactorsFactoryUE4/Public/Specs/Mocks/SpyFactorsFactoryClient.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
 #include "Specs/Mocks/FakeFactorsFactoryClientAdapter.h"
-#include "Specs/Mocks/StubFactorStackNotWorking.h"
+#include "Specs/Mocks/StubFactorNotWorking.h"
 #include "Specs/Mocks/StubFactorState.h"
-#include "Specs/Mocks/StubNullUnrealFactorStackProxy.h"
+#include "Specs/Mocks/StubNullUnrealFactorProxy.h"
 #include "Specs/Mocks/StubTimeline.h"
-#include "Stack/FactorStackDecorator.h"
+#include "Factor/FactorDecorator.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -25,16 +25,16 @@ void FactorsFactoryClientAdapterSpec::Define()
 {
 	Describe("How to use FactorsFactoryClientAdapter", [this]() {
 		BeforeEach([this]() {
-			NFactorInterface* NullObj = new NNullFactor();
+			NFactorUnitInterface* NullObj = new NNullFactorUnit();
 			Client = NewObject<UFakeFactorsFactoryClientAdapter>();
 			Client->Init();
 		});
 
 		It("Should failed when add the wrong stack", [this]() {
-			TSharedPtr<NFactorStackInterface> Stack = MakeShareable(new StubFactorStackNotWorking());
+			TSharedPtr<NFactorInterface> Factor = MakeShareable(new StubFactorNotWorking());
 			try
 			{
-				Client->AddStack(Stack);
+				Client->AddFactor(Factor);
 				TEST_FALSE(TEXT("Should not be called"), true);
 			}
 			catch (const TCHAR* e)
@@ -44,12 +44,12 @@ void FactorsFactoryClientAdapterSpec::Define()
 		});
 
 		It("Should failed when add the wrong stack's proxy", [this]() {
-			UNFactorStackDecorator* Stack = NewObject<UNFactorStackDecorator>();
-			TSharedPtr<NFactorStackInterface> Proxy = MakeShareable(new StubNullUnrealFactorStackProxy(*Stack));
+			UNFactorDecorator* Factor = NewObject<UNFactorDecorator>();
+			TSharedPtr<NFactorInterface> Proxy = MakeShareable(new StubNullUnrealFactorProxy(*Factor));
 
 			try
 			{
-				Client->AddStack(Proxy);
+				Client->AddFactor(Proxy);
 				TEST_FALSE(TEXT("Should not be called"), true);
 			}
 			catch (const TCHAR* e)
@@ -59,25 +59,25 @@ void FactorsFactoryClientAdapterSpec::Define()
 		});
 
 		It("Should use its embeded client's methods for the most part", [this]() {
-			FName StackName("MyName");
+			FName FactorName("MyName");
 			TSharedPtr<NStubTimeline> StubTimeline = MakeShareable(new NStubTimeline());
-			Client->CreateStack(StackName, StubTimeline);
+			Client->CreateFactor(FactorName, StubTimeline);
 			TEST_EQ(
-				"Calls SpyFactorsFactoryClient::AddStack once", Client->GetSpy()->GetCall("SpyFactorsFactoryClient::AddStack"), 1);
-			TEST_EQ("Save 1 object in stacks", Client->GetUEStacks().Num(), 1);
-			TEST_NOT_NULL("Save an unreal object in stacks", Client->GetUEStacks()[StackName]);
+				"Calls SpyFactorsFactoryClient::AddFactor once", Client->GetSpy()->GetCall("SpyFactorsFactoryClient::AddFactor"), 1);
+			TEST_EQ("Save 1 object in stacks", Client->GetUEFactors().Num(), 1);
+			TEST_NOT_NULL("Save an unreal object in stacks", Client->GetUEFactors()[FactorName]);
 			StubFactorState* State = new StubFactorState();
-			Client->GetState(StackName, *State);
+			Client->GetState(FactorName, *State);
 			TEST_EQ(
 				"Calls SpyFactorsFactoryClient::GetState once", Client->GetSpy()->GetCall("SpyFactorsFactoryClient::GetState"), 1);
-			Client->GetStates({StackName}, State);
+			Client->GetStates({FactorName}, State);
 			TEST_EQ("Calls SpyFactorsFactoryClient::GetStates once",
 				Client->GetSpy()->GetCall("SpyFactorsFactoryClient::GetStates"),
 				1);
-			auto Factor = MakeShareable(new NNullFactor());
-			Client->AddFactor(StackName, Factor);
-			TEST_EQ("Calls SpyFactorsFactoryClient::AddFactor once",
-				Client->GetSpy()->GetCall("SpyFactorsFactoryClient::AddFactor"),
+			auto FactorUnit = MakeShareable(new NNullFactorUnit());
+			Client->AddFactorUnit(FactorName, FactorUnit);
+			TEST_EQ("Calls SpyFactorsFactoryClient::AddFactorUnit once",
+				Client->GetSpy()->GetCall("SpyFactorsFactoryClient::AddFactorUnit"),
 				1);
 		});
 
