@@ -21,7 +21,6 @@ public:
 	virtual NFactorStateInterface* Clone() override;
 	virtual void Debug(bool _bDebug) override;
 	virtual const TArray<FNFactorStateOperator> GetOperators() const override;
-	// TODO create a Serialize method which save Time + FactorValue +  Operators
 
 protected:
 	TArray<FNFactorStateOperator> Operators;

@@ -41,7 +41,6 @@ struct NANSFACTORSFACTORYUE4_API FNFactorRecord
 		Factor = _Factor;
 		UId = Factor->GetUID();
 		OperatorName = Factor->GetOperator()->GetName();
-		// TODO create a NFactor::GetValueForComputation() to allow having the initial value with GetFactorValue
 		Value = Factor->GetFactorValue();
 	}
 
