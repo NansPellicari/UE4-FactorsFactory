@@ -92,7 +92,7 @@ protected:
 	UEdGraphPin* FindClassPin(const TArray<UEdGraphPin*>& FromPins) const;
 
 	/**
-	 * Finds and returns the stack input pin.
+	 * Finds and returns the factor input pin.
 	 *
 	 * @param FromPins	A list of pins to search.
 	 */

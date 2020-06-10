@@ -85,7 +85,7 @@ TODO: Improve the system to allow it
 
 ### 3.1. Factor
 
-TODO make it possible to use overrides in the system...
+You can create your own C++ or Blueprint class overriding the default [FactorDecorator](../Source/NansFactorsFactoryUE4/Public/Factor/FactorDecorator.h) class.
 
 <a id="markdown-32-timeline" name="32-timeline"></a>
 

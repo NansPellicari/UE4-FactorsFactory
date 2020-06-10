@@ -61,6 +61,8 @@ void UNFactorDecorator::Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeli
 {
 	Factor = MakeShareable(new NFactor(_Name, _Timeline));
 	Factor->GetTimeline()->OnEventExpired().AddUObject(this, &UNFactorDecorator::OnTimelineEventExpired);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), ANSI_TO_TCHAR(__FUNCTION__));
+	OnInit();
 }
 
 void UNFactorDecorator::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index)
@@ -69,8 +71,10 @@ void UNFactorDecorator::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event
 	FNFactorUnitRecord* FactorUnitRecord =
 		FactorUnitStore.FindByPredicate([UId](const FNFactorUnitRecord& Record) { return Record.UId == UId; });
 
-	// It could be an event from an another stack or an another type
+	// It could be an event from an another factor or an another type
 	if (FactorUnitRecord == nullptr) return;
+
+	OnFactorUnitExpired(FactorUnitRecord->FactorUnit);
 
 	FactorUnitRecord->FactorUnit = nullptr;
 }
@@ -129,13 +133,14 @@ TArray<FNFactorUnitRecord> UNFactorDecorator::GetFactorUnitStore() const
 void UNFactorDecorator::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
 	auto Proxy = dynamic_cast<NUnrealFactorUnitProxy*>(FactorUnit.Get());
-	mycheckf(Proxy != nullptr, TEXT("You should passed NUnrealFactorUnitProxy inherited stack only"));
+	mycheckf(Proxy != nullptr, TEXT("You should passed NUnrealFactorUnitProxy (or derivation) only"));
 	mycheckf(Proxy->GetUnrealObject() != nullptr,
-		TEXT("You should instanciate your stack proxy with a UNFactorUnitAdapterAbstract inherited stack"));
+		TEXT("You should instanciate your factorUnit proxy with a UNFactorUnitAdapterAbstract base class"));
 
 	FactorUnitStore.Add(FNFactorUnitRecord(Proxy->GetUnrealObject()));
 
 	Factor->AddFactorUnit(FactorUnit);
+	OnAddFactorUnit(Proxy->GetUnrealObject());
 }
 
 bool UNFactorDecorator::HasFlag(FString Flag) const
@@ -169,10 +174,9 @@ UNTimelineDecorator* UNFactorDecorator::GetUnrealTimeline()
 
 void UNFactorDecorator::Serialize(FArchive& Ar)
 {
-	// Remove actual factor to avoid cumulate old factors + new factors currenlty earned
 	if (Ar.IsSaving())
 	{
-		SavedName = Factor->GetName();
+		SavedName = Factor.IsValid() ? Factor->GetName() : SavedName;
 	}
 
 	if (Ar.IsLoading())
@@ -185,8 +189,12 @@ void UNFactorDecorator::Serialize(FArchive& Ar)
 
 	if (Ar.IsLoading())
 	{
-		Factor->Clear();
-		Factor->SetName(SavedName);
+		// Remove actual factor to avoid cumulate old factors + new factors currenlty earned
+		if (Factor.IsValid())
+		{
+			Factor->Clear();
+			Factor->SetName(SavedName);
+		}
 		SavedName = NAME_None;
 	}
 

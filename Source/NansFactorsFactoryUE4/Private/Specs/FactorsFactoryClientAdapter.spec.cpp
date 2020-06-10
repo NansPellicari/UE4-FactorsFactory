@@ -1,4 +1,5 @@
 #include "Attribute/FactorAttribute.h"
+#include "Factor/FactorDecorator.h"
 #include "FactorUnit/FactorUnitAdapters.h"
 #include "Misc/AutomationTest.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
@@ -11,7 +12,6 @@
 #include "Specs/Mocks/StubFactorState.h"
 #include "Specs/Mocks/StubNullUnrealFactorProxy.h"
 #include "Specs/Mocks/StubTimeline.h"
-#include "Factor/FactorDecorator.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -30,7 +30,7 @@ void FactorsFactoryClientAdapterSpec::Define()
 			Client->Init();
 		});
 
-		It("Should failed when add the wrong stack", [this]() {
+		It("Should failed when add the wrong factor", [this]() {
 			TSharedPtr<NFactorInterface> Factor = MakeShareable(new StubFactorNotWorking());
 			try
 			{
@@ -43,7 +43,7 @@ void FactorsFactoryClientAdapterSpec::Define()
 			}
 		});
 
-		It("Should failed when add the wrong stack's proxy", [this]() {
+		It("Should failed when add the wrong factor's proxy", [this]() {
 			UNFactorDecorator* Factor = NewObject<UNFactorDecorator>();
 			TSharedPtr<NFactorInterface> Proxy = MakeShareable(new StubNullUnrealFactorProxy(*Factor));
 
@@ -62,10 +62,11 @@ void FactorsFactoryClientAdapterSpec::Define()
 			FName FactorName("MyName");
 			TSharedPtr<NStubTimeline> StubTimeline = MakeShareable(new NStubTimeline());
 			Client->CreateFactor(FactorName, StubTimeline);
-			TEST_EQ(
-				"Calls SpyFactorsFactoryClient::AddFactor once", Client->GetSpy()->GetCall("SpyFactorsFactoryClient::AddFactor"), 1);
-			TEST_EQ("Save 1 object in stacks", Client->GetUEFactors().Num(), 1);
-			TEST_NOT_NULL("Save an unreal object in stacks", Client->GetUEFactors()[FactorName]);
+			TEST_EQ("Calls SpyFactorsFactoryClient::AddFactor once",
+				Client->GetSpy()->GetCall("SpyFactorsFactoryClient::AddFactor"),
+				1);
+			TEST_EQ("Save 1 object in factors", Client->GetUEFactors().Num(), 1);
+			TEST_NOT_NULL("Save an unreal object in factors", Client->GetUEFactors()[FactorName]);
 			StubFactorState* State = new StubFactorState();
 			Client->GetState(FactorName, *State);
 			TEST_EQ(

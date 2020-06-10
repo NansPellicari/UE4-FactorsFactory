@@ -41,13 +41,13 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			TEST_NOT_NULL("FakeObject should be not null", FakeObject);
 			TEST_NOT_NULL("GEngine should still exists", GEngine);
 			TEST_NOT_NULL("World should still exists", FakeObject->GetWorld());
-			TEST_NOT_NULL(
-				"UNFactorsFactoryClientAdapter should be retrieved", UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject));
+			TEST_NOT_NULL("UNFactorsFactoryClientAdapter should be retrieved",
+				UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject));
 			CollectGarbage(RF_NoFlags);
 			TEST_NOT_NULL("World should be not null", World);
 			TEST_NOT_NULL("World should still exists", FakeObject->GetWorld());
-			TEST_NOT_NULL(
-				"UNFactorsFactoryClientAdapter should be retrieved", UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject));
+			TEST_NOT_NULL("UNFactorsFactoryClientAdapter should be retrieved",
+				UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject));
 			CollectGarbage(RF_NoFlags);
 		});
 
@@ -81,8 +81,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			Client->CreateFactor(FName("test1"), StubTimeline);
 			FFactorAttribute FactorConf = FFactorAttribute(FName("test1"));
 
-			UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(
-				UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapterBasic::StaticClass(), FactorConf));
+			UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+				FakeObject, UNFactorUnitAdapterBasic::StaticClass(), FactorConf));
 
 			TEST_NOT_NULL("Should not be null", MyObject);
 			MyObject->FactorUnitValue = 2.f;
@@ -95,7 +95,7 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			TEST_EQ("Should be add and equals as itself...", ObjectAdded, MyObject);
 		});
 
-		It("Should get a results even if the asked stack not exists", [this]() {
+		It("Should get a results even if the asked factor does not exists", [this]() {
 			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("Im not existing"))};
 			TMap<FName, FNFactorStateResult> States;
 
@@ -109,7 +109,7 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			TEST_TRUE("with an amount", States[Names[0].Name].Amount == 0);
 		});
 
-		It("Can clear stacks", [this]() {
+		It("Can clear factors", [this]() {
 			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("test1"))};
 			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
 			Client->CreateFactor(Names[0].Name, StubTimeline);
@@ -142,8 +142,9 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 			for (uint32 I = 0; I < 200; I++)
 			{
-				UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+				UNFactorUnitAdapterBasic* MyObject =
+					Cast<UNFactorUnitAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+						FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
@@ -155,7 +156,7 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			TEST_TRUE("Yes it can without crashing", true);
 			TMap<FName, FNFactorStateResult> States = UNFactorsFactoryBlueprintHelpers::GetFactorStates(FakeObject, Names);
 			TEST_TRUE("And get some results", States.Num() > 0);
-			TEST_TRUE("And get a result for the stack 'test1'", States.Contains(Names[0].Name));
+			TEST_TRUE("And get a result for the factor 'test1'", States.Contains(Names[0].Name));
 
 			// Just to avoid crashing the test
 			if (States.Contains(Names[0].Name))
@@ -172,8 +173,9 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 			for (uint32 I = 0; I < 200; I++)
 			{
-				UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+				UNFactorUnitAdapterBasic* MyObject =
+					Cast<UNFactorUnitAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+						FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
@@ -185,8 +187,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			TEST_TRUE("Yes it can create and add 200 diff without crashing", true);
 			TMap<FName, FNFactorStateResult> States = UNFactorsFactoryBlueprintHelpers::GetFactorStates(FakeObject, Names);
 			TEST_TRUE("And get some results", States.Num() == 2);
-			TEST_TRUE("And get a result for the stack 'test1'", States.Contains(Names[0].Name));
-			TEST_TRUE("And get a result for the stack 'test2'", States.Contains(Names[1].Name));
+			TEST_TRUE("And get a result for the factor 'test1'", States.Contains(Names[0].Name));
+			TEST_TRUE("And get a result for the factor 'test2'", States.Contains(Names[1].Name));
 
 			// Just to avoid crashing the test in case of a problem occured earlyer
 			if (States.Contains(Names[0].Name))
@@ -204,8 +206,9 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 			for (uint32 I = 0; I < 100; I++)
 			{
-				UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+				UNFactorUnitAdapterBasic* MyObject =
+					Cast<UNFactorUnitAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+						FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");

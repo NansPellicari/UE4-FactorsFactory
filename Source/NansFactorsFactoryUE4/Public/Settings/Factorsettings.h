@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+#include "Factor/FactorDecorator.h"
 
 #include "FactorSettings.generated.h"
 
@@ -14,6 +15,9 @@ struct FNFactorSettings
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors")
 	FName Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors")
+	TSubclassOf<UNFactorDecorator> FactorClass = UNFactorDecorator::StaticClass();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors")
 	FName TimelineName;

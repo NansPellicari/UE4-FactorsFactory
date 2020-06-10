@@ -23,6 +23,7 @@ public:
 	UNFactorsFactoryClientAdapter();
 	virtual void Init();
 	UNFactorUnitAdapterAbstract* CreateFactorUnit(const FName& FactorName, const UClass* Class);
+	virtual void CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> Timeline, const UClass* FactorClass);
 
 	// BEGIN NFactorsFactoryClientInterface override
 	virtual void CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> Timeline) override;
@@ -45,7 +46,7 @@ protected:
 
 	/**
 	 * This parameter is usefull only for serialization,
-	 * it allows to keep the same stack list order
+	 * it allows to keep the same factor list order
 	 * for save & load to maintain data serialization's order consistency.
 	 */
 	UPROPERTY(SaveGame)

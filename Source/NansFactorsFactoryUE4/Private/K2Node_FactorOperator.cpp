@@ -170,12 +170,12 @@ FName UK2Node_FactorOperator::ObjectPinName(TEXT("FactorUnitObject"));
 
 FText UK2Node_FactorOperator::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
-	return LOCTEXT("FactorOperatorFactory_Title", "Create a FactorUnit");
+	return LOCTEXT("FactorOperatorFactory_Title", "Create a Factor Unit");
 }
 
 FText UK2Node_FactorOperator::GetTooltipText() const
 {
-	return LOCTEXT("FactorOperatorFactory_Tooltip", "This node allow to create any factor and add it to a new factor stack");
+	return LOCTEXT("FactorOperatorFactory_Tooltip", "This node allow to create any factorUnit and add it to a factor");
 }
 
 FText UK2Node_FactorOperator::GetMenuCategory() const
@@ -384,8 +384,9 @@ void UK2Node_FactorOperator::AllocateDefaultPins()
 		LOCTEXT("ClassPinDescription", "The class from which to access one or more default values."),
 		ClassPin->PinToolTip);
 	UEdGraphPin* FactorPin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Struct, FFactorAttribute::StaticStruct(), FactorPinName);
-	K2Schema->ConstructBasicPinTooltip(
-		*FactorPin, LOCTEXT("ClassPinDescription", "The stack from which the factor will be attached to."), FactorPin->PinToolTip);
+	K2Schema->ConstructBasicPinTooltip(*FactorPin,
+		LOCTEXT("ClassPinDescription", "The factor from which the factorUnit will be attached to."),
+		FactorPin->PinToolTip);
 
 	CreatePin(
 		EGPD_Output, UEdGraphSchema_K2::PC_Object, UNFactorUnitAdapterAbstract::StaticClass(), UEdGraphSchema_K2::PN_ReturnValue);
@@ -491,7 +492,7 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 		return;
 	}
 
-	// Create temp variable for stack which allows to connect to the blueprint helpers functions
+	// Create temp variable for factor field which allows to connect it to blueprint helpers functions
 	UK2Node_TemporaryVariable* TempFactorNode = CompilerContext.SpawnIntermediateNode<UK2Node_TemporaryVariable>(this, SourceGraph);
 	TempFactorNode->VariableType = FactorPin->PinType;
 	TempFactorNode->AllocateDefaultPins();

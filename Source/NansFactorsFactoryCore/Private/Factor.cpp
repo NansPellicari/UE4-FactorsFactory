@@ -1,7 +1,7 @@
 #include "Factor.h"
 
-#include "FactorUnitInterface.h"
 #include "FactorState.h"
+#include "FactorUnitInterface.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "Operator/Interfaces.h"
@@ -33,7 +33,7 @@ void NFactor::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const fl
 	int32 FactorUnitIndex =
 		Factors.IndexOfByPredicate([UId](const TSharedPtr<NFactorUnitInterface> Record) { return Record->GetUID() == UId; });
 
-	// It could be an event from an another stack or an another type
+	// It could be an event from an another factor or an another type
 	if (FactorUnitIndex == INDEX_NONE) return;
 
 	Factors.RemoveAt(FactorUnitIndex);
@@ -113,7 +113,8 @@ void NFactor::AddFactorsToState(NFactorStateInterface& State)
 
 		mycheck(FactorUnit->GetOperator().IsValid());
 
-		NFactorOperatorInterfaceWithFactor* Operator = dynamic_cast<NFactorOperatorInterfaceWithFactor*>(FactorUnit->GetOperator().Get());
+		NFactorOperatorInterfaceWithFactor* Operator =
+			dynamic_cast<NFactorOperatorInterfaceWithFactor*>(FactorUnit->GetOperator().Get());
 		if (Operator != nullptr)
 		{
 			Operator->SetFactor(this);

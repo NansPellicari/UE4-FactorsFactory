@@ -2,6 +2,7 @@
 #include "Engine/Engine.h"
 #include "Engine/GameInstance.h"
 #include "EngineGlobals.h"
+#include "Factor/FactorDecorator.h"
 #include "FactorUnit/FactorUnitAdapters.h"
 #include "FactorUnit/UnrealFactorUnitProxy.h"
 #include "FactorsFactoryBlueprintHelpers.h"
@@ -18,7 +19,6 @@
 #include "Specs/Mocks/FakeFullFactorsClientAdapter.h"
 #include "Specs/Mocks/MockEngineAndWorld.h"
 #include "Specs/Mocks/StubTimeline.h"
-#include "Factor/FactorDecorator.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -64,7 +64,8 @@ void FactorsFactorySerializationSpec::Define()
 			MyObject->Init();
 
 			Client->AddFactorUnit(Names[0].Name, MakeShareable(new NUnrealFactorUnitProxy(MyObject)));
-			MyObject = Cast<UNFactorUnitAdapterBasic>(Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapterBasic::StaticClass()));
+			MyObject =
+				Cast<UNFactorUnitAdapterBasic>(Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapterBasic::StaticClass()));
 			MyObject->FactorUnitValue = 1.f;
 			MyObject->Duration = 2.f;
 			MyObject->Reason = FName("Reason 2");
@@ -90,7 +91,8 @@ void FactorsFactorySerializationSpec::Define()
 
 			// Add a factor to ensure it will be deleted when the previous data are loaded
 			{
-				MyObject = Cast<UNFactorUnitAdapterBasic>(Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapterBasic::StaticClass()));
+				MyObject = Cast<UNFactorUnitAdapterBasic>(
+					Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapterBasic::StaticClass()));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason 3");
@@ -107,7 +109,7 @@ void FactorsFactorySerializationSpec::Define()
 			TEST_EQ("And get a result", State.Amount, 4.f);
 			TEST_EQ("There is 3 Events in Timeline collection", TimelineManager->GetEvents().Num(), 3);
 			TEST_EQ("There is 3 Factors in store", Factor->GetFactorUnitStore().Num(), 3);
-			TEST_EQ("There is 2 Factors in stack", Factor->GetFactors().Num(), 2);
+			TEST_EQ("There is 2 Factors in factor", Factor->GetFactors().Num(), 2);
 
 			// load from memory
 			FMemoryReader FromBinary = FMemoryReader(ToBinary, true);
@@ -120,7 +122,7 @@ void FactorsFactorySerializationSpec::Define()
 			TEST_EQ("And get a result", State.Amount, 2.f);
 			TEST_EQ("There is 2 Events in Timeline collection", TimelineManager->GetEvents().Num(), 2);
 			TEST_EQ("There is 2 Factors in store", Factor->GetFactorUnitStore().Num(), 2);
-			TEST_EQ("There is 1 FactorUnit in stack", Factor->GetFactors().Num(), 1);
+			TEST_EQ("There is 1 FactorUnit in factor", Factor->GetFactors().Num(), 1);
 
 			Client->Clear();
 		});

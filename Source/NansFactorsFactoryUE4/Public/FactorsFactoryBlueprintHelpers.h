@@ -55,16 +55,16 @@ public:
 	 *      and if there is a results I can use it as a helpers factor,
 	 *      and if not I can ... do ... things?"
 	 */
-	UFUNCTION(BlueprintPure, Category = "FactorsFactory|Factory", meta = (WorldContext = "WorldContextObject", Keywords = "FactorsFactory get states factory", DisplayName = "Get states of FactorsFactory stacks list"))
+	UFUNCTION(BlueprintPure, Category = "FactorsFactory|Factory", meta = (WorldContext = "WorldContextObject", Keywords = "FactorsFactory get states factory", DisplayName = "Get states of the factors list"))
 	static TMap<FName, FNFactorStateResult> GetFactorStates(UObject* WorldContextObject, TArray<FFactorAttribute> FactorNames);
 	
-	UFUNCTION(BlueprintPure, Category = "FactorsFactory|Factory", meta = (WorldContext = "WorldContextObject", Keywords = "FactorsFactory get state factory", DisplayName = "Get state of a FactorsFactory stack"))
+	UFUNCTION(BlueprintPure, Category = "FactorsFactory|Factory", meta = (WorldContext = "WorldContextObject", Keywords = "FactorsFactory get state factory", DisplayName = "Get state of a factor"))
 	static FNFactorStateResult GetFactorState(UObject* WorldContextObject, FFactorAttribute FactorName);
 
-	UFUNCTION(BlueprintCallable, Category = "FactorsFactory|Factory", meta = (WorldContext = "WorldContextObject", Keywords = "FactorsFactory remove stack", DisplayName = "Remove a FactorsFactory stack"))
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory|Factory", meta = (WorldContext = "WorldContextObject", Keywords = "FactorsFactory remove factor", DisplayName = "Remove a factor"))
 	static void Clear(UObject* WorldContextObject, TArray<FFactorAttribute> FactorNames);
 
-	UFUNCTION(BlueprintCallable, Category = "FactorsFactory|Factory", meta = (DevelopmentOnly, WorldContext = "WorldContextObject", Keywords = "FactorsFactory debug", DisplayName = "Debug FactorsFactory stack"))
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory|Factory", meta = (DevelopmentOnly, WorldContext = "WorldContextObject", Keywords = "FactorsFactory debug", DisplayName = "Debug a factor"))
 	static void Debug(UObject* WorldContextObject, const TArray<FFactorAttribute> FactorNames, const bool Debug);
 	
 	UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "FactorsFactory|Factory")

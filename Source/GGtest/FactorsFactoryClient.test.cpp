@@ -1,10 +1,10 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
 #include "Mock/FakeTimelineManager.h"
-#include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
 #include "NansFactorsFactoryCore/Public/FactorStateInterface.h"
+#include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
@@ -176,7 +176,7 @@ TEST_F(NansFactorsFactoryCoreClientTest, ShouldDispatchTimeInFactorAndFactors)
 	Timeline->NotifyTick();
 	NFactorStateInterface* State = new NFactorState();
 	Client->GetFactor()[Names[0]]->SupplyStateWithCurrentData(*State);
-	// Time should be synchronized between client>stacks>factors
+	// Time should be synchronized between client>factors>factorUnits
 	EXPECT_EQ(Timeline->GetCurrentTime(), State->GetTime());
 	EXPECT_EQ(Timeline->GetCurrentTime() - TickInterval, FactorUnit->GetEvent()->GetLocalTime());
 }

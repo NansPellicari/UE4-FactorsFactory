@@ -82,31 +82,58 @@ struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 	};
 };
 
-UCLASS()
+UCLASS(Blueprintable)
 class NANSFACTORSFACTORYUE4_API UNFactorDecorator : public UObject, public NFactorInterface
 {
 	friend struct FNFactorUnitRecord;
 	GENERATED_BODY()
 public:
 	UNFactorDecorator() {}
+
 	void Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
 	UNFactorUnitAdapterAbstract* CreateFactorUnit(const UClass* Class);
 	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
 	TArray<FNFactorUnitRecord> GetFactorUnitStore() const;
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
+	void OnInit();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
+	void OnAddFactorUnit(UNFactorUnitAdapterAbstract* FactorUnit);
+
+	/**
+	 * @warning The FactorUnit pointer is immediatly removed after this method is called.
+	 *
+	 * @param FactorUnit - A pointer to a factorUnit which end its lifetime.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
+	void OnFactorUnitExpired(UNFactorUnitAdapterAbstract* FactorUnit);
+
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
+	virtual FName GetName() const override;
+
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
+	virtual float GetTime() const override;
+
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
+	virtual bool HasFlag(FString Flag) const override;
+
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
+	virtual bool GetFlag(FString Flag) const override;
+
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
+	virtual void Debug(bool _bDebug) override;
+
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
+	virtual void SetFlag(FString Flag, bool Value) override;
+
 	// BEGIN NFactorInterface override
 	virtual void Clear() override;
 	virtual void SetName(FName _Name) override;
-	virtual FName GetName() const override;
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;
-	virtual float GetTime() const override;
 	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override;
 	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
-	virtual bool HasFlag(FString Flag) const override;
-	virtual bool GetFlag(FString Flag) const override;
-	virtual void SetFlag(FString Flag, bool Value) override;
-	virtual void Debug(bool _bDebug) override;
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
 	// END NFactorInterface override
 
