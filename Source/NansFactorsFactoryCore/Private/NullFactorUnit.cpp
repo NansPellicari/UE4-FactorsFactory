@@ -1,6 +1,5 @@
 #include "NullFactorUnit.h"
 
-#include "FactorEvent.h"
 #include "NansTimelineSystemCore/public/EventInterface.h"
 #include "Operator/Interfaces.h"
 

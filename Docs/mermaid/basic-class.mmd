@@ -1,3 +1,7 @@
 graph LR
-FS[FactorState] -- Get data from --> F[Factor] -- Stores --> FU[FactorUnits] -- Embeds & is notified by --> FE[FactorEvent]
-FU -- Embeds & uses to compute --> FO[FactorOperator]
+FS[FactorState] -- Get data from --> F[Factor] -- Stores --> FU[FactorUnits] -- Contains & uses to compute --> FO[FactorOperator]
+F -- Contains -->  T["Timeline (from TimelineSystem)"]:::S
+FU -- Contains & is notified by --> E["Event (from TimelineSystem)"]:::S
+T -- Stores & notifies --> E
+
+classDef S fill:#f96;

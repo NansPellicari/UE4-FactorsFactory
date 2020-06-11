@@ -17,10 +17,10 @@
 #include "Attribute/FactorAttribute.h"
 #include "CoreMinimal.h"
 #include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
+#include "NansTimelineSystemUE4/Public/Event/EventDecorator.h"
 
 class NEventInterface;
 class NFactorOperatorInterface;
-class UNFactorEventDecorator;
 class NFactorUnit;
 
 #include "FactorUnitAdapterAbstract.generated.h"
@@ -32,21 +32,27 @@ class NANSFACTORSFACTORYUE4_API UNFactorUnitAdapterAbstract : public UObject, pu
 public:
 	UNFactorUnitAdapterAbstract() {}
 
-	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
+	TSubclassOf<UNEventDecorator> EventClass = UNEventDecorator::StaticClass();
+
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
 	float FactorUnitValue = 0.f;
 
-	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
 	float Duration = 0.f;
 
-	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
 	float Delay = 0.f;
 
-	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operation")
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
 	FName Reason = NAME_None;
 
 	virtual void Init();
-	virtual void Init(UNFactorEventDecorator* _Event);
+	virtual void Init(UNEventDecorator* _Event);
 	virtual TSharedPtr<NFactorOperatorInterface> GetConfiguredOperator() const;
+
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory|Unit")
+	virtual UNEventDecorator* GetEventDecorator();
 
 	// BEGIN NFactorUnitInterface override
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
@@ -67,5 +73,5 @@ protected:
 	TSharedPtr<NFactorUnit> FactorUnit;
 
 	UPROPERTY(SkipSerialization)
-	UNFactorEventDecorator* Event;
+	UNEventDecorator* Event;
 };

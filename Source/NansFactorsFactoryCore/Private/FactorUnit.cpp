@@ -1,6 +1,5 @@
 #include "FactorUnit.h"
 
-#include "FactorEvent.h"
 #include "NansTimelineSystemCore/public/Event.h"
 #include "Operator/FactorOperator.h"
 #include "Operator/Interfaces.h"
@@ -24,7 +23,7 @@ NFactorUnit::NFactorUnit(float _FactorUnitValue,
 	Event = _Event;
 	if (!_Event.IsValid())
 	{
-		Event = MakeShareable(new NFactorEvent());
+		Event = MakeShareable(new NEvent());
 	}
 
 	Event->SetEventLabel(_Reason);

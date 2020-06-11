@@ -15,23 +15,33 @@
 #include "FactorUnit/FactorUnitAdapterAbstract.h"
 
 #include "Attribute/FactorAttribute.h"
-#include "Event/EventDecorator.h"
-#include "Event/FactorEventDecorator.h"
 #include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
+#include "NansTimelineSystemUE4/Public/Event/EventDecorator.h"
 #include "NansTimelineSystemUE4/Public/Event/UnrealEventProxy.h"
 #include "Settings/FactorSettings.h"
 
 void UNFactorUnitAdapterAbstract::Init()
 {
-	Event = UNEventDecoratorFactory::CreateObject<UNFactorEventDecorator>(this, UNFactorEventDecorator::StaticClass(), Reason);
+	UClass* TheEventClass = EventClass;
+	if (!TheEventClass->IsChildOf(UNEventDecorator::StaticClass()))
+	{
+		UE_LOG(LogTemp,
+			Error,
+			TEXT("%s - The event class should be a subclass of UNEventDecorator!"
+				 "To avoid crashing the game, it has been replaced by UNEventDecorator."),
+			ANSI_TO_TCHAR(__FUNCTION__));
+		TheEventClass = UNEventDecorator::StaticClass();
+	}
+
+	Event = UNEventDecoratorFactory::CreateObject<UNEventDecorator>(this, TheEventClass, Reason);
 	TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(*Event));
 	FactorUnit = MakeShareable(new NFactorUnit(FactorUnitValue, GetConfiguredOperator(), Duration, Reason, Delay, EventProxy));
 }
 
-void UNFactorUnitAdapterAbstract::Init(UNFactorEventDecorator* _Event)
+void UNFactorUnitAdapterAbstract::Init(UNEventDecorator* _Event)
 {
 	Event = _Event;
 	TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(*Event));
@@ -61,6 +71,11 @@ void UNFactorUnitAdapterAbstract::SetOperator(TSharedPtr<NFactorOperatorInterfac
 float UNFactorUnitAdapterAbstract::GetFactorUnitValue() const
 {
 	return FactorUnit->GetFactorUnitValue();
+}
+
+UNEventDecorator* UNFactorUnitAdapterAbstract::GetEventDecorator()
+{
+	return Event;
 }
 
 FName UNFactorUnitAdapterAbstract::GetReason() const

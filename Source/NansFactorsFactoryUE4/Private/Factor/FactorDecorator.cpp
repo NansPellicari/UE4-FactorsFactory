@@ -15,8 +15,8 @@
 #include "Factor/FactorDecorator.h"
 
 #include "NansFactorsFactoryCore/Public/Factor.h"
-#include "NansFactorsFactoryUE4/Public/Event/FactorEventDecorator.h"
 #include "NansFactorsFactoryUE4/Public/FactorUnit/UnrealFactorUnitProxy.h"
+#include "NansTimelineSystemUE4/Public/Event/EventDecorator.h"
 #include "NansTimelineSystemUE4/Public/TimelineDecorator.h"
 #include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
 
@@ -34,7 +34,7 @@ void FNFactorUnitRecord::Serialize(FArchive& Ar, UNFactorDecorator* Factor)
 
 		UClass* Class = FindObject<UClass>(ANY_PACKAGE, *FactorUnitClassName);
 		FactorUnit = Factor->CreateFactorUnit(Class);
-		UNFactorEventDecorator* Event = Cast<UNFactorEventDecorator>(EventRecord.Event);
+		UNEventDecorator* Event = Cast<UNEventDecorator>(EventRecord.Event);
 		mycheckf(Event != nullptr,
 			TEXT("Problems occured during serialization of FNFactorUnitRecord,"
 				 "The associated event has not been found for UID %s"),
@@ -61,7 +61,6 @@ void UNFactorDecorator::Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeli
 {
 	Factor = MakeShareable(new NFactor(_Name, _Timeline));
 	Factor->GetTimeline()->OnEventExpired().AddUObject(this, &UNFactorDecorator::OnTimelineEventExpired);
-	UE_LOG(LogTemp, Warning, TEXT("%s"), ANSI_TO_TCHAR(__FUNCTION__));
 	OnInit();
 }
 

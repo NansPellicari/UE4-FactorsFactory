@@ -92,7 +92,6 @@ public:
 
 	void Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
 	UNFactorUnitAdapterAbstract* CreateFactorUnit(const UClass* Class);
-	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
 	TArray<FNFactorUnitRecord> GetFactorUnitStore() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
@@ -151,4 +150,5 @@ protected:
 	FName SavedName;
 
 	UNTimelineDecorator* GetUnrealTimeline();
+	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
 };
