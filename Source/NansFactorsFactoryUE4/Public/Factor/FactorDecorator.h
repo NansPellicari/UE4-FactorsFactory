@@ -17,7 +17,7 @@
 #include "CoreMinimal.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
-#include "NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitAdapterAbstract.h"
+#include "NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitAdapter.h"
 #include "NansTimelineSystemUE4/Public/Event/EventRecord.h"
 
 #include "FactorDecorator.generated.h"
@@ -36,17 +36,18 @@ struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 	GENERATED_USTRUCT_BODY()
 
 	FNFactorUnitRecord() {}
-	FNFactorUnitRecord(UNFactorUnitAdapterAbstract* _FactorUnit)
+	FNFactorUnitRecord(UNFactorUnitAdapter* _FactorUnit)
 	{
 		FactorUnit = _FactorUnit;
 		UId = FactorUnit->GetUID();
 		OperatorName = FactorUnit->GetOperator()->GetName();
 		Value = FactorUnit->GetFactorUnitValue();
+		OperatorProviderClassName = FactorUnit->OperatorProvider->GetPathName();
 	}
 
-	/** The UNFactorUnitAdapterAbstract object */
+	/** The UNFactorUnitAdapter object */
 	UPROPERTY(SkipSerialization)
-	UNFactorUnitAdapterAbstract* FactorUnit = nullptr;
+	UNFactorUnitAdapter* FactorUnit = nullptr;
 	/** The time it as been attached to the timeline in secs (differ to UNEventDecorator::StartedAt) */
 	UPROPERTY(SkipSerialization)
 	FString UId = FString("");
@@ -59,6 +60,9 @@ struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 	/** This is used only during serialization, it allow to re-instance the object on load */
 	UPROPERTY(SkipSerialization)
 	FString FactorUnitClassName = FString("");
+
+	UPROPERTY(SkipSerialization)
+	FString OperatorProviderClassName = FString("");
 
 	FNEventRecord& GetEventRecord(UNFactorDecorator* Factor);
 
@@ -74,6 +78,7 @@ struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 		}
 
 		Ar << Record.FactorUnitClassName;
+		Ar << Record.OperatorProviderClassName;
 		Ar << Record.UId;
 		Ar << Record.OperatorName;
 		Ar << Record.Value;
@@ -91,14 +96,14 @@ public:
 	UNFactorDecorator() {}
 
 	void Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
-	UNFactorUnitAdapterAbstract* CreateFactorUnit(const UClass* Class);
+	UNFactorUnitAdapter* CreateFactorUnit(const UClass* Class);
 	TArray<FNFactorUnitRecord> GetFactorUnitStore() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
 	void OnInit();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
-	void OnAddFactorUnit(UNFactorUnitAdapterAbstract* FactorUnit);
+	void OnAddFactorUnit(UNFactorUnitAdapter* FactorUnit);
 
 	/**
 	 * @warning The FactorUnit pointer is immediatly removed after this method is called.
@@ -106,7 +111,7 @@ public:
 	 * @param FactorUnit - A pointer to a factorUnit which end its lifetime.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
-	void OnFactorUnitExpired(UNFactorUnitAdapterAbstract* FactorUnit);
+	void OnFactorUnitExpired(UNFactorUnitAdapter* FactorUnit);
 
 	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
 	virtual FName GetName() const override;

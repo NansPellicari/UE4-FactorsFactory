@@ -39,6 +39,8 @@ void FNFactorUnitRecord::Serialize(FArchive& Ar, UNFactorDecorator* Factor)
 			TEXT("Problems occured during serialization of FNFactorUnitRecord,"
 				 "The associated event has not been found for UID %s"),
 			*UId);
+		UClass* OperatorProviderClass = FindObject<UClass>(ANY_PACKAGE, *OperatorProviderClassName);
+		FactorUnit->OperatorProvider = OperatorProviderClass;
 
 		FactorUnit->Init(Event);
 		FactorUnit->Serialize(Ar);
@@ -104,14 +106,14 @@ float UNFactorDecorator::GetTime() const
 	return Factor->GetTime();
 }
 
-UNFactorUnitAdapterAbstract* UNFactorDecorator::CreateFactorUnit(const UClass* Class)
+UNFactorUnitAdapter* UNFactorDecorator::CreateFactorUnit(const UClass* Class)
 {
 	static uint32 FactorUnitNum = 0;
 
 	FString Name = FString::Format(TEXT("FactorUnit_{0}_"), {Class->GetFullName()});
 	Name.AppendInt(++FactorUnitNum);
 
-	return NewObject<UNFactorUnitAdapterAbstract>(this, Class, FName(*Name));
+	return NewObject<UNFactorUnitAdapter>(this, Class, FName(*Name));
 }
 
 TSharedRef<NFactorUnitInterface> UNFactorDecorator::GetFactorUnit(uint32 Key) const
@@ -134,7 +136,7 @@ void UNFactorDecorator::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUni
 	auto Proxy = dynamic_cast<NUnrealFactorUnitProxy*>(FactorUnit.Get());
 	mycheckf(Proxy != nullptr, TEXT("You should passed NUnrealFactorUnitProxy (or derivation) only"));
 	mycheckf(Proxy->GetUnrealObject() != nullptr,
-		TEXT("You should instanciate your factorUnit proxy with a UNFactorUnitAdapterAbstract base class"));
+		TEXT("You should instanciate your factorUnit proxy with a UNFactorUnitAdapter base class"));
 
 	FactorUnitStore.Add(FNFactorUnitRecord(Proxy->GetUnrealObject()));
 

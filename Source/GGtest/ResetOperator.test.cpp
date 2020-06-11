@@ -60,8 +60,8 @@ TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldCheckIfIsAnOperatorWithFac
 	// Some factors to be reset
 	FakeResetOperator* Operator = new FakeResetOperator();
 	EXPECT_EQ(Operator->GetName(), NResetOperator::Name);
-	EXPECT_FALSE(OperatorUtils::IsOperatorWithFactor(new NNullOperator()));
-	EXPECT_TRUE(OperatorUtils::IsOperatorWithFactor(Operator));
+	EXPECT_FALSE(NOperatorUtils::IsOperatorWithFactor(new NNullOperator()));
+	EXPECT_TRUE(NOperatorUtils::IsOperatorWithFactor(Operator));
 }
 
 TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldTriggerAnErrorIfTryingToSetAKeyBeforeHavingAFactor)

@@ -2,7 +2,7 @@
 #include "Engine/Engine.h"
 #include "Engine/GameInstance.h"
 #include "EngineGlobals.h"
-#include "FactorUnit/FactorUnitAdapters.h"
+#include "FactorUnit/FactorUnitAdapter.h"
 #include "FactorsFactoryBlueprintHelpers.h"
 #include "Misc/AutomationTest.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
@@ -51,11 +51,11 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			CollectGarbage(RF_NoFlags);
 		});
 
-		It("Should instanciate a UNFactorUnitAdapterBasic", [this]() {
+		It("Should instanciate a UNFactorUnitAdapter", [this]() {
 			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
 			Client->CreateFactor(FName("test1"), StubTimeline);
-			UNFactorUnitAdapterAbstract* MyObject = UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-				FakeObject, UNFactorUnitAdapterBasic::StaticClass(), FFactorAttribute(FName("test1")));
+			UNFactorUnitAdapter* MyObject = UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+				FakeObject, UNFactorUnitAdapter::StaticClass(), FFactorAttribute(FName("test1")));
 			TEST_NOT_NULL("Should not be null", MyObject);
 		});
 
@@ -67,7 +67,7 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 				try
 				{
 					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-						FakeObject, UNFactorUnitAdapterBasic::StaticClass(), FFactorAttribute());
+						FakeObject, UNFactorUnitAdapter::StaticClass(), FFactorAttribute());
 					TEST_TRUE("Should not be called", false);
 				}
 				catch (const TCHAR* e)
@@ -81,17 +81,18 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			Client->CreateFactor(FName("test1"), StubTimeline);
 			FFactorAttribute FactorConf = FFactorAttribute(FName("test1"));
 
-			UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-				FakeObject, UNFactorUnitAdapterBasic::StaticClass(), FactorConf));
+			UNFactorUnitAdapter* MyObject =
+				Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+					FakeObject, UNFactorUnitAdapter::StaticClass(), FactorConf));
 
 			TEST_NOT_NULL("Should not be null", MyObject);
 			MyObject->FactorUnitValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = FName("Reason");
-			MyObject->Operator = ENFactorOperator::Add;
+			MyObject->OperatorProvider = UNAddOperatorProvider::StaticClass();
 
-			UNFactorUnitAdapterBasic* ObjectAdded =
-				Cast<UNFactorUnitAdapterBasic>(UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, FactorConf));
+			UNFactorUnitAdapter* ObjectAdded = Cast<UNFactorUnitAdapter>(
+				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, FactorConf));
 			TEST_EQ("Should be add and equals as itself...", ObjectAdded, MyObject);
 		});
 
@@ -115,12 +116,13 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			Client->CreateFactor(Names[0].Name, StubTimeline);
 
 			FName Reason = FName("A temp object");
-			UNFactorUnitAdapterBasic* MyObject = Cast<UNFactorUnitAdapterBasic>(
-				UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+			UNFactorUnitAdapter* MyObject =
+				Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+					FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
 			MyObject->FactorUnitValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = Reason;
-			MyObject->Operator = ENFactorOperator::Add;
+			MyObject->OperatorProvider = UNAddOperatorProvider::StaticClass();
 			UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, Names[0]);
 
 			FNFactorStateResult State = UNFactorsFactoryBlueprintHelpers::GetFactorState(FakeObject, Names[0]);
@@ -142,13 +144,13 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 			for (uint32 I = 0; I < 200; I++)
 			{
-				UNFactorUnitAdapterBasic* MyObject =
-					Cast<UNFactorUnitAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-						FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+				UNFactorUnitAdapter* MyObject =
+					Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+						FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
-				MyObject->Operator = ENFactorOperator::Add;
+				MyObject->OperatorProvider = UNAddOperatorProvider::StaticClass();
 
 				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, Names[0]);
 			}
@@ -173,13 +175,13 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 			for (uint32 I = 0; I < 200; I++)
 			{
-				UNFactorUnitAdapterBasic* MyObject =
-					Cast<UNFactorUnitAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-						FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+				UNFactorUnitAdapter* MyObject =
+					Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+						FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
-				MyObject->Operator = ENFactorOperator::Add;
+				MyObject->OperatorProvider = UNAddOperatorProvider::StaticClass();
 
 				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, I % 2 ? Names[0] : Names[1]);
 			}
@@ -206,13 +208,13 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 			for (uint32 I = 0; I < 100; I++)
 			{
-				UNFactorUnitAdapterBasic* MyObject =
-					Cast<UNFactorUnitAdapterBasic>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-						FakeObject, UNFactorUnitAdapterBasic::StaticClass(), Names[0]));
+				UNFactorUnitAdapter* MyObject =
+					Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+						FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
-				MyObject->Operator = ENFactorOperator::Add;
+				MyObject->OperatorProvider = UNAddOperatorProvider::StaticClass();
 				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, I % 2 ? Names[0] : Names[1]);
 
 				// Launch GC at each 10th's iteration

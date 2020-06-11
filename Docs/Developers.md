@@ -9,15 +9,17 @@ Get the full documentation of the [API here](Api.md).
 -   [2. Design decisions](#2-design-decisions)
     -   [2.1. Core & UE4 separation](#21-core--ue4-separation)
 -   [3. Implementation details](#3-implementation-details)
--   [4. How to override, create my own Factor, Factor Unit/State & Operator](#4-how-to-override-create-my-own-factor-factor-unitstate--operator)
-    -   [4.1. FactorState](#41-factorstate)
-    -   [4.2. Factor](#42-factor)
-    -   [4.3. FactorUnit](#43-factorunit)
-    -   [4.4. FactorOperator & FactorProvider](#44-factoroperator--factorprovider)
+-   [4. How to override, create my own Factor, Factor Unit & Operator](#4-how-to-override-create-my-own-factor-factor-unit--operator)
+    -   [4.1. Factor](#41-factor)
+    -   [4.2. FactorUnit](#42-factorunit)
+    -   [4.3. FactorOperator & OperatorProvider](#43-factoroperator--operatorprovider)
+        -   [4.3.1. FactorOperator](#431-factoroperator)
+        -   [4.3.2. OperatorProvider](#432-operatorprovider)
 -   [5. Special case: Load game](#5-special-case-load-game)
 -   [6. Testing](#6-testing)
     -   [6.1. Make Google Tests works](#61-make-google-tests-works)
--   [7. Contributing](#7-contributing)
+-   [7. Notes](#7-notes)
+-   [8. Contributing](#8-contributing)
 
 <!-- /TOC -->
 
@@ -66,47 +68,58 @@ My goal was to create the most extensible plugin as possible and keep things sim
 -   there is a [proto in javascript](../JsProto/proto.js) to test quickly the system
 -   Core [Class diagram](./Core/ClassDiagram.md) (TODO update them)
 
-<a id="markdown-4-how-to-override-create-my-own-factor-factor-unitstate--operator" name="4-how-to-override-create-my-own-factor-factor-unitstate--operator"></a>
+<a id="markdown-4-how-to-override-create-my-own-factor-factor-unit--operator" name="4-how-to-override-create-my-own-factor-factor-unit--operator"></a>
 
-## 4. How to override, create my own Factor, Factor Unit/State & Operator
+## 4. How to override, create my own Factor, Factor Unit & Operator
 
 First, I create the whole structure to be the most extensible.  
 To doing it, we have to consider **4** basics elements (those in blue):
 
 ![basic class](./mermaid/basic-class.png)
 
-> To get more details, you can read the [README definitions](../README.md#3-definitions) section.  
-> To get more details about the **orange** classes, see [NansTimelineSystem: How to override](https://github.com/NansPellicari/UE4-NansTimelineSystem/blob/master/Docs/Developers.md#3-how-to-override-create-my-own-event-timeline-etc) section.
+> :bookmark_tabs: To get more details, you can read the [README: What Is A Factor](../README.md#23-what-is-a-factor) section.  
+> :bookmark_tabs: To get more details about the **orange** classes, see [NansTimelineSystem: How to override](https://github.com/NansPellicari/UE4-NansTimelineSystem/blob/master/Docs/Developers.md#3-how-to-override-create-my-own-event-timeline-etc) section.
 
 Each of these **Core** classes in `Source/NansFactorsFactoryCore` have their **decorator(s)** in the `Source/NansFactorsFactoryUE4`.  
 The most preferable way to extend them, it's to create your own decorators or override existants decorators.
 
-<a id="markdown-41-factorstate" name="41-factorstate"></a>
+<a id="markdown-41-factor" name="41-factor"></a>
 
-### 4.1. FactorState
-
-TODO: Improve the system to allow it
-
-<a id="markdown-42-factor" name="42-factor"></a>
-
-### 4.2. Factor
+### 4.1. Factor
 
 You can create your own C++ or Blueprint class overriding the default [FactorDecorator](../Source/NansFactorsFactoryUE4/Public/Factor/FactorDecorator.h) class.
 
-<a id="markdown-43-factorunit" name="43-factorunit"></a>
+<a id="markdown-42-factorunit" name="42-factorunit"></a>
 
-### 4.3. FactorUnit
+### 4.2. FactorUnit
 
-Factor Unit contains data about factor alteration it provides.  
+Factor Unit contains data about factor **alteration** it provides.  
 It is also the glue with `FactorOperator` object and `Event` from `TimelineSystem`.  
-If you want to create a more complex behavior like changing the factor computation, maybe you should rather overrides [FactorOperator & FactorProvider](#44-factoroperator--factorprovider) instead.  
 The best way is to extend this base class [FactorUnitAdapterAbstract.h](../Source/NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitAdapterAbstract.h). You can extend it with only a Blueprint or in C++.
 
-<a id="markdown-44-factoroperator--factorprovider" name="44-factoroperator--factorprovider"></a>
+> If you want to create a more complex behavior like changing the factor computation, maybe you should rather overrides [FactorOperator & FactorProvider](#44-factoroperator--factorprovider) instead.
 
-### 4.4. FactorOperator & FactorProvider
+<a id="markdown-43-factoroperator--operatorprovider" name="43-factoroperator--operatorprovider"></a>
 
-TODO: Improve this to alow overrides
+### 4.3. FactorOperator & OperatorProvider
+
+<a id="markdown-431-factoroperator" name="431-factoroperator"></a>
+
+#### 4.3.1. FactorOperator
+
+Its goal is to compute data from its `FactorUnit` wrapper related to all previous `FactorUnit` set in the `Factor`.
+
+For simple operation you can just implement [NFactorOperatorInterface](../Source/NansFactorsFactoryCore/Public/Operator/Interfaces.h), it just add a new operation at the top of the `FactorUnits` stack in `Factor` object (the case for null, add, multiply, divider, subtract).
+
+For more complex computing like making an operation with a specfic previous `FactorUnit` (like the [ResetOperator](../Source/NansFactorsFactoryCore/Public/Operator/ResetOperator.h) for example), you can implement [NFactorOperatorInterfaceWithFactor](../Source/NansFactorsFactoryCore/Public/Operator/Interfaces.h). Using it allows to provide the `Factor` object (so the `FactorUnits` stack) into your `FactorOperator` object during its computation.
+
+<a id="markdown-432-operatorprovider" name="432-operatorprovider"></a>
+
+#### 4.3.2. OperatorProvider
+
+It's aimed to provide an `FactorOperator` to a `FactorUnit`.  
+You **have to** always create one associated to your `FactorOperator`, it allows to parameterized `FactorUnit` creation with your new `FactorOperator`.  
+You just have to override [UNOperatorProviderBase](../Source/NansFactorsFactoryUE4/Public/Operator/OperatorProviders.h) and fill the `GetOperator()` method.
 
 <a id="markdown-5-special-case-load-game" name="5-special-case-load-game"></a>
 
@@ -158,9 +171,15 @@ After that you just have to link tests located into the `GGTest` folder of the p
 
 And that it!
 
-<a id="markdown-7-contributing" name="7-contributing"></a>
+<a id="markdown-7-notes" name="7-notes"></a>
 
-## 7. Contributing
+## 7. Notes
+
+The clang-file as been inspired by this really helpull gist: https://gist.github.com/intinig/9bba3a3faee80250b781bf916a4ab8b7
+
+<a id="markdown-8-contributing" name="8-contributing"></a>
+
+## 8. Contributing
 
 You are very welcome if you want to contribute.
 I explain in [CONTRIBUTING.md](../CONTRIBUTING.md) what is the most comfortable way to me you can contribute.

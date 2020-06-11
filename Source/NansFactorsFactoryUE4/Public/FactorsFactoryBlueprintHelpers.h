@@ -2,7 +2,7 @@
 
 #include "Attribute/FactorAttribute.h"
 #include "CoreMinimal.h"
-#include "FactorUnit/FactorUnitAdapters.h"
+#include "FactorUnit/FactorUnitAdapter.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "Settings/FactorSettings.h"
@@ -13,7 +13,7 @@ class NFactorOperatorInterface;
 class UNFactorsFactoryClientAdapter;
 class UOperatorTest;
 class FactorUnit;
-class UNFactorUnitAdapterAbstract;
+class UNFactorUnitAdapter;
 
 USTRUCT(BlueprintType)
 struct FNFactorStateResult
@@ -31,7 +31,7 @@ struct FNFactorStateResult
 	float Time = -1.f;
 };
 
-UCLASS(meta = (ScriptName = "FactorUnitLibrary"))
+UCLASS(meta = (ScriptName = "FactorsFactoryLibrary"))
 class NANSFACTORSFACTORYUE4_API UNFactorsFactoryBlueprintHelpers : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
@@ -68,9 +68,9 @@ public:
 	static void Debug(UObject* WorldContextObject, const TArray<FFactorAttribute> FactorNames, const bool Debug);
 	
 	UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "FactorsFactory|Factory")
-	static UNFactorUnitAdapterAbstract* CreateFactorUnit(UObject* WorldContextObject, UClass* Class, FFactorAttribute Factor);
+	static UNFactorUnitAdapter* CreateFactorUnit(UObject* WorldContextObject, UClass* Class, FFactorAttribute Factor);
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "FactorsFactory|Factory")
-	static UNFactorUnitAdapterAbstract* AddFactorUnit(UObject* WorldContextObject, UNFactorUnitAdapterAbstract* FactorUnit, FFactorAttribute Factor);
+	static UNFactorUnitAdapter* AddFactorUnit(UObject* WorldContextObject, UNFactorUnitAdapter* FactorUnit, FFactorAttribute Factor);
 	// clang-format on
 };

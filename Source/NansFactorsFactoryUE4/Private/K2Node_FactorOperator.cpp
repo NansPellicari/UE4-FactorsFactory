@@ -10,7 +10,7 @@
 #include "EditorCategoryUtils.h"
 #include "Engine/Blueprint.h"
 #include "Engine/BlueprintGeneratedClass.h"
-#include "FactorUnit/FactorUnitAdapterAbstract.h"
+#include "FactorUnit/FactorUnitAdapter.h"
 #include "FactorsFactoryBlueprintHelpers.h"
 #include "GraphEditorActions.h"
 #include "K2Node_AssignmentStatement.h"
@@ -44,9 +44,9 @@ namespace
 		{
 			FOptionalPinManager::GetRecordDefaults(TestProperty, Record);
 
-			// Show pin which the property is owned by the src class or UNFactorUnitAdapterAbstract class.
+			// Show pin which the property is owned by the src class or UNFactorUnitAdapter class.
 			Record.bShowPin = TestProperty->GetOwnerClass() == SrcClass ||
-							  TestProperty->GetOwnerClass() == UNFactorUnitAdapterAbstract::StaticClass();
+							  TestProperty->GetOwnerClass() == UNFactorUnitAdapter::StaticClass();
 			Record.bShowPin = !TestProperty->HasAnyPropertyFlags(CPF_DisableEditOnInstance);
 		}
 
@@ -379,7 +379,7 @@ void UK2Node_FactorOperator::AllocateDefaultPins()
 
 	// Create the class input type selector pin
 	UEdGraphPin* ClassPin =
-		CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Class, UNFactorUnitAdapterAbstract::StaticClass(), ClassPinName);
+		CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Class, UNFactorUnitAdapter::StaticClass(), ClassPinName);
 	K2Schema->ConstructBasicPinTooltip(*ClassPin,
 		LOCTEXT("ClassPinDescription", "The class from which to access one or more default values."),
 		ClassPin->PinToolTip);
@@ -389,7 +389,7 @@ void UK2Node_FactorOperator::AllocateDefaultPins()
 		FactorPin->PinToolTip);
 
 	CreatePin(
-		EGPD_Output, UEdGraphSchema_K2::PC_Object, UNFactorUnitAdapterAbstract::StaticClass(), UEdGraphSchema_K2::PN_ReturnValue);
+		EGPD_Output, UEdGraphSchema_K2::PC_Object, UNFactorUnitAdapter::StaticClass(), UEdGraphSchema_K2::PN_ReturnValue);
 }
 
 #if WITH_EDITOR
@@ -797,14 +797,14 @@ void UK2Node_FactorOperator::OnClassPinChanged()
 	UClass* InputClass = GetInputClass();
 
 #if WITH_EDITOR
-	if (!InputClass->IsChildOf(UNFactorUnitAdapterAbstract::StaticClass()) ||
+	if (!InputClass->IsChildOf(UNFactorUnitAdapter::StaticClass()) ||
 		InputClass->HasAnyClassFlags(EClassFlags::CLASS_Abstract))
 	{
 		UE_LOG(LogTemp,
 			Error,
 			TEXT("%s has a wrong class selected, you have to set a subclass of %s"),
 			*this->GetName(),
-			*UNFactorUnitAdapterAbstract::StaticClass()->GetName());
+			*UNFactorUnitAdapter::StaticClass()->GetName());
 	}
 #endif
 
@@ -880,7 +880,7 @@ void UK2Node_FactorOperator::ValidateNodeDuringCompilation(class FCompilerResult
 
 	if (const UClass* SourceClass = GetInputClass())
 	{
-		if (!SourceClass->IsChildOf(UNFactorUnitAdapterAbstract::StaticClass()) ||
+		if (!SourceClass->IsChildOf(UNFactorUnitAdapter::StaticClass()) ||
 			SourceClass->HasAnyClassFlags(EClassFlags::CLASS_Abstract))
 		{
 			bool bEmitWarning = true;
@@ -888,7 +888,7 @@ void UK2Node_FactorOperator::ValidateNodeDuringCompilation(class FCompilerResult
 				*LOCTEXT("NotInstanciableObjectWarning", "@@ has a wrong class selected, you have to set a subclass of @@")
 					 .ToString(),
 				this,
-				UNFactorUnitAdapterAbstract::StaticClass());
+				UNFactorUnitAdapter::StaticClass());
 			return;
 		}
 

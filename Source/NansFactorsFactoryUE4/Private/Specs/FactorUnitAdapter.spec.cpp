@@ -2,11 +2,12 @@
 #include "Engine/Engine.h"
 #include "Engine/GameInstance.h"
 #include "EngineGlobals.h"
-#include "FactorUnit/FactorUnitAdapters.h"
+#include "FactorUnit/FactorUnitAdapter.h"
 #include "Misc/AutomationTest.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/NullFactorUnit.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
+#include "Operator/OperatorProviders.h"
 
 #if WITH_DEV_AUTOMATION_TESTS
 
@@ -20,38 +21,47 @@ void FactorUnitAdapterSpec::Define()
 	Describe("How to use FactorUnitAdapter", [this]() {
 		BeforeEach([this]() {});
 
-		It("Should transform an enum to an operator with static class", [this]() {
-			auto Operator = UNFactorUnitAdapterBasic::EnumToOperator(ENFactorOperator::Null);
-			TEST_NOT_NULL(TEXT("Should return a NullOperator"), dynamic_cast<NNullOperator*>(Operator.Get()));
-			Operator = UNFactorUnitAdapterBasic::EnumToOperator(ENFactorOperator::Add);
-			TEST_NOT_NULL(TEXT("Should return a AddOperator"), dynamic_cast<NAddOperator*>(Operator.Get()));
-			Operator = UNFactorUnitAdapterBasic::EnumToOperator(ENFactorOperator::ResP);
-			TEST_NOT_NULL(TEXT("Should return a ResetOperator"), dynamic_cast<NResetOperator*>(Operator.Get()));
-			Operator = UNFactorUnitAdapterBasic::EnumToOperator(ENFactorOperator::Div);
-			TEST_NOT_NULL(TEXT("Should return a DividerOperator"), dynamic_cast<NDividerOperator*>(Operator.Get()));
-			Operator = UNFactorUnitAdapterBasic::EnumToOperator(ENFactorOperator::Mul);
-			TEST_NOT_NULL(TEXT("Should return a MultiplyOperator"), dynamic_cast<NMultiplyOperator*>(Operator.Get()));
-			Operator = UNFactorUnitAdapterBasic::EnumToOperator(ENFactorOperator::Sub);
-			TEST_NOT_NULL(TEXT("Should return a SubsctractOperator"), dynamic_cast<NSubtractOperator*>(Operator.Get()));
+		It("Should transform a provider to an operator", [this]() {
+			auto FactorUnit = NewObject<UNFactorUnitAdapter>();
+			FactorUnit->OperatorProvider = UNNullOperatorProvider::StaticClass();
+			TEST_NOT_NULL(
+				TEXT("Should return a NullOperator"), dynamic_cast<NNullOperator*>(FactorUnit->GetConfiguredOperator().Get()));
+			FactorUnit->OperatorProvider = UNAddOperatorProvider::StaticClass();
+
+			TEST_NOT_NULL(
+				TEXT("Should return a AddOperator"), dynamic_cast<NAddOperator*>(FactorUnit->GetConfiguredOperator().Get()));
+			FactorUnit->OperatorProvider = UNResetOperatorProvider::StaticClass();
+			TEST_NOT_NULL(
+				TEXT("Should return a ResetOperator"), dynamic_cast<NResetOperator*>(FactorUnit->GetConfiguredOperator().Get()));
+			FactorUnit->OperatorProvider = UNDividerOperatorProvider::StaticClass();
+			TEST_NOT_NULL(TEXT("Should return a DividerOperator"),
+				dynamic_cast<NDividerOperator*>(FactorUnit->GetConfiguredOperator().Get()));
+			FactorUnit->OperatorProvider = UNMultiplyOperatorProvider::StaticClass();
+			TEST_NOT_NULL(TEXT("Should return a MultiplyOperator"),
+				dynamic_cast<NMultiplyOperator*>(FactorUnit->GetConfiguredOperator().Get()));
+			FactorUnit->OperatorProvider = UNSubtractOperatorProvider::StaticClass();
+			TEST_NOT_NULL(TEXT("Should return a SubsctractOperator"),
+				dynamic_cast<NSubtractOperator*>(FactorUnit->GetConfiguredOperator().Get()));
 		});
 
 		It("Should transform an enum to an operator with operator property", [this]() {
-			auto FactorUnit = NewObject<UNFactorUnitAdapterBasic>();
-			FactorUnit->Operator = ENFactorOperator::Null;
+			auto FactorUnit = NewObject<UNFactorUnitAdapter>();
+			FactorUnit->OperatorProvider = UNNullOperatorProvider::StaticClass();
 			TEST_NOT_NULL(
 				TEXT("Should return a NullOperator"), dynamic_cast<NNullOperator*>(FactorUnit->GetConfiguredOperator().Get()));
-			FactorUnit->Operator = ENFactorOperator::Add;
-			TEST_NOT_NULL(TEXT("Should return a AddOperator"), dynamic_cast<NAddOperator*>(FactorUnit->GetConfiguredOperator().Get()));
-			FactorUnit->Operator = ENFactorOperator::ResP;
+			FactorUnit->OperatorProvider = UNAddOperatorProvider::StaticClass();
+			TEST_NOT_NULL(
+				TEXT("Should return a AddOperator"), dynamic_cast<NAddOperator*>(FactorUnit->GetConfiguredOperator().Get()));
+			FactorUnit->OperatorProvider = UNResetOperatorProvider::StaticClass();
 			TEST_NOT_NULL(
 				TEXT("Should return a ResetOperator"), dynamic_cast<NResetOperator*>(FactorUnit->GetConfiguredOperator().Get()));
-			FactorUnit->Operator = ENFactorOperator::Div;
-			TEST_NOT_NULL(
-				TEXT("Should return a DividerOperator"), dynamic_cast<NDividerOperator*>(FactorUnit->GetConfiguredOperator().Get()));
-			FactorUnit->Operator = ENFactorOperator::Mul;
-			TEST_NOT_NULL(
-				TEXT("Should return a MultiplyOperator"), dynamic_cast<NMultiplyOperator*>(FactorUnit->GetConfiguredOperator().Get()));
-			FactorUnit->Operator = ENFactorOperator::Sub;
+			FactorUnit->OperatorProvider = UNDividerOperatorProvider::StaticClass();
+			TEST_NOT_NULL(TEXT("Should return a DividerOperator"),
+				dynamic_cast<NDividerOperator*>(FactorUnit->GetConfiguredOperator().Get()));
+			FactorUnit->OperatorProvider = UNMultiplyOperatorProvider::StaticClass();
+			TEST_NOT_NULL(TEXT("Should return a MultiplyOperator"),
+				dynamic_cast<NMultiplyOperator*>(FactorUnit->GetConfiguredOperator().Get()));
+			FactorUnit->OperatorProvider = UNSubtractOperatorProvider::StaticClass();
 			TEST_NOT_NULL(TEXT("Should return a SubsctractOperator"),
 				dynamic_cast<NSubtractOperator*>(FactorUnit->GetConfiguredOperator().Get()));
 		});

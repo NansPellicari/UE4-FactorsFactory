@@ -14,7 +14,7 @@
 
 #include "FactorUnit/UnrealFactorUnitProxy.h"
 
-#include "FactorUnit/FactorUnitAdapterAbstract.h"
+#include "FactorUnit/FactorUnitAdapter.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
 
@@ -65,7 +65,7 @@ TSharedPtr<NEventInterface> NUnrealFactorUnitProxy::GetEvent()
 	return FactorUnit->GetEvent();
 }
 
-UNFactorUnitAdapterAbstract* NUnrealFactorUnitProxy::GetUnrealObject()
+UNFactorUnitAdapter* NUnrealFactorUnitProxy::GetUnrealObject()
 {
 	return FactorUnit;
 }

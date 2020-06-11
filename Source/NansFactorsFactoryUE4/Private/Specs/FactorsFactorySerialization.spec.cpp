@@ -3,7 +3,7 @@
 #include "Engine/GameInstance.h"
 #include "EngineGlobals.h"
 #include "Factor/FactorDecorator.h"
-#include "FactorUnit/FactorUnitAdapters.h"
+#include "FactorUnit/FactorUnitAdapter.h"
 #include "FactorUnit/UnrealFactorUnitProxy.h"
 #include "FactorsFactoryBlueprintHelpers.h"
 #include "Misc/AutomationTest.h"
@@ -55,21 +55,23 @@ void FactorsFactorySerializationSpec::Define()
 
 			NTestWorld::Tick(World, KINDA_SMALL_NUMBER);
 
-			UNFactorUnitAdapterBasic* MyObject =
-				Cast<UNFactorUnitAdapterBasic>(Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapterBasic::StaticClass()));
+			UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
+				Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapter::StaticClass()));
 			MyObject->FactorUnitValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = FName("Reason 1");
-			MyObject->Operator = ENFactorOperator::Add;
+			MyObject->OperatorProvider = UNAddOperatorProvider::StaticClass();
+
 			MyObject->Init();
 
 			Client->AddFactorUnit(Names[0].Name, MakeShareable(new NUnrealFactorUnitProxy(MyObject)));
-			MyObject =
-				Cast<UNFactorUnitAdapterBasic>(Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapterBasic::StaticClass()));
+			MyObject = Cast<UNFactorUnitAdapter>(
+				Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapter::StaticClass()));
 			MyObject->FactorUnitValue = 1.f;
 			MyObject->Duration = 2.f;
 			MyObject->Reason = FName("Reason 2");
-			MyObject->Operator = ENFactorOperator::ResP;
+			MyObject->OperatorProvider = UNResetOperatorProvider::StaticClass();
+
 			MyObject->Init();
 			Client->AddFactorUnit(Names[0].Name, MakeShareable(new NUnrealFactorUnitProxy(MyObject)));
 
@@ -91,12 +93,13 @@ void FactorsFactorySerializationSpec::Define()
 
 			// Add a factor to ensure it will be deleted when the previous data are loaded
 			{
-				MyObject = Cast<UNFactorUnitAdapterBasic>(
-					Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapterBasic::StaticClass()));
+				MyObject = Cast<UNFactorUnitAdapter>(
+					Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapter::StaticClass()));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason 3");
-				MyObject->Operator = ENFactorOperator::Add;
+				MyObject->OperatorProvider = UNAddOperatorProvider::StaticClass();
+
 				MyObject->Init();
 				Client->AddFactorUnit(Names[0].Name, MakeShareable(new NUnrealFactorUnitProxy(MyObject)));
 			}

@@ -3,15 +3,15 @@
 #include "Engine.h"
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
-#include "FactorUnit/FactorUnitAdapters.h"
+#include "FactorUnit/FactorUnitAdapter.h"
 #include "FactorUnit/UnrealFactorUnitProxy.h"
 #include "FactorsFactoryClientAdapter.h"
 #include "FactorsFactoryGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
+#include "NansFactorsFactoryCore/Public/FactorState.h"
 #include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
-#include "NansFactorsFactoryCore/Public/FactorState.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
 #include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
@@ -92,8 +92,8 @@ void UNFactorsFactoryBlueprintHelpers::Clear(UObject* WorldContextObject, TArray
 	}
 }
 
-UNFactorUnitAdapterAbstract* UNFactorsFactoryBlueprintHelpers::AddFactorUnit(
-	UObject* WorldContextObject, UNFactorUnitAdapterAbstract* FactorUnit, FFactorAttribute Factor)
+UNFactorUnitAdapter* UNFactorsFactoryBlueprintHelpers::AddFactorUnit(
+	UObject* WorldContextObject, UNFactorUnitAdapter* FactorUnit, FFactorAttribute Factor)
 {
 	UNFactorsFactoryClientAdapter* Client = GetFactorUnitClient(WorldContextObject);
 
@@ -105,7 +105,7 @@ UNFactorUnitAdapterAbstract* UNFactorsFactoryBlueprintHelpers::AddFactorUnit(
 	return FactorUnit;
 }
 
-UNFactorUnitAdapterAbstract* UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+UNFactorUnitAdapter* UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
 	UObject* WorldContextObject, UClass* Class, FFactorAttribute Factor)
 {
 	UNFactorsFactoryClientAdapter* Client = GetFactorUnitClient(WorldContextObject);

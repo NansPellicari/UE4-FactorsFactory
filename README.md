@@ -13,23 +13,13 @@ Ease and centralized your **factors**<sup>1</sup> management, **retrieve** them 
 -   [1. Requirements](#1-requirements)
 -   [2. Usages](#2-usages)
     -   [2.1. Many factors](#21-many-factors)
-    -   [2.2. When & Where? Ease of use](#22-when--where-ease-of-use)
-    -   [2.3. What is a factor?](#23-what-is-a-factor)
-        -   [2.3.1. - UNIT](#231---unit)
-        -   [2.3.2. - FACTOR (a stack of units)](#232---factor-a-stack-of-units)
-        -   [2.3.3. - STATE](#233---state)
--   [3. How to install it?](#3-how-to-install-it)
--   [4. How should I use?](#4-how-should-i-use)
-    -   [4.1. As designer](#41-as-designer)
-    -   [4.2. As developper](#42-as-developper)
-        -   [4.2.1. Implementation details](#421-implementation-details)
--   [5. How can I extend it?](#5-how-can-i-extend-it)
-    -   [5.1. As designer](#51-as-designer)
-    -   [5.2. As developper](#52-as-developper)
--   [6. Bonus](#6-bonus)
-    -   [6.1. How to run tests quickly](#61-how-to-run-tests-quickly)
--   [7. Notes](#7-notes)
--   [8. Contributing and Supporting](#8-contributing-and-supporting)
+    -   [2.2. What is a factor?](#22-what-is-a-factor)
+        -   [2.2.1. - UNIT](#221---unit)
+        -   [2.2.2. - FACTOR](#222---factor)
+        -   [2.2.3. - STATE](#223---state)
+    -   [2.3. When & Where? Ease of use](#23-when--where-ease-of-use)
+-   [3. Step by step guide](#3-step-by-step-guide)
+-   [4. Contributing and Supporting](#4-contributing-and-supporting)
 
 <!-- /TOC -->
 
@@ -52,7 +42,9 @@ Ease and centralized your **factors**<sup>1</sup> management, **retrieve** them 
 I used this to get a **malus/bonus** system, a **difficulty** factor and an **xp** counter,... sky is the limit!  
 The factors factory helps you to create any factor and update or retrieve it **where** and **when** you want.
 
-### 2.2. Many factors
+<a id="markdown-21-many-factors" name="21-many-factors"></a>
+
+### 2.1. Many factors
 
 For instance in my game I didn't want to have:
 
@@ -64,16 +56,17 @@ So basically a Factor as a **name** and it is attached to a **Timeline** and can
 
 > **Be aware of**: When a timeline ends, all attached factors will be reset.
 
-<a id="markdown-23-what-is-a-factor" name="23-what-is-a-factor"></a>
+<a id="markdown-22-what-is-a-factor" name="22-what-is-a-factor"></a>
 
-### 2.1. What is a factor?
+### 2.2. What is a factor?
 
 In this plugin I categorized factor in **3 units of work**:
 
-<a id="markdown-231---unit" name="231---unit"></a>
+<a id="markdown-221---unit" name="221---unit"></a>
 
-#### 2.1.1. - UNIT
+#### 2.2.1. - UNIT
 
+The related class object is named `FactorUnit`.  
 This is what designers or developpers want to **add on the fly** as a factor's variator.  
 Eg.
 
@@ -83,20 +76,20 @@ Eg.
 
 A factor **UNIT** is basically composed of:
 
-| A Reason                                                                                            | A Value                                | An Operator                                                                                  | A Duration                                                                                                   | A Delay                                     |
-| --------------------------------------------------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
-| Is the **Why** this factor appears (can be used to send feedback to player, to make some stats,...) | **What** amount/degree of factor it is | **How** the value is computed with previous units in the same category (or stack, see below) | Duration of this unit is applied (it is removed for computation after that but saved for stats or feedbacks) | To schedule the start before a unit applies |
+| A Reason                                                                                            | A Value                                | An Operator                                                                                             | A Duration                                                                                                   | A Delay                                     |
+| --------------------------------------------------------------------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
+| Is the **Why** this factor appears (can be used to send feedback to player, to make some stats,...) | **What** amount/degree of factor it is | **How** the value is computed with previous units in the same factor (or `FactorUnit` stack, see below) | Duration of this unit is applied (it is removed for computation after that but saved for stats or feedbacks) | To schedule the start before a unit applies |
 | **Using last examples:**                                                                            |
-| 1. eat rotten fruit                                                                                 | 2                                      | Substract (**reduce** = **malus** = the inverse of **adding** a **bonus**)                   | 300secs                                                                                                      | 100secs                                     |
-| 2. drunk                                                                                            | 4                                      | Divide                                                                                       | 200sec                                                                                                       | 50secs                                      |
-| 3. benevolent action                                                                                | 10                                     | Add                                                                                          | 2 days (you can convert in seconds... :smirk:)                                                               | 0                                           |
+| 1. eat rotten fruit                                                                                 | 2                                      | Substract (**reduce** = **malus** = the inverse of **adding** a **bonus**)                              | 300secs                                                                                                      | 100secs                                     |
+| 2. drunk                                                                                            | 4                                      | Divide                                                                                                  | 200sec                                                                                                       | 50secs                                      |
+| 3. benevolent action                                                                                | 10                                     | Add                                                                                                     | 2 days (you can convert in seconds... :smirk:)                                                               | 0                                           |
 
-<a id="markdown-232---factor-a-stack-of-units" name="232---factor-a-stack-of-units"></a>
+<a id="markdown-222---factor" name="222---factor"></a>
 
-#### 2.1.2. - FACTOR
+#### 2.2.2. - FACTOR
 
 A factor is **named** (eg. **ACTION**, **ELOQUENCE**, **REFLEXE**, **SociaL**, **WhatEver**... you decide) to retrieve them easily.  
-As designer or developper you can create an **infinite list** of factor add add as many units you want.  
+As designer or developper you can create an **infinite list** of factors and add as many units you want.  
 All factors are created in **project settings**.  
 A factor relies on a timeline (configured in **project settings** too).  
 A factor is a **stack of units**, it saved them no matters their lifetime (for computation) so you can use it to:
@@ -105,46 +98,32 @@ A factor is a **stack of units**, it saved them no matters their lifetime (for c
 -   gives feedbacks to the player afterwards
 -   save them on saved games
 
-<a id="markdown-233---state" name="233---state"></a>
+<a id="markdown-223---state" name="223---state"></a>
 
-#### 2.1.3. - STATE
+#### 2.2.3. - STATE
 
-This is the **state** of a factor at a given time.  
+This is the **state** of a factor at a **given time**.  
 Every time you ask to get a state, you will have a static state of the factor value, reasons list implied on computation (all units reasons reduce to get a unique reasons list), and the current time you asked for it (depending on the timeline paradigm).
 
-<a id="markdown-22-when--where-ease-of-use" name="22-when--where-ease-of-use"></a>
+<a id="markdown-23-when--where-ease-of-use" name="23-when--where-ease-of-use"></a>
 
 ### 2.3. When & Where? Ease of use
 
 As a designer and a developper I wanted to:
 
-| Needs                                                                                                              | What is my solution                                                                                                                                                       |
-| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Update a factor in any moment and in every single part of the game (eg. Behavior tree, Blueprint, c++ classes,...) | **1** single **API entry point** saved in the **Game Instance**                                                                                                           |
-| Don't have to use my brain too much...                                                                             | **3 mains blueprints nodes** to manage all of this (**create** units & **get** factor's value).                                                                           |
-| Easily extend it later                                                                                             | Simple architecture in isolated plugins, use a bunch of interfaces and a lot of tests/specs (see below :exclamation: need details here :exclamation:) to avoid regression |
+| Needs                                                                                                              | What is my solution                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Update a factor in any moment and in every single part of the game (eg. Behavior tree, Blueprint, c++ classes,...) | **1** single **API entry point** saved in the **Game Instance**                                                                                                                                                                                                                                                                                   |
+| Don't have to use my brain too much...                                                                             | **3 mains blueprints nodes** to manage all of this (**create** units & **get** factor's value).                                                                                                                                                                                                                                                   |
+| Easily extend it later                                                                                             | Simple architecture in isolated plugins, use a bunch of interfaces (lot of extension possibility see [Developers: How to override ...](./Docs/Developers.md#4-how-to-override-create-my-own-factor-factor-unitstate--operator)) and a lot of tests/specs (see [Developers: Testing](./Docs/Developers.md#6-testing) section) to avoid regression. |
 
-<a id="markdown-3-how-to-install-it" name="3-how-to-install-it"></a>
+<a id="markdown-3-step-by-step-guide" name="3-step-by-step-guide"></a>
 
 ## 3. Step by step guide
 
-<a id="markdown-6-bonus" name="6-bonus"></a>
+<a id="markdown-4-contributing-and-supporting" name="4-contributing-and-supporting"></a>
 
-## 6. Bonus
-
-<a id="markdown-61-how-to-run-tests-quickly" name="61-how-to-run-tests-quickly"></a>
-
-### 6.1. How to run tests quickly
-
-<a id="markdown-7-notes" name="7-notes"></a>
-
-## 7. Notes
-
-The clang-file as been inspired by this really helpull gist: https://gist.github.com/intinig/9bba3a3faee80250b781bf916a4ab8b7
-
-<a id="markdown-8-contributing-and-supporting" name="8-contributing-and-supporting"></a>
-
-## 8. Contributing and Supporting
+## 4. Contributing and Supporting
 
 I've decided to make all the code I developed for my games free to use and open source.  
 I am a true believer in the mindset that sharing and collaborating makes the world a better place.  

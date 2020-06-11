@@ -7,7 +7,7 @@
 #include "FactorsFactoryClientAdapter.generated.h"
 
 class NFactorUnitInterface;
-class UNFactorUnitAdapterAbstract;
+class UNFactorUnitAdapter;
 class NFactorStateInterface;
 class NFactorInterface;
 class NTimelineInterface;
@@ -22,7 +22,7 @@ class NANSFACTORSFACTORYUE4_API UNFactorsFactoryClientAdapter : public UObject, 
 public:
 	UNFactorsFactoryClientAdapter();
 	virtual void Init();
-	UNFactorUnitAdapterAbstract* CreateFactorUnit(const FName& FactorName, const UClass* Class);
+	UNFactorUnitAdapter* CreateFactorUnit(const FName& FactorName, const UClass* Class);
 	virtual void CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> Timeline, const UClass* FactorClass);
 
 	// BEGIN NFactorsFactoryClientInterface override

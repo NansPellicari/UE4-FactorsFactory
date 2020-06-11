@@ -1,6 +1,6 @@
 #include "Attribute/FactorAttribute.h"
 #include "Factor/FactorDecorator.h"
-#include "FactorUnit/FactorUnitAdapters.h"
+#include "FactorUnit/FactorUnitAdapter.h"
 #include "Misc/AutomationTest.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"

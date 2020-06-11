@@ -1,7 +1,7 @@
 #include "Operator/ResetOperator.h"
 
-#include "FactorUnit.h"
 #include "Factor.h"
+#include "FactorUnit.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "Operator/FactorOperator.h"
 
@@ -30,8 +30,9 @@ float NResetOperator::Compute(float Lh, float Rh)
 	TSharedRef<NFactorUnitInterface> FactorUnit = MyFactor->GetFactorUnit(KeyInFactor);
 
 	TSharedRef<NFactorUnitInterface> ResetFactorUnit = FactorUnit;
-	while (MaxAttempt > 0 && (!ResetFactorUnit->IsActivated() || OperatorUtils::IsOperatorWithFactor(ResetFactorUnit->GetOperator().Get()) ||
-								 MyFactor->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit))))
+	while (MaxAttempt > 0 &&
+		   (!ResetFactorUnit->IsActivated() || NOperatorUtils::IsOperatorWithFactor(ResetFactorUnit->GetOperator().Get()) ||
+			   MyFactor->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit))))
 	{
 		int32 ResetKey = KeyInFactor - (Rh + (10 - MaxAttempt));
 		if (ResetKey < 0) return NullOperationResult;

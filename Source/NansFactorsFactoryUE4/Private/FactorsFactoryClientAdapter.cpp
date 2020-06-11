@@ -2,7 +2,7 @@
 
 #include "Factor/FactorDecorator.h"
 #include "Factor/UnrealFactorProxy.h"
-#include "FactorUnit/FactorUnitAdapterAbstract.h"
+#include "FactorUnit/FactorUnitAdapter.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
@@ -44,7 +44,7 @@ void UNFactorsFactoryClientAdapter::CreateFactor(TArray<FName> FactorNames, TSha
 	}
 }
 
-UNFactorUnitAdapterAbstract* UNFactorsFactoryClientAdapter::CreateFactorUnit(const FName& FactorName, const UClass* Class)
+UNFactorUnitAdapter* UNFactorsFactoryClientAdapter::CreateFactorUnit(const FName& FactorName, const UClass* Class)
 {
 	mycheckf(UEFactors.Contains(FactorName), TEXT("The factor %s doesn't exists!"), *FactorName.ToString());
 	return UEFactors[FactorName]->CreateFactorUnit(Class);

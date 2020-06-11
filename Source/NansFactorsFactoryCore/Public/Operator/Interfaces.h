@@ -19,7 +19,7 @@ public:
 	virtual void SetKeyInFactor(uint32 Key) = 0;
 };
 
-class OperatorUtils
+class NOperatorUtils
 {
 public:
 	template <typename T>
