@@ -32,9 +32,13 @@ public:
 	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override;
 	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
-	virtual bool HasFlag(FString Flag) const override;
-	virtual bool GetFlag(FString Flag) const override;
-	virtual void SetFlag(FString Flag, bool Value) override;
+	virtual bool HasStateFlag(FString Flag) const override;
+	virtual bool GetStateFlag(FString Flag) const override;
+	virtual void SetStateFlag(FString Flag, bool Value) override;
+	virtual void RemoveStateFlag(FString Flag) override;
+	virtual void AddFlag(ENFactorFlag Flag) override;
+	virtual bool HasFlag(ENFactorFlag Flag) const override;
+	virtual void RemoveFlag(ENFactorFlag Flag) override;
 	virtual void Debug(bool _bDebug) override;
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
 	virtual UNFactorDecorator* GetUnrealObject() const;

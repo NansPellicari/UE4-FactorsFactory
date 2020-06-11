@@ -50,18 +50,39 @@ void NUnrealFactorProxy::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUn
 {
 	Factor.AddFactorUnit(FactorUnit);
 }
-bool NUnrealFactorProxy::HasFlag(FString Flag) const
+bool NUnrealFactorProxy::HasStateFlag(FString Flag) const
+{
+	return Factor.HasStateFlag(Flag);
+}
+bool NUnrealFactorProxy::GetStateFlag(FString Flag) const
+{
+	return Factor.GetStateFlag(Flag);
+}
+void NUnrealFactorProxy::SetStateFlag(FString Flag, bool Value)
+{
+	Factor.SetStateFlag(Flag, Value);
+}
+
+void NUnrealFactorProxy::RemoveStateFlag(FString Flag)
+{
+	Factor.RemoveStateFlag(Flag);
+}
+
+void NUnrealFactorProxy::AddFlag(ENFactorFlag Flag)
+{
+	Factor.AddFlag(Flag);
+}
+
+bool NUnrealFactorProxy::HasFlag(ENFactorFlag Flag) const
 {
 	return Factor.HasFlag(Flag);
 }
-bool NUnrealFactorProxy::GetFlag(FString Flag) const
+
+void NUnrealFactorProxy::RemoveFlag(ENFactorFlag Flag)
 {
-	return Factor.GetFlag(Flag);
+	Factor.RemoveFlag(Flag);
 }
-void NUnrealFactorProxy::SetFlag(FString Flag, bool Value)
-{
-	Factor.SetFlag(Flag, Value);
-}
+
 void NUnrealFactorProxy::Debug(bool _bDebug)
 {
 	Factor.Debug(_bDebug);

@@ -14,7 +14,7 @@ public:
 };
 
 // TODO create ResetByReasonOperator ResetWithRangeOperator ResetAllOperator
-class NANSFACTORSFACTORYCORE_API NResetOperator : public NResetOperatorBase, public NFactorOperatorInterfaceWithFactor
+class NANSFACTORSFACTORYCORE_API NResetOperator : public NResetOperatorBase, public NFactorOperatorWithFactorInterface
 {
 public:
 	virtual ~NResetOperator();

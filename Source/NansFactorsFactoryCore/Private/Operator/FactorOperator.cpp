@@ -13,7 +13,8 @@ float NNullOperator::Compute(float Lh, float Rh)
 
 TSharedPtr<NFactorOperatorInterface> NNullOperator::GetInverse()
 {
-	return MakeShareable(this);
+	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
+	return Operator;
 }
 
 float NAddOperator::Compute(float Lh, float Rh)

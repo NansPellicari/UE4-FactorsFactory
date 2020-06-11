@@ -15,10 +15,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FactorInterface.h"
-#include "NansFactorsFactoryCore/Public/NullFactorUnit.h"
 #include "Factor/FactorDecorator.h"
 #include "Factor/UnrealFactorProxy.h"
+#include "FactorInterface.h"
+#include "NansFactorsFactoryCore/Public/NullFactorUnit.h"
 
 class StubNullUnrealFactorProxy : public NUnrealFactorProxy
 {
@@ -50,15 +50,15 @@ public:
 		return {};
 	}
 	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override {}
-	virtual bool HasFlag(FString Flag) const override
+	virtual bool HasStateFlag(FString Flag) const override
 	{
 		return false;
 	}
-	virtual bool GetFlag(FString Flag) const override
+	virtual bool GetStateFlag(FString Flag) const override
 	{
 		return false;
 	}
-	virtual void SetFlag(FString Flag, bool Value) override {}
+	virtual void SetStateFlag(FString Flag, bool Value) override {}
 	virtual void Debug(bool _bDebug) override {}
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override {}
 	virtual UNFactorDecorator* GetUnrealObject() const

@@ -36,6 +36,15 @@ void NFactor::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const fl
 	// It could be an event from an another factor or an another type
 	if (FactorUnitIndex == INDEX_NONE) return;
 
+	TSharedPtr<NFactorUnitInterface> FactorUnit = Factors[FactorUnitIndex];
+
+	NFactorOperatorStopperInterface* Stopper = dynamic_cast<NFactorOperatorStopperInterface*>(FactorUnit->GetOperator().Get());
+
+	if (Stopper != nullptr)
+	{
+		RemoveFlag(ENFactorFlag::CanNotAddNewUnit);
+	}
+
 	Factors.RemoveAt(FactorUnitIndex);
 }
 
@@ -73,31 +82,68 @@ void NFactor::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
 	mycheck(Name != NAME_None);
 	mycheck(Timeline.IsValid());
+
+	if (HasFlag(ENFactorFlag::CanNotAddNewUnit)) return;
+
 	if (FactorUnit->GetEvent().IsValid())
 	{
 		// This allow to notify time
 		Timeline->Attached(FactorUnit->GetEvent());
 	}
 	Factors.Add(FactorUnit);
+
+	NFactorOperatorStopperInterface* Stopper = dynamic_cast<NFactorOperatorStopperInterface*>(FactorUnit->GetOperator().Get());
+	if (Stopper != nullptr)
+	{
+		AddFlag(ENFactorFlag::CanNotAddNewUnit);
+	}
 }
 
-bool NFactor::HasFlag(FString Flag) const
+bool NFactor::HasStateFlag(FString Flag) const
 {
 	mycheck(Name != NAME_None);
 	return IterationFlags.Contains(Flag);
 }
 
-bool NFactor::GetFlag(FString Flag) const
+bool NFactor::GetStateFlag(FString Flag) const
 {
 	mycheck(Name != NAME_None);
 	mycheck(IterationFlags.Contains(Flag));
 	return IterationFlags[Flag];
 }
 
-void NFactor::SetFlag(FString Flag, bool value)
+void NFactor::SetStateFlag(FString Flag, bool value)
 {
 	mycheck(Name != NAME_None);
 	IterationFlags.Add(Flag, value);
+}
+
+void NFactor::RemoveStateFlag(FString Flag)
+{
+	mycheck(Name != NAME_None);
+	IterationFlags.Remove(Flag);
+}
+
+bool NFactor::HasFlag(ENFactorFlag Flag) const
+{
+	mycheck(Name != NAME_None);
+	return OwnFlags.Contains(Flag);
+}
+
+void NFactor::AddFlag(ENFactorFlag Flag)
+{
+	mycheck(Name != NAME_None);
+	OwnFlags.Add(Flag);
+}
+
+void NFactor::RemoveFlag(ENFactorFlag Flag)
+{
+	mycheck(Name != NAME_None);
+	int32 IndexLast = OwnFlags.FindLast(Flag);
+	if (IndexLast != INDEX_NONE)
+	{
+		OwnFlags.RemoveAt(IndexLast);
+	}
 }
 
 void NFactor::AddFactorsToState(NFactorStateInterface& State)
@@ -113,14 +159,22 @@ void NFactor::AddFactorsToState(NFactorStateInterface& State)
 
 		mycheck(FactorUnit->GetOperator().IsValid());
 
-		NFactorOperatorInterfaceWithFactor* Operator =
-			dynamic_cast<NFactorOperatorInterfaceWithFactor*>(FactorUnit->GetOperator().Get());
+		NFactorOperatorWithFactorInterface* Operator =
+			dynamic_cast<NFactorOperatorWithFactorInterface*>(FactorUnit->GetOperator().Get());
 		if (Operator != nullptr)
 		{
 			Operator->SetFactor(this);
 			Operator->SetKeyInFactor(Index);
 		}
+
 		State.AddFactorUnit(FactorUnit);
+
+		NFactorOperatorBreakerInterface* Breaker = dynamic_cast<NFactorOperatorBreakerInterface*>(FactorUnit->GetOperator().Get());
+		if (Breaker != nullptr)
+		{
+			bool bBreak = Breaker->IsBreaking();
+			if (bBreak) break;
+		}
 	}
 }
 

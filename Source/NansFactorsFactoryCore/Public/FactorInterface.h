@@ -7,6 +7,11 @@ class NFactorUnitInterface;
 class NFactorStateInterface;
 class NTimelineInterface;
 
+enum class ENFactorFlag : uint8
+{
+	CanNotAddNewUnit
+};
+
 class NANSFACTORSFACTORYCORE_API NFactorInterface
 {
 public:
@@ -18,9 +23,13 @@ public:
 	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const = 0;
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const = 0;
 	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) = 0;
-	virtual bool HasFlag(FString Flag) const = 0;
-	virtual bool GetFlag(FString Flag) const = 0;
-	virtual void SetFlag(FString Flag, bool Value) = 0;
+	virtual bool HasStateFlag(FString Flag) const = 0;
+	virtual bool GetStateFlag(FString Flag) const = 0;
+	virtual void SetStateFlag(FString Flag, bool Value) = 0;
+	virtual void RemoveStateFlag(FString Flag) = 0;
+	virtual void AddFlag(ENFactorFlag Flag) = 0;
+	virtual bool HasFlag(ENFactorFlag Flag) const = 0;
+	virtual void RemoveFlag(ENFactorFlag Flag) = 0;
 	virtual void Debug(bool _bDebug) = 0;
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) = 0;
 };

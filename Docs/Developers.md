@@ -107,11 +107,19 @@ The best way is to extend this base class [FactorUnitAdapterAbstract.h](../Sourc
 
 #### 4.3.1. FactorOperator
 
-Its goal is to compute data from its `FactorUnit` wrapper related to all previous `FactorUnit` set in the `Factor`.
+Its goal is to compute data from its `FactorUnit` wrapper related to all previous `FactorUnit` set in the `Factor` object.
 
-For simple operation you can just implement [NFactorOperatorInterface](../Source/NansFactorsFactoryCore/Public/Operator/Interfaces.h), it just add a new operation at the top of the `FactorUnits` stack in `Factor` object (the case for null, add, multiply, divider, subtract).
+**Simple operation**: You can just implement [NFactorOperatorInterface](../Source/NansFactorsFactoryCore/Public/Operator/Interfaces.h), it allows to add a new operation at the top of the `FactorUnits` stack in `Factor` object (the case for null, add, multiply, divider, subtract).
 
-For more complex computing like making an operation with a specfic previous `FactorUnit` (like the [ResetOperator](../Source/NansFactorsFactoryCore/Public/Operator/ResetOperator.h) for example), you can implement [NFactorOperatorInterfaceWithFactor](../Source/NansFactorsFactoryCore/Public/Operator/Interfaces.h). Using it allows to provide the `Factor` object (so the `FactorUnits` stack) into your `FactorOperator` object during its computation.
+**Create a _persistent_ operator**: In some case you should want an operator which continually computes **over** new `FactorUnit` added in the factor (Eg. for a **bonus malus Factor** the player can take a magic potion which cancels any new or old malus for 30secs). You can implement [NFactorOperatorPersistentInterface](../Source/NansFactorsFactoryCore/Public/Operator/Interfaces.h).
+
+**Computing with the _Factor object_ (`FactorUnits` stack)**: If you want to make an operation with a specfic previous `FactorUnit` (like the [ResetOperator](../Source/NansFactorsFactoryCore/Public/Operator/ResetOperator.h) for example), you can implement [NFactorOperatorWithFactorInterface](../Source/NansFactorsFactoryCore/Public/Operator/Interfaces.h). Using it allows to provide the `Factor` object (so the `FactorUnits` stack) into your `FactorOperator` object during its computation.
+
+**Create a _breaker_ operator**: In some case you should want an operator which breaks the factor computation, so stop including next added `FactorUnits` for computation (Eg. for a **difficulty Factor** the player can take a potion which avoid any difficulty increasing for 30secs, but restart with the new effect added). You can implement [NFactorOperatorBreakerInterface](../Source/NansFactorsFactoryCore/Public/Operator/Interfaces.h).
+
+**Create a _stopper_ operator**: In some case you should want an operator which prevents the factor to include new alterations, so no more addition of any `FactorUnits` (Eg. for a **difficulty Factor** the player can take a magic spell which avoid any new difficulty addition for 30secs). You can implement [NFactorOperatorStopperInterface](../Source/NansFactorsFactoryCore/Public/Operator/Interfaces.h).
+
+> :exclamation: For this last one, be aware that stopping behavior can't be delayed, it take effect immediatly. Only computation is delayed.
 
 <a id="markdown-432-operatorprovider" name="432-operatorprovider"></a>
 

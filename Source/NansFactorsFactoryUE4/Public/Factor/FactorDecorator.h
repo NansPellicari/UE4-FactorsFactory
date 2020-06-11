@@ -120,20 +120,26 @@ public:
 	virtual float GetTime() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
-	virtual bool HasFlag(FString Flag) const override;
+	virtual bool HasStateFlag(FString Flag) const override;
 
 	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
-	virtual bool GetFlag(FString Flag) const override;
+	virtual bool GetStateFlag(FString Flag) const override;
 
 	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
 	virtual void Debug(bool _bDebug) override;
 
 	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
-	virtual void SetFlag(FString Flag, bool Value) override;
+	virtual void SetStateFlag(FString Flag, bool Value) override;
+
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
+	virtual void RemoveStateFlag(FString Flag) override;
 
 	// BEGIN NFactorInterface override
 	virtual void Clear() override;
 	virtual void SetName(FName _Name) override;
+	virtual void AddFlag(ENFactorFlag Flag) override;
+	virtual bool HasFlag(ENFactorFlag Flag) const override;
+	virtual void RemoveFlag(ENFactorFlag Flag) override;
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;
 	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override;

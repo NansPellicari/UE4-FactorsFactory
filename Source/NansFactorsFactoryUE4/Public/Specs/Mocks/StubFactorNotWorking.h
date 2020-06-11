@@ -15,10 +15,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FactorInterface.h"
-#include "NansFactorsFactoryCore/Public/NullFactorUnit.h"
 #include "Factor/FactorDecorator.h"
 #include "Factor/UnrealFactorProxy.h"
+#include "FactorInterface.h"
+#include "NansFactorsFactoryCore/Public/NullFactorUnit.h"
 
 class StubFactorNotWorking : public NFactorInterface
 {
@@ -36,9 +36,13 @@ public:
     }
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override { return {};}
 	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override {}
-	virtual bool HasFlag(FString Flag) const override  { return false; }
-	virtual bool GetFlag(FString Flag) const override { return false; }
-	virtual void SetFlag(FString Flag, bool Value) override {}
+	virtual bool HasStateFlag(FString Flag) const override  { return false; }
+	virtual bool GetStateFlag(FString Flag) const override { return false; }
+	virtual void SetStateFlag(FString Flag, bool Value) override {}
+	virtual void RemoveStateFlag(FString Flag) override {}
+    virtual void AddFlag(ENFactorFlag Flag) override {}
+	virtual bool HasFlag(ENFactorFlag Flag) const override { return false;}
+	virtual void RemoveFlag(ENFactorFlag Flag) override {}
 	virtual void Debug(bool _bDebug) override {}
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override {}
 	// clang-format on

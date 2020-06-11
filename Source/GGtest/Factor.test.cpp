@@ -1,13 +1,62 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
 #include "Mock/FakeTimelineManager.h"
-#include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
+#include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+
+class NBreakerOperator : public NFactorOperatorBreakerInterface, public NFactorOperatorInterface
+{
+	virtual float Compute(float Lh, float Rh) override
+	{
+		return 0;
+	}
+	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override
+	{
+		static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
+		return Operator;
+	}
+	virtual const FName GetName() override
+	{
+		return FName("BreakBreakBreak");
+	}
+	virtual bool IsBreaking() override
+	{
+		return true;
+	};
+};
+class NStopperOperator : public NFactorOperatorStopperInterface, public NFactorOperatorInterface
+{
+	virtual float Compute(float Lh, float Rh) override
+	{
+		return 0;
+	}
+	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override
+	{
+		static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
+		return Operator;
+	}
+	virtual const FName GetName() override
+	{
+		return FName("Stopper");
+	}
+	virtual bool IsStopping() override
+	{
+		return true;
+	};
+};
+
+class NAddPersistentOperator : public NAddOperator, public NFactorOperatorPersistentInterface
+{
+	virtual float Compute(float Lh, float Rh, const NFactorUnitInterface& ActualUnit) override
+	{
+		return NAddOperator::Compute(Lh, Rh);
+	}
+};
 
 class NansFactorsFactoryCoreFactorTest : public ::testing::Test
 {
@@ -35,13 +84,13 @@ protected:
 TEST_F(NansFactorsFactoryCoreFactorTest, ShouldRemovesEverySetFlagsAfterGettingTheCurrentState)
 {
 	Factor->SetName(FName("Test iteration flag"));
-	Factor->SetFlag("Flag", true);
+	Factor->SetStateFlag("Flag", true);
 	NFactorStateInterface* State = new NFactorState();
 	Factor->SupplyStateWithCurrentData(*State);
 
 	try
 	{
-		Factor->GetFlag("Flag");
+		Factor->GetStateFlag("Flag");
 		ASSERT_FALSE(true);
 	}
 	catch (const TCHAR* e)
@@ -91,6 +140,69 @@ TEST_F(NansFactorsFactoryCoreFactorTest, FactorShouldGetValidStateAndComputeCorr
 	EXPECT_EQ(State->Compute(), 8.f);
 }
 
+TEST_F(NansFactorsFactoryCoreFactorTest, PersitentFactorShouldComputeOverEachNextValidOperator)
+{
+	Timeline->SetTickInterval(2.f);
+	Timeline->NotifyTick();
+	Timeline->NotifyTick();
+	Factor->AddFactorUnit(
+		MakeShareable(new NFactorUnit(1.f, MakeShareable(new NAddPersistentOperator()), 4.f, FName("Persistent Add"))));
+	NFactorStateInterface* State = new NFactorState();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 4.f);
+	EXPECT_EQ(State->Compute(), 5.f);
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(4.f, MakeShareable(new NAddOperator()), 5.f, FName("Exhausted"))));
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 4.f);
+	EXPECT_EQ(State->Compute(), 10.f);
+	Timeline->NotifyTick();
+	Timeline->NotifyTick();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 8.f);
+	EXPECT_EQ(State->Compute(), 8.f);
+}
+
+TEST_F(NansFactorsFactoryCoreFactorTest, ABreakerShouldStopNewUnitCalculation)
+{
+	Timeline->SetTickInterval(1.f);
+	Timeline->NotifyTick();
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NBreakerOperator()), 2, FName("Breaker"))));
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Add not Added"))));
+	NFactorStateInterface* State = new NFactorState();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 1.f);
+	EXPECT_EQ(State->Compute(), 0.f);
+	Timeline->NotifyTick();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->Compute(), 0.f);
+	Timeline->NotifyTick();
+	// should take count of new Unit when the breaker expires
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 3.f);
+	EXPECT_EQ(State->Compute(), 6.f);
+}
+
+TEST_F(NansFactorsFactoryCoreFactorTest, AStopperShouldStopAddingUnit)
+{
+	Timeline->SetTickInterval(1.f);
+	Timeline->NotifyTick();
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NStopperOperator()), 2, FName("Stopper"))));
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Add not Added"))));
+	NFactorStateInterface* State = new NFactorState();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 1.f);
+	EXPECT_EQ(State->Compute(), 0.f);
+	Timeline->NotifyTick();
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->Compute(), 0.f);
+	Timeline->NotifyTick();
+	// the new unit should not be added at all,
+	// computation should take only previous Unit in count when the avoider expires
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 3.f);
+	EXPECT_EQ(State->Compute(), 4.f);
+}
+
 TEST_F(NansFactorsFactoryCoreFactorTest, FactorShouldGetValidStateAndComputeCorrectlyWhen5_1secsPassed)
 {
 	Timeline->SetTickInterval(5.1f);
@@ -99,4 +211,16 @@ TEST_F(NansFactorsFactoryCoreFactorTest, FactorShouldGetValidStateAndComputeCorr
 	Factor->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->GetTime(), 5.1f);
 	EXPECT_EQ(State->Compute(), 4.f);
+}
+
+TEST_F(NansFactorsFactoryCoreFactorTest, ShouldHaveSeveralTimeTheSameFlag)
+{
+	Factor->SetName(FName("Test flag"));
+	Factor->AddFlag(ENFactorFlag::CanNotAddNewUnit);
+	Factor->AddFlag(ENFactorFlag::CanNotAddNewUnit);
+	EXPECT_TRUE(Factor->HasFlag(ENFactorFlag::CanNotAddNewUnit));
+	Factor->RemoveFlag(ENFactorFlag::CanNotAddNewUnit);
+	EXPECT_TRUE(Factor->HasFlag(ENFactorFlag::CanNotAddNewUnit));
+	Factor->RemoveFlag(ENFactorFlag::CanNotAddNewUnit);
+	EXPECT_FALSE(Factor->HasFlag(ENFactorFlag::CanNotAddNewUnit));
 }

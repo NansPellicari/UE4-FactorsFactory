@@ -51,21 +51,57 @@ float NFactorState::Compute()
 {
 	// Reset the value
 	FactorUnitValue = 0;
-	for (FNFactorStateOperator Operation : Operators)
+	TArray<TSharedPtr<NFactorUnitInterface>> PersistentUnit;
+	for (const FNFactorStateOperator& Operation : Operators)
 	{
-		float Value = Operation.Activate ? Operation.Operator->Compute(FactorUnitValue, Operation.Value) : FactorUnitValue;
-		if (bDebug)
+		TArray<TSharedPtr<NFactorUnitInterface>> ActualUnit;
+
+		if (Operation.Activate)
 		{
-			UE_LOG(LogTemp,
-				Warning,
-				TEXT("Compute with Previous value: %f - Operator: %s - Operation Value: %f - results to: %f"),
-				FactorUnitValue,
-				*Operation.Operator->GetName().ToString(),
-				Operation.Value,
-				Value);
+			ActualUnit.Add(Operation.FactorUnit);
+			ActualUnit += PersistentUnit;
 		}
-		FactorUnitValue = Value;
+
+		for (int32 Index = 0; Index < ActualUnit.Num(); ++Index)
+		{
+			const TSharedPtr<NFactorUnitInterface> Unit = ActualUnit[Index];
+			float Value = FactorUnitValue;
+
+			if (Index == 0)
+			{
+				Value = Unit->GetOperator()->Compute(Value, Unit->GetFactorUnitValue());
+			}
+			else
+			{
+				NFactorOperatorPersistentInterface* Persistent =
+					dynamic_cast<NFactorOperatorPersistentInterface*>(Unit->GetOperator().Get());
+				Value = Persistent->Compute(Value, Unit->GetFactorUnitValue(), *ActualUnit[0].Get());
+			}
+
+			if (bDebug)
+			{
+				UE_LOG(LogTemp,
+					Warning,
+					TEXT("Compute with Previous value: %f - Operator: %s - Operation Value: %f - results to: %f"),
+					FactorUnitValue,
+					*Unit->GetOperator()->GetName().ToString(),
+					Unit->GetFactorUnitValue(),
+					Value);
+			}
+
+			FactorUnitValue = Value;
+		}
+
+		NFactorOperatorPersistentInterface* Persistent =
+			dynamic_cast<NFactorOperatorPersistentInterface*>(Operation.Operator.Get());
+		if (Operation.Activate && Persistent != nullptr)
+		{
+			PersistentUnit.Add(Operation.FactorUnit);
+		}
+
+		ActualUnit.Empty();
 	}
+	PersistentUnit.Empty();
 	return FactorUnitValue;
 }
 

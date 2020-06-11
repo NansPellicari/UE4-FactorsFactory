@@ -32,7 +32,7 @@ float NResetOperator::Compute(float Lh, float Rh)
 	TSharedRef<NFactorUnitInterface> ResetFactorUnit = FactorUnit;
 	while (MaxAttempt > 0 &&
 		   (!ResetFactorUnit->IsActivated() || NOperatorUtils::IsOperatorWithFactor(ResetFactorUnit->GetOperator().Get()) ||
-			   MyFactor->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit))))
+			   MyFactor->HasStateFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit))))
 	{
 		int32 ResetKey = KeyInFactor - (Rh + (10 - MaxAttempt));
 		if (ResetKey < 0) return NullOperationResult;
@@ -45,10 +45,10 @@ float NResetOperator::Compute(float Lh, float Rh)
 		return NullOperationResult;
 	}
 
-	if (!MyFactor->HasFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit)) ||
-		!MyFactor->GetFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit)))
+	if (!MyFactor->HasStateFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit)) ||
+		!MyFactor->GetStateFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit)))
 	{
-		MyFactor->SetFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit), true);
+		MyFactor->SetStateFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit), true);
 	}
 	return ResetFactorUnit->GetOperator()->GetInverse()->Compute(Lh, ResetFactorUnit->GetFactorUnitValue());
 }

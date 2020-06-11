@@ -90,7 +90,7 @@ TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheLastFactorUnitSetI
 	EXPECT_EQ(State->Compute(), 2.f);
 	EXPECT_TRUE(Operator->HasFactor());
 	EXPECT_TRUE(Operator->GetKeyInFactor() > 0);
-	EXPECT_TRUE(Factor->HasFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(1))));
+	EXPECT_TRUE(Factor->HasStateFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(1))));
 }
 
 TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheFirstFactorUnitSetInTheFactor)
@@ -103,7 +103,7 @@ TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheFirstFactorUnitSet
 	NFactorStateInterface* State = new NFactorState();
 	Factor->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->Compute(), 3.f);
-	EXPECT_TRUE(Factor->HasFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(0))));
+	EXPECT_TRUE(Factor->HasStateFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(0))));
 }
 
 TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheFirstAndLastFactorUnitSetInTheFactor)
@@ -117,6 +117,6 @@ TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldResetTheFirstAndLastFactor
 	Factor->SupplyStateWithCurrentData(*State);
 
 	EXPECT_EQ(State->Compute(), 0.f);
-	EXPECT_TRUE(Factor->HasFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(0))));
-	EXPECT_TRUE(Factor->HasFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(1))));
+	EXPECT_TRUE(Factor->HasStateFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(0))));
+	EXPECT_TRUE(Factor->HasStateFlag(FakeResetOperator::GetResetIdFlag(Factor->GetFactorUnit(1))));
 }

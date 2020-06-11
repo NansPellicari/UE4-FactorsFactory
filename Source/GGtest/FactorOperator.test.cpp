@@ -16,7 +16,7 @@ TEST_F(NansFactorsFactoryCoreOperatorTest, ShouldComputeWithANullOperator)
 
 	EXPECT_EQ(Operator->GetName(), NNullOperator::Name);
 	EXPECT_EQ(Operator->Compute(1, 2), 1.f);
-	EXPECT_EQ(Operator, Operator->GetInverse().Get());
+	EXPECT_EQ(Operator->Compute(1, 2), Operator->GetInverse()->Compute(1, 5));
 }
 
 TEST_F(NansFactorsFactoryCoreOperatorTest, ShouldComputeWithAnAddOperator)

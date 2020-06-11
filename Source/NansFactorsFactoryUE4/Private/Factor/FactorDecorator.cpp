@@ -144,19 +144,41 @@ void UNFactorDecorator::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUni
 	OnAddFactorUnit(Proxy->GetUnrealObject());
 }
 
-bool UNFactorDecorator::HasFlag(FString Flag) const
+bool UNFactorDecorator::HasStateFlag(FString Flag) const
+{
+	return Factor->HasStateFlag(Flag);
+}
+
+bool UNFactorDecorator::GetStateFlag(FString Flag) const
+{
+	return Factor->GetStateFlag(Flag);
+}
+
+void UNFactorDecorator::SetStateFlag(FString Flag, bool Value)
+{
+	Factor->SetStateFlag(Flag, Value);
+}
+
+void UNFactorDecorator::RemoveStateFlag(FString Flag)
+{
+	Factor->RemoveStateFlag(Flag);
+}
+
+void UNFactorDecorator::AddFlag(ENFactorFlag Flag)
+{
+	Factor->AddFlag(Flag);
+}
+
+bool UNFactorDecorator::HasFlag(ENFactorFlag Flag) const
 {
 	return Factor->HasFlag(Flag);
 }
 
-bool UNFactorDecorator::GetFlag(FString Flag) const
+void UNFactorDecorator::RemoveFlag(ENFactorFlag Flag)
 {
-	return Factor->GetFlag(Flag);
+	Factor->RemoveFlag(Flag);
 }
-void UNFactorDecorator::SetFlag(FString Flag, bool Value)
-{
-	Factor->SetFlag(Flag, Value);
-}
+
 void UNFactorDecorator::Debug(bool _bDebug)
 {
 	Factor->Debug(_bDebug);
