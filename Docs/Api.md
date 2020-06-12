@@ -2,6 +2,7 @@
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
+`class `[`FakeFactor`](#classFakeFactor) | 
 `class `[`FakeTimelineManager`](#classFakeTimelineManager) | 
 `class `[`FNansFactorsFactoryCoreModule`](#classFNansFactorsFactoryCoreModule) | 
 `class `[`FNansFactorsFactoryUE4Module`](#classFNansFactorsFactoryUE4Module) | 
@@ -10,43 +11,73 @@
 `class `[`NAddOperator`](#classNAddOperator) | 
 `class `[`NansFactorsFactoryCore`](#classNansFactorsFactoryCore) | 
 `class `[`NansFactorsFactoryUE4`](#classNansFactorsFactoryUE4) | 
+`class `[`NCleanerOperator`](#classNCleanerOperator) | This operator is raw! It removes every previous operator set in the factor's units queue. For the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method, it returns the value set at the Rh parameter (means that the factor Unit value associated replace every previous value).
 `class `[`NDividerOperator`](#classNDividerOperator) | 
 `class `[`NFactor`](#classNFactor) | 
-`class `[`NFactorEvent`](#classNFactorEvent) | 
 `class `[`NFactorInterface`](#classNFactorInterface) | 
+`class `[`NFactorOperatorBreakerInterface`](#classNFactorOperatorBreakerInterface) | 
 `class `[`NFactorOperatorInterface`](#classNFactorOperatorInterface) | 
-`class `[`NFactorOperatorInterfaceWithFactor`](#classNFactorOperatorInterfaceWithFactor) | 
+`class `[`NFactorOperatorPersistentInterface`](#classNFactorOperatorPersistentInterface) | 
+`class `[`NFactorOperatorStopperInterface`](#classNFactorOperatorStopperInterface) | 
+`class `[`NFactorOperatorWithFactorInterface`](#classNFactorOperatorWithFactorInterface) | 
 `class `[`NFactorsFactoryClient`](#classNFactorsFactoryClient) | 
 `class `[`NFactorsFactoryClientInterface`](#classNFactorsFactoryClientInterface) | 
 `class `[`NFactorState`](#classNFactorState) | 
 `class `[`NFactorStateInterface`](#classNFactorStateInterface) | 
 `class `[`NFactorUnit`](#classNFactorUnit) | 
 `class `[`NFactorUnitInterface`](#classNFactorUnitInterface) | 
+`class `[`NIncreasersCleanerOperator`](#classNIncreasersCleanerOperator) | This operator is raw! It removes every previous operator set in the factor's units queue. It cleans only factor's unit which implies factor amount increase. The Rh parameter of the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method determines the amount of FactorUnit removed (0 = all). For the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method it doesn't make any computation by returning the Lh parameter.
+`class `[`NIncreasersCleanerPersistentOperator`](#classNIncreasersCleanerPersistentOperator) | This operator is raw! It removes every previous operator set in the factor's units queue. It cleans only factor's unit which implies factor amount increase. The Rh parameter of the [Compute()](#classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8) method determines the amount of FactorUnit removed (0 = all). For the [Compute()](#classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8) method it doesn't make any computation by returning the Lh parameter. It removes also next Increasers set.
 `class `[`NMultiplyOperator`](#classNMultiplyOperator) | 
 `class `[`NNullFactorUnit`](#classNNullFactorUnit) | 
 `class `[`NNullOperator`](#classNNullOperator) | 
-`class `[`NResetOperator`](#classNResetOperator) | 
+`class `[`NOperatorUtils`](#classNOperatorUtils) | 
+`class `[`NReducersCleanerOperator`](#classNReducersCleanerOperator) | This operator is raw! It removes every previous operator set in the factor's units queue. It cleans only factor's unit which implies factor amount reduction. The Rh parameter of the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method determines the amount of FactorUnit removed (0 = all). For the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method it doesn't make any computation by returning the Lh parameter.
+`class `[`NReducersCleanerPersistentOperator`](#classNReducersCleanerPersistentOperator) | This operator is raw! It removes every previous operator set in the factor's units queue. It cleans only factor's unit which implies factor amount reduction. The Rh parameter of the [Compute()](#classNReducersCleanerPersistentOperator_1a378e8aef2e4db7ff7a085ee18baba7f9) method determines the amount of FactorUnit removed (0 = all). For the [Compute()](#classNReducersCleanerPersistentOperator_1a378e8aef2e4db7ff7a085ee18baba7f9) method it doesn't make any computation by returning the Lh parameter. It removes also next Reducers set.
+`class `[`NReplacerOperator`](#classNReplacerOperator) | This operator replace the value from the previous operators list (It doesn't care of the Lh parameter of the method Compute). For the [Compute()](#classNReplacerOperator_1acc351a22cc2268269e0a2c531bf4be46) method, it returns the value set at the Rh parameter.
+`class `[`NResetOperator`](#classNResetOperator) | This class find a previous FactorUnit and try to reset it. The Rh parameter of the [Compute()](#classNResetOperator_1abdb19ca6f82e81ff1d7d13948448f10e) method determines the previous position (The Index of the FactorUnit which embeds this Operator - Rh) of the FactorUnit you want to reset.
 `class `[`NResetOperatorBase`](#classNResetOperatorBase) | 
 `class `[`NSubtractOperator`](#classNSubtractOperator) | 
 `class `[`NUnrealFactorProxy`](#classNUnrealFactorProxy) | 
 `class `[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy) | 
-`class `[`OperatorUtils`](#classOperatorUtils) | 
 `class `[`SNFactorSettingsPin`](#classSNFactorSettingsPin) | 
 `class `[`UFactorSettings`](#classUFactorSettings) | This allow to
-`class `[`UK2Node_FactorOperator`](#classUK2Node__FactorOperator) | 
+`class `[`UK2Node_FactorUnit`](#classUK2Node__FactorUnit) | 
 `class `[`UNFactorDecorator`](#classUNFactorDecorator) | 
-`class `[`UNFactorEventDecorator`](#classUNFactorEventDecorator) | 
 `class `[`UNFactorsFactoryBlueprintHelpers`](#classUNFactorsFactoryBlueprintHelpers) | 
 `class `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter) | 
 `class `[`UNFactorsFactoryGameInstance`](#classUNFactorsFactoryGameInstance) | 
-`class `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract) | 
-`class `[`UNFactorUnitAdapterBasic`](#classUNFactorUnitAdapterBasic) | 
-`class `[`UNFactorUnitAdapterResetFromReason`](#classUNFactorUnitAdapterResetFromReason) | 
+`class `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter) | 
+`class `[`UNOperatorCleaners`](#classUNOperatorCleaners) | 
+`class `[`UNOperatorProviderBase`](#classUNOperatorProviderBase) | 
+`class `[`UNOperatorSimpleOperations`](#classUNOperatorSimpleOperations) | 
+`class `[`UNResetOperatorProvider`](#classUNResetOperatorProvider) | 
 `struct `[`FFactorAttribute`](#structFFactorAttribute) | 
+`struct `[`FFactorUnitUtilities`](#structFFactorUnitUtilities) | This utility class is made to helps the [UK2Node_FactorUnit::ExpandNode()](#classUK2Node__FactorUnit_1a2e5e0b8e6114590dc36d9fa471d0055f).
 `struct `[`FNFactorSettings`](#structFNFactorSettings) | 
 `struct `[`FNFactorStateOperator`](#structFNFactorStateOperator) | 
 `struct `[`FNFactorStateResult`](#structFNFactorStateResult) | 
 `struct `[`FNFactorUnitRecord`](#structFNFactorUnitRecord) | This struct is a record object used for savegame or get user feedbacks
+
+# class `FakeFactor` <a id="classFakeFactor"></a>
+
+```
+class FakeFactor
+  : public NFactor
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`FakeFactor`](#classFakeFactor_1a5b231e44be3dcdb7b2b09798fb4e97ec)`(FName _Name,TSharedPtr< NTimeline > _Timeline)` | 
+`public inline virtual void `[`SupplyStateWithCurrentData`](#classFakeFactor_1a98a6309bc5ce9dda9293ee333eb22425)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+
+## Members
+
+#### `public inline  `[`FakeFactor`](#classFakeFactor_1a5b231e44be3dcdb7b2b09798fb4e97ec)`(FName _Name,TSharedPtr< NTimeline > _Timeline)` <a id="classFakeFactor_1a5b231e44be3dcdb7b2b09798fb4e97ec"></a>
+
+#### `public inline virtual void `[`SupplyStateWithCurrentData`](#classFakeFactor_1a98a6309bc5ce9dda9293ee333eb22425)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classFakeFactor_1a98a6309bc5ce9dda9293ee333eb22425"></a>
 
 # class `FakeTimelineManager` <a id="classFakeTimelineManager"></a>
 
@@ -126,11 +157,13 @@ class FNFactorSettingsPinFactory
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public virtual `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter)` * `[`GetFactorsFactoryClient`](#classINFactorsFactoryGameInstance_1a2b28c233072fdb005682f1695ee06843)`() const` | 
+`public  `[`UFUNCTION`](#classINFactorsFactoryGameInstance_1a19952e47bedbb4723a23450e33f4a032)`(BlueprintCallable,BlueprintNativeEvent,meta,Category) const` | A blueprint overridable fn to get the Actual [UNFactorsFactoryClientAdapter](#classUNFactorsFactoryClientAdapter)
 
 ## Members
 
-#### `public virtual `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter)` * `[`GetFactorsFactoryClient`](#classINFactorsFactoryGameInstance_1a2b28c233072fdb005682f1695ee06843)`() const` <a id="classINFactorsFactoryGameInstance_1a2b28c233072fdb005682f1695ee06843"></a>
+#### `public  `[`UFUNCTION`](#classINFactorsFactoryGameInstance_1a19952e47bedbb4723a23450e33f4a032)`(BlueprintCallable,BlueprintNativeEvent,meta,Category) const` <a id="classINFactorsFactoryGameInstance_1a19952e47bedbb4723a23450e33f4a032"></a>
+
+A blueprint overridable fn to get the Actual [UNFactorsFactoryClientAdapter](#classUNFactorsFactoryClientAdapter)
 
 # class `NAddOperator` <a id="classNAddOperator"></a>
 
@@ -189,6 +222,53 @@ class NansFactorsFactoryUE4
 
 #### `public inline  `[`NansFactorsFactoryUE4`](#classNansFactorsFactoryUE4_1a36b5cb9753eef7c9f78f9f4c1f80ee3c)`(ReadOnlyTargetRules Target)` <a id="classNansFactorsFactoryUE4_1a36b5cb9753eef7c9f78f9f4c1f80ee3c"></a>
 
+# class `NCleanerOperator` <a id="classNCleanerOperator"></a>
+
+```
+class NCleanerOperator
+  : public NResetOperatorBase
+  : public NFactorOperatorWithFactorInterface
+```  
+
+This operator is raw! It removes every previous operator set in the factor's units queue. For the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method, it returns the value set at the Rh parameter (means that the factor Unit value associated replace every previous value).
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline virtual const FName `[`GetName`](#classNCleanerOperator_1a1acba394dd146e0854c07b8a7cc87464)`()` | 
+`public virtual float `[`Compute`](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6)`(float Lh,float Rh)` | 
+`public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetInverse`](#classNCleanerOperator_1a7e4a297e0963fe95427310eec21cebae)`()` | 
+`public virtual void `[`SetFactor`](#classNCleanerOperator_1a29062bd5e5562ba19e72267b9558929e)`(`[`NFactorInterface`](#classNFactorInterface)` * Factor)` | 
+`public virtual void `[`SetKeyInFactor`](#classNCleanerOperator_1a74addade5011c190bd303719baac27aa)`(uint32 Key)` | 
+`protected `[`NFactorInterface`](#classNFactorInterface)` * `[`MyFactor`](#classNCleanerOperator_1ad9ba044ba7b75bdc0a41a5814cb8fe1b) | 
+`protected uint32 `[`KeyInFactor`](#classNCleanerOperator_1af8cc3d1f239bed565352263d6c9c8e5a) | 
+`protected int32 `[`FactorUnitsNumber`](#classNCleanerOperator_1a61ae3070b503a1029f14ef7fb6e906cd) | 
+`protected virtual bool `[`IsShouldClean`](#classNCleanerOperator_1ad083350719def073dfd321996a5bade5)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit) const` | 
+`protected virtual float `[`Clean`](#classNCleanerOperator_1a7094e3e3b05f8aec60dacfcb4a1e0103)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit,float Lh)` | 
+
+## Members
+
+#### `public inline virtual const FName `[`GetName`](#classNCleanerOperator_1a1acba394dd146e0854c07b8a7cc87464)`()` <a id="classNCleanerOperator_1a1acba394dd146e0854c07b8a7cc87464"></a>
+
+#### `public virtual float `[`Compute`](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6)`(float Lh,float Rh)` <a id="classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6"></a>
+
+#### `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetInverse`](#classNCleanerOperator_1a7e4a297e0963fe95427310eec21cebae)`()` <a id="classNCleanerOperator_1a7e4a297e0963fe95427310eec21cebae"></a>
+
+#### `public virtual void `[`SetFactor`](#classNCleanerOperator_1a29062bd5e5562ba19e72267b9558929e)`(`[`NFactorInterface`](#classNFactorInterface)` * Factor)` <a id="classNCleanerOperator_1a29062bd5e5562ba19e72267b9558929e"></a>
+
+#### `public virtual void `[`SetKeyInFactor`](#classNCleanerOperator_1a74addade5011c190bd303719baac27aa)`(uint32 Key)` <a id="classNCleanerOperator_1a74addade5011c190bd303719baac27aa"></a>
+
+#### `protected `[`NFactorInterface`](#classNFactorInterface)` * `[`MyFactor`](#classNCleanerOperator_1ad9ba044ba7b75bdc0a41a5814cb8fe1b) <a id="classNCleanerOperator_1ad9ba044ba7b75bdc0a41a5814cb8fe1b"></a>
+
+#### `protected uint32 `[`KeyInFactor`](#classNCleanerOperator_1af8cc3d1f239bed565352263d6c9c8e5a) <a id="classNCleanerOperator_1af8cc3d1f239bed565352263d6c9c8e5a"></a>
+
+#### `protected int32 `[`FactorUnitsNumber`](#classNCleanerOperator_1a61ae3070b503a1029f14ef7fb6e906cd) <a id="classNCleanerOperator_1a61ae3070b503a1029f14ef7fb6e906cd"></a>
+
+#### `protected virtual bool `[`IsShouldClean`](#classNCleanerOperator_1ad083350719def073dfd321996a5bade5)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit) const` <a id="classNCleanerOperator_1ad083350719def073dfd321996a5bade5"></a>
+
+#### `protected virtual float `[`Clean`](#classNCleanerOperator_1a7094e3e3b05f8aec60dacfcb4a1e0103)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit,float Lh)` <a id="classNCleanerOperator_1a7094e3e3b05f8aec60dacfcb4a1e0103"></a>
+
 # class `NDividerOperator` <a id="classNDividerOperator"></a>
 
 ```
@@ -231,20 +311,26 @@ class NFactor
 `public virtual FName `[`GetName`](#classNFactor_1aad1ee98c8f37d17677126dd987178098)`() const` | 
 `public virtual TSharedPtr< NTimelineInterface > `[`GetTimeline`](#classNFactor_1a258339f2bbf428006b90747da0ac7767)`() const` | 
 `public virtual float `[`GetTime`](#classNFactor_1a65760fa5995f54bfd67527d136928a34)`() const` | 
-`public virtual TSharedRef< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNFactor_1a6b30cc88d4694dd0dcc62105cac729e3)`(uint32 Key) const` | 
+`public virtual TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNFactor_1a06b0541872396fd135a29c27bca69cbb)`(uint32 Key) const` | 
 `public virtual void `[`AddFactorUnit`](#classNFactor_1a7c2a3721444ad515f673624c59af274a)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit)` | 
-`public virtual bool `[`HasFlag`](#classNFactor_1a1c279e98cbe719c4809fac82c89f9fe0)`(FString Flag) const` | 
-`public virtual bool `[`GetFlag`](#classNFactor_1a533d5ea4ffb3b778e125c5fb9181906f)`(FString Flag) const` | 
-`public virtual void `[`SetFlag`](#classNFactor_1aaa997e667d6598aedb89305ed069521b)`(FString Flag,bool Value)` | 
+`public virtual bool `[`HasStateFlag`](#classNFactor_1ad32258ae8f95fae47c21a089b5c38344)`(FString Flag) const` | 
+`public virtual bool `[`GetStateFlag`](#classNFactor_1aee02d9f87783b98796abb4d3044fb179)`(FString Flag) const` | 
+`public virtual void `[`SetStateFlag`](#classNFactor_1ac780703e09cc012efb42fc2b776cf249)`(FString Flag,bool Value)` | 
+`public virtual void `[`RemoveStateFlag`](#classNFactor_1a4677b2d80dc31e4f702749380c892b6d)`(FString Flag)` | 
 `public virtual TArray< TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > > `[`GetFactors`](#classNFactor_1a883f26734c9356e2dfd637ea7db7ee44)`() const` | 
 `public virtual void `[`SupplyStateWithCurrentData`](#classNFactor_1a9841dad0ab989f48cd659292b0d81d01)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
 `public virtual void `[`Debug`](#classNFactor_1a66dedee6a114423b83af232f4a491923)`(bool _bDebug)` | 
+`public virtual void `[`AddFlag`](#classNFactor_1af1a0a37a6512b04fcb0ac2ed3e387e87)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` | 
+`public virtual bool `[`HasFlag`](#classNFactor_1a5de5108d06f49eaf0b32b48aac1f0f0b)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag) const` | 
+`public virtual void `[`RemoveFlag`](#classNFactor_1a07d856c96c4106e626c3bb3a7c6017c5)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` | 
 `protected bool `[`bDebug`](#classNFactor_1af3f3aa1a0a8de9d0ac9b7a1dbbabe007) | 
 `protected TMap< FString, bool > `[`IterationFlags`](#classNFactor_1ad99643576e9929158fb9ac9df7caef4d) | 
+`protected TArray< `[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` > `[`OwnFlags`](#classNFactor_1aed2b9181e841461726af766f93f7aef1) | 
 `protected TSharedPtr< NTimelineInterface > `[`Timeline`](#classNFactor_1ad92f86775473a330e973a3a60fc6ae22) | 
 `protected TArray< TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > > `[`Factors`](#classNFactor_1ab217aeb59d451d1b23256e1753fafcd1) | 
 `protected FName `[`Name`](#classNFactor_1a44e3980574bed89aaf6add01c35ffcde) | 
 `protected void `[`AddFactorsToState`](#classNFactor_1adc71be7e3ab9860b664bc3cb2c4d20d2)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+`protected void `[`OnStopperStart`](#classNFactor_1a0ea6d3b05889b5299057b6430e629749)`(NEventInterface * Event,const float & StartTime)` | This is use as a delegate attached to a NEventInterface::OnStart of the FactorUnit's event when its FactorOperator is an implementation of [NFactorOperatorStopperInterface](#classNFactorOperatorStopperInterface).
 
 ## Members
 
@@ -264,15 +350,17 @@ class NFactor
 
 #### `public virtual float `[`GetTime`](#classNFactor_1a65760fa5995f54bfd67527d136928a34)`() const` <a id="classNFactor_1a65760fa5995f54bfd67527d136928a34"></a>
 
-#### `public virtual TSharedRef< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNFactor_1a6b30cc88d4694dd0dcc62105cac729e3)`(uint32 Key) const` <a id="classNFactor_1a6b30cc88d4694dd0dcc62105cac729e3"></a>
+#### `public virtual TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNFactor_1a06b0541872396fd135a29c27bca69cbb)`(uint32 Key) const` <a id="classNFactor_1a06b0541872396fd135a29c27bca69cbb"></a>
 
 #### `public virtual void `[`AddFactorUnit`](#classNFactor_1a7c2a3721444ad515f673624c59af274a)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit)` <a id="classNFactor_1a7c2a3721444ad515f673624c59af274a"></a>
 
-#### `public virtual bool `[`HasFlag`](#classNFactor_1a1c279e98cbe719c4809fac82c89f9fe0)`(FString Flag) const` <a id="classNFactor_1a1c279e98cbe719c4809fac82c89f9fe0"></a>
+#### `public virtual bool `[`HasStateFlag`](#classNFactor_1ad32258ae8f95fae47c21a089b5c38344)`(FString Flag) const` <a id="classNFactor_1ad32258ae8f95fae47c21a089b5c38344"></a>
 
-#### `public virtual bool `[`GetFlag`](#classNFactor_1a533d5ea4ffb3b778e125c5fb9181906f)`(FString Flag) const` <a id="classNFactor_1a533d5ea4ffb3b778e125c5fb9181906f"></a>
+#### `public virtual bool `[`GetStateFlag`](#classNFactor_1aee02d9f87783b98796abb4d3044fb179)`(FString Flag) const` <a id="classNFactor_1aee02d9f87783b98796abb4d3044fb179"></a>
 
-#### `public virtual void `[`SetFlag`](#classNFactor_1aaa997e667d6598aedb89305ed069521b)`(FString Flag,bool Value)` <a id="classNFactor_1aaa997e667d6598aedb89305ed069521b"></a>
+#### `public virtual void `[`SetStateFlag`](#classNFactor_1ac780703e09cc012efb42fc2b776cf249)`(FString Flag,bool Value)` <a id="classNFactor_1ac780703e09cc012efb42fc2b776cf249"></a>
+
+#### `public virtual void `[`RemoveStateFlag`](#classNFactor_1a4677b2d80dc31e4f702749380c892b6d)`(FString Flag)` <a id="classNFactor_1a4677b2d80dc31e4f702749380c892b6d"></a>
 
 #### `public virtual TArray< TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > > `[`GetFactors`](#classNFactor_1a883f26734c9356e2dfd637ea7db7ee44)`() const` <a id="classNFactor_1a883f26734c9356e2dfd637ea7db7ee44"></a>
 
@@ -280,9 +368,17 @@ class NFactor
 
 #### `public virtual void `[`Debug`](#classNFactor_1a66dedee6a114423b83af232f4a491923)`(bool _bDebug)` <a id="classNFactor_1a66dedee6a114423b83af232f4a491923"></a>
 
+#### `public virtual void `[`AddFlag`](#classNFactor_1af1a0a37a6512b04fcb0ac2ed3e387e87)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` <a id="classNFactor_1af1a0a37a6512b04fcb0ac2ed3e387e87"></a>
+
+#### `public virtual bool `[`HasFlag`](#classNFactor_1a5de5108d06f49eaf0b32b48aac1f0f0b)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag) const` <a id="classNFactor_1a5de5108d06f49eaf0b32b48aac1f0f0b"></a>
+
+#### `public virtual void `[`RemoveFlag`](#classNFactor_1a07d856c96c4106e626c3bb3a7c6017c5)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` <a id="classNFactor_1a07d856c96c4106e626c3bb3a7c6017c5"></a>
+
 #### `protected bool `[`bDebug`](#classNFactor_1af3f3aa1a0a8de9d0ac9b7a1dbbabe007) <a id="classNFactor_1af3f3aa1a0a8de9d0ac9b7a1dbbabe007"></a>
 
 #### `protected TMap< FString, bool > `[`IterationFlags`](#classNFactor_1ad99643576e9929158fb9ac9df7caef4d) <a id="classNFactor_1ad99643576e9929158fb9ac9df7caef4d"></a>
+
+#### `protected TArray< `[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` > `[`OwnFlags`](#classNFactor_1aed2b9181e841461726af766f93f7aef1) <a id="classNFactor_1aed2b9181e841461726af766f93f7aef1"></a>
 
 #### `protected TSharedPtr< NTimelineInterface > `[`Timeline`](#classNFactor_1ad92f86775473a330e973a3a60fc6ae22) <a id="classNFactor_1ad92f86775473a330e973a3a60fc6ae22"></a>
 
@@ -292,22 +388,9 @@ class NFactor
 
 #### `protected void `[`AddFactorsToState`](#classNFactor_1adc71be7e3ab9860b664bc3cb2c4d20d2)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classNFactor_1adc71be7e3ab9860b664bc3cb2c4d20d2"></a>
 
-# class `NFactorEvent` <a id="classNFactorEvent"></a>
+#### `protected void `[`OnStopperStart`](#classNFactor_1a0ea6d3b05889b5299057b6430e629749)`(NEventInterface * Event,const float & StartTime)` <a id="classNFactor_1a0ea6d3b05889b5299057b6430e629749"></a>
 
-```
-class NFactorEvent
-  : public NEvent
-```  
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public inline  `[`NFactorEvent`](#classNFactorEvent_1a2399651fcdcbffa64e92d77630112860)`()` | 
-
-## Members
-
-#### `public inline  `[`NFactorEvent`](#classNFactorEvent_1a2399651fcdcbffa64e92d77630112860)`()` <a id="classNFactorEvent_1a2399651fcdcbffa64e92d77630112860"></a>
+This is use as a delegate attached to a NEventInterface::OnStart of the FactorUnit's event when its FactorOperator is an implementation of [NFactorOperatorStopperInterface](#classNFactorOperatorStopperInterface).
 
 # class `NFactorInterface` <a id="classNFactorInterface"></a>
 
@@ -320,12 +403,16 @@ class NFactorEvent
 `public FName `[`GetName`](#classNFactorInterface_1aa6d806dfbde602a5bc1087490b98b086)`() const` | 
 `public TSharedPtr< NTimelineInterface > `[`GetTimeline`](#classNFactorInterface_1a2cbbeae6a891e84976055369c4c89bc5)`() const` | 
 `public float `[`GetTime`](#classNFactorInterface_1a5dffa6febdd15622467d18b054b1d7a1)`() const` | 
-`public TSharedRef< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNFactorInterface_1a6a5c8b2eb7c70ac42d2958517b459531)`(uint32 Key) const` | 
+`public TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNFactorInterface_1ac2ebf1708a85eb0ff0d6a358426004a8)`(uint32 Key) const` | 
 `public TArray< TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > > `[`GetFactors`](#classNFactorInterface_1a51d80b31ba732d9476a709a3424aa7dd)`() const` | 
 `public void `[`AddFactorUnit`](#classNFactorInterface_1a3aa9f5f41e71e3d7dc4a113cf486bf31)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit)` | 
-`public bool `[`HasFlag`](#classNFactorInterface_1a05a25e4c605c79cc92e3cbec4dc5b8ad)`(FString Flag) const` | 
-`public bool `[`GetFlag`](#classNFactorInterface_1ade5a64764d6c8775f18cc2749791d2f5)`(FString Flag) const` | 
-`public void `[`SetFlag`](#classNFactorInterface_1a3680768a5e8cd476b47f47aee03e6a7c)`(FString Flag,bool Value)` | 
+`public bool `[`HasStateFlag`](#classNFactorInterface_1a5e476f34c9cc8ee8441ff1620b401037)`(FString Flag) const` | 
+`public bool `[`GetStateFlag`](#classNFactorInterface_1aac748f28ce1c1e6eb8f70b7d510d5269)`(FString Flag) const` | 
+`public void `[`SetStateFlag`](#classNFactorInterface_1a22302bd97f493d9a47e8817cb2b5645c)`(FString Flag,bool Value)` | 
+`public void `[`RemoveStateFlag`](#classNFactorInterface_1a637f374194a219f7ffef5251277578ee)`(FString Flag)` | 
+`public void `[`AddFlag`](#classNFactorInterface_1a121f9a151f81e006bd0d281dc2fde1c6)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` | 
+`public bool `[`HasFlag`](#classNFactorInterface_1adf709bd32e99c93024bc6aabb4b9f86d)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag) const` | 
+`public void `[`RemoveFlag`](#classNFactorInterface_1a4aaac880d5593e64afe86a4490cd609b)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` | 
 `public void `[`Debug`](#classNFactorInterface_1a9a0698b3d77202918d60a565c8962f56)`(bool _bDebug)` | 
 `public void `[`SupplyStateWithCurrentData`](#classNFactorInterface_1a09b4ac44820dd2eb16f9f684753f0bb3)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
 
@@ -341,21 +428,41 @@ class NFactorEvent
 
 #### `public float `[`GetTime`](#classNFactorInterface_1a5dffa6febdd15622467d18b054b1d7a1)`() const` <a id="classNFactorInterface_1a5dffa6febdd15622467d18b054b1d7a1"></a>
 
-#### `public TSharedRef< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNFactorInterface_1a6a5c8b2eb7c70ac42d2958517b459531)`(uint32 Key) const` <a id="classNFactorInterface_1a6a5c8b2eb7c70ac42d2958517b459531"></a>
+#### `public TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNFactorInterface_1ac2ebf1708a85eb0ff0d6a358426004a8)`(uint32 Key) const` <a id="classNFactorInterface_1ac2ebf1708a85eb0ff0d6a358426004a8"></a>
 
 #### `public TArray< TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > > `[`GetFactors`](#classNFactorInterface_1a51d80b31ba732d9476a709a3424aa7dd)`() const` <a id="classNFactorInterface_1a51d80b31ba732d9476a709a3424aa7dd"></a>
 
 #### `public void `[`AddFactorUnit`](#classNFactorInterface_1a3aa9f5f41e71e3d7dc4a113cf486bf31)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit)` <a id="classNFactorInterface_1a3aa9f5f41e71e3d7dc4a113cf486bf31"></a>
 
-#### `public bool `[`HasFlag`](#classNFactorInterface_1a05a25e4c605c79cc92e3cbec4dc5b8ad)`(FString Flag) const` <a id="classNFactorInterface_1a05a25e4c605c79cc92e3cbec4dc5b8ad"></a>
+#### `public bool `[`HasStateFlag`](#classNFactorInterface_1a5e476f34c9cc8ee8441ff1620b401037)`(FString Flag) const` <a id="classNFactorInterface_1a5e476f34c9cc8ee8441ff1620b401037"></a>
 
-#### `public bool `[`GetFlag`](#classNFactorInterface_1ade5a64764d6c8775f18cc2749791d2f5)`(FString Flag) const` <a id="classNFactorInterface_1ade5a64764d6c8775f18cc2749791d2f5"></a>
+#### `public bool `[`GetStateFlag`](#classNFactorInterface_1aac748f28ce1c1e6eb8f70b7d510d5269)`(FString Flag) const` <a id="classNFactorInterface_1aac748f28ce1c1e6eb8f70b7d510d5269"></a>
 
-#### `public void `[`SetFlag`](#classNFactorInterface_1a3680768a5e8cd476b47f47aee03e6a7c)`(FString Flag,bool Value)` <a id="classNFactorInterface_1a3680768a5e8cd476b47f47aee03e6a7c"></a>
+#### `public void `[`SetStateFlag`](#classNFactorInterface_1a22302bd97f493d9a47e8817cb2b5645c)`(FString Flag,bool Value)` <a id="classNFactorInterface_1a22302bd97f493d9a47e8817cb2b5645c"></a>
+
+#### `public void `[`RemoveStateFlag`](#classNFactorInterface_1a637f374194a219f7ffef5251277578ee)`(FString Flag)` <a id="classNFactorInterface_1a637f374194a219f7ffef5251277578ee"></a>
+
+#### `public void `[`AddFlag`](#classNFactorInterface_1a121f9a151f81e006bd0d281dc2fde1c6)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` <a id="classNFactorInterface_1a121f9a151f81e006bd0d281dc2fde1c6"></a>
+
+#### `public bool `[`HasFlag`](#classNFactorInterface_1adf709bd32e99c93024bc6aabb4b9f86d)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag) const` <a id="classNFactorInterface_1adf709bd32e99c93024bc6aabb4b9f86d"></a>
+
+#### `public void `[`RemoveFlag`](#classNFactorInterface_1a4aaac880d5593e64afe86a4490cd609b)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` <a id="classNFactorInterface_1a4aaac880d5593e64afe86a4490cd609b"></a>
 
 #### `public void `[`Debug`](#classNFactorInterface_1a9a0698b3d77202918d60a565c8962f56)`(bool _bDebug)` <a id="classNFactorInterface_1a9a0698b3d77202918d60a565c8962f56"></a>
 
 #### `public void `[`SupplyStateWithCurrentData`](#classNFactorInterface_1a09b4ac44820dd2eb16f9f684753f0bb3)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classNFactorInterface_1a09b4ac44820dd2eb16f9f684753f0bb3"></a>
+
+# class `NFactorOperatorBreakerInterface` <a id="classNFactorOperatorBreakerInterface"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public bool `[`IsBreaking`](#classNFactorOperatorBreakerInterface_1a88d5dadc90a73e7441421612cc53410c)`()` | 
+
+## Members
+
+#### `public bool `[`IsBreaking`](#classNFactorOperatorBreakerInterface_1a88d5dadc90a73e7441421612cc53410c)`()` <a id="classNFactorOperatorBreakerInterface_1a88d5dadc90a73e7441421612cc53410c"></a>
 
 # class `NFactorOperatorInterface` <a id="classNFactorOperatorInterface"></a>
 
@@ -375,20 +482,41 @@ class NFactorEvent
 
 #### `public const FName `[`GetName`](#classNFactorOperatorInterface_1a31563b058466848c2cf1d9f299607aee)`()` <a id="classNFactorOperatorInterface_1a31563b058466848c2cf1d9f299607aee"></a>
 
-# class `NFactorOperatorInterfaceWithFactor` <a id="classNFactorOperatorInterfaceWithFactor"></a>
+# class `NFactorOperatorPersistentInterface` <a id="classNFactorOperatorPersistentInterface"></a>
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public void `[`SetFactor`](#classNFactorOperatorInterfaceWithFactor_1a7f9692cf7da24c8fc284f50e56d6e7b5)`(`[`NFactorInterface`](#classNFactorInterface)` * Factor)` | 
-`public void `[`SetKeyInFactor`](#classNFactorOperatorInterfaceWithFactor_1a8d39bb427522822521b40973b1596baa)`(uint32 Key)` | 
+`public float `[`Compute`](#classNFactorOperatorPersistentInterface_1ab36cff2e9cd5ee2dde33c99694866f5a)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` | 
 
 ## Members
 
-#### `public void `[`SetFactor`](#classNFactorOperatorInterfaceWithFactor_1a7f9692cf7da24c8fc284f50e56d6e7b5)`(`[`NFactorInterface`](#classNFactorInterface)` * Factor)` <a id="classNFactorOperatorInterfaceWithFactor_1a7f9692cf7da24c8fc284f50e56d6e7b5"></a>
+#### `public float `[`Compute`](#classNFactorOperatorPersistentInterface_1ab36cff2e9cd5ee2dde33c99694866f5a)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` <a id="classNFactorOperatorPersistentInterface_1ab36cff2e9cd5ee2dde33c99694866f5a"></a>
 
-#### `public void `[`SetKeyInFactor`](#classNFactorOperatorInterfaceWithFactor_1a8d39bb427522822521b40973b1596baa)`(uint32 Key)` <a id="classNFactorOperatorInterfaceWithFactor_1a8d39bb427522822521b40973b1596baa"></a>
+# class `NFactorOperatorStopperInterface` <a id="classNFactorOperatorStopperInterface"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
+
+# class `NFactorOperatorWithFactorInterface` <a id="classNFactorOperatorWithFactorInterface"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public void `[`SetFactor`](#classNFactorOperatorWithFactorInterface_1ad923fa3872e1becfa9ee1b356d083207)`(`[`NFactorInterface`](#classNFactorInterface)` * Factor)` | 
+`public void `[`SetKeyInFactor`](#classNFactorOperatorWithFactorInterface_1aa92b49b9f27cbc8dedff51d8a324214e)`(uint32 Key)` | 
+
+## Members
+
+#### `public void `[`SetFactor`](#classNFactorOperatorWithFactorInterface_1ad923fa3872e1becfa9ee1b356d083207)`(`[`NFactorInterface`](#classNFactorInterface)` * Factor)` <a id="classNFactorOperatorWithFactorInterface_1ad923fa3872e1becfa9ee1b356d083207"></a>
+
+#### `public void `[`SetKeyInFactor`](#classNFactorOperatorWithFactorInterface_1aa92b49b9f27cbc8dedff51d8a324214e)`(uint32 Key)` <a id="classNFactorOperatorWithFactorInterface_1aa92b49b9f27cbc8dedff51d8a324214e"></a>
 
 # class `NFactorsFactoryClient` <a id="classNFactorsFactoryClient"></a>
 
@@ -572,7 +700,7 @@ class NFactorUnit
 `public virtual void `[`SetFactorUnitValue`](#classNFactorUnit_1afb92cfc6e060c603f76b0866af59b4d8)`(float _Value)` | 
 `public virtual const FString `[`GetUID`](#classNFactorUnit_1a4ea14c7c9d56ddf6a9d67f62c644bebc)`() const` | 
 `public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classNFactorUnit_1a02eff08ce993e49cccd988d5ef132efe)`()` | 
-`public void `[`Activate`](#classNFactorUnit_1adbc7e9ef9260ce68972f6cb4c795d4ad)`(bool _bIsActivated)` | 
+`public virtual void `[`Activate`](#classNFactorUnit_1a07f052db4deb77dce4ced7b5c4c7a901)`(bool _bIsActivated)` | 
 `protected TSharedPtr< NEventInterface > `[`Event`](#classNFactorUnit_1a49722915624b6e0a86fc8d8572a80891) | 
 `protected bool `[`bIsActivated`](#classNFactorUnit_1ab9923883cce13ff910b06c958c8a9c43) | 
 `protected float `[`FactorUnitValue`](#classNFactorUnit_1aca9c10ab53aa8ae78628fb9940f27cdf) | 
@@ -602,7 +730,7 @@ class NFactorUnit
 
 #### `public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classNFactorUnit_1a02eff08ce993e49cccd988d5ef132efe)`()` <a id="classNFactorUnit_1a02eff08ce993e49cccd988d5ef132efe"></a>
 
-#### `public void `[`Activate`](#classNFactorUnit_1adbc7e9ef9260ce68972f6cb4c795d4ad)`(bool _bIsActivated)` <a id="classNFactorUnit_1adbc7e9ef9260ce68972f6cb4c795d4ad"></a>
+#### `public virtual void `[`Activate`](#classNFactorUnit_1a07f052db4deb77dce4ced7b5c4c7a901)`(bool _bIsActivated)` <a id="classNFactorUnit_1a07f052db4deb77dce4ced7b5c4c7a901"></a>
 
 #### `protected TSharedPtr< NEventInterface > `[`Event`](#classNFactorUnit_1a49722915624b6e0a86fc8d8572a80891) <a id="classNFactorUnit_1a49722915624b6e0a86fc8d8572a80891"></a>
 
@@ -626,6 +754,7 @@ class NFactorUnit
 `public bool `[`IsActivated`](#classNFactorUnitInterface_1a587651b5d8ca573d39ecb68b79a738d9)`() const` | 
 `public const FString `[`GetUID`](#classNFactorUnitInterface_1a7d8efaac45af07e09210589e4f55d0cd)`() const` | 
 `public TSharedPtr< NEventInterface > `[`GetEvent`](#classNFactorUnitInterface_1aab0f6b86947f1c788a01cbd15894e00d)`()` | 
+`public void `[`Activate`](#classNFactorUnitInterface_1a365d67a3a2b5bf3dba02298af92fef93)`(bool _bIsActivated)` | 
 
 ## Members
 
@@ -644,6 +773,47 @@ class NFactorUnit
 #### `public const FString `[`GetUID`](#classNFactorUnitInterface_1a7d8efaac45af07e09210589e4f55d0cd)`() const` <a id="classNFactorUnitInterface_1a7d8efaac45af07e09210589e4f55d0cd"></a>
 
 #### `public TSharedPtr< NEventInterface > `[`GetEvent`](#classNFactorUnitInterface_1aab0f6b86947f1c788a01cbd15894e00d)`()` <a id="classNFactorUnitInterface_1aab0f6b86947f1c788a01cbd15894e00d"></a>
+
+#### `public void `[`Activate`](#classNFactorUnitInterface_1a365d67a3a2b5bf3dba02298af92fef93)`(bool _bIsActivated)` <a id="classNFactorUnitInterface_1a365d67a3a2b5bf3dba02298af92fef93"></a>
+
+# class `NIncreasersCleanerOperator` <a id="classNIncreasersCleanerOperator"></a>
+
+```
+class NIncreasersCleanerOperator
+  : public NCleanerOperator
+```  
+
+This operator is raw! It removes every previous operator set in the factor's units queue. It cleans only factor's unit which implies factor amount increase. The Rh parameter of the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method determines the amount of FactorUnit removed (0 = all). For the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method it doesn't make any computation by returning the Lh parameter.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual bool `[`IsShouldClean`](#classNIncreasersCleanerOperator_1a7d45c66c9e6cc1530fdfa3cc652df1d3)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit) const` | 
+
+## Members
+
+#### `public virtual bool `[`IsShouldClean`](#classNIncreasersCleanerOperator_1a7d45c66c9e6cc1530fdfa3cc652df1d3)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit) const` <a id="classNIncreasersCleanerOperator_1a7d45c66c9e6cc1530fdfa3cc652df1d3"></a>
+
+# class `NIncreasersCleanerPersistentOperator` <a id="classNIncreasersCleanerPersistentOperator"></a>
+
+```
+class NIncreasersCleanerPersistentOperator
+  : public NIncreasersCleanerOperator
+  : public NFactorOperatorPersistentInterface
+```  
+
+This operator is raw! It removes every previous operator set in the factor's units queue. It cleans only factor's unit which implies factor amount increase. The Rh parameter of the [Compute()](#classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8) method determines the amount of FactorUnit removed (0 = all). For the [Compute()](#classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8) method it doesn't make any computation by returning the Lh parameter. It removes also next Increasers set.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual float `[`Compute`](#classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` | 
+
+## Members
+
+#### `public virtual float `[`Compute`](#classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` <a id="classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8"></a>
 
 # class `NMultiplyOperator` <a id="classNMultiplyOperator"></a>
 
@@ -689,6 +859,7 @@ class NNullFactorUnit
 `public virtual FName `[`GetReason`](#classNNullFactorUnit_1a7c78dd5dd524f4d163afbecd817fd9c2)`() const` | 
 `public virtual const FString `[`GetUID`](#classNNullFactorUnit_1a30f07497a8fe7fe403383084597ec9bc)`() const` | 
 `public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classNNullFactorUnit_1a23c5b7aec16c55fa725cf0ad5e04242b)`()` | 
+`public virtual void `[`Activate`](#classNNullFactorUnit_1ad100123e9b29b3fcc362a4bb9a46f508)`(bool _bIsActivated)` | 
 
 ## Members
 
@@ -711,6 +882,8 @@ class NNullFactorUnit
 #### `public virtual const FString `[`GetUID`](#classNNullFactorUnit_1a30f07497a8fe7fe403383084597ec9bc)`() const` <a id="classNNullFactorUnit_1a30f07497a8fe7fe403383084597ec9bc"></a>
 
 #### `public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classNNullFactorUnit_1a23c5b7aec16c55fa725cf0ad5e04242b)`()` <a id="classNNullFactorUnit_1a23c5b7aec16c55fa725cf0ad5e04242b"></a>
+
+#### `public virtual void `[`Activate`](#classNNullFactorUnit_1ad100123e9b29b3fcc362a4bb9a46f508)`(bool _bIsActivated)` <a id="classNNullFactorUnit_1ad100123e9b29b3fcc362a4bb9a46f508"></a>
 
 # class `NNullOperator` <a id="classNNullOperator"></a>
 
@@ -735,13 +908,89 @@ class NNullOperator
 
 #### `public inline virtual const FName `[`GetName`](#classNNullOperator_1a5bab46d063f6b81227aa6925a34b1ea3)`()` <a id="classNNullOperator_1a5bab46d063f6b81227aa6925a34b1ea3"></a>
 
+# class `NOperatorUtils` <a id="classNOperatorUtils"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+
+## Members
+
+# class `NReducersCleanerOperator` <a id="classNReducersCleanerOperator"></a>
+
+```
+class NReducersCleanerOperator
+  : public NCleanerOperator
+```  
+
+This operator is raw! It removes every previous operator set in the factor's units queue. It cleans only factor's unit which implies factor amount reduction. The Rh parameter of the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method determines the amount of FactorUnit removed (0 = all). For the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method it doesn't make any computation by returning the Lh parameter.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual bool `[`IsShouldClean`](#classNReducersCleanerOperator_1a4eb2a1b4a45557d75e84b6c553ffd05c)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit) const` | 
+
+## Members
+
+#### `public virtual bool `[`IsShouldClean`](#classNReducersCleanerOperator_1a4eb2a1b4a45557d75e84b6c553ffd05c)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit) const` <a id="classNReducersCleanerOperator_1a4eb2a1b4a45557d75e84b6c553ffd05c"></a>
+
+# class `NReducersCleanerPersistentOperator` <a id="classNReducersCleanerPersistentOperator"></a>
+
+```
+class NReducersCleanerPersistentOperator
+  : public NReducersCleanerOperator
+  : public NFactorOperatorPersistentInterface
+```  
+
+This operator is raw! It removes every previous operator set in the factor's units queue. It cleans only factor's unit which implies factor amount reduction. The Rh parameter of the [Compute()](#classNReducersCleanerPersistentOperator_1a378e8aef2e4db7ff7a085ee18baba7f9) method determines the amount of FactorUnit removed (0 = all). For the [Compute()](#classNReducersCleanerPersistentOperator_1a378e8aef2e4db7ff7a085ee18baba7f9) method it doesn't make any computation by returning the Lh parameter. It removes also next Reducers set.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual float `[`Compute`](#classNReducersCleanerPersistentOperator_1a378e8aef2e4db7ff7a085ee18baba7f9)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` | 
+
+## Members
+
+#### `public virtual float `[`Compute`](#classNReducersCleanerPersistentOperator_1a378e8aef2e4db7ff7a085ee18baba7f9)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` <a id="classNReducersCleanerPersistentOperator_1a378e8aef2e4db7ff7a085ee18baba7f9"></a>
+
+# class `NReplacerOperator` <a id="classNReplacerOperator"></a>
+
+```
+class NReplacerOperator
+  : public NFactorOperatorStopperInterface
+  : public NFactorOperatorInterface
+```  
+
+This operator replace the value from the previous operators list (It doesn't care of the Lh parameter of the method Compute). For the [Compute()](#classNReplacerOperator_1acc351a22cc2268269e0a2c531bf4be46) method, it returns the value set at the Rh parameter.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline virtual const FName `[`GetName`](#classNReplacerOperator_1a90a05de757299fd8a148fc20eea18b19)`()` | 
+`public virtual float `[`Compute`](#classNReplacerOperator_1acc351a22cc2268269e0a2c531bf4be46)`(float Lh,float Rh)` | 
+`public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetInverse`](#classNReplacerOperator_1ad4e34d60c99dbaa94f2b6cac1d8bdcce)`()` | 
+
+## Members
+
+#### `public inline virtual const FName `[`GetName`](#classNReplacerOperator_1a90a05de757299fd8a148fc20eea18b19)`()` <a id="classNReplacerOperator_1a90a05de757299fd8a148fc20eea18b19"></a>
+
+#### `public virtual float `[`Compute`](#classNReplacerOperator_1acc351a22cc2268269e0a2c531bf4be46)`(float Lh,float Rh)` <a id="classNReplacerOperator_1acc351a22cc2268269e0a2c531bf4be46"></a>
+
+#### `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetInverse`](#classNReplacerOperator_1ad4e34d60c99dbaa94f2b6cac1d8bdcce)`()` <a id="classNReplacerOperator_1ad4e34d60c99dbaa94f2b6cac1d8bdcce"></a>
+
 # class `NResetOperator` <a id="classNResetOperator"></a>
 
 ```
 class NResetOperator
   : public NResetOperatorBase
-  : public NFactorOperatorInterfaceWithFactor
+  : public NFactorOperatorWithFactorInterface
 ```  
+
+This class find a previous FactorUnit and try to reset it. The Rh parameter of the [Compute()](#classNResetOperator_1abdb19ca6f82e81ff1d7d13948448f10e) method determines the previous position (The Index of the FactorUnit which embeds this Operator - Rh) of the FactorUnit you want to reset.
 
 ## Summary
 
@@ -832,12 +1081,16 @@ class NUnrealFactorProxy
 `public virtual FName `[`GetName`](#classNUnrealFactorProxy_1a6c61a479db7afa0805fd880eede88aca)`() const` | 
 `public virtual TSharedPtr< NTimelineInterface > `[`GetTimeline`](#classNUnrealFactorProxy_1a2c0276ac93171db220a209996823112f)`() const` | 
 `public virtual float `[`GetTime`](#classNUnrealFactorProxy_1a835793be01ba3f24ed3a6c884f10446f)`() const` | 
-`public virtual TSharedRef< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNUnrealFactorProxy_1a631849f0ac9c8749c833f1c2600c59f2)`(uint32 Key) const` | 
+`public virtual TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNUnrealFactorProxy_1ab2a00c614f9684ed391375ba1b000a74)`(uint32 Key) const` | 
 `public virtual TArray< TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > > `[`GetFactors`](#classNUnrealFactorProxy_1a446893ac332e4f98694fc3360df0159c)`() const` | 
 `public virtual void `[`AddFactorUnit`](#classNUnrealFactorProxy_1adebd9a6160774185260a728bfc00a136)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit)` | 
-`public virtual bool `[`HasFlag`](#classNUnrealFactorProxy_1a54b22c4d4a48d9d0b874be32a331c481)`(FString Flag) const` | 
-`public virtual bool `[`GetFlag`](#classNUnrealFactorProxy_1ac4abac0dec3717a28ffa618b3941ec00)`(FString Flag) const` | 
-`public virtual void `[`SetFlag`](#classNUnrealFactorProxy_1ab7e70d97a64bf37498cc558d58ebf6d9)`(FString Flag,bool Value)` | 
+`public virtual bool `[`HasStateFlag`](#classNUnrealFactorProxy_1a377f1cafbd99f1fe0374075e016c9c58)`(FString Flag) const` | 
+`public virtual bool `[`GetStateFlag`](#classNUnrealFactorProxy_1a42aa779d4ab737ecf9c213abde80cad5)`(FString Flag) const` | 
+`public virtual void `[`SetStateFlag`](#classNUnrealFactorProxy_1a93f384aefe60aedd01fccf05fda7bb4c)`(FString Flag,bool Value)` | 
+`public virtual void `[`RemoveStateFlag`](#classNUnrealFactorProxy_1ac89d496882b27f596cb65ee859e526d5)`(FString Flag)` | 
+`public virtual void `[`AddFlag`](#classNUnrealFactorProxy_1a92c800933de8b489f8b739594a952570)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` | 
+`public virtual bool `[`HasFlag`](#classNUnrealFactorProxy_1a6aec220f10e951435b7a9a9771cf210b)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag) const` | 
+`public virtual void `[`RemoveFlag`](#classNUnrealFactorProxy_1a65745a8ac24c90440f79202e6bc6b448)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` | 
 `public virtual void `[`Debug`](#classNUnrealFactorProxy_1a0c11e6af6776d8d8a9ef4e372e8d3906)`(bool _bDebug)` | 
 `public virtual void `[`SupplyStateWithCurrentData`](#classNUnrealFactorProxy_1ab3e71d6372845d4bbed0f8681df60a2a)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
 `public virtual `[`UNFactorDecorator`](#classUNFactorDecorator)` * `[`GetUnrealObject`](#classNUnrealFactorProxy_1a9de3b199a932a3233f3b4c33708683b4)`() const` | 
@@ -858,17 +1111,25 @@ class NUnrealFactorProxy
 
 #### `public virtual float `[`GetTime`](#classNUnrealFactorProxy_1a835793be01ba3f24ed3a6c884f10446f)`() const` <a id="classNUnrealFactorProxy_1a835793be01ba3f24ed3a6c884f10446f"></a>
 
-#### `public virtual TSharedRef< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNUnrealFactorProxy_1a631849f0ac9c8749c833f1c2600c59f2)`(uint32 Key) const` <a id="classNUnrealFactorProxy_1a631849f0ac9c8749c833f1c2600c59f2"></a>
+#### `public virtual TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classNUnrealFactorProxy_1ab2a00c614f9684ed391375ba1b000a74)`(uint32 Key) const` <a id="classNUnrealFactorProxy_1ab2a00c614f9684ed391375ba1b000a74"></a>
 
 #### `public virtual TArray< TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > > `[`GetFactors`](#classNUnrealFactorProxy_1a446893ac332e4f98694fc3360df0159c)`() const` <a id="classNUnrealFactorProxy_1a446893ac332e4f98694fc3360df0159c"></a>
 
 #### `public virtual void `[`AddFactorUnit`](#classNUnrealFactorProxy_1adebd9a6160774185260a728bfc00a136)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit)` <a id="classNUnrealFactorProxy_1adebd9a6160774185260a728bfc00a136"></a>
 
-#### `public virtual bool `[`HasFlag`](#classNUnrealFactorProxy_1a54b22c4d4a48d9d0b874be32a331c481)`(FString Flag) const` <a id="classNUnrealFactorProxy_1a54b22c4d4a48d9d0b874be32a331c481"></a>
+#### `public virtual bool `[`HasStateFlag`](#classNUnrealFactorProxy_1a377f1cafbd99f1fe0374075e016c9c58)`(FString Flag) const` <a id="classNUnrealFactorProxy_1a377f1cafbd99f1fe0374075e016c9c58"></a>
 
-#### `public virtual bool `[`GetFlag`](#classNUnrealFactorProxy_1ac4abac0dec3717a28ffa618b3941ec00)`(FString Flag) const` <a id="classNUnrealFactorProxy_1ac4abac0dec3717a28ffa618b3941ec00"></a>
+#### `public virtual bool `[`GetStateFlag`](#classNUnrealFactorProxy_1a42aa779d4ab737ecf9c213abde80cad5)`(FString Flag) const` <a id="classNUnrealFactorProxy_1a42aa779d4ab737ecf9c213abde80cad5"></a>
 
-#### `public virtual void `[`SetFlag`](#classNUnrealFactorProxy_1ab7e70d97a64bf37498cc558d58ebf6d9)`(FString Flag,bool Value)` <a id="classNUnrealFactorProxy_1ab7e70d97a64bf37498cc558d58ebf6d9"></a>
+#### `public virtual void `[`SetStateFlag`](#classNUnrealFactorProxy_1a93f384aefe60aedd01fccf05fda7bb4c)`(FString Flag,bool Value)` <a id="classNUnrealFactorProxy_1a93f384aefe60aedd01fccf05fda7bb4c"></a>
+
+#### `public virtual void `[`RemoveStateFlag`](#classNUnrealFactorProxy_1ac89d496882b27f596cb65ee859e526d5)`(FString Flag)` <a id="classNUnrealFactorProxy_1ac89d496882b27f596cb65ee859e526d5"></a>
+
+#### `public virtual void `[`AddFlag`](#classNUnrealFactorProxy_1a92c800933de8b489f8b739594a952570)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` <a id="classNUnrealFactorProxy_1a92c800933de8b489f8b739594a952570"></a>
+
+#### `public virtual bool `[`HasFlag`](#classNUnrealFactorProxy_1a6aec220f10e951435b7a9a9771cf210b)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag) const` <a id="classNUnrealFactorProxy_1a6aec220f10e951435b7a9a9771cf210b"></a>
+
+#### `public virtual void `[`RemoveFlag`](#classNUnrealFactorProxy_1a65745a8ac24c90440f79202e6bc6b448)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` <a id="classNUnrealFactorProxy_1a65745a8ac24c90440f79202e6bc6b448"></a>
 
 #### `public virtual void `[`Debug`](#classNUnrealFactorProxy_1a0c11e6af6776d8d8a9ef4e372e8d3906)`(bool _bDebug)` <a id="classNUnrealFactorProxy_1a0c11e6af6776d8d8a9ef4e372e8d3906"></a>
 
@@ -887,8 +1148,8 @@ class NUnrealFactorUnitProxy
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * `[`FactorUnit`](#classNUnrealFactorUnitProxy_1aa494cfb2063ef7e8d8c4b8c0ce4b8f34) | 
-`public inline  `[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy_1a80e1799ca69dd9f264cc5c6cdd5a3612)`(`[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * _FactorUnit)` | 
+`public `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * `[`FactorUnit`](#classNUnrealFactorUnitProxy_1a02427b72567f5d134334d86e017038ff) | 
+`public inline  `[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy_1abd1f79022911318861793ba0216044c4)`(`[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * _FactorUnit)` | 
 `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classNUnrealFactorUnitProxy_1a6b0443ff2d2ad592d35d3f0436847122)`() const` | 
 `public virtual void `[`SetOperator`](#classNUnrealFactorUnitProxy_1a762f634df2b0f567dd77147021042caf)`(TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > _Operator)` | 
 `public virtual float `[`GetFactorUnitValue`](#classNUnrealFactorUnitProxy_1aa62c653a47165b6d8709d351447b389f)`() const` | 
@@ -896,14 +1157,15 @@ class NUnrealFactorUnitProxy
 `public virtual FName `[`GetReason`](#classNUnrealFactorUnitProxy_1adcd53d6f9614ccb63ab4713d220cfbc1)`() const` | 
 `public virtual bool `[`IsActivated`](#classNUnrealFactorUnitProxy_1abbdfd8dce8631d8d8bbdfc91c799228b)`() const` | 
 `public virtual const FString `[`GetUID`](#classNUnrealFactorUnitProxy_1a91858cd0e1fcf04681e8481105b484ae)`() const` | 
+`public virtual void `[`Activate`](#classNUnrealFactorUnitProxy_1a7288e953010eb1395f2a3e2e3e0ca3e0)`(bool _bIsActivated)` | 
 `public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classNUnrealFactorUnitProxy_1aa96f37e135760b63f28b329b8b34dcb4)`()` | 
-`public virtual `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * `[`GetUnrealObject`](#classNUnrealFactorUnitProxy_1a1d62ca92912a0786327eeb76aae2f72e)`()` | 
+`public virtual `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * `[`GetUnrealObject`](#classNUnrealFactorUnitProxy_1ad1c8a88092efb1487596559e32fe3990)`()` | 
 
 ## Members
 
-#### `public `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * `[`FactorUnit`](#classNUnrealFactorUnitProxy_1aa494cfb2063ef7e8d8c4b8c0ce4b8f34) <a id="classNUnrealFactorUnitProxy_1aa494cfb2063ef7e8d8c4b8c0ce4b8f34"></a>
+#### `public `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * `[`FactorUnit`](#classNUnrealFactorUnitProxy_1a02427b72567f5d134334d86e017038ff) <a id="classNUnrealFactorUnitProxy_1a02427b72567f5d134334d86e017038ff"></a>
 
-#### `public inline  `[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy_1a80e1799ca69dd9f264cc5c6cdd5a3612)`(`[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * _FactorUnit)` <a id="classNUnrealFactorUnitProxy_1a80e1799ca69dd9f264cc5c6cdd5a3612"></a>
+#### `public inline  `[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy_1abd1f79022911318861793ba0216044c4)`(`[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * _FactorUnit)` <a id="classNUnrealFactorUnitProxy_1abd1f79022911318861793ba0216044c4"></a>
 
 #### `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classNUnrealFactorUnitProxy_1a6b0443ff2d2ad592d35d3f0436847122)`() const` <a id="classNUnrealFactorUnitProxy_1a6b0443ff2d2ad592d35d3f0436847122"></a>
 
@@ -919,18 +1181,11 @@ class NUnrealFactorUnitProxy
 
 #### `public virtual const FString `[`GetUID`](#classNUnrealFactorUnitProxy_1a91858cd0e1fcf04681e8481105b484ae)`() const` <a id="classNUnrealFactorUnitProxy_1a91858cd0e1fcf04681e8481105b484ae"></a>
 
+#### `public virtual void `[`Activate`](#classNUnrealFactorUnitProxy_1a7288e953010eb1395f2a3e2e3e0ca3e0)`(bool _bIsActivated)` <a id="classNUnrealFactorUnitProxy_1a7288e953010eb1395f2a3e2e3e0ca3e0"></a>
+
 #### `public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classNUnrealFactorUnitProxy_1aa96f37e135760b63f28b329b8b34dcb4)`()` <a id="classNUnrealFactorUnitProxy_1aa96f37e135760b63f28b329b8b34dcb4"></a>
 
-#### `public virtual `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * `[`GetUnrealObject`](#classNUnrealFactorUnitProxy_1a1d62ca92912a0786327eeb76aae2f72e)`()` <a id="classNUnrealFactorUnitProxy_1a1d62ca92912a0786327eeb76aae2f72e"></a>
-
-# class `OperatorUtils` <a id="classOperatorUtils"></a>
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-
-## Members
+#### `public virtual `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * `[`GetUnrealObject`](#classNUnrealFactorUnitProxy_1ad1c8a88092efb1487596559e32fe3990)`()` <a id="classNUnrealFactorUnitProxy_1ad1c8a88092efb1487596559e32fe3990"></a>
 
 # class `SNFactorSettingsPin` <a id="classSNFactorSettingsPin"></a>
 
@@ -993,10 +1248,10 @@ Thanks to: [https://forums.unrealengine.com/development-discussion/c-gameplay-pr
 
 #### `public TArray< `[`FNFactorSettings`](#structFNFactorSettings)` > `[`CategoryNames`](#classUFactorSettings_1aa3e82d4ec785fb841541eaacabc904c3) <a id="classUFactorSettings_1aa3e82d4ec785fb841541eaacabc904c3"></a>
 
-# class `UK2Node_FactorOperator` <a id="classUK2Node__FactorOperator"></a>
+# class `UK2Node_FactorUnit` <a id="classUK2Node__FactorUnit"></a>
 
 ```
-class UK2Node_FactorOperator
+class UK2Node_FactorUnit
   : public UK2Node
 ```  
 
@@ -1004,128 +1259,146 @@ class UK2Node_FactorOperator
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public virtual void `[`BeginDestroy`](#classUK2Node__FactorOperator_1abe95ed3e5db1e6b5b18ef944fe749896)`()` | 
-`public virtual void `[`PostEditChangeProperty`](#classUK2Node__FactorOperator_1a926b8f3314809423b98ef0c261632e18)`(struct FPropertyChangedEvent & PropertyChangedEvent)` | 
-`public virtual void `[`PreEditChange`](#classUK2Node__FactorOperator_1a62e4b3137f9f7f14d479f5484451290e)`(UProperty * PropertyAboutToChange)` | 
-`public virtual FText `[`GetNodeTitle`](#classUK2Node__FactorOperator_1a942770c29d3a5f36b4963c9750b425f9)`(ENodeTitleType::Type TitleType) const` | 
-`public virtual FText `[`GetTooltipText`](#classUK2Node__FactorOperator_1aa0bc30677eeef3637c8f944bbbaf8be7)`() const` | 
-`public virtual void `[`AllocateDefaultPins`](#classUK2Node__FactorOperator_1a99e35e30c4e6d7aa1005fe4d059799d5)`()` | 
-`public virtual void `[`PostPlacedNewNode`](#classUK2Node__FactorOperator_1a635463c9a784768f35d8f620ec2c791f)`()` | 
-`public virtual void `[`PinDefaultValueChanged`](#classUK2Node__FactorOperator_1a12f298ffe40c74a851b8d705fa30f591)`(UEdGraphPin * Pin)` | 
-`public virtual void `[`PinConnectionListChanged`](#classUK2Node__FactorOperator_1aab63a9a025ce0ce5abef1d4fd7bc347f)`(UEdGraphPin * Pin)` | 
-`public virtual void `[`ValidateNodeDuringCompilation`](#classUK2Node__FactorOperator_1a61088c55586b9b55977d765631ce2cad)`(class FCompilerResultsLog & MessageLog) const` | 
-`public inline virtual bool `[`ShouldShowNodeProperties`](#classUK2Node__FactorOperator_1ab66148b0e43836cbc0456d455640a38c)`() const` | 
-`public virtual void `[`ReallocatePinsDuringReconstruction`](#classUK2Node__FactorOperator_1af76c21297f39efc3745159aa18c5158f)`(TArray< UEdGraphPin * > & OldPins)` | 
-`public virtual bool `[`HasExternalDependencies`](#classUK2Node__FactorOperator_1af06102885767e3f0e395d3634d9b6d4c)`(TArray< class UStruct * > * OptionalOutput) const` | 
-`public virtual class FNodeHandlingFunctor * `[`CreateNodeHandler`](#classUK2Node__FactorOperator_1af93336d26a6a417f59c71096b25ef214)`(class FKismetCompilerContext & CompilerContext) const` | 
-`public virtual void `[`ExpandNode`](#classUK2Node__FactorOperator_1ab2b71e23b67852303bed8ce10c2c038f)`(class FKismetCompilerContext & CompilerContext,UEdGraph * SourceGraph)` | 
-`public virtual void `[`GetMenuActions`](#classUK2Node__FactorOperator_1aed249802840d8e031ba45f005e8a452b)`(FBlueprintActionDatabaseRegistrar & ActionRegistrar) const` | 
-`public virtual FText `[`GetMenuCategory`](#classUK2Node__FactorOperator_1aa01422bdd97ce092713d0e111d496ca3)`() const` | 
-`public UEdGraphPin * `[`FindClassPin`](#classUK2Node__FactorOperator_1ac515c437b2f8741242db6a7fd2f854ae)`() const` | Finds and returns the class input pin from the current set of pins.
-`public UEdGraphPin * `[`FindFactorPin`](#classUK2Node__FactorOperator_1af49cc930f1823c1529a1c535538bd191)`() const` | 
-`public UEdGraphPin * `[`GetResultPin`](#classUK2Node__FactorOperator_1a5a373cc9dec8e9950101b3e4795f0d76)`() const` | 
-`public UEdGraphPin * `[`GetThenPin`](#classUK2Node__FactorOperator_1a4ddae61c346d63d0190c0114b40f94c4)`() const` | 
-`public UEdGraphPin * `[`GetOuterPin`](#classUK2Node__FactorOperator_1a54eafeebb68a110dd895eb34c8014e02)`() const` | 
-`public UClass * `[`GetInputClass`](#classUK2Node__FactorOperator_1a0326a77bc82c9e534ee895a4031135fb)`() const` | Retrieves the current input class type.
-`public void `[`OnBlueprintClassModified`](#classUK2Node__FactorOperator_1ab599f3c28dcd97430cc301c8c9c9ee3c)`(UBlueprint * TargetBlueprint)` | 
-`public void `[`ClearDelegates`](#classUK2Node__FactorOperator_1a99e68cec308fa3c4991bf4f07bc11c61)`()` | 
-`protected bool `[`MovePinLinks`](#classUK2Node__FactorOperator_1a575b1bbe365635647c7422933471dd58)`(UEdGraphPin * PinA,UEdGraphPin * PinB,class FKismetCompilerContext & CompilerContext,uint32 & Step) const` | 
-`protected bool `[`TryConnectPin`](#classUK2Node__FactorOperator_1acaed4495b31fdc7afd2e47b51f0d7f84)`(UEdGraphPin * PinA,UEdGraphPin * PinB,class FKismetCompilerContext & CompilerContext,uint32 & Step) const` | 
-`protected UEdGraphPin * `[`FindClassPin`](#classUK2Node__FactorOperator_1a999bea75bad83a53ecefcb828c7cf041)`(const TArray< UEdGraphPin * > & FromPins) const` | Finds and returns the class input pin.
-`protected UEdGraphPin * `[`FindFactorPin`](#classUK2Node__FactorOperator_1ab5cfd21aa977630cd7627f92344c6729)`(const TArray< UEdGraphPin * > & FromPins) const` | Finds and returns the stack input pin.
-`protected UClass * `[`GetInputClass`](#classUK2Node__FactorOperator_1a888c0647555d013d49ad18eb34d36cac)`(const UEdGraphPin * FromPin) const` | Determines the input class type from the given pin.
-`protected void `[`CreateNewPins`](#classUK2Node__FactorOperator_1aee3f14c4c58a1e94030bb6fa58487e60)`(UClass * InClass)` | Creates the full set of pins (properties) from the given input class.
-`protected void `[`OnClassPinChanged`](#classUK2Node__FactorOperator_1a707e58272062acef24fcf2034014cd21)`()` | Will be called whenever the class pin selector changes its value.
+`public virtual void `[`BeginDestroy`](#classUK2Node__FactorUnit_1a81c836c7347d7c7794f905506300a5b6)`()` | 
+`public virtual void `[`PostEditChangeProperty`](#classUK2Node__FactorUnit_1ad506d88fcaf4dd41ae9759d9c900d1f1)`(struct FPropertyChangedEvent & PropertyChangedEvent)` | 
+`public virtual void `[`PreEditChange`](#classUK2Node__FactorUnit_1a3bf81b59c73f02025937e2c8b4e19ba7)`(UProperty * PropertyAboutToChange)` | 
+`public virtual FText `[`GetNodeTitle`](#classUK2Node__FactorUnit_1a60801166ba25be9afc815515c91fb989)`(ENodeTitleType::Type TitleType) const` | 
+`public virtual FText `[`GetTooltipText`](#classUK2Node__FactorUnit_1a6b96d80b1066e8dfb7d82762c49bb5d1)`() const` | 
+`public virtual void `[`AllocateDefaultPins`](#classUK2Node__FactorUnit_1a0d3be5d50d3234e0b1426757f4db3ef8)`()` | 
+`public virtual void `[`PostPlacedNewNode`](#classUK2Node__FactorUnit_1af82261abd70183df239caafafc4f366c)`()` | 
+`public virtual void `[`PinDefaultValueChanged`](#classUK2Node__FactorUnit_1aff6537a6054aeb4cd12fac44893925f6)`(UEdGraphPin * Pin)` | 
+`public virtual void `[`PinConnectionListChanged`](#classUK2Node__FactorUnit_1a1c182d9f7feca6ec962005ef4e07bc4c)`(UEdGraphPin * Pin)` | 
+`public virtual void `[`ValidateNodeDuringCompilation`](#classUK2Node__FactorUnit_1a960ec7e2bb2d95969e0d011be7adbca5)`(class FCompilerResultsLog & MessageLog) const` | 
+`public inline virtual bool `[`ShouldShowNodeProperties`](#classUK2Node__FactorUnit_1a43b3d5d9b744502fbc7cde7923dc86c4)`() const` | 
+`public virtual void `[`ReallocatePinsDuringReconstruction`](#classUK2Node__FactorUnit_1af8e49d77d879ed3f3c8c3b984cf9607e)`(TArray< UEdGraphPin * > & OldPins)` | 
+`public virtual bool `[`HasExternalDependencies`](#classUK2Node__FactorUnit_1a4a63d00ddeaf125df6c66546f73c14d7)`(TArray< class UStruct * > * OptionalOutput) const` | 
+`public virtual class FNodeHandlingFunctor * `[`CreateNodeHandler`](#classUK2Node__FactorUnit_1a551dbd176f60eb3069dccb31ba524461)`(class FKismetCompilerContext & CompilerContext) const` | 
+`public virtual void `[`ExpandNode`](#classUK2Node__FactorUnit_1a2e5e0b8e6114590dc36d9fa471d0055f)`(class FKismetCompilerContext & CompilerContext,UEdGraph * SourceGraph)` | 
+`public virtual void `[`GetMenuActions`](#classUK2Node__FactorUnit_1aec517d36a7578ea0067a28198c840788)`(FBlueprintActionDatabaseRegistrar & ActionRegistrar) const` | 
+`public virtual FText `[`GetMenuCategory`](#classUK2Node__FactorUnit_1a6461f2f87642397004aae08e5faa4c7b)`() const` | 
+`public UEdGraphPin * `[`FindClassPin`](#classUK2Node__FactorUnit_1a4ffb25e6bd7900ca50961ce59df5612b)`() const` | Finds and returns the class input pin from the current set of pins.
+`public UEdGraphPin * `[`FindFactorPin`](#classUK2Node__FactorUnit_1aee2299b4a7d4e451e42254abd3db99fd)`() const` | 
+`public UEdGraphPin * `[`FindOperatorPin`](#classUK2Node__FactorUnit_1a912d4d7c7f43b16750065c6ef0c4fe75)`() const` | 
+`public UEdGraphPin * `[`GetResultPin`](#classUK2Node__FactorUnit_1a6d8f4261dc9d176d79995e160a1593a9)`() const` | 
+`public UEdGraphPin * `[`GetThenPin`](#classUK2Node__FactorUnit_1a1f970cb823a3453b3b09018f7379e9a4)`() const` | 
+`public UEdGraphPin * `[`GetOuterPin`](#classUK2Node__FactorUnit_1a306c1b2361f7bc71835a0da7eb9d1f9d)`() const` | 
+`public UClass * `[`GetInputClass`](#classUK2Node__FactorUnit_1a8a86283041c0c174970a4bbc55cb3dfa)`() const` | Retrieves the current input class type.
+`public UClass * `[`GetInputOperatorClass`](#classUK2Node__FactorUnit_1a7731286605c2e7c5990fc46fc520587d)`() const` | Retrieves the current input operator class type.
+`public void `[`OnBlueprintClassModified`](#classUK2Node__FactorUnit_1a6f884e91e77f6cc633c667632ee8b124)`(UBlueprint * TargetBlueprint)` | 
+`public void `[`ClearDelegates`](#classUK2Node__FactorUnit_1a563cb61adc2033d2be4c20dd957830ad)`(FString InClassName)` | 
+`protected UEdGraphPin * `[`FindClassPin`](#classUK2Node__FactorUnit_1acbbea8ac79812d971aa2b1d17923b0b7)`(const TArray< UEdGraphPin * > & FromPins) const` | Finds and returns the class input pin.
+`protected UEdGraphPin * `[`FindFactorPin`](#classUK2Node__FactorUnit_1a3c346385e3100bba0d6bb8abebab48db)`(const TArray< UEdGraphPin * > & FromPins) const` | Finds and returns the factor input pin.
+`protected UEdGraphPin * `[`FindOperatorPin`](#classUK2Node__FactorUnit_1a3b1c1ad4c215434934b557585d913c19)`(const TArray< UEdGraphPin * > & FromPins) const` | Finds and returns the opearator provider input pin.
+`protected UClass * `[`GetInputClass`](#classUK2Node__FactorUnit_1a52e4320f505f4a74abf9beadcff32a36)`(const UEdGraphPin * FromPin) const` | Determines the input class type from the given pin.
+`protected UClass * `[`GetInputOperatorClass`](#classUK2Node__FactorUnit_1a953580996631360f7c72490691bdf174)`(const UEdGraphPin * FromPin) const` | Determines the input operator class type from the given pin.
+`protected void `[`CreateNewPins`](#classUK2Node__FactorUnit_1a8039ee6de899d3d23f9ec5d816a80d15)`(UClass * InClass,bool bOuputPin)` | Creates the full set of pins (properties) from the given input class.
+`protected void `[`OnClassPinChanged`](#classUK2Node__FactorUnit_1a2ab3ac66a08fc41b225743a53b460493)`()` | Will be called whenever the class pin selector changes its value.
 
 ## Members
 
-#### `public virtual void `[`BeginDestroy`](#classUK2Node__FactorOperator_1abe95ed3e5db1e6b5b18ef944fe749896)`()` <a id="classUK2Node__FactorOperator_1abe95ed3e5db1e6b5b18ef944fe749896"></a>
+#### `public virtual void `[`BeginDestroy`](#classUK2Node__FactorUnit_1a81c836c7347d7c7794f905506300a5b6)`()` <a id="classUK2Node__FactorUnit_1a81c836c7347d7c7794f905506300a5b6"></a>
 
-#### `public virtual void `[`PostEditChangeProperty`](#classUK2Node__FactorOperator_1a926b8f3314809423b98ef0c261632e18)`(struct FPropertyChangedEvent & PropertyChangedEvent)` <a id="classUK2Node__FactorOperator_1a926b8f3314809423b98ef0c261632e18"></a>
+#### `public virtual void `[`PostEditChangeProperty`](#classUK2Node__FactorUnit_1ad506d88fcaf4dd41ae9759d9c900d1f1)`(struct FPropertyChangedEvent & PropertyChangedEvent)` <a id="classUK2Node__FactorUnit_1ad506d88fcaf4dd41ae9759d9c900d1f1"></a>
 
-#### `public virtual void `[`PreEditChange`](#classUK2Node__FactorOperator_1a62e4b3137f9f7f14d479f5484451290e)`(UProperty * PropertyAboutToChange)` <a id="classUK2Node__FactorOperator_1a62e4b3137f9f7f14d479f5484451290e"></a>
+#### `public virtual void `[`PreEditChange`](#classUK2Node__FactorUnit_1a3bf81b59c73f02025937e2c8b4e19ba7)`(UProperty * PropertyAboutToChange)` <a id="classUK2Node__FactorUnit_1a3bf81b59c73f02025937e2c8b4e19ba7"></a>
 
-#### `public virtual FText `[`GetNodeTitle`](#classUK2Node__FactorOperator_1a942770c29d3a5f36b4963c9750b425f9)`(ENodeTitleType::Type TitleType) const` <a id="classUK2Node__FactorOperator_1a942770c29d3a5f36b4963c9750b425f9"></a>
+#### `public virtual FText `[`GetNodeTitle`](#classUK2Node__FactorUnit_1a60801166ba25be9afc815515c91fb989)`(ENodeTitleType::Type TitleType) const` <a id="classUK2Node__FactorUnit_1a60801166ba25be9afc815515c91fb989"></a>
 
-#### `public virtual FText `[`GetTooltipText`](#classUK2Node__FactorOperator_1aa0bc30677eeef3637c8f944bbbaf8be7)`() const` <a id="classUK2Node__FactorOperator_1aa0bc30677eeef3637c8f944bbbaf8be7"></a>
+#### `public virtual FText `[`GetTooltipText`](#classUK2Node__FactorUnit_1a6b96d80b1066e8dfb7d82762c49bb5d1)`() const` <a id="classUK2Node__FactorUnit_1a6b96d80b1066e8dfb7d82762c49bb5d1"></a>
 
-#### `public virtual void `[`AllocateDefaultPins`](#classUK2Node__FactorOperator_1a99e35e30c4e6d7aa1005fe4d059799d5)`()` <a id="classUK2Node__FactorOperator_1a99e35e30c4e6d7aa1005fe4d059799d5"></a>
+#### `public virtual void `[`AllocateDefaultPins`](#classUK2Node__FactorUnit_1a0d3be5d50d3234e0b1426757f4db3ef8)`()` <a id="classUK2Node__FactorUnit_1a0d3be5d50d3234e0b1426757f4db3ef8"></a>
 
-#### `public virtual void `[`PostPlacedNewNode`](#classUK2Node__FactorOperator_1a635463c9a784768f35d8f620ec2c791f)`()` <a id="classUK2Node__FactorOperator_1a635463c9a784768f35d8f620ec2c791f"></a>
+#### `public virtual void `[`PostPlacedNewNode`](#classUK2Node__FactorUnit_1af82261abd70183df239caafafc4f366c)`()` <a id="classUK2Node__FactorUnit_1af82261abd70183df239caafafc4f366c"></a>
 
-#### `public virtual void `[`PinDefaultValueChanged`](#classUK2Node__FactorOperator_1a12f298ffe40c74a851b8d705fa30f591)`(UEdGraphPin * Pin)` <a id="classUK2Node__FactorOperator_1a12f298ffe40c74a851b8d705fa30f591"></a>
+#### `public virtual void `[`PinDefaultValueChanged`](#classUK2Node__FactorUnit_1aff6537a6054aeb4cd12fac44893925f6)`(UEdGraphPin * Pin)` <a id="classUK2Node__FactorUnit_1aff6537a6054aeb4cd12fac44893925f6"></a>
 
-#### `public virtual void `[`PinConnectionListChanged`](#classUK2Node__FactorOperator_1aab63a9a025ce0ce5abef1d4fd7bc347f)`(UEdGraphPin * Pin)` <a id="classUK2Node__FactorOperator_1aab63a9a025ce0ce5abef1d4fd7bc347f"></a>
+#### `public virtual void `[`PinConnectionListChanged`](#classUK2Node__FactorUnit_1a1c182d9f7feca6ec962005ef4e07bc4c)`(UEdGraphPin * Pin)` <a id="classUK2Node__FactorUnit_1a1c182d9f7feca6ec962005ef4e07bc4c"></a>
 
-#### `public virtual void `[`ValidateNodeDuringCompilation`](#classUK2Node__FactorOperator_1a61088c55586b9b55977d765631ce2cad)`(class FCompilerResultsLog & MessageLog) const` <a id="classUK2Node__FactorOperator_1a61088c55586b9b55977d765631ce2cad"></a>
+#### `public virtual void `[`ValidateNodeDuringCompilation`](#classUK2Node__FactorUnit_1a960ec7e2bb2d95969e0d011be7adbca5)`(class FCompilerResultsLog & MessageLog) const` <a id="classUK2Node__FactorUnit_1a960ec7e2bb2d95969e0d011be7adbca5"></a>
 
-#### `public inline virtual bool `[`ShouldShowNodeProperties`](#classUK2Node__FactorOperator_1ab66148b0e43836cbc0456d455640a38c)`() const` <a id="classUK2Node__FactorOperator_1ab66148b0e43836cbc0456d455640a38c"></a>
+#### `public inline virtual bool `[`ShouldShowNodeProperties`](#classUK2Node__FactorUnit_1a43b3d5d9b744502fbc7cde7923dc86c4)`() const` <a id="classUK2Node__FactorUnit_1a43b3d5d9b744502fbc7cde7923dc86c4"></a>
 
-#### `public virtual void `[`ReallocatePinsDuringReconstruction`](#classUK2Node__FactorOperator_1af76c21297f39efc3745159aa18c5158f)`(TArray< UEdGraphPin * > & OldPins)` <a id="classUK2Node__FactorOperator_1af76c21297f39efc3745159aa18c5158f"></a>
+#### `public virtual void `[`ReallocatePinsDuringReconstruction`](#classUK2Node__FactorUnit_1af8e49d77d879ed3f3c8c3b984cf9607e)`(TArray< UEdGraphPin * > & OldPins)` <a id="classUK2Node__FactorUnit_1af8e49d77d879ed3f3c8c3b984cf9607e"></a>
 
-#### `public virtual bool `[`HasExternalDependencies`](#classUK2Node__FactorOperator_1af06102885767e3f0e395d3634d9b6d4c)`(TArray< class UStruct * > * OptionalOutput) const` <a id="classUK2Node__FactorOperator_1af06102885767e3f0e395d3634d9b6d4c"></a>
+#### `public virtual bool `[`HasExternalDependencies`](#classUK2Node__FactorUnit_1a4a63d00ddeaf125df6c66546f73c14d7)`(TArray< class UStruct * > * OptionalOutput) const` <a id="classUK2Node__FactorUnit_1a4a63d00ddeaf125df6c66546f73c14d7"></a>
 
-#### `public virtual class FNodeHandlingFunctor * `[`CreateNodeHandler`](#classUK2Node__FactorOperator_1af93336d26a6a417f59c71096b25ef214)`(class FKismetCompilerContext & CompilerContext) const` <a id="classUK2Node__FactorOperator_1af93336d26a6a417f59c71096b25ef214"></a>
+#### `public virtual class FNodeHandlingFunctor * `[`CreateNodeHandler`](#classUK2Node__FactorUnit_1a551dbd176f60eb3069dccb31ba524461)`(class FKismetCompilerContext & CompilerContext) const` <a id="classUK2Node__FactorUnit_1a551dbd176f60eb3069dccb31ba524461"></a>
 
-#### `public virtual void `[`ExpandNode`](#classUK2Node__FactorOperator_1ab2b71e23b67852303bed8ce10c2c038f)`(class FKismetCompilerContext & CompilerContext,UEdGraph * SourceGraph)` <a id="classUK2Node__FactorOperator_1ab2b71e23b67852303bed8ce10c2c038f"></a>
+#### `public virtual void `[`ExpandNode`](#classUK2Node__FactorUnit_1a2e5e0b8e6114590dc36d9fa471d0055f)`(class FKismetCompilerContext & CompilerContext,UEdGraph * SourceGraph)` <a id="classUK2Node__FactorUnit_1a2e5e0b8e6114590dc36d9fa471d0055f"></a>
 
-#### `public virtual void `[`GetMenuActions`](#classUK2Node__FactorOperator_1aed249802840d8e031ba45f005e8a452b)`(FBlueprintActionDatabaseRegistrar & ActionRegistrar) const` <a id="classUK2Node__FactorOperator_1aed249802840d8e031ba45f005e8a452b"></a>
+#### `public virtual void `[`GetMenuActions`](#classUK2Node__FactorUnit_1aec517d36a7578ea0067a28198c840788)`(FBlueprintActionDatabaseRegistrar & ActionRegistrar) const` <a id="classUK2Node__FactorUnit_1aec517d36a7578ea0067a28198c840788"></a>
 
-#### `public virtual FText `[`GetMenuCategory`](#classUK2Node__FactorOperator_1aa01422bdd97ce092713d0e111d496ca3)`() const` <a id="classUK2Node__FactorOperator_1aa01422bdd97ce092713d0e111d496ca3"></a>
+#### `public virtual FText `[`GetMenuCategory`](#classUK2Node__FactorUnit_1a6461f2f87642397004aae08e5faa4c7b)`() const` <a id="classUK2Node__FactorUnit_1a6461f2f87642397004aae08e5faa4c7b"></a>
 
-#### `public UEdGraphPin * `[`FindClassPin`](#classUK2Node__FactorOperator_1ac515c437b2f8741242db6a7fd2f854ae)`() const` <a id="classUK2Node__FactorOperator_1ac515c437b2f8741242db6a7fd2f854ae"></a>
+#### `public UEdGraphPin * `[`FindClassPin`](#classUK2Node__FactorUnit_1a4ffb25e6bd7900ca50961ce59df5612b)`() const` <a id="classUK2Node__FactorUnit_1a4ffb25e6bd7900ca50961ce59df5612b"></a>
 
 Finds and returns the class input pin from the current set of pins.
 
-#### `public UEdGraphPin * `[`FindFactorPin`](#classUK2Node__FactorOperator_1af49cc930f1823c1529a1c535538bd191)`() const` <a id="classUK2Node__FactorOperator_1af49cc930f1823c1529a1c535538bd191"></a>
+#### `public UEdGraphPin * `[`FindFactorPin`](#classUK2Node__FactorUnit_1aee2299b4a7d4e451e42254abd3db99fd)`() const` <a id="classUK2Node__FactorUnit_1aee2299b4a7d4e451e42254abd3db99fd"></a>
 
-#### `public UEdGraphPin * `[`GetResultPin`](#classUK2Node__FactorOperator_1a5a373cc9dec8e9950101b3e4795f0d76)`() const` <a id="classUK2Node__FactorOperator_1a5a373cc9dec8e9950101b3e4795f0d76"></a>
+#### `public UEdGraphPin * `[`FindOperatorPin`](#classUK2Node__FactorUnit_1a912d4d7c7f43b16750065c6ef0c4fe75)`() const` <a id="classUK2Node__FactorUnit_1a912d4d7c7f43b16750065c6ef0c4fe75"></a>
 
-#### `public UEdGraphPin * `[`GetThenPin`](#classUK2Node__FactorOperator_1a4ddae61c346d63d0190c0114b40f94c4)`() const` <a id="classUK2Node__FactorOperator_1a4ddae61c346d63d0190c0114b40f94c4"></a>
+#### `public UEdGraphPin * `[`GetResultPin`](#classUK2Node__FactorUnit_1a6d8f4261dc9d176d79995e160a1593a9)`() const` <a id="classUK2Node__FactorUnit_1a6d8f4261dc9d176d79995e160a1593a9"></a>
 
-#### `public UEdGraphPin * `[`GetOuterPin`](#classUK2Node__FactorOperator_1a54eafeebb68a110dd895eb34c8014e02)`() const` <a id="classUK2Node__FactorOperator_1a54eafeebb68a110dd895eb34c8014e02"></a>
+#### `public UEdGraphPin * `[`GetThenPin`](#classUK2Node__FactorUnit_1a1f970cb823a3453b3b09018f7379e9a4)`() const` <a id="classUK2Node__FactorUnit_1a1f970cb823a3453b3b09018f7379e9a4"></a>
 
-#### `public UClass * `[`GetInputClass`](#classUK2Node__FactorOperator_1a0326a77bc82c9e534ee895a4031135fb)`() const` <a id="classUK2Node__FactorOperator_1a0326a77bc82c9e534ee895a4031135fb"></a>
+#### `public UEdGraphPin * `[`GetOuterPin`](#classUK2Node__FactorUnit_1a306c1b2361f7bc71835a0da7eb9d1f9d)`() const` <a id="classUK2Node__FactorUnit_1a306c1b2361f7bc71835a0da7eb9d1f9d"></a>
+
+#### `public UClass * `[`GetInputClass`](#classUK2Node__FactorUnit_1a8a86283041c0c174970a4bbc55cb3dfa)`() const` <a id="classUK2Node__FactorUnit_1a8a86283041c0c174970a4bbc55cb3dfa"></a>
 
 Retrieves the current input class type.
 
-#### `public void `[`OnBlueprintClassModified`](#classUK2Node__FactorOperator_1ab599f3c28dcd97430cc301c8c9c9ee3c)`(UBlueprint * TargetBlueprint)` <a id="classUK2Node__FactorOperator_1ab599f3c28dcd97430cc301c8c9c9ee3c"></a>
+#### `public UClass * `[`GetInputOperatorClass`](#classUK2Node__FactorUnit_1a7731286605c2e7c5990fc46fc520587d)`() const` <a id="classUK2Node__FactorUnit_1a7731286605c2e7c5990fc46fc520587d"></a>
 
-#### `public void `[`ClearDelegates`](#classUK2Node__FactorOperator_1a99e68cec308fa3c4991bf4f07bc11c61)`()` <a id="classUK2Node__FactorOperator_1a99e68cec308fa3c4991bf4f07bc11c61"></a>
+Retrieves the current input operator class type.
 
-#### `protected bool `[`MovePinLinks`](#classUK2Node__FactorOperator_1a575b1bbe365635647c7422933471dd58)`(UEdGraphPin * PinA,UEdGraphPin * PinB,class FKismetCompilerContext & CompilerContext,uint32 & Step) const` <a id="classUK2Node__FactorOperator_1a575b1bbe365635647c7422933471dd58"></a>
+#### `public void `[`OnBlueprintClassModified`](#classUK2Node__FactorUnit_1a6f884e91e77f6cc633c667632ee8b124)`(UBlueprint * TargetBlueprint)` <a id="classUK2Node__FactorUnit_1a6f884e91e77f6cc633c667632ee8b124"></a>
 
-#### `protected bool `[`TryConnectPin`](#classUK2Node__FactorOperator_1acaed4495b31fdc7afd2e47b51f0d7f84)`(UEdGraphPin * PinA,UEdGraphPin * PinB,class FKismetCompilerContext & CompilerContext,uint32 & Step) const` <a id="classUK2Node__FactorOperator_1acaed4495b31fdc7afd2e47b51f0d7f84"></a>
+#### `public void `[`ClearDelegates`](#classUK2Node__FactorUnit_1a563cb61adc2033d2be4c20dd957830ad)`(FString InClassName)` <a id="classUK2Node__FactorUnit_1a563cb61adc2033d2be4c20dd957830ad"></a>
 
-#### `protected UEdGraphPin * `[`FindClassPin`](#classUK2Node__FactorOperator_1a999bea75bad83a53ecefcb828c7cf041)`(const TArray< UEdGraphPin * > & FromPins) const` <a id="classUK2Node__FactorOperator_1a999bea75bad83a53ecefcb828c7cf041"></a>
+#### `protected UEdGraphPin * `[`FindClassPin`](#classUK2Node__FactorUnit_1acbbea8ac79812d971aa2b1d17923b0b7)`(const TArray< UEdGraphPin * > & FromPins) const` <a id="classUK2Node__FactorUnit_1acbbea8ac79812d971aa2b1d17923b0b7"></a>
 
 Finds and returns the class input pin.
 
 #### Parameters
 * `FromPins` A list of pins to search.
 
-#### `protected UEdGraphPin * `[`FindFactorPin`](#classUK2Node__FactorOperator_1ab5cfd21aa977630cd7627f92344c6729)`(const TArray< UEdGraphPin * > & FromPins) const` <a id="classUK2Node__FactorOperator_1ab5cfd21aa977630cd7627f92344c6729"></a>
+#### `protected UEdGraphPin * `[`FindFactorPin`](#classUK2Node__FactorUnit_1a3c346385e3100bba0d6bb8abebab48db)`(const TArray< UEdGraphPin * > & FromPins) const` <a id="classUK2Node__FactorUnit_1a3c346385e3100bba0d6bb8abebab48db"></a>
 
-Finds and returns the stack input pin.
+Finds and returns the factor input pin.
 
 #### Parameters
 * `FromPins` A list of pins to search.
 
-#### `protected UClass * `[`GetInputClass`](#classUK2Node__FactorOperator_1a888c0647555d013d49ad18eb34d36cac)`(const UEdGraphPin * FromPin) const` <a id="classUK2Node__FactorOperator_1a888c0647555d013d49ad18eb34d36cac"></a>
+#### `protected UEdGraphPin * `[`FindOperatorPin`](#classUK2Node__FactorUnit_1a3b1c1ad4c215434934b557585d913c19)`(const TArray< UEdGraphPin * > & FromPins) const` <a id="classUK2Node__FactorUnit_1a3b1c1ad4c215434934b557585d913c19"></a>
+
+Finds and returns the opearator provider input pin.
+
+#### Parameters
+* `FromPins` A list of pins to search.
+
+#### `protected UClass * `[`GetInputClass`](#classUK2Node__FactorUnit_1a52e4320f505f4a74abf9beadcff32a36)`(const UEdGraphPin * FromPin) const` <a id="classUK2Node__FactorUnit_1a52e4320f505f4a74abf9beadcff32a36"></a>
 
 Determines the input class type from the given pin.
 
 #### Parameters
 * `FromPin` Input class pin.
 
-#### `protected void `[`CreateNewPins`](#classUK2Node__FactorOperator_1aee3f14c4c58a1e94030bb6fa58487e60)`(UClass * InClass)` <a id="classUK2Node__FactorOperator_1aee3f14c4c58a1e94030bb6fa58487e60"></a>
+#### `protected UClass * `[`GetInputOperatorClass`](#classUK2Node__FactorUnit_1a953580996631360f7c72490691bdf174)`(const UEdGraphPin * FromPin) const` <a id="classUK2Node__FactorUnit_1a953580996631360f7c72490691bdf174"></a>
+
+Determines the input operator class type from the given pin.
+
+#### Parameters
+* `FromPin` Input class pin.
+
+#### `protected void `[`CreateNewPins`](#classUK2Node__FactorUnit_1a8039ee6de899d3d23f9ec5d816a80d15)`(UClass * InClass,bool bOuputPin)` <a id="classUK2Node__FactorUnit_1a8039ee6de899d3d23f9ec5d816a80d15"></a>
 
 Creates the full set of pins (properties) from the given input class.
 
 #### Parameters
 * `InClass` Input class type.
 
-#### `protected void `[`OnClassPinChanged`](#classUK2Node__FactorOperator_1a707e58272062acef24fcf2034014cd21)`()` <a id="classUK2Node__FactorOperator_1a707e58272062acef24fcf2034014cd21"></a>
+#### `protected void `[`OnClassPinChanged`](#classUK2Node__FactorUnit_1a2ab3ac66a08fc41b225743a53b460493)`()` <a id="classUK2Node__FactorUnit_1a2ab3ac66a08fc41b225743a53b460493"></a>
 
 Will be called whenever the class pin selector changes its value.
 
@@ -1143,21 +1416,27 @@ class UNFactorDecorator
 --------------------------------|---------------------------------------------
 `public inline  `[`UNFactorDecorator`](#classUNFactorDecorator_1a85c700d5382b6b57355f04d3122c8e4c)`()` | 
 `public void `[`Init`](#classUNFactorDecorator_1a5c1ec700ce04c8d8f127f284af627deb)`(FName _Name,TSharedPtr< NTimelineInterface > _Timeline)` | 
-`public `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * `[`CreateFactorUnit`](#classUNFactorDecorator_1a665ff68e8e968f4f58a8a2ca23c7208a)`(const UClass * Class)` | 
-`public void `[`OnTimelineEventExpired`](#classUNFactorDecorator_1a75801cce123355d679d6ba3791003d6b)`(TSharedPtr< NEventInterface > Event,const float & ExpiredTime,const int32 & Index)` | 
+`public `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * `[`CreateFactorUnit`](#classUNFactorDecorator_1aab633c751f383cf552de3fbd13e6ea00)`(const UClass * Class)` | 
 `public TArray< `[`FNFactorUnitRecord`](#structFNFactorUnitRecord)` > `[`GetFactorUnitStore`](#classUNFactorDecorator_1aac4ba4dd040c4a6ce7b4051b34f10c69)`() const` | 
+`public void `[`OnInit`](#classUNFactorDecorator_1a5a1301646573c17b62286b19557f7221)`()` | 
+`public void `[`OnAddFactorUnit`](#classUNFactorDecorator_1adea3f4fceff9117e36f469eb1e17a118)`(`[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * FactorUnit)` | 
+`public void `[`OnFactorUnitExpired`](#classUNFactorDecorator_1ae37a5998d879fc76d722ff1369207df0)`(`[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * FactorUnit)` | The FactorUnit pointer is immediatly removed after this method is called.
+`public virtual FName `[`GetName`](#classUNFactorDecorator_1aba3f6a0fc1b7b956d3e183c58a36fff6)`() const` | 
+`public virtual float `[`GetTime`](#classUNFactorDecorator_1a1e5f17e044f128a5277b4f3d60a7dbb2)`() const` | 
+`public virtual bool `[`HasStateFlag`](#classUNFactorDecorator_1aed9dd50882e13ea14e4608d11940c4f8)`(FString Flag) const` | 
+`public virtual bool `[`GetStateFlag`](#classUNFactorDecorator_1a0cb6ebcb4b6b6361e2fae928a701d843)`(FString Flag) const` | 
+`public virtual void `[`Debug`](#classUNFactorDecorator_1a7a7de1642931a4068df21a088b5f422d)`(bool _bDebug)` | 
+`public virtual void `[`SetStateFlag`](#classUNFactorDecorator_1a0df1f19cd68399749a2995e04c8e5ac2)`(FString Flag,bool Value)` | 
+`public virtual void `[`RemoveStateFlag`](#classUNFactorDecorator_1a29afe0df02753f6d227dc0f399807f72)`(FString Flag)` | 
 `public virtual void `[`Clear`](#classUNFactorDecorator_1a512506f157c8492ae63b9493d3feb017)`()` | 
 `public virtual void `[`SetName`](#classUNFactorDecorator_1a1e22d50f221aed52eadd6995a9668f92)`(FName _Name)` | 
-`public virtual FName `[`GetName`](#classUNFactorDecorator_1aba3f6a0fc1b7b956d3e183c58a36fff6)`() const` | 
+`public virtual void `[`AddFlag`](#classUNFactorDecorator_1a5b74fc5bc722b995be2d68e15ffe6560)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` | 
+`public virtual bool `[`HasFlag`](#classUNFactorDecorator_1a74a715688b890ae6fb5aca002a81d9fe)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag) const` | 
+`public virtual void `[`RemoveFlag`](#classUNFactorDecorator_1afb62c3653327d57fdb0b65bba93e676e)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` | 
 `public virtual TSharedPtr< NTimelineInterface > `[`GetTimeline`](#classUNFactorDecorator_1a084aa3d3f8f9e11b07d5f86f2c2afcb6)`() const` | 
-`public virtual float `[`GetTime`](#classUNFactorDecorator_1a1e5f17e044f128a5277b4f3d60a7dbb2)`() const` | 
-`public virtual TSharedRef< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classUNFactorDecorator_1adf7de1f008fb1d8238a054ac798a4eea)`(uint32 Key) const` | 
+`public virtual TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classUNFactorDecorator_1ae38da4342b5de1f4d74a6b05f26e6d92)`(uint32 Key) const` | 
 `public virtual TArray< TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > > `[`GetFactors`](#classUNFactorDecorator_1a32fa9ff6f873fe213889e2e48df3441a)`() const` | 
 `public virtual void `[`AddFactorUnit`](#classUNFactorDecorator_1a5a56654af140435a9213e37ac223f847)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit)` | 
-`public virtual bool `[`HasFlag`](#classUNFactorDecorator_1a6195d803a9d29aafb0fb319be17b6118)`(FString Flag) const` | 
-`public virtual bool `[`GetFlag`](#classUNFactorDecorator_1aa609ec521f4bd611657eabe86ad2d2f5)`(FString Flag) const` | 
-`public virtual void `[`SetFlag`](#classUNFactorDecorator_1a989c1409ad9a3ae17b9bf482d4ad141d)`(FString Flag,bool Value)` | 
-`public virtual void `[`Debug`](#classUNFactorDecorator_1a7a7de1642931a4068df21a088b5f422d)`(bool _bDebug)` | 
 `public virtual void `[`SupplyStateWithCurrentData`](#classUNFactorDecorator_1ac47b6b12d173be3ceebd0d7da4d30364)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
 `public virtual void `[`Serialize`](#classUNFactorDecorator_1a3f62f9a90ff06645af714258c9b30a51)`(FArchive & Ar)` | 
 `public virtual void `[`BeginDestroy`](#classUNFactorDecorator_1ade932b7be1ebc06e7df16684fb7a4e28)`()` | 
@@ -1165,6 +1444,7 @@ class UNFactorDecorator
 `protected TArray< `[`FNFactorUnitRecord`](#structFNFactorUnitRecord)` > `[`FactorUnitStore`](#classUNFactorDecorator_1a29eb11d3180482f0300946354d0f06ce) | 
 `protected FName `[`SavedName`](#classUNFactorDecorator_1a9ae6a6ada9ca0eb6b6ca6333d583048a) | 
 `protected UNTimelineDecorator * `[`GetUnrealTimeline`](#classUNFactorDecorator_1adcd125451de174c9cc6fa67c9d52e84f)`()` | 
+`protected void `[`OnTimelineEventExpired`](#classUNFactorDecorator_1a75801cce123355d679d6ba3791003d6b)`(TSharedPtr< NEventInterface > Event,const float & ExpiredTime,const int32 & Index)` | 
 
 ## Members
 
@@ -1172,35 +1452,52 @@ class UNFactorDecorator
 
 #### `public void `[`Init`](#classUNFactorDecorator_1a5c1ec700ce04c8d8f127f284af627deb)`(FName _Name,TSharedPtr< NTimelineInterface > _Timeline)` <a id="classUNFactorDecorator_1a5c1ec700ce04c8d8f127f284af627deb"></a>
 
-#### `public `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * `[`CreateFactorUnit`](#classUNFactorDecorator_1a665ff68e8e968f4f58a8a2ca23c7208a)`(const UClass * Class)` <a id="classUNFactorDecorator_1a665ff68e8e968f4f58a8a2ca23c7208a"></a>
-
-#### `public void `[`OnTimelineEventExpired`](#classUNFactorDecorator_1a75801cce123355d679d6ba3791003d6b)`(TSharedPtr< NEventInterface > Event,const float & ExpiredTime,const int32 & Index)` <a id="classUNFactorDecorator_1a75801cce123355d679d6ba3791003d6b"></a>
+#### `public `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * `[`CreateFactorUnit`](#classUNFactorDecorator_1aab633c751f383cf552de3fbd13e6ea00)`(const UClass * Class)` <a id="classUNFactorDecorator_1aab633c751f383cf552de3fbd13e6ea00"></a>
 
 #### `public TArray< `[`FNFactorUnitRecord`](#structFNFactorUnitRecord)` > `[`GetFactorUnitStore`](#classUNFactorDecorator_1aac4ba4dd040c4a6ce7b4051b34f10c69)`() const` <a id="classUNFactorDecorator_1aac4ba4dd040c4a6ce7b4051b34f10c69"></a>
+
+#### `public void `[`OnInit`](#classUNFactorDecorator_1a5a1301646573c17b62286b19557f7221)`()` <a id="classUNFactorDecorator_1a5a1301646573c17b62286b19557f7221"></a>
+
+#### `public void `[`OnAddFactorUnit`](#classUNFactorDecorator_1adea3f4fceff9117e36f469eb1e17a118)`(`[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * FactorUnit)` <a id="classUNFactorDecorator_1adea3f4fceff9117e36f469eb1e17a118"></a>
+
+#### `public void `[`OnFactorUnitExpired`](#classUNFactorDecorator_1ae37a5998d879fc76d722ff1369207df0)`(`[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * FactorUnit)` <a id="classUNFactorDecorator_1ae37a5998d879fc76d722ff1369207df0"></a>
+
+The FactorUnit pointer is immediatly removed after this method is called.
+
+#### Parameters
+* `FactorUnit` - A pointer to a factorUnit which end its lifetime.
+
+#### `public virtual FName `[`GetName`](#classUNFactorDecorator_1aba3f6a0fc1b7b956d3e183c58a36fff6)`() const` <a id="classUNFactorDecorator_1aba3f6a0fc1b7b956d3e183c58a36fff6"></a>
+
+#### `public virtual float `[`GetTime`](#classUNFactorDecorator_1a1e5f17e044f128a5277b4f3d60a7dbb2)`() const` <a id="classUNFactorDecorator_1a1e5f17e044f128a5277b4f3d60a7dbb2"></a>
+
+#### `public virtual bool `[`HasStateFlag`](#classUNFactorDecorator_1aed9dd50882e13ea14e4608d11940c4f8)`(FString Flag) const` <a id="classUNFactorDecorator_1aed9dd50882e13ea14e4608d11940c4f8"></a>
+
+#### `public virtual bool `[`GetStateFlag`](#classUNFactorDecorator_1a0cb6ebcb4b6b6361e2fae928a701d843)`(FString Flag) const` <a id="classUNFactorDecorator_1a0cb6ebcb4b6b6361e2fae928a701d843"></a>
+
+#### `public virtual void `[`Debug`](#classUNFactorDecorator_1a7a7de1642931a4068df21a088b5f422d)`(bool _bDebug)` <a id="classUNFactorDecorator_1a7a7de1642931a4068df21a088b5f422d"></a>
+
+#### `public virtual void `[`SetStateFlag`](#classUNFactorDecorator_1a0df1f19cd68399749a2995e04c8e5ac2)`(FString Flag,bool Value)` <a id="classUNFactorDecorator_1a0df1f19cd68399749a2995e04c8e5ac2"></a>
+
+#### `public virtual void `[`RemoveStateFlag`](#classUNFactorDecorator_1a29afe0df02753f6d227dc0f399807f72)`(FString Flag)` <a id="classUNFactorDecorator_1a29afe0df02753f6d227dc0f399807f72"></a>
 
 #### `public virtual void `[`Clear`](#classUNFactorDecorator_1a512506f157c8492ae63b9493d3feb017)`()` <a id="classUNFactorDecorator_1a512506f157c8492ae63b9493d3feb017"></a>
 
 #### `public virtual void `[`SetName`](#classUNFactorDecorator_1a1e22d50f221aed52eadd6995a9668f92)`(FName _Name)` <a id="classUNFactorDecorator_1a1e22d50f221aed52eadd6995a9668f92"></a>
 
-#### `public virtual FName `[`GetName`](#classUNFactorDecorator_1aba3f6a0fc1b7b956d3e183c58a36fff6)`() const` <a id="classUNFactorDecorator_1aba3f6a0fc1b7b956d3e183c58a36fff6"></a>
+#### `public virtual void `[`AddFlag`](#classUNFactorDecorator_1a5b74fc5bc722b995be2d68e15ffe6560)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` <a id="classUNFactorDecorator_1a5b74fc5bc722b995be2d68e15ffe6560"></a>
+
+#### `public virtual bool `[`HasFlag`](#classUNFactorDecorator_1a74a715688b890ae6fb5aca002a81d9fe)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag) const` <a id="classUNFactorDecorator_1a74a715688b890ae6fb5aca002a81d9fe"></a>
+
+#### `public virtual void `[`RemoveFlag`](#classUNFactorDecorator_1afb62c3653327d57fdb0b65bba93e676e)`(`[`ENFactorFlag`](#FactorInterface_8h_1a5d036ca1b6eabfb89b51cbedcf9223fe)` Flag)` <a id="classUNFactorDecorator_1afb62c3653327d57fdb0b65bba93e676e"></a>
 
 #### `public virtual TSharedPtr< NTimelineInterface > `[`GetTimeline`](#classUNFactorDecorator_1a084aa3d3f8f9e11b07d5f86f2c2afcb6)`() const` <a id="classUNFactorDecorator_1a084aa3d3f8f9e11b07d5f86f2c2afcb6"></a>
 
-#### `public virtual float `[`GetTime`](#classUNFactorDecorator_1a1e5f17e044f128a5277b4f3d60a7dbb2)`() const` <a id="classUNFactorDecorator_1a1e5f17e044f128a5277b4f3d60a7dbb2"></a>
-
-#### `public virtual TSharedRef< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classUNFactorDecorator_1adf7de1f008fb1d8238a054ac798a4eea)`(uint32 Key) const` <a id="classUNFactorDecorator_1adf7de1f008fb1d8238a054ac798a4eea"></a>
+#### `public virtual TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > `[`GetFactorUnit`](#classUNFactorDecorator_1ae38da4342b5de1f4d74a6b05f26e6d92)`(uint32 Key) const` <a id="classUNFactorDecorator_1ae38da4342b5de1f4d74a6b05f26e6d92"></a>
 
 #### `public virtual TArray< TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > > `[`GetFactors`](#classUNFactorDecorator_1a32fa9ff6f873fe213889e2e48df3441a)`() const` <a id="classUNFactorDecorator_1a32fa9ff6f873fe213889e2e48df3441a"></a>
 
 #### `public virtual void `[`AddFactorUnit`](#classUNFactorDecorator_1a5a56654af140435a9213e37ac223f847)`(TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit)` <a id="classUNFactorDecorator_1a5a56654af140435a9213e37ac223f847"></a>
-
-#### `public virtual bool `[`HasFlag`](#classUNFactorDecorator_1a6195d803a9d29aafb0fb319be17b6118)`(FString Flag) const` <a id="classUNFactorDecorator_1a6195d803a9d29aafb0fb319be17b6118"></a>
-
-#### `public virtual bool `[`GetFlag`](#classUNFactorDecorator_1aa609ec521f4bd611657eabe86ad2d2f5)`(FString Flag) const` <a id="classUNFactorDecorator_1aa609ec521f4bd611657eabe86ad2d2f5"></a>
-
-#### `public virtual void `[`SetFlag`](#classUNFactorDecorator_1a989c1409ad9a3ae17b9bf482d4ad141d)`(FString Flag,bool Value)` <a id="classUNFactorDecorator_1a989c1409ad9a3ae17b9bf482d4ad141d"></a>
-
-#### `public virtual void `[`Debug`](#classUNFactorDecorator_1a7a7de1642931a4068df21a088b5f422d)`(bool _bDebug)` <a id="classUNFactorDecorator_1a7a7de1642931a4068df21a088b5f422d"></a>
 
 #### `public virtual void `[`SupplyStateWithCurrentData`](#classUNFactorDecorator_1ac47b6b12d173be3ceebd0d7da4d30364)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classUNFactorDecorator_1ac47b6b12d173be3ceebd0d7da4d30364"></a>
 
@@ -1216,22 +1513,7 @@ class UNFactorDecorator
 
 #### `protected UNTimelineDecorator * `[`GetUnrealTimeline`](#classUNFactorDecorator_1adcd125451de174c9cc6fa67c9d52e84f)`()` <a id="classUNFactorDecorator_1adcd125451de174c9cc6fa67c9d52e84f"></a>
 
-# class `UNFactorEventDecorator` <a id="classUNFactorEventDecorator"></a>
-
-```
-class UNFactorEventDecorator
-  : public UNEventDecorator
-```  
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-`public inline  `[`UNFactorEventDecorator`](#classUNFactorEventDecorator_1af02c54de62e737dc91a5f986012c844b)`()` | 
-
-## Members
-
-#### `public inline  `[`UNFactorEventDecorator`](#classUNFactorEventDecorator_1af02c54de62e737dc91a5f986012c844b)`()` <a id="classUNFactorEventDecorator_1af02c54de62e737dc91a5f986012c844b"></a>
+#### `protected void `[`OnTimelineEventExpired`](#classUNFactorDecorator_1a75801cce123355d679d6ba3791003d6b)`(TSharedPtr< NEventInterface > Event,const float & ExpiredTime,const int32 & Index)` <a id="classUNFactorDecorator_1a75801cce123355d679d6ba3791003d6b"></a>
 
 # class `UNFactorsFactoryBlueprintHelpers` <a id="classUNFactorsFactoryBlueprintHelpers"></a>
 
@@ -1261,7 +1543,8 @@ class UNFactorsFactoryClientAdapter
 --------------------------------|---------------------------------------------
 `public  `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter_1a9c56d9300d9ca48e9b5e8dd8456a1677)`()` | 
 `public virtual void `[`Init`](#classUNFactorsFactoryClientAdapter_1ae232af08c5f91d5a428d09036e845c05)`()` | 
-`public `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * `[`CreateFactorUnit`](#classUNFactorsFactoryClientAdapter_1ab4f207be0397f94e6b9963391b73cb7e)`(const FName & FactorName,const UClass * Class)` | 
+`public `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * `[`CreateFactorUnit`](#classUNFactorsFactoryClientAdapter_1a3044c3e0bb891a767378ed0a51a51bb3)`(const FName & FactorName,const UClass * Class)` | 
+`public virtual void `[`CreateFactor`](#classUNFactorsFactoryClientAdapter_1a0167c59b39e43214f5738f26b046d255)`(FName FactorName,TSharedPtr< NTimelineInterface > Timeline,const UClass * FactorClass)` | 
 `public virtual void `[`CreateFactor`](#classUNFactorsFactoryClientAdapter_1a5d30a363d4b3bbbf651712d9bd582f57)`(FName FactorName,TSharedPtr< NTimelineInterface > Timeline)` | 
 `public virtual void `[`CreateFactor`](#classUNFactorsFactoryClientAdapter_1a00f761724f61f50c58aeba0096f33172)`(TArray< FName > FactorNames,TSharedPtr< NTimelineInterface > Timeline)` | 
 `public virtual void `[`AddFactor`](#classUNFactorsFactoryClientAdapter_1a57627b4e52bfe29badcc817164a8f497)`(TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > Factor)` | 
@@ -1273,7 +1556,7 @@ class UNFactorsFactoryClientAdapter
 `public virtual void `[`Serialize`](#classUNFactorsFactoryClientAdapter_1a2f064dec5e659ab6c2245478df757871)`(FArchive & Ar)` | 
 `protected TSharedPtr< `[`NFactorsFactoryClientInterface`](#classNFactorsFactoryClientInterface)` > `[`Client`](#classUNFactorsFactoryClientAdapter_1a4c52e7da9a9094caaf10686dd2a5e6cc) | 
 `protected TMap< FName, `[`UNFactorDecorator`](#classUNFactorDecorator)` * > `[`UEFactors`](#classUNFactorsFactoryClientAdapter_1a8276710d261dcba361d6e156f7750399) | 
-`protected TArray< FName > `[`UEFactorsNames`](#classUNFactorsFactoryClientAdapter_1a33e62737840d00dde90ef919e9b91bf7) | This parameter is usefull only for serialization, it allows to keep the same stack list order for save & load to maintain data serialization's order consistency.
+`protected TArray< FName > `[`UEFactorsNames`](#classUNFactorsFactoryClientAdapter_1a33e62737840d00dde90ef919e9b91bf7) | This parameter is usefull only for serialization, it allows to keep the same factor list order for save & load to maintain data serialization's order consistency.
 
 ## Members
 
@@ -1281,7 +1564,9 @@ class UNFactorsFactoryClientAdapter
 
 #### `public virtual void `[`Init`](#classUNFactorsFactoryClientAdapter_1ae232af08c5f91d5a428d09036e845c05)`()` <a id="classUNFactorsFactoryClientAdapter_1ae232af08c5f91d5a428d09036e845c05"></a>
 
-#### `public `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * `[`CreateFactorUnit`](#classUNFactorsFactoryClientAdapter_1ab4f207be0397f94e6b9963391b73cb7e)`(const FName & FactorName,const UClass * Class)` <a id="classUNFactorsFactoryClientAdapter_1ab4f207be0397f94e6b9963391b73cb7e"></a>
+#### `public `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * `[`CreateFactorUnit`](#classUNFactorsFactoryClientAdapter_1a3044c3e0bb891a767378ed0a51a51bb3)`(const FName & FactorName,const UClass * Class)` <a id="classUNFactorsFactoryClientAdapter_1a3044c3e0bb891a767378ed0a51a51bb3"></a>
+
+#### `public virtual void `[`CreateFactor`](#classUNFactorsFactoryClientAdapter_1a0167c59b39e43214f5738f26b046d255)`(FName FactorName,TSharedPtr< NTimelineInterface > Timeline,const UClass * FactorClass)` <a id="classUNFactorsFactoryClientAdapter_1a0167c59b39e43214f5738f26b046d255"></a>
 
 #### `public virtual void `[`CreateFactor`](#classUNFactorsFactoryClientAdapter_1a5d30a363d4b3bbbf651712d9bd582f57)`(FName FactorName,TSharedPtr< NTimelineInterface > Timeline)` <a id="classUNFactorsFactoryClientAdapter_1a5d30a363d4b3bbbf651712d9bd582f57"></a>
 
@@ -1307,7 +1592,7 @@ class UNFactorsFactoryClientAdapter
 
 #### `protected TArray< FName > `[`UEFactorsNames`](#classUNFactorsFactoryClientAdapter_1a33e62737840d00dde90ef919e9b91bf7) <a id="classUNFactorsFactoryClientAdapter_1a33e62737840d00dde90ef919e9b91bf7"></a>
 
-This parameter is usefull only for serialization, it allows to keep the same stack list order for save & load to maintain data serialization's order consistency.
+This parameter is usefull only for serialization, it allows to keep the same factor list order for save & load to maintain data serialization's order consistency.
 
 # class `UNFactorsFactoryGameInstance` <a id="classUNFactorsFactoryGameInstance"></a>
 
@@ -1323,10 +1608,10 @@ class UNFactorsFactoryGameInstance
 
 ## Members
 
-# class `UNFactorUnitAdapterAbstract` <a id="classUNFactorUnitAdapterAbstract"></a>
+# class `UNFactorUnitAdapter` <a id="classUNFactorUnitAdapter"></a>
 
 ```
-class UNFactorUnitAdapterAbstract
+class UNFactorUnitAdapter
   : public UObject
   : public NFactorUnitInterface
 ```  
@@ -1335,105 +1620,175 @@ class UNFactorUnitAdapterAbstract
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public float `[`FactorUnitValue`](#classUNFactorUnitAdapterAbstract_1a4c3aa5e16937bc11de7a2791bc7d4088) | 
-`public float `[`Duration`](#classUNFactorUnitAdapterAbstract_1aa31dc64c7d74e96911ea92ecea7997c9) | 
-`public float `[`Delay`](#classUNFactorUnitAdapterAbstract_1af974d36ad9d2f08d1f7c09fac19fe671) | 
-`public FName `[`Reason`](#classUNFactorUnitAdapterAbstract_1af088c4519b077c598caadba171dd9378) | 
-`public inline  `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract_1acc78abb4e00ee21c04f1ffcbf074f1f8)`()` | 
-`public virtual void `[`Init`](#classUNFactorUnitAdapterAbstract_1a41074d146cdc845538d55f04c785c0be)`()` | 
-`public virtual void `[`Init`](#classUNFactorUnitAdapterAbstract_1ab871add242f06bc53043a33e0ca05780)`(`[`UNFactorEventDecorator`](#classUNFactorEventDecorator)` * _Event)` | 
-`public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetConfiguredOperator`](#classUNFactorUnitAdapterAbstract_1a2b5609c9b3b778775ceccbd6a6824e6a)`() const` | 
-`public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classUNFactorUnitAdapterAbstract_1a66adb1ddf602054b97f5544da89bd49f)`()` | 
-`public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNFactorUnitAdapterAbstract_1ace07db627ec02a38b27cc7476570b90c)`() const` | 
-`public virtual void `[`SetOperator`](#classUNFactorUnitAdapterAbstract_1ac3d7c3c4ce535420fa28bd864df2628a)`(TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > _Operator)` | 
-`public virtual float `[`GetFactorUnitValue`](#classUNFactorUnitAdapterAbstract_1a27db7376d9c056c7569884ceb7215af9)`() const` | 
-`public virtual FName `[`GetReason`](#classUNFactorUnitAdapterAbstract_1a959f5dd7726a61240b857888ff7677b0)`() const` | 
-`public virtual bool `[`IsActivated`](#classUNFactorUnitAdapterAbstract_1a65c7093789427c0f97880746d18acd46)`() const` | 
-`public virtual void `[`SetFactorUnitValue`](#classUNFactorUnitAdapterAbstract_1a51adaf645529b7b5f294fad0de59d5fd)`(float _Value)` | 
-`public virtual const FString `[`GetUID`](#classUNFactorUnitAdapterAbstract_1a244f682f8c9347ea041fe836cf25caf5)`() const` | 
-`public virtual void `[`Serialize`](#classUNFactorUnitAdapterAbstract_1a9ee3b7eaf81009a2b0a1a020288909a1)`(FArchive & Ar)` | 
-`protected TSharedPtr< `[`NFactorUnit`](#classNFactorUnit)` > `[`FactorUnit`](#classUNFactorUnitAdapterAbstract_1aafcc0a9f4c2bd988b1739e373da4d8ef) | 
-`protected `[`UNFactorEventDecorator`](#classUNFactorEventDecorator)` * `[`Event`](#classUNFactorUnitAdapterAbstract_1af6913c4a21a81c73a75eb52396f3e92d) | 
+`public TSubclassOf< UNEventDecorator > `[`EventClass`](#classUNFactorUnitAdapter_1aceb16963ee911a4cb65b87d052ea1c30) | 
+`public float `[`FactorUnitValue`](#classUNFactorUnitAdapter_1a6418185406b8b979ee8183e27490a235) | 
+`public float `[`Duration`](#classUNFactorUnitAdapter_1aa2602d924e5c3a6ba5d27530c81fce1f) | 
+`public float `[`Delay`](#classUNFactorUnitAdapter_1a3482448a4d225e1c7d6d002121b22c18) | 
+`public FName `[`Reason`](#classUNFactorUnitAdapter_1a3f8df5827a4e4ff0ff1b3a62e49d9a45) | 
+`public `[`UNOperatorProviderBase`](#classUNOperatorProviderBase)` * `[`OperatorProvider`](#classUNFactorUnitAdapter_1a571183a813ae3329956ad49bd27b3117) | 
+`public inline  `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter_1a0902ad27ee68823011b6e586b5a0e6c4)`()` | 
+`public virtual void `[`SetOperatorProvider`](#classUNFactorUnitAdapter_1ac371e1f21a2be4b83993555a5f2f6836)`(`[`UNOperatorProviderBase`](#classUNOperatorProviderBase)` * _OperatorProvider)` | 
+`public virtual void `[`Init`](#classUNFactorUnitAdapter_1a1eff4f070ed57ddce68d0f898ee49eb2)`()` | 
+`public virtual void `[`Init`](#classUNFactorUnitAdapter_1ab3dc4c826fc9fef24fc15ccdc595f228)`(UNEventDecorator * _Event)` | 
+`public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetConfiguredOperator`](#classUNFactorUnitAdapter_1a925a3f182e71ca3be110b86aa35499ac)`()` | 
+`public virtual UNEventDecorator * `[`GetEventDecorator`](#classUNFactorUnitAdapter_1acda6a68b727947cd068d79b332b04d86)`()` | 
+`public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classUNFactorUnitAdapter_1a0b545d4574d049c209b1f96a03e72b05)`()` | 
+`public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNFactorUnitAdapter_1aa05dbd64709c29c837d41a8d99bd93f5)`() const` | 
+`public virtual void `[`SetOperator`](#classUNFactorUnitAdapter_1aeec48f6e58b83fb7d76319b0b60d2008)`(TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > _Operator)` | 
+`public virtual float `[`GetFactorUnitValue`](#classUNFactorUnitAdapter_1ad0cf79ecd4e172ed9974cee83ee226e5)`() const` | 
+`public virtual FName `[`GetReason`](#classUNFactorUnitAdapter_1ad0229fc149af8303d4b639f44298f4d7)`() const` | 
+`public virtual bool `[`IsActivated`](#classUNFactorUnitAdapter_1a33139b699abf02f5e41bb3b5a39f43b4)`() const` | 
+`public virtual void `[`SetFactorUnitValue`](#classUNFactorUnitAdapter_1a40c5bccf4f4aded0069f8db52747ffad)`(float _Value)` | 
+`public virtual const FString `[`GetUID`](#classUNFactorUnitAdapter_1a671caeae42c9f9615eec495f36f16cc1)`() const` | 
+`public virtual void `[`Activate`](#classUNFactorUnitAdapter_1a1ff46f054c4b746a6f7d6cdc0f7c4ab7)`(bool _bIsActivated)` | 
+`public virtual void `[`Serialize`](#classUNFactorUnitAdapter_1a6a9e7d8f7f7cc8d857d9f08033e6d91d)`(FArchive & Ar)` | 
+`protected TSharedPtr< `[`NFactorUnit`](#classNFactorUnit)` > `[`FactorUnit`](#classUNFactorUnitAdapter_1a5f74f8c2a4e4a283793e5516ab23c275) | 
+`protected UNEventDecorator * `[`Event`](#classUNFactorUnitAdapter_1ae740964b60366a596c3b202bde715952) | 
 
 ## Members
 
-#### `public float `[`FactorUnitValue`](#classUNFactorUnitAdapterAbstract_1a4c3aa5e16937bc11de7a2791bc7d4088) <a id="classUNFactorUnitAdapterAbstract_1a4c3aa5e16937bc11de7a2791bc7d4088"></a>
+#### `public TSubclassOf< UNEventDecorator > `[`EventClass`](#classUNFactorUnitAdapter_1aceb16963ee911a4cb65b87d052ea1c30) <a id="classUNFactorUnitAdapter_1aceb16963ee911a4cb65b87d052ea1c30"></a>
 
-#### `public float `[`Duration`](#classUNFactorUnitAdapterAbstract_1aa31dc64c7d74e96911ea92ecea7997c9) <a id="classUNFactorUnitAdapterAbstract_1aa31dc64c7d74e96911ea92ecea7997c9"></a>
+#### `public float `[`FactorUnitValue`](#classUNFactorUnitAdapter_1a6418185406b8b979ee8183e27490a235) <a id="classUNFactorUnitAdapter_1a6418185406b8b979ee8183e27490a235"></a>
 
-#### `public float `[`Delay`](#classUNFactorUnitAdapterAbstract_1af974d36ad9d2f08d1f7c09fac19fe671) <a id="classUNFactorUnitAdapterAbstract_1af974d36ad9d2f08d1f7c09fac19fe671"></a>
+#### `public float `[`Duration`](#classUNFactorUnitAdapter_1aa2602d924e5c3a6ba5d27530c81fce1f) <a id="classUNFactorUnitAdapter_1aa2602d924e5c3a6ba5d27530c81fce1f"></a>
 
-#### `public FName `[`Reason`](#classUNFactorUnitAdapterAbstract_1af088c4519b077c598caadba171dd9378) <a id="classUNFactorUnitAdapterAbstract_1af088c4519b077c598caadba171dd9378"></a>
+#### `public float `[`Delay`](#classUNFactorUnitAdapter_1a3482448a4d225e1c7d6d002121b22c18) <a id="classUNFactorUnitAdapter_1a3482448a4d225e1c7d6d002121b22c18"></a>
 
-#### `public inline  `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract_1acc78abb4e00ee21c04f1ffcbf074f1f8)`()` <a id="classUNFactorUnitAdapterAbstract_1acc78abb4e00ee21c04f1ffcbf074f1f8"></a>
+#### `public FName `[`Reason`](#classUNFactorUnitAdapter_1a3f8df5827a4e4ff0ff1b3a62e49d9a45) <a id="classUNFactorUnitAdapter_1a3f8df5827a4e4ff0ff1b3a62e49d9a45"></a>
 
-#### `public virtual void `[`Init`](#classUNFactorUnitAdapterAbstract_1a41074d146cdc845538d55f04c785c0be)`()` <a id="classUNFactorUnitAdapterAbstract_1a41074d146cdc845538d55f04c785c0be"></a>
+#### `public `[`UNOperatorProviderBase`](#classUNOperatorProviderBase)` * `[`OperatorProvider`](#classUNFactorUnitAdapter_1a571183a813ae3329956ad49bd27b3117) <a id="classUNFactorUnitAdapter_1a571183a813ae3329956ad49bd27b3117"></a>
 
-#### `public virtual void `[`Init`](#classUNFactorUnitAdapterAbstract_1ab871add242f06bc53043a33e0ca05780)`(`[`UNFactorEventDecorator`](#classUNFactorEventDecorator)` * _Event)` <a id="classUNFactorUnitAdapterAbstract_1ab871add242f06bc53043a33e0ca05780"></a>
+#### `public inline  `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter_1a0902ad27ee68823011b6e586b5a0e6c4)`()` <a id="classUNFactorUnitAdapter_1a0902ad27ee68823011b6e586b5a0e6c4"></a>
 
-#### `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetConfiguredOperator`](#classUNFactorUnitAdapterAbstract_1a2b5609c9b3b778775ceccbd6a6824e6a)`() const` <a id="classUNFactorUnitAdapterAbstract_1a2b5609c9b3b778775ceccbd6a6824e6a"></a>
+#### `public virtual void `[`SetOperatorProvider`](#classUNFactorUnitAdapter_1ac371e1f21a2be4b83993555a5f2f6836)`(`[`UNOperatorProviderBase`](#classUNOperatorProviderBase)` * _OperatorProvider)` <a id="classUNFactorUnitAdapter_1ac371e1f21a2be4b83993555a5f2f6836"></a>
 
-#### `public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classUNFactorUnitAdapterAbstract_1a66adb1ddf602054b97f5544da89bd49f)`()` <a id="classUNFactorUnitAdapterAbstract_1a66adb1ddf602054b97f5544da89bd49f"></a>
+#### `public virtual void `[`Init`](#classUNFactorUnitAdapter_1a1eff4f070ed57ddce68d0f898ee49eb2)`()` <a id="classUNFactorUnitAdapter_1a1eff4f070ed57ddce68d0f898ee49eb2"></a>
 
-#### `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNFactorUnitAdapterAbstract_1ace07db627ec02a38b27cc7476570b90c)`() const` <a id="classUNFactorUnitAdapterAbstract_1ace07db627ec02a38b27cc7476570b90c"></a>
+#### `public virtual void `[`Init`](#classUNFactorUnitAdapter_1ab3dc4c826fc9fef24fc15ccdc595f228)`(UNEventDecorator * _Event)` <a id="classUNFactorUnitAdapter_1ab3dc4c826fc9fef24fc15ccdc595f228"></a>
 
-#### `public virtual void `[`SetOperator`](#classUNFactorUnitAdapterAbstract_1ac3d7c3c4ce535420fa28bd864df2628a)`(TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > _Operator)` <a id="classUNFactorUnitAdapterAbstract_1ac3d7c3c4ce535420fa28bd864df2628a"></a>
+#### `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetConfiguredOperator`](#classUNFactorUnitAdapter_1a925a3f182e71ca3be110b86aa35499ac)`()` <a id="classUNFactorUnitAdapter_1a925a3f182e71ca3be110b86aa35499ac"></a>
 
-#### `public virtual float `[`GetFactorUnitValue`](#classUNFactorUnitAdapterAbstract_1a27db7376d9c056c7569884ceb7215af9)`() const` <a id="classUNFactorUnitAdapterAbstract_1a27db7376d9c056c7569884ceb7215af9"></a>
+#### `public virtual UNEventDecorator * `[`GetEventDecorator`](#classUNFactorUnitAdapter_1acda6a68b727947cd068d79b332b04d86)`()` <a id="classUNFactorUnitAdapter_1acda6a68b727947cd068d79b332b04d86"></a>
 
-#### `public virtual FName `[`GetReason`](#classUNFactorUnitAdapterAbstract_1a959f5dd7726a61240b857888ff7677b0)`() const` <a id="classUNFactorUnitAdapterAbstract_1a959f5dd7726a61240b857888ff7677b0"></a>
+#### `public virtual TSharedPtr< NEventInterface > `[`GetEvent`](#classUNFactorUnitAdapter_1a0b545d4574d049c209b1f96a03e72b05)`()` <a id="classUNFactorUnitAdapter_1a0b545d4574d049c209b1f96a03e72b05"></a>
 
-#### `public virtual bool `[`IsActivated`](#classUNFactorUnitAdapterAbstract_1a65c7093789427c0f97880746d18acd46)`() const` <a id="classUNFactorUnitAdapterAbstract_1a65c7093789427c0f97880746d18acd46"></a>
+#### `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNFactorUnitAdapter_1aa05dbd64709c29c837d41a8d99bd93f5)`() const` <a id="classUNFactorUnitAdapter_1aa05dbd64709c29c837d41a8d99bd93f5"></a>
 
-#### `public virtual void `[`SetFactorUnitValue`](#classUNFactorUnitAdapterAbstract_1a51adaf645529b7b5f294fad0de59d5fd)`(float _Value)` <a id="classUNFactorUnitAdapterAbstract_1a51adaf645529b7b5f294fad0de59d5fd"></a>
+#### `public virtual void `[`SetOperator`](#classUNFactorUnitAdapter_1aeec48f6e58b83fb7d76319b0b60d2008)`(TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > _Operator)` <a id="classUNFactorUnitAdapter_1aeec48f6e58b83fb7d76319b0b60d2008"></a>
 
-#### `public virtual const FString `[`GetUID`](#classUNFactorUnitAdapterAbstract_1a244f682f8c9347ea041fe836cf25caf5)`() const` <a id="classUNFactorUnitAdapterAbstract_1a244f682f8c9347ea041fe836cf25caf5"></a>
+#### `public virtual float `[`GetFactorUnitValue`](#classUNFactorUnitAdapter_1ad0cf79ecd4e172ed9974cee83ee226e5)`() const` <a id="classUNFactorUnitAdapter_1ad0cf79ecd4e172ed9974cee83ee226e5"></a>
 
-#### `public virtual void `[`Serialize`](#classUNFactorUnitAdapterAbstract_1a9ee3b7eaf81009a2b0a1a020288909a1)`(FArchive & Ar)` <a id="classUNFactorUnitAdapterAbstract_1a9ee3b7eaf81009a2b0a1a020288909a1"></a>
+#### `public virtual FName `[`GetReason`](#classUNFactorUnitAdapter_1ad0229fc149af8303d4b639f44298f4d7)`() const` <a id="classUNFactorUnitAdapter_1ad0229fc149af8303d4b639f44298f4d7"></a>
 
-#### `protected TSharedPtr< `[`NFactorUnit`](#classNFactorUnit)` > `[`FactorUnit`](#classUNFactorUnitAdapterAbstract_1aafcc0a9f4c2bd988b1739e373da4d8ef) <a id="classUNFactorUnitAdapterAbstract_1aafcc0a9f4c2bd988b1739e373da4d8ef"></a>
+#### `public virtual bool `[`IsActivated`](#classUNFactorUnitAdapter_1a33139b699abf02f5e41bb3b5a39f43b4)`() const` <a id="classUNFactorUnitAdapter_1a33139b699abf02f5e41bb3b5a39f43b4"></a>
 
-#### `protected `[`UNFactorEventDecorator`](#classUNFactorEventDecorator)` * `[`Event`](#classUNFactorUnitAdapterAbstract_1af6913c4a21a81c73a75eb52396f3e92d) <a id="classUNFactorUnitAdapterAbstract_1af6913c4a21a81c73a75eb52396f3e92d"></a>
+#### `public virtual void `[`SetFactorUnitValue`](#classUNFactorUnitAdapter_1a40c5bccf4f4aded0069f8db52747ffad)`(float _Value)` <a id="classUNFactorUnitAdapter_1a40c5bccf4f4aded0069f8db52747ffad"></a>
 
-# class `UNFactorUnitAdapterBasic` <a id="classUNFactorUnitAdapterBasic"></a>
+#### `public virtual const FString `[`GetUID`](#classUNFactorUnitAdapter_1a671caeae42c9f9615eec495f36f16cc1)`() const` <a id="classUNFactorUnitAdapter_1a671caeae42c9f9615eec495f36f16cc1"></a>
+
+#### `public virtual void `[`Activate`](#classUNFactorUnitAdapter_1a1ff46f054c4b746a6f7d6cdc0f7c4ab7)`(bool _bIsActivated)` <a id="classUNFactorUnitAdapter_1a1ff46f054c4b746a6f7d6cdc0f7c4ab7"></a>
+
+#### `public virtual void `[`Serialize`](#classUNFactorUnitAdapter_1a6a9e7d8f7f7cc8d857d9f08033e6d91d)`(FArchive & Ar)` <a id="classUNFactorUnitAdapter_1a6a9e7d8f7f7cc8d857d9f08033e6d91d"></a>
+
+#### `protected TSharedPtr< `[`NFactorUnit`](#classNFactorUnit)` > `[`FactorUnit`](#classUNFactorUnitAdapter_1a5f74f8c2a4e4a283793e5516ab23c275) <a id="classUNFactorUnitAdapter_1a5f74f8c2a4e4a283793e5516ab23c275"></a>
+
+#### `protected UNEventDecorator * `[`Event`](#classUNFactorUnitAdapter_1ae740964b60366a596c3b202bde715952) <a id="classUNFactorUnitAdapter_1ae740964b60366a596c3b202bde715952"></a>
+
+# class `UNOperatorCleaners` <a id="classUNOperatorCleaners"></a>
 
 ```
-class UNFactorUnitAdapterBasic
-  : public UNFactorUnitAdapterAbstract
+class UNOperatorCleaners
+  : public UNOperatorProviderBase
 ```  
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public `[`ENFactorOperator`](#FactorUnitAdapters_8h_1ac0832918529efa40bbe65b8c54c4cf20)` `[`Operator`](#classUNFactorUnitAdapterBasic_1a04996a53d3f3bd30cd451f5499220866) | 
-`public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetConfiguredOperator`](#classUNFactorUnitAdapterBasic_1a14f1043baaca169bd2a334c4a2c6cdef)`() const` | 
-`public virtual void `[`Serialize`](#classUNFactorUnitAdapterBasic_1afce19c1ea9a2053ea61580753da4f2de)`(FArchive & Ar)` | 
+`public `[`ENFactorCleaner`](#OperatorProviders_8h_1ab9a700a635483ac1b5ec9411cfcd361e)` `[`Type`](#classUNOperatorCleaners_1af81d115a3eaca8f2afdb2d1d36b414cf) | 
+`public inline  `[`UNOperatorCleaners`](#classUNOperatorCleaners_1a78ee9e79e588ad8a89b0d414211d829d)`()` | 
+`public inline virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNOperatorCleaners_1a662a7bd9fd2cf08ba4d41937d8d46968)`()` | 
+`public inline virtual void `[`Serialize`](#classUNOperatorCleaners_1ad0f742c59dfc9a60de933e2a3e84af23)`(FArchive & Ar)` | 
 
 ## Members
 
-#### `public `[`ENFactorOperator`](#FactorUnitAdapters_8h_1ac0832918529efa40bbe65b8c54c4cf20)` `[`Operator`](#classUNFactorUnitAdapterBasic_1a04996a53d3f3bd30cd451f5499220866) <a id="classUNFactorUnitAdapterBasic_1a04996a53d3f3bd30cd451f5499220866"></a>
+#### `public `[`ENFactorCleaner`](#OperatorProviders_8h_1ab9a700a635483ac1b5ec9411cfcd361e)` `[`Type`](#classUNOperatorCleaners_1af81d115a3eaca8f2afdb2d1d36b414cf) <a id="classUNOperatorCleaners_1af81d115a3eaca8f2afdb2d1d36b414cf"></a>
 
-#### `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetConfiguredOperator`](#classUNFactorUnitAdapterBasic_1a14f1043baaca169bd2a334c4a2c6cdef)`() const` <a id="classUNFactorUnitAdapterBasic_1a14f1043baaca169bd2a334c4a2c6cdef"></a>
+#### `public inline  `[`UNOperatorCleaners`](#classUNOperatorCleaners_1a78ee9e79e588ad8a89b0d414211d829d)`()` <a id="classUNOperatorCleaners_1a78ee9e79e588ad8a89b0d414211d829d"></a>
 
-#### `public virtual void `[`Serialize`](#classUNFactorUnitAdapterBasic_1afce19c1ea9a2053ea61580753da4f2de)`(FArchive & Ar)` <a id="classUNFactorUnitAdapterBasic_1afce19c1ea9a2053ea61580753da4f2de"></a>
+#### `public inline virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNOperatorCleaners_1a662a7bd9fd2cf08ba4d41937d8d46968)`()` <a id="classUNOperatorCleaners_1a662a7bd9fd2cf08ba4d41937d8d46968"></a>
 
-# class `UNFactorUnitAdapterResetFromReason` <a id="classUNFactorUnitAdapterResetFromReason"></a>
+#### `public inline virtual void `[`Serialize`](#classUNOperatorCleaners_1ad0f742c59dfc9a60de933e2a3e84af23)`(FArchive & Ar)` <a id="classUNOperatorCleaners_1ad0f742c59dfc9a60de933e2a3e84af23"></a>
+
+# class `UNOperatorProviderBase` <a id="classUNOperatorProviderBase"></a>
 
 ```
-class UNFactorUnitAdapterResetFromReason
-  : public UNFactorUnitAdapterAbstract
+class UNOperatorProviderBase
+  : public UObject
 ```  
 
 ## Summary
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public FName `[`ReasonToReset`](#classUNFactorUnitAdapterResetFromReason_1ad95f44a65665f05eb9c7b7439349f445) | 
+`public TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNOperatorProviderBase_1a7817d05ffc11612cf4443d3d6c254ead) | 
+`public inline  `[`UNOperatorProviderBase`](#classUNOperatorProviderBase_1afe6f702dad0c0a5a6f669cb162e1d892)`()` | 
+`public inline virtual void `[`Serialize`](#classUNOperatorProviderBase_1aa821a0b64aa8a61346448816027e983f)`(FArchive & Ar)` | 
 
 ## Members
 
-#### `public FName `[`ReasonToReset`](#classUNFactorUnitAdapterResetFromReason_1ad95f44a65665f05eb9c7b7439349f445) <a id="classUNFactorUnitAdapterResetFromReason_1ad95f44a65665f05eb9c7b7439349f445"></a>
+#### `public TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNOperatorProviderBase_1a7817d05ffc11612cf4443d3d6c254ead) <a id="classUNOperatorProviderBase_1a7817d05ffc11612cf4443d3d6c254ead"></a>
+
+#### `public inline  `[`UNOperatorProviderBase`](#classUNOperatorProviderBase_1afe6f702dad0c0a5a6f669cb162e1d892)`()` <a id="classUNOperatorProviderBase_1afe6f702dad0c0a5a6f669cb162e1d892"></a>
+
+#### `public inline virtual void `[`Serialize`](#classUNOperatorProviderBase_1aa821a0b64aa8a61346448816027e983f)`(FArchive & Ar)` <a id="classUNOperatorProviderBase_1aa821a0b64aa8a61346448816027e983f"></a>
+
+# class `UNOperatorSimpleOperations` <a id="classUNOperatorSimpleOperations"></a>
+
+```
+class UNOperatorSimpleOperations
+  : public UNOperatorProviderBase
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public `[`ENFactorSimpleOperation`](#OperatorProviders_8h_1af732695b4c2077c8409ba91a35ad9891)` `[`Type`](#classUNOperatorSimpleOperations_1a4f67d2d11c7a1ba1e412c8f01eddf5c7) | 
+`public inline  `[`UNOperatorSimpleOperations`](#classUNOperatorSimpleOperations_1aa8c418e1d97f38fb128a6f7c85810c52)`()` | 
+`public inline virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNOperatorSimpleOperations_1a09bf1ecb7a7790777fd76f5c8a51a235)`()` | 
+`public inline virtual void `[`Serialize`](#classUNOperatorSimpleOperations_1aff9dfeed0356a2a8ab3f5a46bfbf3e8f)`(FArchive & Ar)` | 
+
+## Members
+
+#### `public `[`ENFactorSimpleOperation`](#OperatorProviders_8h_1af732695b4c2077c8409ba91a35ad9891)` `[`Type`](#classUNOperatorSimpleOperations_1a4f67d2d11c7a1ba1e412c8f01eddf5c7) <a id="classUNOperatorSimpleOperations_1a4f67d2d11c7a1ba1e412c8f01eddf5c7"></a>
+
+#### `public inline  `[`UNOperatorSimpleOperations`](#classUNOperatorSimpleOperations_1aa8c418e1d97f38fb128a6f7c85810c52)`()` <a id="classUNOperatorSimpleOperations_1aa8c418e1d97f38fb128a6f7c85810c52"></a>
+
+#### `public inline virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNOperatorSimpleOperations_1a09bf1ecb7a7790777fd76f5c8a51a235)`()` <a id="classUNOperatorSimpleOperations_1a09bf1ecb7a7790777fd76f5c8a51a235"></a>
+
+#### `public inline virtual void `[`Serialize`](#classUNOperatorSimpleOperations_1aff9dfeed0356a2a8ab3f5a46bfbf3e8f)`(FArchive & Ar)` <a id="classUNOperatorSimpleOperations_1aff9dfeed0356a2a8ab3f5a46bfbf3e8f"></a>
+
+# class `UNResetOperatorProvider` <a id="classUNResetOperatorProvider"></a>
+
+```
+class UNResetOperatorProvider
+  : public UNOperatorProviderBase
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`UNResetOperatorProvider`](#classUNResetOperatorProvider_1a52546d82f27b46dd17a6439b04c0edc6)`()` | 
+`public inline virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNResetOperatorProvider_1a1170d102f1b916ca126ef1edc264ef06)`()` | 
+
+## Members
+
+#### `public inline  `[`UNResetOperatorProvider`](#classUNResetOperatorProvider_1a52546d82f27b46dd17a6439b04c0edc6)`()` <a id="classUNResetOperatorProvider_1a52546d82f27b46dd17a6439b04c0edc6"></a>
+
+#### `public inline virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetOperator`](#classUNResetOperatorProvider_1a1170d102f1b916ca126ef1edc264ef06)`()` <a id="classUNResetOperatorProvider_1a1170d102f1b916ca126ef1edc264ef06"></a>
 
 # struct `FFactorAttribute` <a id="structFFactorAttribute"></a>
 
@@ -1453,6 +1808,53 @@ class UNFactorUnitAdapterResetFromReason
 
 #### `public inline  `[`FFactorAttribute`](#structFFactorAttribute_1a09a959a8c1dad0d0e1167a274b7a252a)`(FName _Name)` <a id="structFFactorAttribute_1a09a959a8c1dad0d0e1167a274b7a252a"></a>
 
+# struct `FFactorUnitUtilities` <a id="structFFactorUnitUtilities"></a>
+
+This utility class is made to helps the [UK2Node_FactorUnit::ExpandNode()](#classUK2Node__FactorUnit_1a2e5e0b8e6114590dc36d9fa471d0055f).
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public UEdGraphNode * `[`SpawnNode`](#structFFactorUnitUtilities_1a61263a5d39e7766a48b039be4e3762c9) | 
+`public class FKismetCompilerContext & `[`CompilerContext`](#structFFactorUnitUtilities_1a84f06846d875cbdd73fc06cf26189f08) | 
+`public UEdGraph * `[`SourceGraph`](#structFFactorUnitUtilities_1a1fd0812051760e969a0cc710d52c8cb7) | 
+`public bool `[`bDebug`](#structFFactorUnitUtilities_1af1811ac18fb32bf77c7fac4a6827cd25) | 
+`public uint32 `[`DebugStep`](#structFFactorUnitUtilities_1aa8cfd023a89e8341f40153f041b1b659) | 
+`public inline  `[`FFactorUnitUtilities`](#structFFactorUnitUtilities_1a238813c401b416707e6d1861506e759f)`(UEdGraphNode * _SpawnNode,class FKismetCompilerContext & _CompilerContext,UEdGraph * _SourceGraph,bool _bDebug)` | 
+`public UEdGraphPin * `[`GetResultPin`](#structFFactorUnitUtilities_1a2dcb8e2bdb3db6d9c10a7670e343c04f)`() const` | 
+`public bool `[`TryConnectPin`](#structFFactorUnitUtilities_1ab7cfc2aad14fdf9d4ef4379a4640a674)`(UEdGraphPin * PinA,UEdGraphPin * PinB)` | 
+`public bool `[`MovePinLinks`](#structFFactorUnitUtilities_1a6fa711334050756e1e4082a1c10e5e24)`(UEdGraphPin * PinA,UEdGraphPin * PinB)` | 
+`public UK2Node_CallFunction * `[`CreateUnitNode`](#structFFactorUnitUtilities_1ac23af204785597f49d0ab558f4d5edf5)`(UEdGraphPin * ClassPin,UEdGraphPin * TempFactorOutput)` | 
+`public TTuple< UK2Node_CallFunction *, UK2Node_DynamicCast * > `[`CreateOperatorNode`](#structFFactorUnitUtilities_1a819c2442449d6b643b2bf39cec935bc9)`(UEdGraphPin * OperatorPin,UClass * OperatorClassType)` | 
+`public UEdGraphPin * `[`ConnectPinsForObject`](#structFFactorUnitUtilities_1a14c4ea9af44fa990795f410d25513498)`(UClass * ClassType,UEdGraphPin * ObjectPin,UEdGraphPin * LastConnection,TArray< UEdGraphPin * > Pins,TArray< FName > ExcludedPinsName)` | 
+
+## Members
+
+#### `public UEdGraphNode * `[`SpawnNode`](#structFFactorUnitUtilities_1a61263a5d39e7766a48b039be4e3762c9) <a id="structFFactorUnitUtilities_1a61263a5d39e7766a48b039be4e3762c9"></a>
+
+#### `public class FKismetCompilerContext & `[`CompilerContext`](#structFFactorUnitUtilities_1a84f06846d875cbdd73fc06cf26189f08) <a id="structFFactorUnitUtilities_1a84f06846d875cbdd73fc06cf26189f08"></a>
+
+#### `public UEdGraph * `[`SourceGraph`](#structFFactorUnitUtilities_1a1fd0812051760e969a0cc710d52c8cb7) <a id="structFFactorUnitUtilities_1a1fd0812051760e969a0cc710d52c8cb7"></a>
+
+#### `public bool `[`bDebug`](#structFFactorUnitUtilities_1af1811ac18fb32bf77c7fac4a6827cd25) <a id="structFFactorUnitUtilities_1af1811ac18fb32bf77c7fac4a6827cd25"></a>
+
+#### `public uint32 `[`DebugStep`](#structFFactorUnitUtilities_1aa8cfd023a89e8341f40153f041b1b659) <a id="structFFactorUnitUtilities_1aa8cfd023a89e8341f40153f041b1b659"></a>
+
+#### `public inline  `[`FFactorUnitUtilities`](#structFFactorUnitUtilities_1a238813c401b416707e6d1861506e759f)`(UEdGraphNode * _SpawnNode,class FKismetCompilerContext & _CompilerContext,UEdGraph * _SourceGraph,bool _bDebug)` <a id="structFFactorUnitUtilities_1a238813c401b416707e6d1861506e759f"></a>
+
+#### `public UEdGraphPin * `[`GetResultPin`](#structFFactorUnitUtilities_1a2dcb8e2bdb3db6d9c10a7670e343c04f)`() const` <a id="structFFactorUnitUtilities_1a2dcb8e2bdb3db6d9c10a7670e343c04f"></a>
+
+#### `public bool `[`TryConnectPin`](#structFFactorUnitUtilities_1ab7cfc2aad14fdf9d4ef4379a4640a674)`(UEdGraphPin * PinA,UEdGraphPin * PinB)` <a id="structFFactorUnitUtilities_1ab7cfc2aad14fdf9d4ef4379a4640a674"></a>
+
+#### `public bool `[`MovePinLinks`](#structFFactorUnitUtilities_1a6fa711334050756e1e4082a1c10e5e24)`(UEdGraphPin * PinA,UEdGraphPin * PinB)` <a id="structFFactorUnitUtilities_1a6fa711334050756e1e4082a1c10e5e24"></a>
+
+#### `public UK2Node_CallFunction * `[`CreateUnitNode`](#structFFactorUnitUtilities_1ac23af204785597f49d0ab558f4d5edf5)`(UEdGraphPin * ClassPin,UEdGraphPin * TempFactorOutput)` <a id="structFFactorUnitUtilities_1ac23af204785597f49d0ab558f4d5edf5"></a>
+
+#### `public TTuple< UK2Node_CallFunction *, UK2Node_DynamicCast * > `[`CreateOperatorNode`](#structFFactorUnitUtilities_1a819c2442449d6b643b2bf39cec935bc9)`(UEdGraphPin * OperatorPin,UClass * OperatorClassType)` <a id="structFFactorUnitUtilities_1a819c2442449d6b643b2bf39cec935bc9"></a>
+
+#### `public UEdGraphPin * `[`ConnectPinsForObject`](#structFFactorUnitUtilities_1a14c4ea9af44fa990795f410d25513498)`(UClass * ClassType,UEdGraphPin * ObjectPin,UEdGraphPin * LastConnection,TArray< UEdGraphPin * > Pins,TArray< FName > ExcludedPinsName)` <a id="structFFactorUnitUtilities_1a14c4ea9af44fa990795f410d25513498"></a>
+
 # struct `FNFactorSettings` <a id="structFNFactorSettings"></a>
 
 ## Summary
@@ -1460,11 +1862,14 @@ class UNFactorUnitAdapterResetFromReason
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 `public FName `[`Name`](#structFNFactorSettings_1acedd2d410195b0d363964dc2bc1e2e8c) | 
+`public TSubclassOf< `[`UNFactorDecorator`](#classUNFactorDecorator)` > `[`FactorClass`](#structFNFactorSettings_1aa2a9d6fcfd712d1df3d4239fd7a5a5b5) | 
 `public FName `[`TimelineName`](#structFNFactorSettings_1a09235f8b2ab0a80f2d23cb2db5f8cd61) | 
 
 ## Members
 
 #### `public FName `[`Name`](#structFNFactorSettings_1acedd2d410195b0d363964dc2bc1e2e8c) <a id="structFNFactorSettings_1acedd2d410195b0d363964dc2bc1e2e8c"></a>
+
+#### `public TSubclassOf< `[`UNFactorDecorator`](#classUNFactorDecorator)` > `[`FactorClass`](#structFNFactorSettings_1aa2a9d6fcfd712d1df3d4239fd7a5a5b5) <a id="structFNFactorSettings_1aa2a9d6fcfd712d1df3d4239fd7a5a5b5"></a>
 
 #### `public FName `[`TimelineName`](#structFNFactorSettings_1a09235f8b2ab0a80f2d23cb2db5f8cd61) <a id="structFNFactorSettings_1a09235f8b2ab0a80f2d23cb2db5f8cd61"></a>
 
@@ -1530,21 +1935,22 @@ This struct is a record object used for savegame or get user feedbacks
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`public `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * `[`FactorUnit`](#structFNFactorUnitRecord_1afd84fb0a700159f0f59152aed09a4323) | The [UNFactorUnitAdapterAbstract](#classUNFactorUnitAdapterAbstract) object
+`public `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * `[`FactorUnit`](#structFNFactorUnitRecord_1ad53484c42e49e1e69d1ae8511a2f3178) | The [UNFactorUnitAdapter](#classUNFactorUnitAdapter) object
 `public FString `[`UId`](#structFNFactorUnitRecord_1ab3be1f965e8b55590060263dbfdca863) | The time it as been attached to the timeline in secs (differ to UNEventDecorator::StartedAt)
 `public FName `[`OperatorName`](#structFNFactorUnitRecord_1a5bf65e78fc8a54be2a609f49bc5eccbe) | This value to keep trace of what happens, usefull for
 `public float `[`Value`](#structFNFactorUnitRecord_1a260fbb276a68c4bea47ea0a54b7ed7b1) | 
 `public FString `[`FactorUnitClassName`](#structFNFactorUnitRecord_1abc631e7c68cbcfa89e098acc3dba8890) | This is used only during serialization, it allow to re-instance the object on load
+`public FString `[`OperatorProviderClassName`](#structFNFactorUnitRecord_1a852abc3517932d6df6c7b0ddf4693ed2) | 
 `public inline  `[`FNFactorUnitRecord`](#structFNFactorUnitRecord_1ae7b81168f939b8912d738a401c9a33ea)`()` | 
-`public inline  `[`FNFactorUnitRecord`](#structFNFactorUnitRecord_1a15b449a2fdbbbb7a39c2e751fea04186)`(`[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * _FactorUnit)` | 
+`public inline  `[`FNFactorUnitRecord`](#structFNFactorUnitRecord_1a458a5e603b20902a509585d3e7b755f1)`(`[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * _FactorUnit)` | 
 `public FNEventRecord & `[`GetEventRecord`](#structFNFactorUnitRecord_1a36ca58a43518b0575caff9763a5956c3)`(`[`UNFactorDecorator`](#classUNFactorDecorator)` * Factor)` | 
 `public void `[`Serialize`](#structFNFactorUnitRecord_1a736256bf3c2237c02820856dee769b6e)`(FArchive & Ar,`[`UNFactorDecorator`](#classUNFactorDecorator)` * Factor)` | It manages Event object saving and loading
 
 ## Members
 
-#### `public `[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * `[`FactorUnit`](#structFNFactorUnitRecord_1afd84fb0a700159f0f59152aed09a4323) <a id="structFNFactorUnitRecord_1afd84fb0a700159f0f59152aed09a4323"></a>
+#### `public `[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * `[`FactorUnit`](#structFNFactorUnitRecord_1ad53484c42e49e1e69d1ae8511a2f3178) <a id="structFNFactorUnitRecord_1ad53484c42e49e1e69d1ae8511a2f3178"></a>
 
-The [UNFactorUnitAdapterAbstract](#classUNFactorUnitAdapterAbstract) object
+The [UNFactorUnitAdapter](#classUNFactorUnitAdapter) object
 
 #### `public FString `[`UId`](#structFNFactorUnitRecord_1ab3be1f965e8b55590060263dbfdca863) <a id="structFNFactorUnitRecord_1ab3be1f965e8b55590060263dbfdca863"></a>
 
@@ -1560,9 +1966,11 @@ This value to keep trace of what happens, usefull for
 
 This is used only during serialization, it allow to re-instance the object on load
 
+#### `public FString `[`OperatorProviderClassName`](#structFNFactorUnitRecord_1a852abc3517932d6df6c7b0ddf4693ed2) <a id="structFNFactorUnitRecord_1a852abc3517932d6df6c7b0ddf4693ed2"></a>
+
 #### `public inline  `[`FNFactorUnitRecord`](#structFNFactorUnitRecord_1ae7b81168f939b8912d738a401c9a33ea)`()` <a id="structFNFactorUnitRecord_1ae7b81168f939b8912d738a401c9a33ea"></a>
 
-#### `public inline  `[`FNFactorUnitRecord`](#structFNFactorUnitRecord_1a15b449a2fdbbbb7a39c2e751fea04186)`(`[`UNFactorUnitAdapterAbstract`](#classUNFactorUnitAdapterAbstract)` * _FactorUnit)` <a id="structFNFactorUnitRecord_1a15b449a2fdbbbb7a39c2e751fea04186"></a>
+#### `public inline  `[`FNFactorUnitRecord`](#structFNFactorUnitRecord_1a458a5e603b20902a509585d3e7b755f1)`(`[`UNFactorUnitAdapter`](#classUNFactorUnitAdapter)` * _FactorUnit)` <a id="structFNFactorUnitRecord_1a458a5e603b20902a509585d3e7b755f1"></a>
 
 #### `public FNEventRecord & `[`GetEventRecord`](#structFNFactorUnitRecord_1a36ca58a43518b0575caff9763a5956c3)`(`[`UNFactorDecorator`](#classUNFactorDecorator)` * Factor)` <a id="structFNFactorUnitRecord_1a36ca58a43518b0575caff9763a5956c3"></a>
 

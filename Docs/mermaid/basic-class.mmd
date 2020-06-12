@@ -1,6 +1,6 @@
 graph LR
 FS[FactorState] -- Get data from --> F[Factor] -- Stores --> FU[FactorUnits] -- Contains & uses to compute --> FO[FactorOperator]
-F -- Contains -->  T["Timeline (from TimelineSystem)"]:::S
+F -- Contains & is notified by -->  T["Timeline (from TimelineSystem)"]:::S
 FU -- Contains & is notified by --> E["Event (from TimelineSystem)"]:::S
 T -- Stores & notifies --> E
 

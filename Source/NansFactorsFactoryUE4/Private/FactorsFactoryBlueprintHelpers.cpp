@@ -21,10 +21,12 @@ UNFactorsFactoryClientAdapter* UNFactorsFactoryBlueprintHelpers::GetFactorUnitCl
 	UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
 	if (!World) return nullptr;
 
-	INFactorsFactoryGameInstance* GI = Cast<INFactorsFactoryGameInstance>(World->GetGameInstance());
-	mycheckf(GI != nullptr, TEXT("The game instance should implements INFactorsFactoryGameInstance to works"));
+	UGameInstance* GI = World->GetGameInstance();
 
-	UNFactorsFactoryClientAdapter* Client = GI->GetFactorsFactoryClient();
+	mycheckf(GI->GetClass()->ImplementsInterface(UNFactorsFactoryGameInstance::StaticClass()),
+		TEXT("The game instance should implements INFactorsFactoryGameInstance to works"));
+
+	UNFactorsFactoryClientAdapter* Client = INFactorsFactoryGameInstance::Execute_GetFactorsFactoryClient(GI);
 	return Client;
 }
 

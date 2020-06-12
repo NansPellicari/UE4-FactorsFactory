@@ -24,7 +24,7 @@
 #include "KismetCompiler.h"
 
 /**
- * This utility class is made to helps the UK2Node_FactorOperator::ExpandNode().
+ * This utility class is made to helps the UK2Node_FactorUnit::ExpandNode().
  */
 struct FFactorUnitUtilities
 {

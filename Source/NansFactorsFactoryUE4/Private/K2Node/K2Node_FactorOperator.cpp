@@ -70,7 +70,7 @@ namespace
 		// {
 		// 	UE_LOG(LogTemp, Warning, TEXT("*********** Calling %s"), ANSI_TO_TCHAR(__FUNCTION__));
 		//         // Cast to the correct node type
-		//         if (const UK2Node_FactorOperator* GetClassDefaultsNode = Cast<UK2Node_FactorOperator>(Node))
+		//         if (const UK2Node_FactorUnit* GetClassDefaultsNode = Cast<UK2Node_FactorUnit>(Node))
 		//         {
 		//             // Only if we have a valid class input pin
 		//             if (UEdGraphPin* ClassPin = GetClassDefaultsNode->FindClassPin())
@@ -117,7 +117,7 @@ namespace
 		//                             UEdGraphPin* Pin = Node->Pins[PinIndex];
 		//                             if (Pin != nullptr && Pin->Direction == EGPD_Input &&
 		//                                 Pin->PinType.PinCategory != UEdGraphSchema_K2::PC_Exec &&
-		//                                 Pin->PinName != UK2Node_FactorOperator::ClassPinName)
+		//                                 Pin->PinName != UK2Node_FactorUnit::ClassPinName)
 		//                             {
 		//                                 UProperty* BoundProperty = FindField<UProperty>(ClassType, Pin->PinName);
 		//                                 if (BoundProperty != nullptr)
@@ -162,28 +162,28 @@ namespace
 	};
 }	 // namespace
 
-FName UK2Node_FactorOperator::ClassPinName(TEXT("FactorUnitClass"));
-FName UK2Node_FactorOperator::FactorPinName(TEXT("Factor"));
-FName UK2Node_FactorOperator::OperatorPinName(TEXT("Operator"));
-FName UK2Node_FactorOperator::OuterPinName(TEXT("Outer"));
-FName UK2Node_FactorOperator::ObjectPinName(TEXT("FactorUnitObject"));
+FName UK2Node_FactorUnit::ClassPinName(TEXT("FactorUnitClass"));
+FName UK2Node_FactorUnit::FactorPinName(TEXT("Factor"));
+FName UK2Node_FactorUnit::OperatorPinName(TEXT("Operator"));
+FName UK2Node_FactorUnit::OuterPinName(TEXT("Outer"));
+FName UK2Node_FactorUnit::ObjectPinName(TEXT("FactorUnitObject"));
 
-FText UK2Node_FactorOperator::GetNodeTitle(ENodeTitleType::Type TitleType) const
+FText UK2Node_FactorUnit::GetNodeTitle(ENodeTitleType::Type TitleType) const
 {
 	return LOCTEXT("FactorOperatorFactory_Title", "Create a Factor Unit");
 }
 
-FText UK2Node_FactorOperator::GetTooltipText() const
+FText UK2Node_FactorUnit::GetTooltipText() const
 {
 	return LOCTEXT("FactorOperatorFactory_Tooltip", "This node allow to create any factorUnit and add it to a factor");
 }
 
-FText UK2Node_FactorOperator::GetMenuCategory() const
+FText UK2Node_FactorUnit::GetMenuCategory() const
 {
 	return LOCTEXT("FactorOperatorFactory_MenuCategory", "FactorsFactory|Factory");
 }
 
-void UK2Node_FactorOperator::PreEditChange(UProperty* PropertyThatWillChange)
+void UK2Node_FactorUnit::PreEditChange(UProperty* PropertyThatWillChange)
 {
 	Super::PreEditChange(PropertyThatWillChange);
 
@@ -193,28 +193,28 @@ void UK2Node_FactorOperator::PreEditChange(UProperty* PropertyThatWillChange)
 	}
 }
 
-UEdGraphPin* UK2Node_FactorOperator::GetOuterPin() const
+UEdGraphPin* UK2Node_FactorUnit::GetOuterPin() const
 {
-	UEdGraphPin* Pin = FindPin(UK2Node_FactorOperator::OuterPinName);
+	UEdGraphPin* Pin = FindPin(UK2Node_FactorUnit::OuterPinName);
 	ensure(nullptr == Pin || Pin->Direction == EGPD_Input);
 	return Pin;
 }
 
-UEdGraphPin* UK2Node_FactorOperator::GetResultPin() const
+UEdGraphPin* UK2Node_FactorUnit::GetResultPin() const
 {
 	UEdGraphPin* Pin = FindPinChecked(UEdGraphSchema_K2::PN_ReturnValue);
 	check(Pin->Direction == EGPD_Output);
 	return Pin;
 }
 
-UEdGraphPin* UK2Node_FactorOperator::GetThenPin() const
+UEdGraphPin* UK2Node_FactorUnit::GetThenPin() const
 {
 	UEdGraphPin* Pin = FindPinChecked(UEdGraphSchema_K2::PN_Then);
 	check(Pin->Direction == EGPD_Output);
 	return Pin;
 }
 
-void UK2Node_FactorOperator::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
+void UK2Node_FactorUnit::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
 {
 	Super::GetMenuActions(ActionRegistrar);
 
@@ -228,24 +228,24 @@ void UK2Node_FactorOperator::GetMenuActions(FBlueprintActionDatabaseRegistrar& A
 	}
 }
 
-UClass* UK2Node_FactorOperator::GetInputClass() const
+UClass* UK2Node_FactorUnit::GetInputClass() const
 {
 	return GetInputClass(FindClassPin());
 }
 
-UClass* UK2Node_FactorOperator::GetInputOperatorClass() const
+UClass* UK2Node_FactorUnit::GetInputOperatorClass() const
 {
 	return GetInputClass(FindOperatorPin());
 }
 
-UEdGraphPin* UK2Node_FactorOperator::FindClassPin() const
+UEdGraphPin* UK2Node_FactorUnit::FindClassPin() const
 {
-	UEdGraphPin* Pin = FindPinChecked(UK2Node_FactorOperator::ClassPinName);
+	UEdGraphPin* Pin = FindPinChecked(UK2Node_FactorUnit::ClassPinName);
 	check(Pin->Direction == EGPD_Input);
 	return Pin;
 }
 
-UEdGraphPin* UK2Node_FactorOperator::FindClassPin(const TArray<UEdGraphPin*>& FromPins) const
+UEdGraphPin* UK2Node_FactorUnit::FindClassPin(const TArray<UEdGraphPin*>& FromPins) const
 {
 	UEdGraphPin* const* FoundPin = FromPins.FindByPredicate(
 		[](const UEdGraphPin* CurPin) { return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == ClassPinName; });
@@ -253,14 +253,14 @@ UEdGraphPin* UK2Node_FactorOperator::FindClassPin(const TArray<UEdGraphPin*>& Fr
 	return FoundPin ? *FoundPin : nullptr;
 }
 
-UEdGraphPin* UK2Node_FactorOperator::FindFactorPin() const
+UEdGraphPin* UK2Node_FactorUnit::FindFactorPin() const
 {
-	UEdGraphPin* Pin = FindPinChecked(UK2Node_FactorOperator::FactorPinName);
+	UEdGraphPin* Pin = FindPinChecked(UK2Node_FactorUnit::FactorPinName);
 	check(Pin->Direction == EGPD_Input);
 	return Pin;
 }
 
-UEdGraphPin* UK2Node_FactorOperator::FindFactorPin(const TArray<UEdGraphPin*>& FromPins) const
+UEdGraphPin* UK2Node_FactorUnit::FindFactorPin(const TArray<UEdGraphPin*>& FromPins) const
 {
 	UEdGraphPin* const* FoundPin = FromPins.FindByPredicate(
 		[](const UEdGraphPin* CurPin) { return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == FactorPinName; });
@@ -268,14 +268,14 @@ UEdGraphPin* UK2Node_FactorOperator::FindFactorPin(const TArray<UEdGraphPin*>& F
 	return FoundPin ? *FoundPin : nullptr;
 }
 
-UEdGraphPin* UK2Node_FactorOperator::FindOperatorPin() const
+UEdGraphPin* UK2Node_FactorUnit::FindOperatorPin() const
 {
-	UEdGraphPin* Pin = FindPinChecked(UK2Node_FactorOperator::OperatorPinName);
+	UEdGraphPin* Pin = FindPinChecked(UK2Node_FactorUnit::OperatorPinName);
 	check(Pin->Direction == EGPD_Input);
 	return Pin;
 }
 
-UEdGraphPin* UK2Node_FactorOperator::FindOperatorPin(const TArray<UEdGraphPin*>& FromPins) const
+UEdGraphPin* UK2Node_FactorUnit::FindOperatorPin(const TArray<UEdGraphPin*>& FromPins) const
 {
 	UEdGraphPin* const* FoundPin = FromPins.FindByPredicate(
 		[](const UEdGraphPin* CurPin) { return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == OperatorPinName; });
@@ -283,7 +283,7 @@ UEdGraphPin* UK2Node_FactorOperator::FindOperatorPin(const TArray<UEdGraphPin*>&
 	return FoundPin ? *FoundPin : nullptr;
 }
 
-UClass* UK2Node_FactorOperator::GetInputClass(const UEdGraphPin* FromPin) const
+UClass* UK2Node_FactorUnit::GetInputClass(const UEdGraphPin* FromPin) const
 {
 	UClass* InputClass = nullptr;
 
@@ -322,7 +322,7 @@ UClass* UK2Node_FactorOperator::GetInputClass(const UEdGraphPin* FromPin) const
 	return InputClass;
 }
 
-void UK2Node_FactorOperator::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+void UK2Node_FactorUnit::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	const FName PropertyName = (PropertyChangedEvent.Property ? PropertyChangedEvent.Property->GetFName() : NAME_None);
 
@@ -335,7 +335,7 @@ void UK2Node_FactorOperator::PostEditChangeProperty(FPropertyChangedEvent& Prope
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 }
 
-void UK2Node_FactorOperator::PostPlacedNewNode()
+void UK2Node_FactorUnit::PostPlacedNewNode()
 {
 	// Always exclude object container properties for new nodes.
 	// @TODO - Could potentially expose object reference values if/when we have support for 'const' input pins.
@@ -358,7 +358,7 @@ void UK2Node_FactorOperator::PostPlacedNewNode()
 	}
 }
 
-void UK2Node_FactorOperator::PinConnectionListChanged(UEdGraphPin* ChangedPin)
+void UK2Node_FactorUnit::PinConnectionListChanged(UEdGraphPin* ChangedPin)
 {
 	if (ChangedPin != nullptr && (ChangedPin->PinName == ClassPinName || ChangedPin->PinName == OperatorPinName) &&
 		ChangedPin->Direction == EGPD_Input)
@@ -367,7 +367,7 @@ void UK2Node_FactorOperator::PinConnectionListChanged(UEdGraphPin* ChangedPin)
 	}
 }
 
-void UK2Node_FactorOperator::PinDefaultValueChanged(UEdGraphPin* ChangedPin)
+void UK2Node_FactorUnit::PinDefaultValueChanged(UEdGraphPin* ChangedPin)
 {
 	if (ChangedPin != nullptr && (ChangedPin->PinName == ClassPinName || ChangedPin->PinName == OperatorPinName) &&
 		ChangedPin->Direction == EGPD_Input)
@@ -376,7 +376,7 @@ void UK2Node_FactorOperator::PinDefaultValueChanged(UEdGraphPin* ChangedPin)
 	}
 }
 
-bool UK2Node_FactorOperator::HasExternalDependencies(TArray<class UStruct*>* OptionalOutput) const
+bool UK2Node_FactorUnit::HasExternalDependencies(TArray<class UStruct*>* OptionalOutput) const
 {
 #if WITH_EDITOR
 	if (bDebug) UE_LOG(LogTemp, Display, TEXT(">>>>>>>> %s >>>>>>>>"), ANSI_TO_TCHAR(__FUNCTION__));
@@ -394,12 +394,12 @@ bool UK2Node_FactorOperator::HasExternalDependencies(TArray<class UStruct*>* Opt
 	return bSuperResult || bResult;
 }
 
-FNodeHandlingFunctor* UK2Node_FactorOperator::CreateNodeHandler(FKismetCompilerContext& CompilerContext) const
+FNodeHandlingFunctor* UK2Node_FactorUnit::CreateNodeHandler(FKismetCompilerContext& CompilerContext) const
 {
 	return new FKCHandler_FactorOperator(CompilerContext);
 }
 
-void UK2Node_FactorOperator::AllocateDefaultPins()
+void UK2Node_FactorUnit::AllocateDefaultPins()
 {
 	const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
 
@@ -427,7 +427,7 @@ void UK2Node_FactorOperator::AllocateDefaultPins()
 	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, UNFactorUnitAdapter::StaticClass(), UEdGraphSchema_K2::PN_ReturnValue);
 }
 
-void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
+void UK2Node_FactorUnit::ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
 {
 	Super::ExpandNode(CompilerContext, SourceGraph);
 
@@ -441,7 +441,7 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 	uint32 DebugStep = 0;
 #endif
 
-	UK2Node_FactorOperator* Node = this;
+	UK2Node_FactorUnit* Node = this;
 	UEdGraphPin* ClassPin = FindClassPin();
 	UEdGraphPin* OperatorPin = FindOperatorPin();
 	UEdGraphPin* FactorPin = FindFactorPin();
@@ -589,7 +589,7 @@ void UK2Node_FactorOperator::ExpandNode(class FKismetCompilerContext& CompilerCo
 #endif
 }
 
-void UK2Node_FactorOperator::OnBlueprintClassModified(UBlueprint* TargetBlueprint)
+void UK2Node_FactorUnit::OnBlueprintClassModified(UBlueprint* TargetBlueprint)
 {
 	check(TargetBlueprint);
 	UBlueprint* OwnerBlueprint =
@@ -618,7 +618,7 @@ void UK2Node_FactorOperator::OnBlueprintClassModified(UBlueprint* TargetBlueprin
 	}
 }
 
-void UK2Node_FactorOperator::ReallocatePinsDuringReconstruction(TArray<UEdGraphPin*>& OldPins)
+void UK2Node_FactorUnit::ReallocatePinsDuringReconstruction(TArray<UEdGraphPin*>& OldPins)
 {
 #if WITH_EDITOR
 	if (bDebug) UE_LOG(LogTemp, Display, TEXT(">>>>>>>> %s >>>>>>>>"), ANSI_TO_TCHAR(__FUNCTION__));
@@ -651,7 +651,7 @@ void UK2Node_FactorOperator::ReallocatePinsDuringReconstruction(TArray<UEdGraphP
 	RestoreSplitPins(OldPins);
 }
 
-void UK2Node_FactorOperator::CreateNewPins(UClass* InClass, bool bOuputPin)
+void UK2Node_FactorUnit::CreateNewPins(UClass* InClass, bool bOuputPin)
 {
 	// Create the set of output pins through the optional pin manager
 	FFactorOperatorOptionalPinManager OptionalPinManager(InClass, bExcludeObjectContainers);
@@ -695,7 +695,7 @@ void UK2Node_FactorOperator::CreateNewPins(UClass* InClass, bool bOuputPin)
 	}
 }
 
-void UK2Node_FactorOperator::OnClassPinChanged()
+void UK2Node_FactorUnit::OnClassPinChanged()
 {
 	UClass* InputClass = GetInputClass();
 	UClass* InputOpClass = GetInputOperatorClass();
@@ -784,7 +784,7 @@ void UK2Node_FactorOperator::OnClassPinChanged()
 	}
 }
 
-void UK2Node_FactorOperator::ValidateNodeDuringCompilation(class FCompilerResultsLog& MessageLog) const
+void UK2Node_FactorUnit::ValidateNodeDuringCompilation(class FCompilerResultsLog& MessageLog) const
 {
 	Super::ValidateNodeDuringCompilation(MessageLog);
 
@@ -868,7 +868,7 @@ void UK2Node_FactorOperator::ValidateNodeDuringCompilation(class FCompilerResult
 	}
 }
 
-void UK2Node_FactorOperator::ClearDelegates(FString InClassName)
+void UK2Node_FactorUnit::ClearDelegates(FString InClassName)
 {
 	if (!BlueprintSubscribers.Contains(InClassName))
 	{
@@ -896,7 +896,7 @@ void UK2Node_FactorOperator::ClearDelegates(FString InClassName)
 	BlueprintSubscribers.Remove(InClassName);
 }
 
-void UK2Node_FactorOperator::BeginDestroy()
+void UK2Node_FactorUnit::BeginDestroy()
 {
 	for (auto& It : BlueprintSubscribers)
 	{

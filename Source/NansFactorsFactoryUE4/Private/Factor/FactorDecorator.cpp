@@ -213,7 +213,7 @@ void UNFactorDecorator::Serialize(FArchive& Ar)
 
 	if (Ar.IsLoading())
 	{
-		// Remove actual factor to avoid cumulate old factors + new factors currenlty earned
+		// Remove actual factor to avoid cumulate old factors + new factors currently earned
 		if (Factor.IsValid())
 		{
 			Factor->Clear();

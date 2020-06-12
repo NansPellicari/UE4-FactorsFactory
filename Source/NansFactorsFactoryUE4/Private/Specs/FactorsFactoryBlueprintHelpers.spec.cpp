@@ -81,9 +81,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			Client->CreateFactor(FName("test1"), StubTimeline);
 			FFactorAttribute FactorConf = FFactorAttribute(FName("test1"));
 
-			UNFactorUnitAdapter* MyObject =
-				Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-					FakeObject, UNFactorUnitAdapter::StaticClass(), FactorConf));
+			UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
+				UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapter::StaticClass(), FactorConf));
 
 			TEST_NOT_NULL("Should not be null", MyObject);
 			MyObject->FactorUnitValue = 2.f;
@@ -93,8 +92,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 				UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FakeObject, UNOperatorSimpleOperations::StaticClass());
 			Cast<UNOperatorSimpleOperations>(MyObject->OperatorProvider)->Type = ENFactorSimpleOperation::Add;
 
-			UNFactorUnitAdapter* ObjectAdded = Cast<UNFactorUnitAdapter>(
-				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, FactorConf));
+			UNFactorUnitAdapter* ObjectAdded =
+				Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, FactorConf));
 			TEST_EQ("Should be add and equals as itself...", ObjectAdded, MyObject);
 		});
 
@@ -118,9 +117,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			Client->CreateFactor(Names[0].Name, StubTimeline);
 
 			FName Reason = FName("A temp object");
-			UNFactorUnitAdapter* MyObject =
-				Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-					FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
+			UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
+				UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
 			MyObject->FactorUnitValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = Reason;
@@ -148,9 +146,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 			for (uint32 I = 0; I < 200; I++)
 			{
-				UNFactorUnitAdapter* MyObject =
-					Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-						FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
+				UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
+					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
@@ -181,9 +178,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 			for (uint32 I = 0; I < 200; I++)
 			{
-				UNFactorUnitAdapter* MyObject =
-					Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-						FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
+				UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
+					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
@@ -216,9 +212,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 			for (uint32 I = 0; I < 100; I++)
 			{
-				UNFactorUnitAdapter* MyObject =
-					Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-						FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
+				UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
+					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");

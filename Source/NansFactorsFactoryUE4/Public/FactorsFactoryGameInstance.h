@@ -17,5 +17,10 @@ class NANSFACTORSFACTORYUE4_API INFactorsFactoryGameInstance
 {
 	GENERATED_BODY()
 public:
-	virtual UNFactorsFactoryClientAdapter* GetFactorsFactoryClient() const;
+	/**
+	 * A blueprint overridable fn to get the Actual UNFactorsFactoryClientAdapter
+	 */
+	UFUNCTION(
+		BlueprintCallable, BlueprintNativeEvent, meta = (DisplayName = "Get the FactorsFactory client"), Category = "NansTimeline")
+	UNFactorsFactoryClientAdapter* GetFactorsFactoryClient() const;
 };

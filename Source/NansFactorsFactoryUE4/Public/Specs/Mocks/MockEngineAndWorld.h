@@ -40,7 +40,7 @@ public:
 		FactorsFactoryClient = NewObject<UNFactorsFactoryClientAdapter>(this, FName("MyFakeFactorsFactoryClient"));
 		FactorsFactoryClient->Init();
 	}
-	virtual UNFactorsFactoryClientAdapter* GetFactorsFactoryClient() const override
+	virtual UNFactorsFactoryClientAdapter* GetFactorsFactoryClient_Implementation() const override
 	{
 		return FactorsFactoryClient;
 	}

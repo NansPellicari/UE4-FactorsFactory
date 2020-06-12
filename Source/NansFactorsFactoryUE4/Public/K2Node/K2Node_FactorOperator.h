@@ -14,7 +14,7 @@ class FBlueprintActionDatabaseRegistrar;
  *
  */
 UCLASS()
-class NANSFACTORSFACTORYUE4_API UK2Node_FactorOperator : public UK2Node
+class NANSFACTORSFACTORYUE4_API UK2Node_FactorUnit : public UK2Node
 {
 	GENERATED_BODY()
 

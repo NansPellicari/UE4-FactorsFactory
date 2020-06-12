@@ -1,0 +1,14 @@
+graph TD
+    s1[Difficulty Factor for ACTIONS skills]:::F
+    s1 --> q1[actual units]:::S
+    q1 -- player is injured --> s2["malus -3 (20secs left)"]:::U
+    s2 == result in ==> r1([factor amount = -3]):::R
+    s1 --> q2[saved units]:::S
+    q2  --> ss1["malus -3"]:::SU
+    ss1  --> ss2["bonus +2"]:::SU
+
+classDef S fill:#607D8B,stroke-width:0px,color:#fff;
+classDef F fill:#FF9800,stroke-width:0px,color:#fff;
+classDef U fill:#673AB7,color:#fff,stroke-width:0px;
+classDef R fill:#8BC34A,stroke-width:0px,color:#fff;
+classDef SU fill:#D1C4E9,color:#fff,stroke-width:0px;

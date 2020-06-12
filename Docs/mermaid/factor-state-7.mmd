@@ -1,0 +1,15 @@
+graph TD
+    s1[Difficulty Factor for ACTIONS skills]:::F
+    s1 --> q1["actual units (empty)"]:::S
+    q2  --> ss1["malus -3"]:::SU
+    ss1  --> ss2["bonus +2"]:::SU
+    ss2  --> ss3["malus -6"]:::SU
+    ss3  --> ss4["remove all malus"]:::SU
+    ss4  --> ss5["bonus +5"]:::SU
+    s1 --> q2[saved units]:::S
+
+classDef S fill:#607D8B,stroke-width:0px,color:#fff;
+classDef F fill:#FF9800,stroke-width:0px,color:#fff;
+classDef U fill:#673AB7,color:#fff,stroke-width:0px;
+classDef R fill:#8BC34A,stroke-width:0px,color:#fff;
+classDef SU fill:#D1C4E9,color:#fff,stroke-width:0px;

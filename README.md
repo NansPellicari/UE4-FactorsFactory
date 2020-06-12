@@ -4,6 +4,8 @@ Ease and centralized your **factors**<sup>1</sup> management, **retrieve** them 
 
 > <sup>1</sup> A **factor** is a simple stack composed of **unit** objects which embed a **value**, an **operation** instruction and **lifetime** details. It can be used for **Malus** or **Bonus** factor, **difficulty**, ... >> more details in the [What is a factor?](#23-what-is-a-factor) section.
 
+![Developers docs](./Docs/img/FactorsFactory.png)
+
 |                                                                                                       <a href="https://www.buymeacoffee.com/NansUE4" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="51" width="217"></a>                                                                                                       |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | I've decided to make all the code I developed for my games free to use and open source.<br> I am a true believer in the mindset that sharing and collaborating makes the world a better place.<br> The thing is: I'm fulltime dedicated to my project and these open source plugins, for coding I need a looooot of coffee, so please, help me to get my drug :stuck_out_tongue_closed_eyes: !! |
@@ -18,8 +20,9 @@ Ease and centralized your **factors**<sup>1</sup> management, **retrieve** them 
         -   [2.2.2. - FACTOR](#222---factor)
         -   [2.2.3. - STATE](#223---state)
     -   [2.3. When & Where? Ease of use](#23-when--where-ease-of-use)
--   [3. Step by step guide](#3-step-by-step-guide)
--   [4. Contributing and Supporting](#4-contributing-and-supporting)
+-   [3. How does it work?](#3-how-does-it-work)
+-   [4. Step by step guide](#4-step-by-step-guide)
+-   [5. Contributing and Supporting](#5-contributing-and-supporting)
 
 <!-- /TOC -->
 
@@ -46,11 +49,11 @@ The factors factory helps you to create any factor and update or retrieve it **w
 
 ### 2.1. Many factors
 
-For instance in my game I didn't want to have:
+For instance in my game I needed:
 
--   the **same** difficulty **factor** for an **AIMING** ability and for a **SOCIAL** skill
--   the same **timeline** for factors: some needs to work during the **level process** (eg "Oh player is drunk, for 1 minutes during the game session he should be affected! :confused: Alcohol ravages..."), others during the **real life timeline** (eg. "Hey bro, thanks to your fidelity, I give you 2 days of bonus on social interactions :kissing_heart:"), etc...  
-    See below to see possiblities.
+-   **differents** difficulty **factors** for **AIMING** ability and for a **SOCIAL** skill
+-   **differents timeline** for factors: some needs to work during the **level process** (eg "Oh player is drunk, for 1 minutes during the game session he should be affected! :confused: Alcohol ravages..."), others during the **real life timeline** (eg. "Hey bro, thanks to your fidelity, I give you 2 days of bonus on social interactions :kissing_heart:"), etc...
+-   using the same simple **UI** to **alter** a factor
 
 So basically a Factor as a **name** and it is attached to a **Timeline** and can be **updated** in **any moment** and **everywhere**.
 
@@ -67,7 +70,7 @@ In this plugin I categorized factor in **3 units of work**:
 #### 2.2.1. - UNIT
 
 The related class object is named `FactorUnit`.  
-This is what designers or developpers want to **add on the fly** as a factor's variator.  
+This is what designers or developpers want to **add on the fly** as a factor's variator (or alterator).  
 Eg.
 
 > 1. Player eat a rotten fruit = **reduce** the **ACTION** capacity's **factor** to **2** after **100 secs** of digestion.
@@ -92,7 +95,7 @@ A factor is **named** (eg. **ACTION**, **ELOQUENCE**, **REFLEXE**, **SociaL**, *
 As designer or developper you can create an **infinite list** of factors and add as many units you want.  
 All factors are created in **project settings**.  
 A factor relies on a timeline (configured in **project settings** too).  
-A factor is a **stack of units**, it saved them no matters their lifetime (for computation) so you can use it to:
+A factor is a **queue of units**, it saves them no matters their lifetime (for serialization, but not included for state computation) so you can use it to:
 
 -   sends reports
 -   gives feedbacks to the player afterwards
@@ -111,19 +114,27 @@ Every time you ask to get a state, you will have a static state of the factor va
 
 As a designer and a developper I wanted to:
 
-| Needs                                                                                                              | What is my solution                                                                                                                                                                                                                                                                                                                               |
-| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Update a factor in any moment and in every single part of the game (eg. Behavior tree, Blueprint, c++ classes,...) | **1** single **API entry point** saved in the **Game Instance**                                                                                                                                                                                                                                                                                   |
-| Don't have to use my brain too much...                                                                             | **3 mains blueprints nodes** to manage all of this (**create** units & **get** factor's value).                                                                                                                                                                                                                                                   |
-| Easily extend it later                                                                                             | Simple architecture in isolated plugins, use a bunch of interfaces (lot of extension possibility see [Developers: How to override ...](./Docs/Developers.md#4-how-to-override-create-my-own-factor-factor-unitstate--operator)) and a lot of tests/specs (see [Developers: Testing](./Docs/Developers.md#6-testing) section) to avoid regression. |
+| Needs                                                                                                             | What is my solution                                                                                                                                                                                                                                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Alter a factor in any moment and in every single part of the game (eg. Behavior tree, Blueprint, c++ classes,...) | **1** single **API entry point** saved in the **Game Instance**                                                                                                                                                                                                                                                                             |
+| Don't have to use my brain too much...                                                                            | **3 mains blueprints nodes** to manage all of this (**create** units & **get** factor's value).                                                                                                                                                                                                                                             |
+| Easily extend it later                                                                                            | Simple architecture in isolated plugins, use a bunch of interfaces (lot of extension possibility see [Developers: How to override ...](./Docs/Developers.md#4-how-to-override-create-my-own-factor-factor-unit--operator) and a lot of tests/specs (see [Developers: Testing](./Docs/Developers.md#6-testing) section) to avoid regression. |
 
-<a id="markdown-3-step-by-step-guide" name="3-step-by-step-guide"></a>
+<a id="markdown-3-how-does-it-work" name="3-how-does-it-work"></a>
 
-## 3. Step by step guide
+## 3. How does it work?
 
-<a id="markdown-4-contributing-and-supporting" name="4-contributing-and-supporting"></a>
+To maintain a short doc here, please read this page [here](./Docs/How-does-it-work.md)
 
-## 4. Contributing and Supporting
+<a id="markdown-4-step-by-step-guide" name="4-step-by-step-guide"></a>
+
+## 4. Step by step guide
+
+To maintain a short doc here, please read this page [here](./Docs/StepByStep.md)
+
+<a id="markdown-5-contributing-and-supporting" name="5-contributing-and-supporting"></a>
+
+## 5. Contributing and Supporting
 
 I've decided to make all the code I developed for my games free to use and open source.  
 I am a true believer in the mindset that sharing and collaborating makes the world a better place.  

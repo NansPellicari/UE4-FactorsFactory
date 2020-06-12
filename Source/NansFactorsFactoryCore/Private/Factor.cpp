@@ -13,6 +13,7 @@ NFactor::~NFactor()
 	Timeline.Reset();
 }
 
+// TODO create a Restart(), Restart doesn't have to reset NAME_None, but Clear does.
 void NFactor::Clear()
 {
 	Name = NAME_None;
@@ -24,6 +25,7 @@ NFactor::NFactor(FName _Name, TSharedPtr<NTimelineInterface> _Timeline)
 {
 	Name = _Name;
 	Timeline = _Timeline;
+	// TODO create an event when timeline is clear and attach to it
 	_Timeline->OnEventExpired().AddRaw(this, &NFactor::OnTimelineEventExpired);
 }
 

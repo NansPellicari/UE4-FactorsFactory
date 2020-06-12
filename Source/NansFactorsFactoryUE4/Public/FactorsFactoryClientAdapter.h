@@ -21,6 +21,8 @@ class NANSFACTORSFACTORYUE4_API UNFactorsFactoryClientAdapter : public UObject, 
 
 public:
 	UNFactorsFactoryClientAdapter();
+
+	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
 	virtual void Init();
 	UNFactorUnitAdapter* CreateFactorUnit(const FName& FactorName, const UClass* Class);
 	virtual void CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> Timeline, const UClass* FactorClass);
