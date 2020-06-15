@@ -7,7 +7,7 @@
 class NStubTimeline : public NTimelineInterface
 {
 public:
-	FEventDelegate EventExpired;
+	FNTimelineEventDelegate EventExpired;
 	virtual ~NStubTimeline()
 	{
 		EventExpired.Clear();
@@ -15,6 +15,7 @@ public:
 
 	virtual bool Attached(TSharedPtr<NEventInterface> Event) override
 	{
+		Event->Start(0.f);
 		return true;
 	}
 	virtual void Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection) override {}
@@ -31,7 +32,7 @@ public:
 	}
 	virtual void Clear() override {}
 	virtual void NotifyTick() override {}
-	virtual FEventDelegate& OnEventExpired() override
+	virtual FNTimelineEventDelegate& OnEventExpired() override
 	{
 		return EventExpired;
 	};

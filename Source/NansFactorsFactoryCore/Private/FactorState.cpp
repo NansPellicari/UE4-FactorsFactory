@@ -5,6 +5,7 @@
 #include "Operator/FactorOperator.h"
 #include "Operator/Interfaces.h"
 
+#include <iostream>
 #include <typeinfo>
 
 FNFactorStateOperator::FNFactorStateOperator()
@@ -51,20 +52,21 @@ float NFactorState::Compute()
 {
 	// Reset the value
 	FactorUnitValue = 0;
-	TArray<TSharedPtr<NFactorUnitInterface>> PersistentUnit;
+	TMap<int32, TSharedPtr<NFactorUnitInterface>> PersistentUnits;
+	// Start at One, the 0 is dedicated for the operation retrieve by the Operators loop
+	int32 PersistentIndex = 1;
 	for (const FNFactorStateOperator& Operation : Operators)
 	{
-		TArray<TSharedPtr<NFactorUnitInterface>> ActualUnit;
-
-		if (Operation.Activate)
+		if (!Operation.Activate)
 		{
-			ActualUnit.Add(Operation.FactorUnit);
-			ActualUnit += PersistentUnit;
+			continue;
 		}
 
-		for (int32 Index = 0; Index < ActualUnit.Num(); ++Index)
+		PersistentUnits.Add(0, Operation.FactorUnit);
+
+		for (int32 Index = 0; Index < PersistentUnits.Num(); ++Index)
 		{
-			const TSharedPtr<NFactorUnitInterface> Unit = ActualUnit[Index];
+			const TSharedPtr<NFactorUnitInterface> Unit = PersistentUnits[Index];
 			float Value = FactorUnitValue;
 
 			if (Index == 0)
@@ -75,7 +77,7 @@ float NFactorState::Compute()
 			{
 				NFactorOperatorPersistentInterface* Persistent =
 					dynamic_cast<NFactorOperatorPersistentInterface*>(Unit->GetOperator().Get());
-				Value = Persistent->Compute(Value, Unit->GetFactorUnitValue(), *ActualUnit[0].Get());
+				Value = Persistent->Compute(Value, Unit->GetFactorUnitValue(), PersistentUnits[0]);
 			}
 
 			if (bDebug)
@@ -94,14 +96,12 @@ float NFactorState::Compute()
 
 		NFactorOperatorPersistentInterface* Persistent =
 			dynamic_cast<NFactorOperatorPersistentInterface*>(Operation.Operator.Get());
-		if (Operation.Activate && Persistent != nullptr)
+		if (Persistent != nullptr)
 		{
-			PersistentUnit.Add(Operation.FactorUnit);
+			PersistentUnits.Add(PersistentIndex++, Operation.FactorUnit);
 		}
-
-		ActualUnit.Empty();
 	}
-	PersistentUnit.Empty();
+	PersistentUnits.Empty();
 	return FactorUnitValue;
 }
 

@@ -19,4 +19,5 @@ public:
 	virtual FName GetReason() const override;
 	virtual const FString GetUID() const override;
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
+	virtual void Activate(bool _bIsActivated) override;
 };

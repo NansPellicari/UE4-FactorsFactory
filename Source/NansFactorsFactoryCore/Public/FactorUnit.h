@@ -30,7 +30,7 @@ public:
 	virtual void SetFactorUnitValue(float _Value) override;
 	virtual const FString GetUID() const override;
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
-	void Activate(bool _bIsActivated);
+	virtual void Activate(bool _bIsActivated) override;
 
 protected:
 	TSharedPtr<NEventInterface> Event;

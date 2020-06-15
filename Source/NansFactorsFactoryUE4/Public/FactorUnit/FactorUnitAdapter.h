@@ -72,6 +72,8 @@ public:
 	virtual bool IsActivated() const override;
 	virtual void SetFactorUnitValue(float _Value) override;
 	virtual const FString GetUID() const override;
+	virtual void Activate(bool _bIsActivated) override;
+
 	// END NFactorUnitInterface override
 
 	// BEGIN UObject override

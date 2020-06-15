@@ -42,6 +42,7 @@ TEST_F(NansFactorsFactoryCoreFactorUnitTest, NullFactorUnitShouldAlwaysReturnNul
 TEST_F(NansFactorsFactoryCoreFactorUnitTest, ShouldBeAlwaysActivateIfItHasAnUndeterminatedDuration)
 {
 	NFactorUnit* FactorUnit = new NFactorUnit(1.f, MakeShareable(new NNullOperator()), 0, FName("Reason"));
+	FactorUnit->GetEvent()->Start(0);
 	EXPECT_TRUE(FactorUnit->IsActivated());
 	FactorUnit->GetEvent()->NotifyAddTime(1000);
 	EXPECT_TRUE(FactorUnit->IsActivated());
@@ -51,24 +52,24 @@ TEST_F(NansFactorsFactoryCoreFactorUnitTest, ShouldBeAlwaysActivateIfItHasAnUnde
 TEST_F(NansFactorsFactoryCoreFactorUnitTest, CanBeDeactivate)
 {
 	NFactorUnit* FactorUnit = new NFactorUnit(1.f, MakeShareable(new NNullOperator()), 0, FName("Reason"));
+	FactorUnit->GetEvent()->Start(0);
 	EXPECT_TRUE(FactorUnit->IsActivated());
 	FactorUnit->GetEvent()->NotifyAddTime(1000.f);
 	EXPECT_TRUE(FactorUnit->IsActivated());
 	FactorUnit->Activate(false);
 	EXPECT_FALSE(FactorUnit->IsActivated());
-	EXPECT_FALSE(FactorUnit->GetEvent()->IsExpired());
+	EXPECT_TRUE(FactorUnit->GetEvent()->IsExpired());
 }
 
-TEST_F(NansFactorsFactoryCoreFactorUnitTest, ShouldBeDeactivateWhenItsDurationTimeIsReachedAndReturnANullOperator)
+TEST_F(NansFactorsFactoryCoreFactorUnitTest, ShouldBeDeactivateWhenItsDurationTimeIsReached)
 {
 	TSharedPtr<NAddOperator> Operator = MakeShareable(new NAddOperator());
 	NFactorUnit* FactorUnit = new NFactorUnit(1.f, Operator, 2.f, FName("Reason"));
+	FactorUnit->GetEvent()->Start(0);
 	EXPECT_TRUE(FactorUnit->IsActivated());
-	EXPECT_EQ(FactorUnit->GetOperator(), Operator);
+	EXPECT_EQ(FactorUnit->GetOperator().Get(), Operator.Get());
 	EXPECT_EQ(FactorUnit->GetFactorUnitValue(), 1.f);
 	FactorUnit->GetEvent()->NotifyAddTime(2.1f);
 	EXPECT_TRUE(FactorUnit->GetEvent()->IsExpired());
 	EXPECT_FALSE(FactorUnit->IsActivated());
-	EXPECT_NE(FactorUnit->GetOperator(), Operator);
-	EXPECT_NE(static_cast<NNullOperator*>(FactorUnit->GetOperator().Get()), nullptr);
 }

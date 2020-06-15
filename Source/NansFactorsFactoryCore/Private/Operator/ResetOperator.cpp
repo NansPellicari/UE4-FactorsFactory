@@ -15,7 +15,7 @@ TSharedPtr<NFactorOperatorInterface> NResetOperatorBase::GetInverse()
 	return Operator;
 }
 
-FString NResetOperatorBase::GetResetIdFlag(TSharedRef<NFactorUnitInterface> FactorUnit)
+FString NResetOperatorBase::GetResetIdFlag(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
 	const FString Prefix = TEXT("Reset_list_");
 	return FString::Format(TEXT("{0}{1}"), {Prefix, FactorUnit->GetUID()});
@@ -27,9 +27,9 @@ float NResetOperator::Compute(float Lh, float Rh)
 	uint32 MaxAttempt = 10;
 
 	float NullOperationResult = GetInverse()->Compute(Lh, Rh);
-	TSharedRef<NFactorUnitInterface> FactorUnit = MyFactor->GetFactorUnit(KeyInFactor);
+	TSharedPtr<NFactorUnitInterface> FactorUnit = MyFactor->GetFactorUnit(KeyInFactor);
 
-	TSharedRef<NFactorUnitInterface> ResetFactorUnit = FactorUnit;
+	TSharedPtr<NFactorUnitInterface> ResetFactorUnit = FactorUnit;
 	while (MaxAttempt > 0 &&
 		   (!ResetFactorUnit->IsActivated() || NOperatorUtils::IsOperatorWithFactor(ResetFactorUnit->GetOperator().Get()) ||
 			   MyFactor->HasStateFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit))))

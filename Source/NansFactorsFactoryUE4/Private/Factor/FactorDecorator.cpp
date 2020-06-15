@@ -117,7 +117,7 @@ UNFactorUnitAdapter* UNFactorDecorator::CreateFactorUnit(const UClass* Class)
 	return NewObject<UNFactorUnitAdapter>(this, Class, FName(*Name));
 }
 
-TSharedRef<NFactorUnitInterface> UNFactorDecorator::GetFactorUnit(uint32 Key) const
+TSharedPtr<NFactorUnitInterface> UNFactorDecorator::GetFactorUnit(uint32 Key) const
 {
 	return Factor->GetFactorUnit(Key);
 }

@@ -12,12 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#include "Operator/ReplacerOperator.h"
 
-#include "NansTimelineSystemCore/Public/TimelineManager.h"
-#include "gmock/gmock.h"
+#include "Factor.h"
+#include "FactorUnit.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
+#include "Operator/FactorOperator.h"
+#include "Operator/ResetOperator.h"
 
-class FakeTimelineManager : public NTimelineManager
+const FName NReplacerOperator::Name(TEXT("Replacer"));
+
+float NReplacerOperator::Compute(float Lh, float Rh)
 {
-public:
-};
+	return Rh;
+}
+
+TSharedPtr<NFactorOperatorInterface> NReplacerOperator::GetInverse()
+{
+	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
+	return Operator;
+}

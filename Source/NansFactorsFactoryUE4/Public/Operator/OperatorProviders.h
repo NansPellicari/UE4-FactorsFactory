@@ -15,6 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NansFactorsFactoryCore/Public/Operator/CleanerOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
 #include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
@@ -91,5 +92,53 @@ public:
 	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override
 	{
 		return MakeShareable(new NResetOperator());
+	}
+};
+
+UENUM()
+enum class ENFactorCleaner : uint8
+{
+	Cleaner,
+	ReducersCleaner,
+	IncreasersCleaner,
+	ReducersPersistentCleaner,
+	IncreasersPersistentCleaner
+};
+
+UCLASS(MinimalAPI, BlueprintType, Transient)
+class UNOperatorCleaners : public UNOperatorProviderBase
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operator", meta = (DisplayName = "Cleaner Type"))
+	ENFactorCleaner Type;
+
+	UNOperatorCleaners() {}
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override
+	{
+		if (Type == ENFactorCleaner::IncreasersCleaner)
+		{
+			return MakeShareable(new NIncreasersCleanerOperator());
+		}
+		if (Type == ENFactorCleaner::ReducersCleaner)
+		{
+			return MakeShareable(new NReducersCleanerOperator());
+		}
+		if (Type == ENFactorCleaner::ReducersPersistentCleaner)
+		{
+			return MakeShareable(new NReducersCleanerPersistentOperator());
+		}
+		if (Type == ENFactorCleaner::IncreasersPersistentCleaner)
+		{
+			return MakeShareable(new NIncreasersCleanerPersistentOperator());
+		}
+
+		return MakeShareable(new NCleanerOperator());
+	}
+
+	virtual void Serialize(FArchive& Ar) override
+	{
+		Super::Serialize(Ar);
+		Ar << Type;
 	}
 };

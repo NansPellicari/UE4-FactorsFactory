@@ -9,6 +9,8 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+#include <iostream>
+
 class NBreakerOperator : public NFactorOperatorBreakerInterface, public NFactorOperatorInterface
 {
 	virtual float Compute(float Lh, float Rh) override
@@ -44,15 +46,11 @@ class NStopperOperator : public NFactorOperatorStopperInterface, public NFactorO
 	{
 		return FName("Stopper");
 	}
-	virtual bool IsStopping() override
-	{
-		return true;
-	};
 };
 
 class NAddPersistentOperator : public NAddOperator, public NFactorOperatorPersistentInterface
 {
-	virtual float Compute(float Lh, float Rh, const NFactorUnitInterface& ActualUnit) override
+	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override
 	{
 		return NAddOperator::Compute(Lh, Rh);
 	}
@@ -186,20 +184,31 @@ TEST_F(NansFactorsFactoryCoreFactorTest, AStopperShouldStopAddingUnit)
 {
 	Timeline->SetTickInterval(1.f);
 	Timeline->NotifyTick();
-	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NStopperOperator()), 2, FName("Stopper"))));
-	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Add not Added"))));
+	TSharedPtr<NFactorUnit> Stopper =
+		MakeShareable(new NFactorUnit(0, MakeShareable(new NStopperOperator()), 2, FName("Stopper"), 1.f));
+	Factor->AddFactorUnit(Stopper);
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 1, FName("Add should be Added"))));
 	NFactorStateInterface* State = new NFactorState();
 	Factor->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->GetTime(), 1.f);
-	EXPECT_EQ(State->Compute(), 0.f);
-	Timeline->NotifyTick();
+	EXPECT_EQ(State->Compute(), 7.f);
+
+	Timeline->NotifyTick();	   // Stopper start here
+	EXPECT_EQ(Stopper->GetEvent()->GetStartedAt(), 2.f);
+	Factor->AddFactorUnit(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Add not Added"))));
 	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 2.f);
 	EXPECT_EQ(State->Compute(), 0.f);
 	Timeline->NotifyTick();
-	// the new unit should not be added at all,
-	// computation should take only previous Unit in count when the avoider expires
 	Factor->SupplyStateWithCurrentData(*State);
 	EXPECT_EQ(State->GetTime(), 3.f);
+	EXPECT_EQ(State->Compute(), 0.f);
+	Timeline->NotifyTick();
+	Timeline->NotifyTick();
+	// the new unit should not be added at all,
+	// computation should take only previous Unit in count when the stopper expires
+	Factor->SupplyStateWithCurrentData(*State);
+	EXPECT_EQ(State->GetTime(), 5.f);
 	EXPECT_EQ(State->Compute(), 4.f);
 }
 

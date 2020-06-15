@@ -38,7 +38,7 @@ float NUnrealFactorProxy::GetTime() const
 {
 	return Factor.GetTime();
 }
-TSharedRef<NFactorUnitInterface> NUnrealFactorProxy::GetFactorUnit(uint32 Key) const
+TSharedPtr<NFactorUnitInterface> NUnrealFactorProxy::GetFactorUnit(uint32 Key) const
 {
 	return Factor.GetFactorUnit(Key);
 }

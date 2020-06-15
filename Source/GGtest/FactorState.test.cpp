@@ -1,7 +1,7 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
-#include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
+#include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "gtest/gtest.h"
@@ -19,7 +19,7 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithOneOperatorGiven)
 	NFactorStateInterface* FactorState = new NFactorState();
 	FactorState->SetTime(Time);
 	NFactorUnitInterface* FactorUnit = new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Exhausted"));
-	FactorUnit->GetEvent()->NotifyAddTime(Time);
+	FactorUnit->GetEvent()->Start(Time);
 	FactorState->AddFactorUnit(MakeShareable(FactorUnit));
 	EXPECT_EQ(FactorState->Compute(), 2.f);
 }
@@ -35,7 +35,7 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithABunchOfOperatorsGiven)
 
 	for (auto FactorUnit : Factors)
 	{
-		FactorUnit->GetEvent()->NotifyAddTime(Time);
+		FactorUnit->GetEvent()->Start(Time);
 		FactorState->AddFactorUnit(FactorUnit);
 	}
 	EXPECT_EQ(FactorState->Compute(), 4.f);
@@ -56,6 +56,7 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithABunchOfOperatorsGivenA
 
 	for (auto FactorUnit : Factors)
 	{
+		FactorUnit->GetEvent()->Start(0);
 		FactorUnit->GetEvent()->NotifyAddTime(Time);
 		FactorState->AddFactorUnit(FactorUnit);
 	}

@@ -104,6 +104,11 @@ const FString UNFactorUnitAdapter::GetUID() const
 	return FactorUnit->GetUID();
 }
 
+void UNFactorUnitAdapter::Activate(bool _bIsActivated)
+{
+	return FactorUnit->Activate(_bIsActivated);
+}
+
 void UNFactorUnitAdapter::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);

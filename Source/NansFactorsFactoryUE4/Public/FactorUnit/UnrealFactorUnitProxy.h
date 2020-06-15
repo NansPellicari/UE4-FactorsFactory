@@ -17,6 +17,7 @@ public:
 	virtual FName GetReason() const override;
 	virtual bool IsActivated() const override;
 	virtual const FString GetUID() const override;
+	virtual void Activate(bool _bIsActivated) override;
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
 	virtual UNFactorUnitAdapter* GetUnrealObject();
 };

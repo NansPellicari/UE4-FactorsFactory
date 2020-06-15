@@ -20,7 +20,7 @@ public:
 	virtual FName GetName() const = 0;
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const = 0;
 	virtual float GetTime() const = 0;
-	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const = 0;
+	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(uint32 Key) const = 0;
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const = 0;
 	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) = 0;
 	virtual bool HasStateFlag(FString Flag) const = 0;

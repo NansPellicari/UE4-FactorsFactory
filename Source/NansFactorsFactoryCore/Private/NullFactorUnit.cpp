@@ -32,3 +32,4 @@ TSharedPtr<NEventInterface> NNullFactorUnit::GetEvent()
 {
 	return nullptr;
 }
+void NNullFactorUnit::Activate(bool _bIsActivated) {}

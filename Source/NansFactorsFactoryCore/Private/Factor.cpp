@@ -30,8 +30,8 @@ NFactor::NFactor(FName _Name, TSharedPtr<NTimelineInterface> _Timeline)
 void NFactor::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index)
 {
 	const FString& UId = Event->GetUID();
-	int32 FactorUnitIndex =
-		Factors.IndexOfByPredicate([UId](const TSharedPtr<NFactorUnitInterface> Record) { return Record->GetUID() == UId; });
+	int32 FactorUnitIndex = Factors.IndexOfByPredicate(
+		[UId](const TSharedPtr<NFactorUnitInterface> Record) { return Record.IsValid() && Record->GetUID() == UId; });
 
 	// It could be an event from an another factor or an another type
 	if (FactorUnitIndex == INDEX_NONE) return;
@@ -43,6 +43,7 @@ void NFactor::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const fl
 	if (Stopper != nullptr)
 	{
 		RemoveFlag(ENFactorFlag::CanNotAddNewUnit);
+		FactorUnit->GetEvent()->OnStart().RemoveAll(this);
 	}
 
 	Factors.RemoveAt(FactorUnitIndex);
@@ -70,7 +71,7 @@ float NFactor::GetTime() const
 	return Timeline->GetCurrentTime();
 }
 
-TSharedRef<NFactorUnitInterface> NFactor::GetFactorUnit(uint32 Key) const
+TSharedPtr<NFactorUnitInterface> NFactor::GetFactorUnit(uint32 Key) const
 {
 	mycheck(Name != NAME_None);
 	mycheck(Factors.IsValidIndex(Key));
@@ -95,8 +96,13 @@ void NFactor::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 	NFactorOperatorStopperInterface* Stopper = dynamic_cast<NFactorOperatorStopperInterface*>(FactorUnit->GetOperator().Get());
 	if (Stopper != nullptr)
 	{
-		AddFlag(ENFactorFlag::CanNotAddNewUnit);
+		FactorUnit->GetEvent()->OnStart().AddRaw(this, &NFactor::OnStopperStart);
 	}
+}
+
+void NFactor::OnStopperStart(NEventInterface* Event, const float& StartTime)
+{
+	AddFlag(ENFactorFlag::CanNotAddNewUnit);
 }
 
 bool NFactor::HasStateFlag(FString Flag) const
@@ -154,6 +160,12 @@ void NFactor::AddFactorsToState(NFactorStateInterface& State)
 		if (!FactorUnit.IsValid())
 		{
 			UE_LOG(LogTemp, Warning, TEXT("%s: FactorUnit is invalid"), ANSI_TO_TCHAR(__FUNCTION__));
+			continue;
+		}
+
+		// do not add delayed factor
+		if (FactorUnit->GetEvent()->GetStartedAt() < 0.f)
+		{
 			continue;
 		}
 

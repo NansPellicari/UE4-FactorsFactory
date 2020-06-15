@@ -28,14 +28,12 @@ public:
 
 class NANSFACTORSFACTORYCORE_API NFactorOperatorStopperInterface
 {
-public:
-	virtual bool IsStopping() = 0;
 };
 
 class NANSFACTORSFACTORYCORE_API NFactorOperatorPersistentInterface
 {
 public:
-	virtual float Compute(float Lh, float Rh, const NFactorUnitInterface& ActualUnit) = 0;
+	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) = 0;
 };
 
 class NOperatorUtils

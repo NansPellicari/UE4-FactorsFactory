@@ -59,6 +59,12 @@ const FString NUnrealFactorUnitProxy::GetUID() const
 	return FactorUnit->GetUID();
 }
 
+void NUnrealFactorUnitProxy::Activate(bool _bIsActivated)
+{
+	mycheck(FactorUnit != nullptr);
+	return FactorUnit->Activate(_bIsActivated);
+}
+
 TSharedPtr<NEventInterface> NUnrealFactorUnitProxy::GetEvent()
 {
 	mycheck(FactorUnit != nullptr);

@@ -19,7 +19,7 @@ public:
 	virtual FName GetName() const override;
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;
 	virtual float GetTime() const override;
-	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
+	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
 	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
 	virtual bool HasStateFlag(FString Flag) const override;
 	virtual bool GetStateFlag(FString Flag) const override;
@@ -39,5 +39,12 @@ protected:
 	TSharedPtr<NTimelineInterface> Timeline;
 	TArray<TSharedPtr<NFactorUnitInterface>> Factors;
 	void AddFactorsToState(NFactorStateInterface& State);
+
+	/**
+	 * This is use as a delegate attached to a NEventInterface::OnStart of the FactorUnit's event
+	 * when its FactorOperator is an implementation of NFactorOperatorStopperInterface.
+	 */
+	void OnStopperStart(NEventInterface* Event, const float& StartTime);
+
 	FName Name;
 };

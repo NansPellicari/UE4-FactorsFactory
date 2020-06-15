@@ -1,5 +1,6 @@
 #include "CoreMinimal.h"
 #include "GoogleTestApp.h"
+#include "Mock/FakeFactor.h"
 #include "Mock/FakeTimelineManager.h"
 #include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
@@ -20,17 +21,6 @@ public:
 	bool HasFactor()
 	{
 		return MyFactor != nullptr;
-	}
-};
-
-class FakeFactor : public NFactor
-{
-public:
-	FakeFactor(FName _Name, TSharedPtr<NTimeline> _Timeline) : NFactor(_Name, _Timeline) {}
-	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override
-	{
-		State.SetTime(0.f);
-		AddFactorsToState(State);
 	}
 };
 

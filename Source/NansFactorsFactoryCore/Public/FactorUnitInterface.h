@@ -16,4 +16,5 @@ public:
 	virtual bool IsActivated() const = 0;
 	virtual const FString GetUID() const = 0;
 	virtual TSharedPtr<NEventInterface> GetEvent() = 0;
+	virtual void Activate(bool _bIsActivated) = 0;
 };

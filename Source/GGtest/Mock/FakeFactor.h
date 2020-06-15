@@ -14,10 +14,21 @@
 
 #pragma once
 
-#include "NansTimelineSystemCore/Public/TimelineManager.h"
+#include "NansFactorsFactoryCore/Public/Factor.h"
+#include "NansFactorsFactoryCore/Public/FactorState.h"
+#include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
+#include "NansTimelineSystemCore/Public/Timeline.h"
 #include "gmock/gmock.h"
 
-class FakeTimelineManager : public NTimelineManager
+class FakeFactor : public NFactor
 {
 public:
+	FakeFactor(FName _Name, TSharedPtr<NTimeline> _Timeline) : NFactor(_Name, _Timeline) {}
+	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override
+	{
+		State.SetTime(0.f);
+		State.Clear();
+		IterationFlags.Empty();
+		AddFactorsToState(State);
+	}
 };

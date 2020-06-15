@@ -29,7 +29,7 @@ public:
 	virtual FName GetName() const override;
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;
 	virtual float GetTime() const override;
-	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
+	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override;
 	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
 	virtual bool HasStateFlag(FString Flag) const override;

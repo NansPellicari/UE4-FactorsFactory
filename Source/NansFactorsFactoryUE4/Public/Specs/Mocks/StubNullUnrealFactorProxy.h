@@ -40,7 +40,7 @@ public:
 	{
 		return 0.f;
 	}
-	virtual TSharedRef<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override
+	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override
 	{
 		static NFactorUnitInterface* NullObj = new NNullFactorUnit();
 		return MakeShareable(NullObj);
