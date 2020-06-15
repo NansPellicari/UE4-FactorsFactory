@@ -24,6 +24,7 @@ void FNFactorUnitRecord::Serialize(FArchive& Ar, UNFactorDecorator* Factor)
 {
 	if (Ar.IsSaving() && FactorUnit != nullptr)
 	{
+		FactorUnit->OperatorProvider->Serialize(Ar);
 		FactorUnit->Serialize(Ar);
 	}
 
@@ -40,8 +41,8 @@ void FNFactorUnitRecord::Serialize(FArchive& Ar, UNFactorDecorator* Factor)
 				 "The associated event has not been found for UID %s"),
 			*UId);
 		UClass* OperatorProviderClass = FindObject<UClass>(ANY_PACKAGE, *OperatorProviderClassName);
-		FactorUnit->OperatorProvider = OperatorProviderClass;
-
+		FactorUnit->OperatorProvider = NewObject<UNOperatorProviderBase>(FactorUnit, OperatorProviderClass, NAME_None);
+		FactorUnit->OperatorProvider->Serialize(Ar);
 		FactorUnit->Init(Event);
 		FactorUnit->Serialize(Ar);
 	}

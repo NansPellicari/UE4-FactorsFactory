@@ -54,11 +54,14 @@ TSharedPtr<NEventInterface> UNFactorUnitAdapter::GetEvent()
 	return FactorUnit->GetEvent();
 }
 
+void UNFactorUnitAdapter::SetOperatorProvider(UNOperatorProviderBase* _OperatorProvider)
+{
+	OperatorProvider = _OperatorProvider;
+}
+
 TSharedPtr<NFactorOperatorInterface> UNFactorUnitAdapter::GetConfiguredOperator()
 {
-	UClass* OperatorProviderClass = OperatorProvider;
-	UNOperatorProviderBase* Provider = NewObject<UNOperatorProviderBase>(this, OperatorProviderClass, NAME_None, RF_Transient);
-	return Provider->GetOperator();
+	return OperatorProvider->GetOperator();
 }
 
 TSharedPtr<NFactorOperatorInterface> UNFactorUnitAdapter::GetOperator() const

@@ -42,7 +42,7 @@ struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 		UId = FactorUnit->GetUID();
 		OperatorName = FactorUnit->GetOperator()->GetName();
 		Value = FactorUnit->GetFactorUnitValue();
-		OperatorProviderClassName = FactorUnit->OperatorProvider->GetPathName();
+		OperatorProviderClassName = FactorUnit->OperatorProvider->GetClass()->GetPathName();
 	}
 
 	/** The UNFactorUnitAdapter object */

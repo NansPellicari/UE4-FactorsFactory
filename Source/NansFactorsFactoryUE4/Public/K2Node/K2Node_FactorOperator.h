@@ -56,6 +56,8 @@ public:
 	static FName ClassPinName;
 	/** Factor pin name */
 	static FName FactorPinName;
+	/** Operator provider pin name */
+	static FName OperatorPinName;
 	/** Object pin name */
 	static FName ObjectPinName;
 	/** Outer pin name */
@@ -64,6 +66,7 @@ public:
 	/** Finds and returns the class input pin from the current set of pins. */
 	UEdGraphPin* FindClassPin() const;
 	UEdGraphPin* FindFactorPin() const;
+	UEdGraphPin* FindOperatorPin() const;
 	UEdGraphPin* GetResultPin() const;
 	UEdGraphPin* GetThenPin() const;
 	UEdGraphPin* GetOuterPin() const;
@@ -71,19 +74,18 @@ public:
 	/** Retrieves the current input class type. */
 	UClass* GetInputClass() const;
 
+	/** Retrieves the current input operator class type. */
+	UClass* GetInputOperatorClass() const;
+
 	void OnBlueprintClassModified(UBlueprint* TargetBlueprint);
-	void ClearDelegates();
+	void ClearDelegates(FString InClassName);
 
 protected:
 #if WITH_EDITOR
 	// TODO create a Pin available only in dev mode to switch this
-	bool bDebug = false;
-	void DebugConnectionPin(
-		uint32 Step, const UEdGraphPin* PinA, const UEdGraphPin* PinB, const bool bSucceeded, const TCHAR* Type) const;
+	bool bDebug = true;
 #endif
 
-	bool MovePinLinks(UEdGraphPin* PinA, UEdGraphPin* PinB, class FKismetCompilerContext& CompilerContext, uint32& Step) const;
-	bool TryConnectPin(UEdGraphPin* PinA, UEdGraphPin* PinB, class FKismetCompilerContext& CompilerContext, uint32& Step) const;
 	/**
 	 * Finds and returns the class input pin.
 	 *
@@ -99,6 +101,13 @@ protected:
 	UEdGraphPin* FindFactorPin(const TArray<UEdGraphPin*>& FromPins) const;
 
 	/**
+	 * Finds and returns the opearator provider input pin.
+	 *
+	 * @param FromPins	A list of pins to search.
+	 */
+	UEdGraphPin* FindOperatorPin(const TArray<UEdGraphPin*>& FromPins) const;
+
+	/**
 	 * Determines the input class type from the given pin.
 	 *
 	 * @param FromPin	Input class pin.
@@ -106,25 +115,34 @@ protected:
 	UClass* GetInputClass(const UEdGraphPin* FromPin) const;
 
 	/**
+	 * Determines the input operator class type from the given pin.
+	 *
+	 * @param FromPin	Input class pin.
+	 */
+	UClass* GetInputOperatorClass(const UEdGraphPin* FromPin) const;
+
+	/**
 	 * Creates the full set of pins (properties) from the given input class.
 	 *
 	 * @param InClass	Input class type.
 	 */
-	void CreateNewPins(UClass* InClass);
+	void CreateNewPins(UClass* InClass, bool bOuputPin = true);
 
 	/** Will be called whenever the class pin selector changes its value. */
 	void OnClassPinChanged();
 
 private:
-	/** Blueprint that we subscribed OnBlueprintChangedDelegate and OnBlueprintCompiledDelegate to */
-	UPROPERTY()
-	UBlueprint* BlueprintSubscribedTo;
+	/**
+	 * A tuple for ClassSubsciber delegates
+	 * it allows to keep important details trace in memory.
+	 * 0: Blueprint that we subscribed FClassSubsciberTuple<1> and FClassSubsciberTuple<2> to
+	 * 1: Blueprint.OnChanged delegate handle
+	 * 2: Blueprint.OnCompiled delegate handle
+	 */
+	using FClassSubscriberTuple = TTuple<UBlueprint*, FDelegateHandle, FDelegateHandle>;
+	/** FString: Classname, FClassSubsciberTuple: delegates data */
+	TMap<FString, FClassSubscriberTuple> BlueprintSubscribers;
 
-	/** Blueprint.OnChanged delegate handle */
-	FDelegateHandle OnBlueprintChangedDelegate;
-
-	/** Blueprint.OnCompiled delegate handle */
-	FDelegateHandle OnBlueprintCompiledDelegate;
 	TArray<FOptionalPinFromProperty> ShowPinForProperties;
 
 	TArray<FName> OldShownPins;

@@ -37,9 +37,6 @@ public:
 	TSubclassOf<UNEventDecorator> EventClass = UNEventDecorator::StaticClass();
 
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
-	TSubclassOf<UNOperatorProviderBase> OperatorProvider = UNNullOperatorProvider::StaticClass();
-
-	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
 	float FactorUnitValue = 0.f;
 
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
@@ -51,8 +48,16 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
 	FName Reason = NAME_None;
 
+	// clang-format off
+	UFUNCTION(meta = (BlueprintInternalUseOnly = "true"), BlueprintCallable, Category = "FactorsFactory|Unit")
+	virtual void SetOperatorProvider(UNOperatorProviderBase* _OperatorProvider);
+	// clang-format on
+
+	UNOperatorProviderBase* OperatorProvider;
+
 	virtual void Init();
 	virtual void Init(UNEventDecorator* _Event);
+
 	virtual TSharedPtr<NFactorOperatorInterface> GetConfiguredOperator();
 
 	UFUNCTION(BlueprintCallable, Category = "FactorsFactory|Unit")

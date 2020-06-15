@@ -53,10 +53,6 @@ bool NFactorUnit::IsActivated() const
 
 TSharedPtr<NFactorOperatorInterface> NFactorUnit::GetOperator() const
 {
-	if (!IsActivated())
-	{
-		return MakeShareable(new NNullOperator());
-	}
 	return Operator;
 }
 
@@ -73,6 +69,7 @@ void NFactorUnit::SetFactorUnitValue(float _Value)
 void NFactorUnit::Activate(bool _bIsActivated)
 {
 	bIsActivated = _bIsActivated;
+	if (bIsActivated == false) Event->Stop();
 }
 
 TSharedPtr<NEventInterface> NFactorUnit::GetEvent()

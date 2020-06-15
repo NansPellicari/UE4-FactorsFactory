@@ -28,63 +28,60 @@ class NANSFACTORSFACTORYUE4_API UNOperatorProviderBase : public UObject
 public:
 	UNOperatorProviderBase() {}
 	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() PURE_VIRTUAL(UNOperatorProviderBase::GetOperator, return nullptr;);
+	virtual void Serialize(FArchive& Ar) override
+	{
+		Super::Serialize(Ar);
+	}
+};
+
+UENUM()
+enum class ENFactorSimpleOperation : uint8
+{
+	Add,
+	Subtract,
+	Multiply,
+	Divide,
+	Null
 };
 
 UCLASS(MinimalAPI, BlueprintType, Transient)
-class UNAddOperatorProvider : public UNOperatorProviderBase
+class UNOperatorSimpleOperations : public UNOperatorProviderBase
 {
 	GENERATED_BODY()
 public:
-	UNAddOperatorProvider() {}
+	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Operator", meta = (DisplayName = "Computation Type"))
+	ENFactorSimpleOperation Type;
+
+	UNOperatorSimpleOperations() {}
 	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override
 	{
-		return MakeShareable(new NAddOperator());
-	}
-};
-UCLASS(MinimalAPI, BlueprintType, Transient)
-class UNSubtractOperatorProvider : public UNOperatorProviderBase
-{
-	GENERATED_BODY()
-public:
-	UNSubtractOperatorProvider() {}
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override
-	{
-		return MakeShareable(new NSubtractOperator());
-	}
-};
-UCLASS(MinimalAPI, BlueprintType, Transient)
-class UNMultiplyOperatorProvider : public UNOperatorProviderBase
-{
-	GENERATED_BODY()
-public:
-	UNMultiplyOperatorProvider() {}
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override
-	{
-		return MakeShareable(new NMultiplyOperator());
-	}
-};
-UCLASS(MinimalAPI, BlueprintType, Transient)
-class UNDividerOperatorProvider : public UNOperatorProviderBase
-{
-	GENERATED_BODY()
-public:
-	UNDividerOperatorProvider() {}
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override
-	{
-		return MakeShareable(new NDividerOperator());
-	}
-};
-UCLASS(MinimalAPI, BlueprintType, Transient)
-class UNNullOperatorProvider : public UNOperatorProviderBase
-{
-	GENERATED_BODY()
-public:
-	UNNullOperatorProvider() {}
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override
-	{
+		if (Type == ENFactorSimpleOperation::Add)
+		{
+			return MakeShareable(new NAddOperator());
+		}
+		if (Type == ENFactorSimpleOperation::Subtract)
+		{
+			return MakeShareable(new NSubtractOperator());
+		}
+		if (Type == ENFactorSimpleOperation::Multiply)
+		{
+			return MakeShareable(new NMultiplyOperator());
+		}
+		if (Type == ENFactorSimpleOperation::Divide)
+		{
+			return MakeShareable(new NDividerOperator());
+		}
+
 		return MakeShareable(new NNullOperator());
 	}
+
+	virtual void Serialize(FArchive& Ar) override
+	{
+		Super::Serialize(Ar);
+		Ar << Type;
+	}
 };
+
 UCLASS(MinimalAPI, BlueprintType, Transient)
 class UNResetOperatorProvider : public UNOperatorProviderBase
 {
