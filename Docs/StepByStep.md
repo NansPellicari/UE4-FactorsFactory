@@ -1,6 +1,6 @@
 # Step by step guide
 
-First you should follow the [NansTimelineSystem: Step by step guide](https://github.com/NansPellicari/UE4-NansTimelineSystem/blob/master/Docs/StepByStep.md).
+First you should follow the [NansTimelineSystem: Step by step guide](https://github.com/NansPellicari/UE4-TimelineSystem/blob/master/Docs/StepByStep.md).
 
 <!-- TOC -->
 
@@ -29,26 +29,26 @@ First, you need to clone dependencies repos in your project's `Plugins` director
 ```powershell
 cd .\Plugins\
 
-git clone https://github.com/NansPellicari/UE4-NansFactorsFactory NansFactorsFactory
+git clone https://github.com/NansPellicari/UE4-FactorsFactory NansFactorsFactory
 # /!\ renaming destination folder is important, because UE4 doesn't like dash in project name
 
 # or in your root dir if you already use git for your project
 
-git submodule add https://github.com/NansPellicari/UE4-NansFactorsFactory ./Plugins/NansFactorsFactory
+git submodule add https://github.com/NansPellicari/UE4-FactorsFactory ./Plugins/NansFactorsFactory
 ```
 
 You have to clone dependencies too:
 
 ```powershell
 # still in .\Plugins\ dir
-git clone https://github.com/NansPellicari/NansUE4TestsHelpers NansUE4TestsHelpers
-git clone https://github.com/NansPellicari/UE4-NansCoreHelpers NansCoreHelpers
-git clone https://github.com/NansPellicari/UE4-NansTimelineSystem NansTimelineSystem
+git clone https://github.com/NansPellicari/UE4-TestsHelpers.git NansUE4TestsHelpers
+git clone https://github.com/NansPellicari/UE4-CoreHelpers.git NansCoreHelpers
+git clone https://github.com/NansPellicari/UE4-TimelineSystem.git NansTimelineSystem
 
 # or in your root dir if you already use git for your project
-git submodule add https://github.com/NansPellicari/NansUE4TestsHelpers ./Plugins/NansUE4TestsHelpers
-git submodule add https://github.com/NansPellicari/UE4-NansCoreHelpers ./Plugins/NansCoreHelpers
-git submodule add https://github.com/NansPellicari/UE4-NansTimelineSystem ./Plugins/NansTimelineSystem
+git submodule add https://github.com/NansPellicari/UE4-TestsHelpers.git ./Plugins/NansUE4TestsHelpers
+git submodule add https://github.com/NansPellicari/UE4-CoreHelpers.git ./Plugins/NansCoreHelpers
+git submodule add https://github.com/NansPellicari/UE4-TimelineSystem.git ./Plugins/NansTimelineSystem
 ```
 
 <a id="markdown-12-add-plugin-in-your-game-dependencies" name="12-add-plugin-in-your-game-dependencies"></a>
@@ -128,7 +128,7 @@ Add the `NFactorsFactoryGameInstance` & `NTimelineGameInstance` interface:
 
 ![gi-class-settings-interface-choice.png](./img/gi-class-settings-interface-choice.png)
 
-Follow the [NansTimelineSystem: Step by step guide](https://github.com/NansPellicari/UE4-NansTimelineSystem#4-step-by-step-guide) to implements necessary function for the `NTimelineGameInstance`.
+Follow the [NansTimelineSystem: Step by step guide](https://github.com/NansPellicari/UE4-TimelineSystem#4-step-by-step-guide) to implements necessary function for the `NTimelineGameInstance`.
 
 Override the `UGameInstance::init()` method + add 2 new variables:
 
@@ -223,7 +223,7 @@ protected:
 
 ### 2.1. Configure Timelines
 
-Referer to the [NansTimelineSystem: Step by step guide](https://github.com/NansPellicari/UE4-NansTimelineSystem#421-configure-timelines).
+Referer to the [NansTimelineSystem: Step by step guide](https://github.com/NansPellicari/UE4-TimelineSystem#421-configure-timelines).
 
 <a id="markdown-22-configure-factors" name="22-configure-factors"></a>
 
