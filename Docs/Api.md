@@ -42,7 +42,7 @@
 `class `[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy) | 
 `class `[`SNFactorSettingsPin`](#classSNFactorSettingsPin) | 
 `class `[`UFactorSettings`](#classUFactorSettings) | This allow to
-`class `[`UK2Node_FactorUnit`](#classUK2Node__FactorUnit) | 
+`class `[`UK2Node_FactorUnit`](#classUK2Node__FactorUnit) | TODO: This class needs to be cleaned, refactor and documented
 `class `[`UNFactorDecorator`](#classUNFactorDecorator) | 
 `class `[`UNFactorsFactoryBlueprintHelpers`](#classUNFactorsFactoryBlueprintHelpers) | 
 `class `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter) | 
@@ -1254,6 +1254,8 @@ Thanks to: [https://forums.unrealengine.com/development-discussion/c-gameplay-pr
 class UK2Node_FactorUnit
   : public UK2Node
 ```  
+
+TODO: This class needs to be cleaned, refactor and documented
 
 ## Summary
 

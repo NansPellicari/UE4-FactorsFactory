@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 // https://www.s1t2.com.au/blog/virtual-reality/brief-intro-k2nodes
 // Largely Inspired from [engine_path]\Engine\Source\Editor\BlueprintGraph\Private\K2Node_GetClassDefaults.cpp
 #pragma once
@@ -25,7 +24,7 @@
 class FBlueprintActionDatabaseRegistrar;
 
 /**
- *
+ * TODO: This class needs to be cleaned, refactored and documented
  */
 UCLASS()
 class NANSFACTORSFACTORYUE4_API UK2Node_FactorUnit : public UK2Node

@@ -16,6 +16,8 @@ Get the full documentation of the [API here](Api.md).
         -   [4.3.1. FactorOperator](#431-factoroperator)
         -   [4.3.2. OperatorProvider](#432-operatorprovider)
 -   [5. Special case: Load game](#5-special-case-load-game)
+    -   [5.1. Create USaveGame Object](#51-create-usavegame-object)
+    -   [5.2. Copy/Paste to override UE functions](#52-copypaste-to-override-ue-functions)
 -   [6. Testing](#6-testing)
     -   [6.1. Launch UE4 tests](#61-launch-ue4-tests)
     -   [6.2. Make Google Tests works](#62-make-google-tests-works)
@@ -79,7 +81,7 @@ To doing it, we have to consider **4** basics elements (those in blue):
 
 ![basic class](./mermaid/basic-class.png)
 
-> :bookmark_tabs: To get more details, you can read the [README: What Is A Factor](../README.md#23-what-is-a-factor) section.  
+> :bookmark_tabs: To get more details, you can read the [README: What Is A Factor](../README.md#22-what-is-a-factor) section.  
 > :bookmark_tabs: To get more details about the **orange** classes, see [NansTimelineSystem: How to override](https://github.com/NansPellicari/UE4-TimelineSystem/blob/master/Docs/Developers.md#3-how-to-override-create-my-own-event-timeline-etc) section.
 
 Each of these **Core** classes in `Source/NansFactorsFactoryCore` have their **decorator(s)** in the `Source/NansFactorsFactoryUE4`.  
@@ -97,7 +99,7 @@ You can create your own C++ or Blueprint class overriding the default [FactorDec
 
 Factor Unit contains data about factor **alteration** it provides.  
 It is also the glue with `FactorOperator` object and `Event` from `TimelineSystem`.  
-The best way is to extend this base class [FactorUnitAdapterAbstract.h](../Source/NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitAdapterAbstract.h). You can extend it with only a Blueprint or in C++.
+The best way is to extend this base class [FactorUnitAdapter.h](../Source/NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitAdapter.h). You can extend it with only a Blueprint or in C++.
 
 This object can be used too store specific data for feedbacks or stats.
 
@@ -123,7 +125,7 @@ Its goal is to compute data from its `FactorUnit` wrapper related to all previou
 
 **Create a _stopper_ operator**: In some case you should want an operator which prevents the factor to include new alterations, so no more addition of **any** `FactorUnits` (Eg. for a **difficulty Factor** the player can take a magic spell which avoid any new difficulty addition for 30secs, these additions are definitively lost). You can implement [NFactorOperatorStopperInterface](../Source/NansFactorsFactoryCore/Public/Operator/Interfaces.h).
 
-And of course you can mix them all :family: as you can see for the [CleanerOperator](../NansFactorsFactoryCore/Public/Operator/CleanerOperator.h) family.
+And of course you can mix them all :family: as you can see for the [CleanerOperator](../Source/NansFactorsFactoryCore/Public/Operator/CleanerOperator.h) family.
 
 <a id="markdown-432-operatorprovider" name="432-operatorprovider"></a>
 
@@ -141,9 +143,9 @@ You just have to override [UNOperatorProviderBase](../Source/NansFactorsFactoryU
 **Load** is a bit tricky here, because we need to pass a `UWorld` object to the `USaveGame` object to retrieve `UNTimelineManager` from the `UGameInstance`.  
 As I explain [here](https://answers.unrealengine.com/questions/958879/what-is-the-best-way-to-populate-usavegame-on-load.html) the actual code (UE4.25) doesn't allow it with the standard approach.
 
-<a id="markdown-41-create-usavegame-object" name="41-create-usavegame-object"></a>
+<a id="markdown-51-create-usavegame-object" name="51-create-usavegame-object"></a>
 
-### 4.1. Create USaveGame Object
+### 5.1. Create USaveGame Object
 
 First you can follow [this UE4 doc page](https://docs.unrealengine.com/en-US/Gameplay/SaveGame/index.html) to create your own.
 Then you have to add a public `UObject* WorldContextObject` property and add these lines:
@@ -177,7 +179,9 @@ INFactorsFactoryGameInstance::Execute_GetFactorsFactoryClient(GI)->Serialize(Ar)
 
 ```
 
-### 4.2. Copy/Paste to override UE functions
+<a id="markdown-52-copypaste-to-override-ue-functions" name="52-copypaste-to-override-ue-functions"></a>
+
+### 5.2. Copy/Paste to override UE functions
 
 Just follow the same steps at the [NansTimelineSystem doc](https://github.com/NansPellicari/UE4-TimelineSystem/blob/master/Docs/Developers.md#4-special-case-load-game)
 
@@ -191,7 +195,7 @@ They are 2 kinds of tests in this project:
 -   [UE4 automation tests](https://docs.unrealengine.com/en-US/Programming/Automation/TechnicalGuide/index.html) which I use more like **functionnal test** here.
 
 In my workflow I use this project template https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv to simplify all the testing settings, tests launches and to get nice reports.  
-I invite you to using it if you want to [contribute](#6-contributing) to this project or quick testing these features.
+I invite you to using it if you want to [contribute](#8-contributing) to this project or quick testing these features.
 
 <a id="markdown-61-launch-ue4-tests" name="61-launch-ue4-tests"></a>
 

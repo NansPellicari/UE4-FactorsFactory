@@ -1,6 +1,6 @@
-# Step by step guide
+# Getting started - a step by step guide
 
-First you should follow the [NansTimelineSystem: Step by step guide](https://github.com/NansPellicari/UE4-TimelineSystem/blob/master/Docs/StepByStep.md).
+First you should follow the [NansTimelineSystem: Getting started - a step by step guide](https://github.com/NansPellicari/UE4-TimelineSystem/blob/master/Docs/StepByStep.md).
 
 <!-- TOC -->
 
@@ -128,7 +128,7 @@ Add the `NFactorsFactoryGameInstance` & `NTimelineGameInstance` interface:
 
 ![gi-class-settings-interface-choice.png](./img/gi-class-settings-interface-choice.png)
 
-Follow the [NansTimelineSystem: Step by step guide](https://github.com/NansPellicari/UE4-TimelineSystem#4-step-by-step-guide) to implements necessary function for the `NTimelineGameInstance`.
+Follow the [NansTimelineSystem: Step by step guide](https://github.com/NansPellicari/UE4-TimelineSystem/blob/develop/Docs/StepByStep.md) to implements necessary function for the `NTimelineGameInstance`.
 
 Override the `UGameInstance::init()` method + add 2 new variables:
 
@@ -166,9 +166,6 @@ Here an example of a `UGameInstance` class which implements it:
 
 #include "MyGameInstance.generated.h"
 
-/**
- *
- */
 UCLASS()
 class UE4FACTORSFACTORY_API UMyGameInstance : public UGameInstance, public INTimelineGameInstance, public INFactorsFactoryGameInstance
 {
@@ -223,7 +220,7 @@ protected:
 
 ### 2.1. Configure Timelines
 
-Referer to the [NansTimelineSystem: Step by step guide](https://github.com/NansPellicari/UE4-TimelineSystem#421-configure-timelines).
+Referer to the [NansTimelineSystem: Getting started - a step by step guide](https://github.com/NansPellicari/UE4-TimelineSystem/blob/develop/Docs/StepByStep.md#21-configure-timelines).
 
 <a id="markdown-22-configure-factors" name="22-configure-factors"></a>
 

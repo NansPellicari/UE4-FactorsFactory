@@ -2,7 +2,7 @@
 
 Ease and centralized your **factors**<sup>1</sup> management, **retrieve** them to get some player **feedbacks/stats** and **serialized** them for **save/load game**.
 
-> <sup>1</sup> A **factor** is a simple stack composed of **unit** objects which embed a **value**, an **operation** instruction and **lifetime** details. It can be used for **Malus** or **Bonus** factor, **difficulty**, ... >> more details in the [What is a factor?](#23-what-is-a-factor) section.
+> <sup>1</sup> A **factor** is a simple stack composed of **unit** objects which embed a **value**, an **operation** instruction and **lifetime** details. It can be used for **Malus** or **Bonus** factor, **difficulty**, ... >> more details in the [What is a factor?](#22-what-is-a-factor) section.
 
 ![Developers docs](./Docs/img/FactorsFactory.png)
 
@@ -21,7 +21,7 @@ Ease and centralized your **factors**<sup>1</sup> management, **retrieve** them 
         -   [2.2.3. - STATE](#223---state)
     -   [2.3. When & Where? Ease of use](#23-when--where-ease-of-use)
 -   [3. How does it work?](#3-how-does-it-work)
--   [4. Step by step guide](#4-step-by-step-guide)
+-   [4. Getting started - a step by step guide](#4-getting-started---a-step-by-step-guide)
 -   [5. Contributing and Supporting](#5-contributing-and-supporting)
 
 <!-- /TOC -->
@@ -126,9 +126,9 @@ As a designer and a developper I wanted to:
 
 To maintain a short doc here, please read this page [here](./Docs/How-does-it-work.md)
 
-<a id="markdown-4-step-by-step-guide" name="4-step-by-step-guide"></a>
+<a id="markdown-4-getting-started---a-step-by-step-guide" name="4-getting-started---a-step-by-step-guide"></a>
 
-## 4. Step by step guide
+## 4. Getting started - a step by step guide
 
 To maintain a short doc here, please read this page [here](./Docs/StepByStep.md)
 
