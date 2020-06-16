@@ -80,7 +80,7 @@ To doing it, we have to consider **4** basics elements (those in blue):
 ![basic class](./mermaid/basic-class.png)
 
 > :bookmark_tabs: To get more details, you can read the [README: What Is A Factor](../README.md#23-what-is-a-factor) section.  
-> :bookmark_tabs: To get more details about the **orange** classes, see [NansTimelineSystem: How to override](https://github.com/NansPellicari/UE4-NansTimelineSystem/blob/master/Docs/Developers.md#3-how-to-override-create-my-own-event-timeline-etc) section.
+> :bookmark_tabs: To get more details about the **orange** classes, see [NansTimelineSystem: How to override](https://github.com/NansPellicari/UE4-TimelineSystem/blob/master/Docs/Developers.md#3-how-to-override-create-my-own-event-timeline-etc) section.
 
 Each of these **Core** classes in `Source/NansFactorsFactoryCore` have their **decorator(s)** in the `Source/NansFactorsFactoryUE4`.  
 The most preferable way to extend them, it's to create your own decorators or override existants decorators.
@@ -179,7 +179,7 @@ INFactorsFactoryGameInstance::Execute_GetFactorsFactoryClient(GI)->Serialize(Ar)
 
 ### 4.2. Copy/Paste to override UE functions
 
-Just follow the same steps at the [NansTimelineSystem doc](https://github.com/NansPellicari/UE4-NansTimelineSystem/blob/master/Docs/Developers.md#4-special-case-load-game)
+Just follow the same steps at the [NansTimelineSystem doc](https://github.com/NansPellicari/UE4-TimelineSystem/blob/master/Docs/Developers.md#4-special-case-load-game)
 
 <a id="markdown-6-testing" name="6-testing"></a>
 
@@ -214,10 +214,10 @@ After installing the https://github.com/NansPellicari/UE4-TPL-CppWithTestEnv fol
 
 ```powershell
 # in your project root folder
-git submodule add https://github.com/NansPellicari/NansUE4TestsHelpers .\Plugins\NansUE4TestsHelpers
-git submodule add https://github.com/NansPellicari/UE4-NansCoreHelpers .\Plugins\NansCoreHelpers
-git submodule add https://github.com/NansPellicari/UE4-NansTimelineSystem .\Plugins\NansTimelineSystem
-git submodule add https://github.com/NansPellicari/UE4-NansFactorsFactory .\Plugins\NansFactorsFactory
+git submodule add https://github.com/NansPellicari/UE4-TestsHelpers.git .\Plugins\NansUE4TestsHelpers
+git submodule add https://github.com/NansPellicari/UE4-CoreHelpers.git .\Plugins\NansCoreHelpers
+git submodule add https://github.com/NansPellicari/UE4-TimelineSystem.git .\Plugins\NansTimelineSystem
+git submodule add https://github.com/NansPellicari/UE4-FactorsFactory.git .\Plugins\NansFactorsFactory
 # this to place in the right directory and rename correctly
 # the plugin's folder to avoid UE4 misconfiguration.
 ```
