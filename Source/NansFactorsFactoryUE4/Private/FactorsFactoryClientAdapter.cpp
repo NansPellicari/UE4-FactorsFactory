@@ -40,9 +40,7 @@ void UNFactorsFactoryClientAdapter::Init()
 	UFactorSettings::GetConfigs(ConfigList);
 	for (auto& Conf : ConfigList)
 	{
-		FConfiguredTimeline TimelineConf;
-		TimelineConf.Name = Conf.TimelineName;
-		UNTimelineManagerDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, TimelineConf);
+		UNTimelineManagerDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, Conf.Timeline);
 		if (TimelineManager != nullptr)
 		{
 			CreateFactor(Conf.Name, TimelineManager->GetTimeline(), Conf.FactorClass);

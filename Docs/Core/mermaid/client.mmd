@@ -8,28 +8,28 @@ FactorArray <|.. Factor4
 FactorArray <|.. Factor5
 
 class Factor1 {
-    &lt;&lt;For Action&gt;&gt;
+   <<For Action>>
 }
 class Factor2 {
-    &lt;&lt;For Dialog&gt;&gt;
+   <<For Dialog>>
 }
 class Factor3 {
-    &lt;&lt;For Alignment BENEVOLENT&gt;&gt;
+   <<For Alignment BENEVOLENT>>
 }
 class Factor4 {
-    &lt;&lt;For Alignment EVIL&gt;&gt;
+   <<For Alignment EVIL>>
 }
 class Factor5 {
-    &lt;&lt;For Alignment NEUTRAL&gt;&gt;
+   <<For Alignment NEUTRAL>>
 }
 
 class IFactorsFactoryGameInstance {
-    &lt;&lt;interface&gt;&gt;  &lt;&lt;public&gt;&gt;
+   <<interface>> <<public>>
     +GetFactorsFactoryClient() NPointSystemClient
 }
 
 class NFactorsFactoryClient {
-    &lt;&lt;public&gt;&gt;
+   <<public>>
     +CreateFactor(FString Name) void
     +GetFactor(TArray&lt;FString&gt; Names) TArray&lt;FactorState&gt;
     +AddFactor(TArray&lt;FString&gt; Names, Factor) void

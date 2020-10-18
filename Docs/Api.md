@@ -2,10 +2,13 @@
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
+`namespace `[`UnrealBuildTool::Rules`](#namespaceUnrealBuildTool_1_1Rules) | 
 `class `[`FakeFactor`](#classFakeFactor) | 
 `class `[`FakeTimelineManager`](#classFakeTimelineManager) | 
 `class `[`FNansFactorsFactoryCoreModule`](#classFNansFactorsFactoryCoreModule) | 
+`class `[`FNansFactorsFactoryEdModule`](#classFNansFactorsFactoryEdModule) | 
 `class `[`FNansFactorsFactoryUE4Module`](#classFNansFactorsFactoryUE4Module) | 
+`class `[`FNFactorAttributeCustomization`](#classFNFactorAttributeCustomization) | 
 `class `[`FNFactorSettingsPinFactory`](#classFNFactorSettingsPinFactory) | 
 `class `[`INFactorsFactoryGameInstance`](#classINFactorsFactoryGameInstance) | 
 `class `[`NAddOperator`](#classNAddOperator) | 
@@ -42,7 +45,7 @@
 `class `[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy) | 
 `class `[`SNFactorSettingsPin`](#classSNFactorSettingsPin) | 
 `class `[`UFactorSettings`](#classUFactorSettings) | This allow to
-`class `[`UK2Node_FactorUnit`](#classUK2Node__FactorUnit) | TODO: This class needs to be cleaned, refactor and documented
+`class `[`UK2Node_FactorUnit`](#classUK2Node__FactorUnit) | TODO: This class needs to be cleaned, refactored and documented
 `class `[`UNFactorDecorator`](#classUNFactorDecorator) | 
 `class `[`UNFactorsFactoryBlueprintHelpers`](#classUNFactorsFactoryBlueprintHelpers) | 
 `class `[`UNFactorsFactoryClientAdapter`](#classUNFactorsFactoryClientAdapter) | 
@@ -58,6 +61,31 @@
 `struct `[`FNFactorStateOperator`](#structFNFactorStateOperator) | 
 `struct `[`FNFactorStateResult`](#structFNFactorStateResult) | 
 `struct `[`FNFactorUnitRecord`](#structFNFactorUnitRecord) | This struct is a record object used for savegame or get user feedbacks
+
+# namespace `UnrealBuildTool::Rules` <a id="namespaceUnrealBuildTool_1_1Rules"></a>
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`class `[`UnrealBuildTool::Rules::NansFactorsFactoryEd`](#classUnrealBuildTool_1_1Rules_1_1NansFactorsFactoryEd) | 
+
+# class `UnrealBuildTool::Rules::NansFactorsFactoryEd` <a id="classUnrealBuildTool_1_1Rules_1_1NansFactorsFactoryEd"></a>
+
+```
+class UnrealBuildTool::Rules::NansFactorsFactoryEd
+  : public ModuleRules
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public inline  `[`NansFactorsFactoryEd`](#classUnrealBuildTool_1_1Rules_1_1NansFactorsFactoryEd_1a9d17074a7ce540e7a3349779ad316185)`(ReadOnlyTargetRules Target)` | 
+
+## Members
+
+#### `public inline  `[`NansFactorsFactoryEd`](#classUnrealBuildTool_1_1Rules_1_1NansFactorsFactoryEd_1a9d17074a7ce540e7a3349779ad316185)`(ReadOnlyTargetRules Target)` <a id="classUnrealBuildTool_1_1Rules_1_1NansFactorsFactoryEd_1a9d17074a7ce540e7a3349779ad316185"></a>
 
 # class `FakeFactor` <a id="classFakeFactor"></a>
 
@@ -115,6 +143,31 @@ IModuleInterface implementation
 
 #### `public virtual void `[`ShutdownModule`](#classFNansFactorsFactoryCoreModule_1a030ed9a6a6cded0f22258aebc2cef7f4)`()` <a id="classFNansFactorsFactoryCoreModule_1a030ed9a6a6cded0f22258aebc2cef7f4"></a>
 
+# class `FNansFactorsFactoryEdModule` <a id="classFNansFactorsFactoryEdModule"></a>
+
+```
+class FNansFactorsFactoryEdModule
+  : public IModuleInterface
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual void `[`StartupModule`](#classFNansFactorsFactoryEdModule_1af5570f4b64671e7fe140a0c1a286e878)`()` | IModuleInterface implementation
+`public virtual void `[`ShutdownModule`](#classFNansFactorsFactoryEdModule_1a7c5551eacc713ea274b191f2b8870767)`()` | 
+`protected TSharedPtr< `[`FNFactorSettingsPinFactory`](#classFNFactorSettingsPinFactory)` > `[`FactorSettingsPinFactory`](#classFNansFactorsFactoryEdModule_1af945e3d047a1be9cc1b2e80e1dc6bd4b) | 
+
+## Members
+
+#### `public virtual void `[`StartupModule`](#classFNansFactorsFactoryEdModule_1af5570f4b64671e7fe140a0c1a286e878)`()` <a id="classFNansFactorsFactoryEdModule_1af5570f4b64671e7fe140a0c1a286e878"></a>
+
+IModuleInterface implementation
+
+#### `public virtual void `[`ShutdownModule`](#classFNansFactorsFactoryEdModule_1a7c5551eacc713ea274b191f2b8870767)`()` <a id="classFNansFactorsFactoryEdModule_1a7c5551eacc713ea274b191f2b8870767"></a>
+
+#### `protected TSharedPtr< `[`FNFactorSettingsPinFactory`](#classFNFactorSettingsPinFactory)` > `[`FactorSettingsPinFactory`](#classFNansFactorsFactoryEdModule_1af945e3d047a1be9cc1b2e80e1dc6bd4b) <a id="classFNansFactorsFactoryEdModule_1af945e3d047a1be9cc1b2e80e1dc6bd4b"></a>
+
 # class `FNansFactorsFactoryUE4Module` <a id="classFNansFactorsFactoryUE4Module"></a>
 
 ```
@@ -136,6 +189,31 @@ class FNansFactorsFactoryUE4Module
 IModuleInterface implementation
 
 #### `public virtual void `[`ShutdownModule`](#classFNansFactorsFactoryUE4Module_1abbbd4accea0843010d6a5ba3683889f2)`()` <a id="classFNansFactorsFactoryUE4Module_1abbbd4accea0843010d6a5ba3683889f2"></a>
+
+# class `FNFactorAttributeCustomization` <a id="classFNFactorAttributeCustomization"></a>
+
+```
+class FNFactorAttributeCustomization
+  : public IPropertyTypeCustomization
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public virtual void `[`CustomizeHeader`](#classFNFactorAttributeCustomization_1a92d0211294a919375b2ae86294936467)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class FDetailWidgetRow & HeaderRow,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` | IPropertyTypeCustomization interface
+`public virtual void `[`CustomizeChildren`](#classFNFactorAttributeCustomization_1adeccb7de892b27ab665435a3d5c3ca60)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class IDetailChildrenBuilder & StructBuilder,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` | 
+`protected void `[`OnAttributeSelected`](#classFNFactorAttributeCustomization_1ac8ff12f86a95a99a4a2b62db616c9c0c)`(TSharedPtr< FName > Selection,ESelectInfo::Type SelectInfo)` | 
+
+## Members
+
+#### `public virtual void `[`CustomizeHeader`](#classFNFactorAttributeCustomization_1a92d0211294a919375b2ae86294936467)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class FDetailWidgetRow & HeaderRow,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` <a id="classFNFactorAttributeCustomization_1a92d0211294a919375b2ae86294936467"></a>
+
+IPropertyTypeCustomization interface
+
+#### `public virtual void `[`CustomizeChildren`](#classFNFactorAttributeCustomization_1adeccb7de892b27ab665435a3d5c3ca60)`(TSharedRef< IPropertyHandle > StructPropertyHandle,class IDetailChildrenBuilder & StructBuilder,IPropertyTypeCustomizationUtils & StructCustomizationUtils)` <a id="classFNFactorAttributeCustomization_1adeccb7de892b27ab665435a3d5c3ca60"></a>
+
+#### `protected void `[`OnAttributeSelected`](#classFNFactorAttributeCustomization_1ac8ff12f86a95a99a4a2b62db616c9c0c)`(TSharedPtr< FName > Selection,ESelectInfo::Type SelectInfo)` <a id="classFNFactorAttributeCustomization_1ac8ff12f86a95a99a4a2b62db616c9c0c"></a>
 
 # class `FNFactorSettingsPinFactory` <a id="classFNFactorSettingsPinFactory"></a>
 
@@ -1255,7 +1333,7 @@ class UK2Node_FactorUnit
   : public UK2Node
 ```  
 
-TODO: This class needs to be cleaned, refactor and documented
+TODO: This class needs to be cleaned, refactored and documented
 
 ## Summary
 
@@ -1865,7 +1943,7 @@ This utility class is made to helps the [UK2Node_FactorUnit::ExpandNode()](#clas
 --------------------------------|---------------------------------------------
 `public FName `[`Name`](#structFNFactorSettings_1acedd2d410195b0d363964dc2bc1e2e8c) | 
 `public TSubclassOf< `[`UNFactorDecorator`](#classUNFactorDecorator)` > `[`FactorClass`](#structFNFactorSettings_1aa2a9d6fcfd712d1df3d4239fd7a5a5b5) | 
-`public FName `[`TimelineName`](#structFNFactorSettings_1a09235f8b2ab0a80f2d23cb2db5f8cd61) | 
+`public FConfiguredTimeline `[`Timeline`](#structFNFactorSettings_1a18510d42fc3456d34b424a5b284a046b) | 
 
 ## Members
 
@@ -1873,7 +1951,7 @@ This utility class is made to helps the [UK2Node_FactorUnit::ExpandNode()](#clas
 
 #### `public TSubclassOf< `[`UNFactorDecorator`](#classUNFactorDecorator)` > `[`FactorClass`](#structFNFactorSettings_1aa2a9d6fcfd712d1df3d4239fd7a5a5b5) <a id="structFNFactorSettings_1aa2a9d6fcfd712d1df3d4239fd7a5a5b5"></a>
 
-#### `public FName `[`TimelineName`](#structFNFactorSettings_1a09235f8b2ab0a80f2d23cb2db5f8cd61) <a id="structFNFactorSettings_1a09235f8b2ab0a80f2d23cb2db5f8cd61"></a>
+#### `public FConfiguredTimeline `[`Timeline`](#structFNFactorSettings_1a18510d42fc3456d34b424a5b284a046b) <a id="structFNFactorSettings_1a18510d42fc3456d34b424a5b284a046b"></a>
 
 # struct `FNFactorStateOperator` <a id="structFNFactorStateOperator"></a>
 

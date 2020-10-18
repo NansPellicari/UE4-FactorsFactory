@@ -22,7 +22,7 @@
 #include "K2Node_VariableSet.h"
 #include "KismetCompiler.h"
 
-#define LOCTEXT_NAMESPACE "FactorsFactoryUE4"
+#define LOCTEXT_NAMESPACE "FactorsFactoryEd"
 
 UEdGraphPin* FFactorUnitUtilities::GetResultPin() const
 {

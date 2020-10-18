@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "Config/TimelineConfig.h"
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
 #include "Factor/FactorDecorator.h"
@@ -32,7 +33,7 @@ struct FNFactorSettings
 	TSubclassOf<UNFactorDecorator> FactorClass = UNFactorDecorator::StaticClass();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors")
-	FName TimelineName;
+	FConfiguredTimeline Timeline;
 };
 
 /**

@@ -27,7 +27,7 @@ class FBlueprintActionDatabaseRegistrar;
  * TODO: This class needs to be cleaned, refactored and documented
  */
 UCLASS()
-class NANSFACTORSFACTORYUE4_API UK2Node_FactorUnit : public UK2Node
+class NANSFACTORSFACTORYED_API UK2Node_FactorUnit : public UK2Node
 {
 	GENERATED_BODY()
 

@@ -24,6 +24,11 @@
 			"Name": "NansFactorsFactoryUE4",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "NansFactorsFactoryEd",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit"
 		}
 	],
 	"Plugins": [

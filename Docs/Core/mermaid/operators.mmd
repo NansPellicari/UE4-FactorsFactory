@@ -12,13 +12,13 @@ IOperator <|-- DivideOperator
 IOperatorWithStack <|-- ResetOperator
 
 class IOperator {
-    &lt;&lt;interface&gt;&gt;
+    <<interface>>
     +Compute(Lh, Rh)
     +GetInverse() IOperator
 }
 
 class IOperatorWithStack {
-    &lt;&lt;interface&gt;&gt;
+    <<interface>>
     +SetStack(FactorStack Stack) void
     +SetKeyInStack(int32 Key) void
 }

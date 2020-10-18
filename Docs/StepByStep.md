@@ -55,6 +55,10 @@ git submodule add https://github.com/NansPellicari/UE4-TimelineSystem.git ./Plug
 
 ### 1.2. Add plugin in your game dependencies
 
+> :warning: I considered you have an Editor Module next to your project. If not, read this:  
+> https://ue4community.wiki/legacy/creating-an-editor-module-x64nt5g3  
+> BTW, this is required to add Custom Pins and Property Customization.
+
 In your `<MyProject>.uproject` file add these lines:
 
 ```json
@@ -81,7 +85,7 @@ In your `<MyProject>.uproject` file add these lines:
 }
 ```
 
-in your `Source/<MyProject>.Target.cs` and `Source/<MyProject>Editor.Target.cs`:
+in your `Source/<MyProject>.Target.cs`:
 
 ```csharp
 ExtraModuleNames.AddRange(new string[] {
@@ -95,7 +99,37 @@ ExtraModuleNames.AddRange(new string[] {
 });
 ```
 
+in your `Source/<MyProject>Editor.Target.cs`:
+
+```csharp
+ExtraModuleNames.AddRange(new string[] {
+    // Other dependencies here ...
+    "NansUE4TestsHelpers",
+    "NansCoreHelpers",
+    "NansTimelineSystemCore",
+    "NansTimelineSystemUE4",
+    "NansFactorFactoryCore",
+    "NansFactorFactoryUE4"
+    "NansFactorFactoryEd"
+});
+```
+
 And be sure to have these in your project public dependencies (in `Source/<MyProject>/<MyProject>.Build.cs`):
+
+```csharp
+PublicDependencyModuleNames.AddRange(new string[] {
+    "Core",
+    "CoreUObject",
+    "Engine",
+    "NansCoreHelpers",
+    "NansTimelineSystemCore",
+    "NansTimelineSystemUE4",
+    "NansFactorFactoryCore",
+    "NansFactorFactoryUE4"
+});
+```
+
+And be sure to have these in your EditorModule public dependencies (in `Source/<MyProject>Editor/<MyProject>Editor.Build.cs`):
 
 ```csharp
 PublicDependencyModuleNames.AddRange(new string[] {

@@ -38,7 +38,7 @@
 #include "Operator/OperatorProviders.h"
 #include "UObject/UnrealType.h"
 
-#define LOCTEXT_NAMESPACE "FactorsFactoryUE4"
+#define LOCTEXT_NAMESPACE "FactorsFactoryEd"
 
 namespace
 {

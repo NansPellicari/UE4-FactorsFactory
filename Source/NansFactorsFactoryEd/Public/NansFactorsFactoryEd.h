@@ -12,18 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "NansFactorsFactoryUE4.h"
+#pragma once
 
-#define LOCTEXT_NAMESPACE "NansFactorsFactoryUE4Module"
+#include "Modules/ModuleManager.h"
 
-void FNansFactorsFactoryUE4Module::StartupModule() {}
+class FNFactorSettingsPinFactory;
 
-void FNansFactorsFactoryUE4Module::ShutdownModule()
+class FNansFactorsFactoryEdModule : public IModuleInterface
 {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
-}
+public:
+	/** IModuleInterface implementation */
+	virtual void StartupModule() override;
+	virtual void ShutdownModule() override;
 
-#undef LOCTEXT_NAMESPACE
-
-IMPLEMENT_MODULE(FNansFactorsFactoryUE4Module, NansFactorsFactoryUE4)
+protected:
+	TSharedPtr<FNFactorSettingsPinFactory> FactorSettingsPinFactory;
+};
