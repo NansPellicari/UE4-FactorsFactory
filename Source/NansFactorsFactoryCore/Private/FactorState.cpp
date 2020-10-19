@@ -35,9 +35,9 @@ FNFactorStateOperator::FNFactorStateOperator(TSharedPtr<NFactorUnitInterface> _F
 	Activate = FactorUnit->IsActivated();
 }
 
-void NFactorState::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
+int32 NFactorState::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
-	Operators.Add(FNFactorStateOperator(FactorUnit));
+	return Operators.Add(FNFactorStateOperator(FactorUnit));
 }
 
 float NFactorState::GetTime() const

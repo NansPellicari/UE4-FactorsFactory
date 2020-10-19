@@ -35,7 +35,7 @@ struct FNFactorStateOperator
 class NANSFACTORSFACTORYCORE_API NFactorStateInterface
 {
 public:
-	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) = 0;
+	virtual int32 AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) = 0;
 	virtual void SetTime(float _Time) = 0;
 	virtual float GetTime() const = 0;
 	virtual float Compute() = 0;

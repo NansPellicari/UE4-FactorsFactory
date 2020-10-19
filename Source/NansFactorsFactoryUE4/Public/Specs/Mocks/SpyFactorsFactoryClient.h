@@ -55,10 +55,15 @@ public:
 		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
 		return StubFactorsFactoryClient::GetStates(FactorNames, StateTemplate);
 	}
-	virtual void AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) override
+	virtual int32 AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) override
 	{
 		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::AddFactorUnit(FactorName, FactorUnit);
+		return StubFactorsFactoryClient::AddFactorUnit(FactorName, FactorUnit);
+	}
+	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(FName FactorName, int32 Key) override
+	{
+		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		return StubFactorsFactoryClient::GetFactorUnit(FactorName, Key);
 	}
 	virtual void SetDebug(const TArray<FName> FactorNames, bool bDebug) override
 	{

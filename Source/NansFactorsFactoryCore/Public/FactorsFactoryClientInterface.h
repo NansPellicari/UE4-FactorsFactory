@@ -30,6 +30,7 @@ public:
 	virtual void RemoveFactor(FName FactorName) = 0;
 	virtual void GetState(FName FactorName, NFactorStateInterface& State) = 0;
 	virtual TArray<NFactorStateInterface*> GetStates(TArray<FName> FactorNames, NFactorStateInterface* StateTemplate) = 0;
-	virtual void AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) = 0;
+	virtual int32 AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) = 0;
+	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(FName FactorName, int32 Key) = 0;
 	virtual void SetDebug(const TArray<FName> FactorNames, bool bDebug) = 0;
 };

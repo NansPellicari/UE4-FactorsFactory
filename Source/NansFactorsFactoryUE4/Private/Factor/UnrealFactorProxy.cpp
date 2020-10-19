@@ -46,9 +46,9 @@ TArray<TSharedPtr<NFactorUnitInterface>> NUnrealFactorProxy::GetFactors() const
 {
 	return Factor.GetFactors();
 }
-void NUnrealFactorProxy::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
+int32 NUnrealFactorProxy::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
-	Factor.AddFactorUnit(FactorUnit);
+	return Factor.AddFactorUnit(FactorUnit);
 }
 bool NUnrealFactorProxy::HasStateFlag(FString Flag) const
 {

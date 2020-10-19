@@ -35,7 +35,9 @@ public:
         return MakeShareable(NullObj);
     }
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override { return {};}
-	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override {}
+	virtual int32 AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override {
+        return -1;
+    }
 	virtual bool HasStateFlag(FString Flag) const override  { return false; }
 	virtual bool GetStateFlag(FString Flag) const override { return false; }
 	virtual void SetStateFlag(FString Flag, bool Value) override {}

@@ -33,6 +33,13 @@ public:
 	{
 		return {};
 	}
-	virtual void AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) override {}
+	virtual int32 AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) override
+	{
+		return -1;
+	}
+	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(FName FactorName, int32 Key) override
+	{
+		return nullptr;
+	}
 	virtual void SetDebug(const TArray<FName> FactorNames, bool bDebug) override {}
 };

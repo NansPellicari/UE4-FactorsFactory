@@ -95,25 +95,29 @@ TSharedPtr<NFactorUnitInterface> NFactor::GetFactorUnit(uint32 Key) const
 	return Factors[Key].ToSharedRef();
 }
 
-void NFactor::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
+int32 NFactor::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
 	mycheck(Name != NAME_None);
 	mycheck(Timeline.IsValid());
 
-	if (HasFlag(ENFactorFlag::CanNotAddNewUnit)) return;
+	int32 key = -1;
+
+	if (HasFlag(ENFactorFlag::CanNotAddNewUnit)) return key;
 
 	if (FactorUnit->GetEvent().IsValid())
 	{
 		// This allow to notify time
 		Timeline->Attached(FactorUnit->GetEvent());
 	}
-	Factors.Add(FactorUnit);
+	key = Factors.Add(FactorUnit);
 
 	NFactorOperatorStopperInterface* Stopper = dynamic_cast<NFactorOperatorStopperInterface*>(FactorUnit->GetOperator().Get());
 	if (Stopper != nullptr)
 	{
 		FactorUnit->GetEvent()->OnStart().AddRaw(this, &NFactor::OnStopperStart);
 	}
+
+	return key;
 }
 
 void NFactor::OnStopperStart(NEventInterface* Event, const float& StartTime)

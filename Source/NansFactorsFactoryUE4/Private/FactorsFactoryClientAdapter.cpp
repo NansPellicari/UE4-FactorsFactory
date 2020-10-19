@@ -107,9 +107,14 @@ TArray<NFactorStateInterface*> UNFactorsFactoryClientAdapter::GetStates(
 	return Client->GetStates(FactorNames, StateTemplate);
 }
 
-void UNFactorsFactoryClientAdapter::AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit)
+int32 UNFactorsFactoryClientAdapter::AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
-	Client->AddFactorUnit(FactorName, FactorUnit);
+	return Client->AddFactorUnit(FactorName, FactorUnit);
+}
+
+TSharedPtr<NFactorUnitInterface> UNFactorsFactoryClientAdapter::GetFactorUnit(FName FactorName, int32 Key)
+{
+	return Client->GetFactorUnit(FactorName, Key);
 }
 
 void UNFactorsFactoryClientAdapter::SetDebug(const TArray<FName> FactorNames, bool bDebug)

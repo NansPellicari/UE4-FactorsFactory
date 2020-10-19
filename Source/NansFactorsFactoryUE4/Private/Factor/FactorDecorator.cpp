@@ -132,7 +132,7 @@ TArray<FNFactorUnitRecord> UNFactorDecorator::GetFactorUnitStore() const
 	return FactorUnitStore;
 }
 
-void UNFactorDecorator::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
+int32 UNFactorDecorator::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
 	auto Proxy = dynamic_cast<NUnrealFactorUnitProxy*>(FactorUnit.Get());
 	mycheckf(Proxy != nullptr, TEXT("You should passed NUnrealFactorUnitProxy (or derivation) only"));
@@ -141,8 +141,9 @@ void UNFactorDecorator::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUni
 
 	FactorUnitStore.Add(FNFactorUnitRecord(Proxy->GetUnrealObject()));
 
-	Factor->AddFactorUnit(FactorUnit);
-	OnAddFactorUnit(Proxy->GetUnrealObject());
+	int32 key = Factor->AddFactorUnit(FactorUnit);
+	OnAddFactorUnit(Proxy->GetUnrealObject(), key);
+	return key;
 }
 
 bool UNFactorDecorator::HasStateFlag(FString Flag) const

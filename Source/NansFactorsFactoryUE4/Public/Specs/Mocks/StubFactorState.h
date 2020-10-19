@@ -22,7 +22,10 @@
 class StubFactorState : public NFactorStateInterface
 {
 public:
-	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override {}
+	virtual int32 AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override
+	{
+		return -1;
+	}
 	virtual void SetTime(float _Time) override {}
 	virtual float GetTime() const override
 	{

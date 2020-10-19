@@ -34,7 +34,7 @@ public:
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;
 	virtual float GetTime() const override;
 	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
-	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
+	virtual int32 AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
 	virtual bool HasStateFlag(FString Flag) const override;
 	virtual bool GetStateFlag(FString Flag) const override;
 	virtual void SetStateFlag(FString Flag, bool Value) override;

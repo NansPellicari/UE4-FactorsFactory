@@ -103,7 +103,7 @@ public:
 	void OnInit();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
-	void OnAddFactorUnit(UNFactorUnitAdapter* FactorUnit);
+	void OnAddFactorUnit(UNFactorUnitAdapter* FactorUnit, int32 key);
 
 	/**
 	 * @warning The FactorUnit pointer is immediatly removed after this method is called.
@@ -143,7 +143,7 @@ public:
 	virtual TSharedPtr<NTimelineInterface> GetTimeline() const override;
 	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(uint32 Key) const override;
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override;
-	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
+	virtual int32 AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
 	// END NFactorInterface override
 

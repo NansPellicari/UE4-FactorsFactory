@@ -27,7 +27,7 @@ public:
 	bool bDebug = false;
 	virtual ~NFactorState() {}
 	NFactorState() {}
-	virtual void AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
+	virtual int32 AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
 	virtual float GetTime() const override;
 	virtual void SetTime(float _Time) override;
 	virtual float Compute() override;

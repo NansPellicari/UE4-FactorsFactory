@@ -48,7 +48,8 @@ public:
 	virtual void RemoveFactor(FName FactorName) override;
 	virtual void GetState(FName FactorName, NFactorStateInterface& State) override;
 	virtual TArray<NFactorStateInterface*> GetStates(TArray<FName> FactorNames, NFactorStateInterface* StateTemplate) override;
-	virtual void AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) override;
+	virtual int32 AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) override;
+	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(FName FactorName, int32 Key) override;
 	virtual void SetDebug(const TArray<FName> FactorNames, bool bDebug) override;
 	// END NFactorsFactoryClientInterface override
 

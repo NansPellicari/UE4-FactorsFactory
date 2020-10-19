@@ -84,7 +84,7 @@ TArray<NFactorStateInterface*> NFactorsFactoryClient::GetStates(TArray<FName> Fa
 	return States;
 }
 
-void NFactorsFactoryClient::AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit)
+int32 NFactorsFactoryClient::AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
 	mycheck(FactorName != NAME_None);
 	mycheckf(FactorsList.Contains(FactorName), TEXT("Factor %s does not exists"), *FactorName.ToString());
@@ -92,9 +92,19 @@ void NFactorsFactoryClient::AddFactorUnit(FName FactorName, TSharedPtr<NFactorUn
 
 	if (!Factor.IsValid() || !FactorUnit.IsValid())
 	{
-		return;
+		return -1;
 	}
-	Factor->AddFactorUnit(FactorUnit);
+	return Factor->AddFactorUnit(FactorUnit);
+}
+
+TSharedPtr<NFactorUnitInterface> NFactorsFactoryClient::GetFactorUnit(FName FactorName, int32 Key)
+{
+	mycheck(FactorName != NAME_None);
+	mycheckf(FactorsList.Contains(FactorName), TEXT("Factor %s does not exists"), *FactorName.ToString());
+
+	TSharedPtr<NFactorInterface> Factor = FactorsList[FactorName];
+
+	return Factor->GetFactorUnit(Key);
 }
 
 void NFactorsFactoryClient::SetDebug(const TArray<FName> FactorNames, bool bDebug)
