@@ -76,3 +76,39 @@ public:
 		return Name;
 	}
 };
+
+/**
+ * It limits the computation with a max value.
+ */
+class NANSFACTORSFACTORYCORE_API NMaxOperator : public NFactorOperatorBreakerInterface,
+												public NFactorOperatorPersistentInterface,
+												public NFactorOperatorInterface
+{
+public:
+	static const FName Name;
+	virtual const FName GetName() override
+	{
+		return Name;
+	}
+	float bBreak;
+	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
+	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
+	virtual float Compute(float Lh, float Rh) override;
+	virtual bool IsBreaking() override;
+};
+class NANSFACTORSFACTORYCORE_API NMinOperator : public NFactorOperatorBreakerInterface,
+												public NFactorOperatorPersistentInterface,
+												public NFactorOperatorInterface
+{
+public:
+	static const FName Name;
+	virtual const FName GetName() override
+	{
+		return Name;
+	}
+	float bBreak;
+	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
+	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
+	virtual float Compute(float Lh, float Rh) override;
+	virtual bool IsBreaking() override;
+};

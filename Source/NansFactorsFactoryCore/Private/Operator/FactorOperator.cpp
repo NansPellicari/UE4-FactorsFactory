@@ -19,6 +19,8 @@ const FName NAddOperator::Name(TEXT("Add"));
 const FName NSubtractOperator::Name(TEXT("Subsctract"));
 const FName NMultiplyOperator::Name(TEXT("Multiply"));
 const FName NDividerOperator::Name(TEXT("Divider"));
+const FName NMaxOperator::Name(TEXT("Max"));
+const FName NMinOperator::Name(TEXT("Min"));
 
 float NNullOperator::Compute(float Lh, float Rh)
 {
@@ -73,4 +75,66 @@ TSharedPtr<NFactorOperatorInterface> NDividerOperator::GetInverse()
 {
 	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NMultiplyOperator());
 	return Operator;
+}
+
+TSharedPtr<NFactorOperatorInterface> NMaxOperator::GetInverse()
+{
+	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
+	return Operator;
+}
+
+bool NMaxOperator::IsBreaking()
+{
+	return bBreak;
+}
+
+float NMaxOperator::Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
+{
+	if (Lh >= Rh)
+	{
+		bBreak = true;
+		return Rh;
+	}
+	return Lh;
+}
+
+float NMaxOperator::Compute(float Lh, float Rh)
+{
+	if (Lh >= Rh)
+	{
+		bBreak = true;
+		return Rh;
+	}
+	return Lh;
+}
+
+TSharedPtr<NFactorOperatorInterface> NMinOperator::GetInverse()
+{
+	static TSharedPtr<NFactorOperatorInterface> Operator = MakeShareable(new NNullOperator());
+	return Operator;
+}
+
+bool NMinOperator::IsBreaking()
+{
+	return bBreak;
+}
+
+float NMinOperator::Compute(float Lh, float Rh)
+{
+	if (Lh <= Rh)
+	{
+		bBreak = true;
+		return Rh;
+	}
+	return Lh;
+}
+
+float NMinOperator::Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
+{
+	if (Lh <= Rh)
+	{
+		bBreak = true;
+		return Rh;
+	}
+	return Lh;
 }

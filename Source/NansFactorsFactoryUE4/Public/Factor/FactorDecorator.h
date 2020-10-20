@@ -25,6 +25,7 @@
 class NUnrealTimelineProxy;
 class UNTimelineDecorator;
 class NEventInterface;
+class NUnrealFactorUnitProxy;
 
 /**
  * This struct is a record object used for savegame or get user feedbacks
@@ -159,6 +160,9 @@ protected:
 
 	UPROPERTY(SaveGame)
 	FName SavedName;
+
+	virtual bool PreAddUnit(NUnrealFactorUnitProxy* Unit);
+	virtual void PostAddUnit(NUnrealFactorUnitProxy* Unit, int32 Key);
 
 	UNTimelineDecorator* GetUnrealTimeline();
 	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);

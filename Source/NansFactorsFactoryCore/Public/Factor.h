@@ -52,7 +52,9 @@ protected:
 	TArray<ENFactorFlag> OwnFlags;
 	TSharedPtr<NTimelineInterface> Timeline;
 	TArray<TSharedPtr<NFactorUnitInterface>> Factors;
-	void AddFactorsToState(NFactorStateInterface& State);
+	void AddFactorUnitsToState(NFactorStateInterface& State);
+	/** Add a factorUnit to a state. It returns a bool, "false" means a breaker stop the adding process  */
+	bool AddFactorUnitToState(NFactorStateInterface& State, TSharedPtr<NFactorUnitInterface> FactorUnit, const int32& Index);
 
 	/**
 	 * This is use as a delegate attached to a NEventInterface::OnStart of the FactorUnit's event

@@ -23,7 +23,7 @@
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemCore/Public/TimelineInterface.h"
 
-void NFactorsFactoryClient::RemoveFactor(FName FactorName)
+void NFactorsFactoryClient::RemoveFactor(const FName& FactorName)
 {
 	if (myensureMsgf(FactorsList.Contains(FactorName), TEXT("The factor \"%s\" does not exists"), *FactorName.ToString()))
 	{
@@ -31,7 +31,7 @@ void NFactorsFactoryClient::RemoveFactor(FName FactorName)
 	}
 }
 
-void NFactorsFactoryClient::CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> _Timeline)
+void NFactorsFactoryClient::CreateFactor(const FName& FactorName, TSharedPtr<NTimelineInterface> _Timeline)
 {
 	if (myensureMsgf(!FactorsList.Contains(FactorName), TEXT("The factor \"%s\" has been already created"), *FactorName.ToString()))
 	{
@@ -50,12 +50,16 @@ void NFactorsFactoryClient::CreateFactor(TArray<FName> FactorNames, TSharedPtr<N
 
 void NFactorsFactoryClient::AddFactor(TSharedPtr<NFactorInterface> Factor)
 {
-	if (myensureMsgf(!FactorsList.Contains(Factor->GetName()),
-			TEXT("The factor \"%s\" has been already added"),
-			*Factor->GetName().ToString()))
+	if (myensureMsgf(
+			!HasFactor(Factor->GetName()), TEXT("The factor \"%s\" has been already added"), *Factor->GetName().ToString()))
 	{
 		FactorsList.Add(Factor->GetName(), Factor);
 	}
+}
+
+bool NFactorsFactoryClient::HasFactor(const FName& FactorName) const
+{
+	return FactorsList.Contains(FactorName);
 }
 
 void NFactorsFactoryClient::GetState(FName FactorName, NFactorStateInterface& State)

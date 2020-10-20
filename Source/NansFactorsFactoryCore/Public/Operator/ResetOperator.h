@@ -27,7 +27,7 @@ public:
 	static FString GetResetIdFlag(TSharedPtr<NFactorUnitInterface> FactorUnit);
 };
 
-// TODO create ResetByReasonOperator ResetWithRangeOperator ResetAllOperator
+// TODO create ResetByReasonOperator ResetWithRangeOperator
 /**
  * This class find a previous FactorUnit and try to reset it.
  * The Rh parameter of the Compute() method determines the previous position

@@ -26,11 +26,14 @@
 `class `[`NFactorsFactoryClient`](#classNFactorsFactoryClient) | 
 `class `[`NFactorsFactoryClientInterface`](#classNFactorsFactoryClientInterface) | 
 `class `[`NFactorState`](#classNFactorState) | 
+`class `[`NFactorStateInRange`](#classNFactorStateInRange) | 
 `class `[`NFactorStateInterface`](#classNFactorStateInterface) | 
 `class `[`NFactorUnit`](#classNFactorUnit) | 
 `class `[`NFactorUnitInterface`](#classNFactorUnitInterface) | 
 `class `[`NIncreasersCleanerOperator`](#classNIncreasersCleanerOperator) | This operator is raw! It removes every previous operator set in the factor's units queue. It cleans only factor's unit which implies factor amount increase. The Rh parameter of the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method determines the amount of FactorUnit removed (0 = all). For the [Compute()](#classNCleanerOperator_1ab819ffc37a28d9d0e3cf6c885c0fd5d6) method it doesn't make any computation by returning the Lh parameter.
 `class `[`NIncreasersCleanerPersistentOperator`](#classNIncreasersCleanerPersistentOperator) | This operator is raw! It removes every previous operator set in the factor's units queue. It cleans only factor's unit which implies factor amount increase. The Rh parameter of the [Compute()](#classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8) method determines the amount of FactorUnit removed (0 = all). For the [Compute()](#classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8) method it doesn't make any computation by returning the Lh parameter. It removes also next Increasers set.
+`class `[`NMaxOperator`](#classNMaxOperator) | It limits the computation with a max value.
+`class `[`NMinOperator`](#classNMinOperator) | 
 `class `[`NMultiplyOperator`](#classNMultiplyOperator) | 
 `class `[`NNullFactorUnit`](#classNNullFactorUnit) | 
 `class `[`NNullOperator`](#classNNullOperator) | 
@@ -407,7 +410,8 @@ class NFactor
 `protected TSharedPtr< NTimelineInterface > `[`Timeline`](#classNFactor_1ad92f86775473a330e973a3a60fc6ae22) | 
 `protected TArray< TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > > `[`Factors`](#classNFactor_1ab217aeb59d451d1b23256e1753fafcd1) | 
 `protected FName `[`Name`](#classNFactor_1a44e3980574bed89aaf6add01c35ffcde) | 
-`protected void `[`AddFactorsToState`](#classNFactor_1adc71be7e3ab9860b664bc3cb2c4d20d2)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+`protected void `[`AddFactorUnitsToState`](#classNFactor_1a76729dcc24e20c44d39f6538b751af44)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` | 
+`protected bool `[`AddFactorUnitToState`](#classNFactor_1a4be3f046455fc66ab16e081e8da2e66f)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit,const int32 & Index)` | Add a factorUnit to a state. It returns a bool, "false" means a breaker stop the adding process
 `protected void `[`OnStopperStart`](#classNFactor_1a0ea6d3b05889b5299057b6430e629749)`(NEventInterface * Event,const float & StartTime)` | This is use as a delegate attached to a NEventInterface::OnStart of the FactorUnit's event when its FactorOperator is an implementation of [NFactorOperatorStopperInterface](#classNFactorOperatorStopperInterface).
 
 ## Members
@@ -464,7 +468,11 @@ class NFactor
 
 #### `protected FName `[`Name`](#classNFactor_1a44e3980574bed89aaf6add01c35ffcde) <a id="classNFactor_1a44e3980574bed89aaf6add01c35ffcde"></a>
 
-#### `protected void `[`AddFactorsToState`](#classNFactor_1adc71be7e3ab9860b664bc3cb2c4d20d2)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classNFactor_1adc71be7e3ab9860b664bc3cb2c4d20d2"></a>
+#### `protected void `[`AddFactorUnitsToState`](#classNFactor_1a76729dcc24e20c44d39f6538b751af44)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State)` <a id="classNFactor_1a76729dcc24e20c44d39f6538b751af44"></a>
+
+#### `protected bool `[`AddFactorUnitToState`](#classNFactor_1a4be3f046455fc66ab16e081e8da2e66f)`(`[`NFactorStateInterface`](#classNFactorStateInterface)` & State,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > FactorUnit,const int32 & Index)` <a id="classNFactor_1a4be3f046455fc66ab16e081e8da2e66f"></a>
+
+Add a factorUnit to a state. It returns a bool, "false" means a breaker stop the adding process
 
 #### `protected void `[`OnStopperStart`](#classNFactor_1a0ea6d3b05889b5299057b6430e629749)`(NEventInterface * Event,const float & StartTime)` <a id="classNFactor_1a0ea6d3b05889b5299057b6430e629749"></a>
 
@@ -729,6 +737,41 @@ class NFactorState
 
 #### `protected TArray< `[`FNFactorStateOperator`](#structFNFactorStateOperator)` > `[`Operators`](#classNFactorState_1a31de6655fee5eabd18207e137b7e34c0) <a id="classNFactorState_1a31de6655fee5eabd18207e137b7e34c0"></a>
 
+# class `NFactorStateInRange` <a id="classNFactorStateInRange"></a>
+
+```
+class NFactorStateInRange
+  : public NFactorState
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public bool `[`bDebug`](#classNFactorStateInRange_1a3e666e9bc3ecc8310ca331ce8a5b1092) | 
+`public inline virtual  `[`~NFactorStateInRange`](#classNFactorStateInRange_1aece80be75056fd397a85fa6022657d68)`()` | 
+`public  `[`NFactorStateInRange`](#classNFactorStateInRange_1aacd8b2af0a99182ae20c306a7bf98c92)`(float _Min,float _Max)` | 
+`public virtual void `[`Clear`](#classNFactorStateInRange_1a3857f9451667721f94aeeccba270acc4)`()` | 
+`public virtual float `[`Compute`](#classNFactorStateInRange_1a6b3a3acef927d581c5547a6849d8b54f)`()` | 
+`public float `[`GetDecimalPercent`](#classNFactorStateInRange_1a3d7dcb739afc3e91026b21b3df46a0a1)`()` | 
+`public float `[`GetDecimalPercentInRange`](#classNFactorStateInRange_1acca25558e604038373b4514be30c5eff)`()` | 
+
+## Members
+
+#### `public bool `[`bDebug`](#classNFactorStateInRange_1a3e666e9bc3ecc8310ca331ce8a5b1092) <a id="classNFactorStateInRange_1a3e666e9bc3ecc8310ca331ce8a5b1092"></a>
+
+#### `public inline virtual  `[`~NFactorStateInRange`](#classNFactorStateInRange_1aece80be75056fd397a85fa6022657d68)`()` <a id="classNFactorStateInRange_1aece80be75056fd397a85fa6022657d68"></a>
+
+#### `public  `[`NFactorStateInRange`](#classNFactorStateInRange_1aacd8b2af0a99182ae20c306a7bf98c92)`(float _Min,float _Max)` <a id="classNFactorStateInRange_1aacd8b2af0a99182ae20c306a7bf98c92"></a>
+
+#### `public virtual void `[`Clear`](#classNFactorStateInRange_1a3857f9451667721f94aeeccba270acc4)`()` <a id="classNFactorStateInRange_1a3857f9451667721f94aeeccba270acc4"></a>
+
+#### `public virtual float `[`Compute`](#classNFactorStateInRange_1a6b3a3acef927d581c5547a6849d8b54f)`()` <a id="classNFactorStateInRange_1a6b3a3acef927d581c5547a6849d8b54f"></a>
+
+#### `public float `[`GetDecimalPercent`](#classNFactorStateInRange_1a3d7dcb739afc3e91026b21b3df46a0a1)`()` <a id="classNFactorStateInRange_1a3d7dcb739afc3e91026b21b3df46a0a1"></a>
+
+#### `public float `[`GetDecimalPercentInRange`](#classNFactorStateInRange_1acca25558e604038373b4514be30c5eff)`()` <a id="classNFactorStateInRange_1acca25558e604038373b4514be30c5eff"></a>
+
 # class `NFactorStateInterface` <a id="classNFactorStateInterface"></a>
 
 ## Summary
@@ -898,6 +941,76 @@ This operator is raw! It removes every previous operator set in the factor's uni
 ## Members
 
 #### `public virtual float `[`Compute`](#classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` <a id="classNIncreasersCleanerPersistentOperator_1af2f61cf4d96ea081ba35ee09dfa1bcf8"></a>
+
+# class `NMaxOperator` <a id="classNMaxOperator"></a>
+
+```
+class NMaxOperator
+  : public NFactorOperatorBreakerInterface
+  : public NFactorOperatorPersistentInterface
+  : public NFactorOperatorInterface
+```  
+
+It limits the computation with a max value.
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public float `[`bBreak`](#classNMaxOperator_1a1921fc38516042f94fad893b5c566686) | 
+`public inline virtual const FName `[`GetName`](#classNMaxOperator_1a1ac0e1c3a663db01d27b7071719c3ec2)`()` | 
+`public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetInverse`](#classNMaxOperator_1af211e1668144578d4f365d7c9448fc0e)`()` | 
+`public virtual float `[`Compute`](#classNMaxOperator_1afce7042f6871945a6a56d37f9023b0a5)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` | 
+`public virtual float `[`Compute`](#classNMaxOperator_1a6d08b9e5a4d79740c9cccaf8cea49b02)`(float Lh,float Rh)` | 
+`public virtual bool `[`IsBreaking`](#classNMaxOperator_1a0ab4e7a6d4c6c95895cd5b3926f4af98)`()` | 
+
+## Members
+
+#### `public float `[`bBreak`](#classNMaxOperator_1a1921fc38516042f94fad893b5c566686) <a id="classNMaxOperator_1a1921fc38516042f94fad893b5c566686"></a>
+
+#### `public inline virtual const FName `[`GetName`](#classNMaxOperator_1a1ac0e1c3a663db01d27b7071719c3ec2)`()` <a id="classNMaxOperator_1a1ac0e1c3a663db01d27b7071719c3ec2"></a>
+
+#### `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetInverse`](#classNMaxOperator_1af211e1668144578d4f365d7c9448fc0e)`()` <a id="classNMaxOperator_1af211e1668144578d4f365d7c9448fc0e"></a>
+
+#### `public virtual float `[`Compute`](#classNMaxOperator_1afce7042f6871945a6a56d37f9023b0a5)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` <a id="classNMaxOperator_1afce7042f6871945a6a56d37f9023b0a5"></a>
+
+#### `public virtual float `[`Compute`](#classNMaxOperator_1a6d08b9e5a4d79740c9cccaf8cea49b02)`(float Lh,float Rh)` <a id="classNMaxOperator_1a6d08b9e5a4d79740c9cccaf8cea49b02"></a>
+
+#### `public virtual bool `[`IsBreaking`](#classNMaxOperator_1a0ab4e7a6d4c6c95895cd5b3926f4af98)`()` <a id="classNMaxOperator_1a0ab4e7a6d4c6c95895cd5b3926f4af98"></a>
+
+# class `NMinOperator` <a id="classNMinOperator"></a>
+
+```
+class NMinOperator
+  : public NFactorOperatorBreakerInterface
+  : public NFactorOperatorPersistentInterface
+  : public NFactorOperatorInterface
+```  
+
+## Summary
+
+ Members                        | Descriptions                                
+--------------------------------|---------------------------------------------
+`public float `[`bBreak`](#classNMinOperator_1a4f4dfae7720e38e3083205b7131e0847) | 
+`public inline virtual const FName `[`GetName`](#classNMinOperator_1afb95efaf2f5faa8d7b364af2ba5dbdb0)`()` | 
+`public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetInverse`](#classNMinOperator_1a30b9d7a6d61ccbc042cb797aeb4e4efb)`()` | 
+`public virtual float `[`Compute`](#classNMinOperator_1ad1fb3b1578f46b4d3dd44ecd11bba39d)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` | 
+`public virtual float `[`Compute`](#classNMinOperator_1afcb9588c1640e1a7daa41eef2cc05af4)`(float Lh,float Rh)` | 
+`public virtual bool `[`IsBreaking`](#classNMinOperator_1add0fbeafe7a0aa6f50cfb899502175c5)`()` | 
+
+## Members
+
+#### `public float `[`bBreak`](#classNMinOperator_1a4f4dfae7720e38e3083205b7131e0847) <a id="classNMinOperator_1a4f4dfae7720e38e3083205b7131e0847"></a>
+
+#### `public inline virtual const FName `[`GetName`](#classNMinOperator_1afb95efaf2f5faa8d7b364af2ba5dbdb0)`()` <a id="classNMinOperator_1afb95efaf2f5faa8d7b364af2ba5dbdb0"></a>
+
+#### `public virtual TSharedPtr< `[`NFactorOperatorInterface`](#classNFactorOperatorInterface)` > `[`GetInverse`](#classNMinOperator_1a30b9d7a6d61ccbc042cb797aeb4e4efb)`()` <a id="classNMinOperator_1a30b9d7a6d61ccbc042cb797aeb4e4efb"></a>
+
+#### `public virtual float `[`Compute`](#classNMinOperator_1ad1fb3b1578f46b4d3dd44ecd11bba39d)`(float Lh,float Rh,TSharedPtr< `[`NFactorUnitInterface`](#classNFactorUnitInterface)` > ActualUnit)` <a id="classNMinOperator_1ad1fb3b1578f46b4d3dd44ecd11bba39d"></a>
+
+#### `public virtual float `[`Compute`](#classNMinOperator_1afcb9588c1640e1a7daa41eef2cc05af4)`(float Lh,float Rh)` <a id="classNMinOperator_1afcb9588c1640e1a7daa41eef2cc05af4"></a>
+
+#### `public virtual bool `[`IsBreaking`](#classNMinOperator_1add0fbeafe7a0aa6f50cfb899502175c5)`()` <a id="classNMinOperator_1add0fbeafe7a0aa6f50cfb899502175c5"></a>
 
 # class `NMultiplyOperator` <a id="classNMultiplyOperator"></a>
 
@@ -1529,6 +1642,8 @@ class UNFactorDecorator
 `protected TSharedPtr< `[`NFactorInterface`](#classNFactorInterface)` > `[`Factor`](#classUNFactorDecorator_1ad611257e3120b1fe77c201d4208f49ef) | 
 `protected TArray< `[`FNFactorUnitRecord`](#structFNFactorUnitRecord)` > `[`FactorUnitStore`](#classUNFactorDecorator_1a29eb11d3180482f0300946354d0f06ce) | 
 `protected FName `[`SavedName`](#classUNFactorDecorator_1a9ae6a6ada9ca0eb6b6ca6333d583048a) | 
+`protected virtual void `[`PreAddUnit`](#classUNFactorDecorator_1a33f8d0b5c6fc80b5ba337fa1d6b1b3cd)`(`[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy)` * Unit)` | 
+`protected virtual void `[`PostAddUnit`](#classUNFactorDecorator_1abdc43f9088c15f818635b1054402f63b)`(`[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy)` * Unit,int32 key)` | 
 `protected UNTimelineDecorator * `[`GetUnrealTimeline`](#classUNFactorDecorator_1adcd125451de174c9cc6fa67c9d52e84f)`()` | 
 `protected void `[`OnTimelineEventExpired`](#classUNFactorDecorator_1a75801cce123355d679d6ba3791003d6b)`(TSharedPtr< NEventInterface > Event,const float & ExpiredTime,const int32 & Index)` | 
 
@@ -1596,6 +1711,10 @@ The FactorUnit pointer is immediatly removed after this method is called.
 #### `protected TArray< `[`FNFactorUnitRecord`](#structFNFactorUnitRecord)` > `[`FactorUnitStore`](#classUNFactorDecorator_1a29eb11d3180482f0300946354d0f06ce) <a id="classUNFactorDecorator_1a29eb11d3180482f0300946354d0f06ce"></a>
 
 #### `protected FName `[`SavedName`](#classUNFactorDecorator_1a9ae6a6ada9ca0eb6b6ca6333d583048a) <a id="classUNFactorDecorator_1a9ae6a6ada9ca0eb6b6ca6333d583048a"></a>
+
+#### `protected virtual void `[`PreAddUnit`](#classUNFactorDecorator_1a33f8d0b5c6fc80b5ba337fa1d6b1b3cd)`(`[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy)` * Unit)` <a id="classUNFactorDecorator_1a33f8d0b5c6fc80b5ba337fa1d6b1b3cd"></a>
+
+#### `protected virtual void `[`PostAddUnit`](#classUNFactorDecorator_1abdc43f9088c15f818635b1054402f63b)`(`[`NUnrealFactorUnitProxy`](#classNUnrealFactorUnitProxy)` * Unit,int32 key)` <a id="classUNFactorDecorator_1abdc43f9088c15f818635b1054402f63b"></a>
 
 #### `protected UNTimelineDecorator * `[`GetUnrealTimeline`](#classUNFactorDecorator_1adcd125451de174c9cc6fa67c9d52e84f)`()` <a id="classUNFactorDecorator_1adcd125451de174c9cc6fa67c9d52e84f"></a>
 

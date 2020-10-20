@@ -100,16 +100,17 @@ int32 NFactor::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 	mycheck(Name != NAME_None);
 	mycheck(Timeline.IsValid());
 
-	int32 key = -1;
+	int32 Key = -1;
 
-	if (HasFlag(ENFactorFlag::CanNotAddNewUnit)) return key;
+	if (HasFlag(ENFactorFlag::CanNotAddNewUnit)) return Key;
 
 	if (FactorUnit->GetEvent().IsValid())
 	{
 		// This allow to notify time
 		Timeline->Attached(FactorUnit->GetEvent());
 	}
-	key = Factors.Add(FactorUnit);
+
+	Key = Factors.Add(FactorUnit);
 
 	NFactorOperatorStopperInterface* Stopper = dynamic_cast<NFactorOperatorStopperInterface*>(FactorUnit->GetOperator().Get());
 	if (Stopper != nullptr)
@@ -117,7 +118,7 @@ int32 NFactor::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 		FactorUnit->GetEvent()->OnStart().AddRaw(this, &NFactor::OnStopperStart);
 	}
 
-	return key;
+	return Key;
 }
 
 void NFactor::OnStopperStart(NEventInterface* Event, const float& StartTime)
@@ -172,41 +173,48 @@ void NFactor::RemoveFlag(ENFactorFlag Flag)
 	}
 }
 
-void NFactor::AddFactorsToState(NFactorStateInterface& State)
+bool NFactor::AddFactorUnitToState(NFactorStateInterface& State, TSharedPtr<NFactorUnitInterface> FactorUnit, const int32& Index)
+{
+	if (!FactorUnit.IsValid())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s: FactorUnit is invalid"), ANSI_TO_TCHAR(__FUNCTION__));
+		return true;
+	}
+
+	// do not add delayed factor
+	if (FactorUnit->GetEvent()->GetStartedAt() < 0.f)
+	{
+		return true;
+	}
+
+	mycheck(FactorUnit->GetOperator().IsValid());
+
+	NFactorOperatorWithFactorInterface* Operator =
+		dynamic_cast<NFactorOperatorWithFactorInterface*>(FactorUnit->GetOperator().Get());
+	if (Operator != nullptr)
+	{
+		Operator->SetFactor(this);
+		Operator->SetKeyInFactor(Index);
+	}
+
+	State.AddFactorUnit(FactorUnit);
+
+	NFactorOperatorBreakerInterface* Breaker = dynamic_cast<NFactorOperatorBreakerInterface*>(FactorUnit->GetOperator().Get());
+	if (Breaker != nullptr)
+	{
+		bool bBreak = Breaker->IsBreaking();
+		if (bBreak) return false;
+	}
+
+	return true;
+}
+
+void NFactor::AddFactorUnitsToState(NFactorStateInterface& State)
 {
 	for (int32 Index = 0; Index < Factors.Num(); ++Index)
 	{
-		TSharedPtr<NFactorUnitInterface> FactorUnit = Factors[Index];
-		if (!FactorUnit.IsValid())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("%s: FactorUnit is invalid"), ANSI_TO_TCHAR(__FUNCTION__));
-			continue;
-		}
-
-		// do not add delayed factor
-		if (FactorUnit->GetEvent()->GetStartedAt() < 0.f)
-		{
-			continue;
-		}
-
-		mycheck(FactorUnit->GetOperator().IsValid());
-
-		NFactorOperatorWithFactorInterface* Operator =
-			dynamic_cast<NFactorOperatorWithFactorInterface*>(FactorUnit->GetOperator().Get());
-		if (Operator != nullptr)
-		{
-			Operator->SetFactor(this);
-			Operator->SetKeyInFactor(Index);
-		}
-
-		State.AddFactorUnit(FactorUnit);
-
-		NFactorOperatorBreakerInterface* Breaker = dynamic_cast<NFactorOperatorBreakerInterface*>(FactorUnit->GetOperator().Get());
-		if (Breaker != nullptr)
-		{
-			bool bBreak = Breaker->IsBreaking();
-			if (bBreak) break;
-		}
+		bool bRet = AddFactorUnitToState(State, Factors[Index], Index);
+		if (!bRet) break;
 	}
 }
 
@@ -224,7 +232,7 @@ void NFactor::SupplyStateWithCurrentData(NFactorStateInterface& State)
 	// Need to reset it, values should depend on iteration scope
 	IterationFlags.Empty();
 
-	AddFactorsToState(State);
+	AddFactorUnitsToState(State);
 }
 void NFactor::Debug(bool _bDebug)
 {

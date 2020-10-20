@@ -24,10 +24,14 @@ public:
 
 	StubFactorsFactoryClient() {}
 	virtual ~StubFactorsFactoryClient() {}
-	virtual void CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> Timeline) override {}
+	virtual void CreateFactor(const FName& FactorName, TSharedPtr<NTimelineInterface> Timeline) override {}
 	virtual void CreateFactor(TArray<FName> FactorNames, TSharedPtr<NTimelineInterface> Timeline) override {}
 	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override {}
-	virtual void RemoveFactor(FName FactorName) override {}
+	virtual bool HasFactor(const FName& FactorName) const override
+	{
+		return false;
+	}
+	virtual void RemoveFactor(const FName& FactorName) override {}
 	virtual void GetState(FName FactorName, NFactorStateInterface& State) override {}
 	virtual TArray<NFactorStateInterface*> GetStates(TArray<FName> FactorNames, NFactorStateInterface* StateTemplate) override
 	{

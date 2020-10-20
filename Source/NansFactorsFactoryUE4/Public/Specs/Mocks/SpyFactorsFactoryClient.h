@@ -18,62 +18,21 @@
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClientInterface.h"
 #include "Specs/Mocks/StubFactorsFactoryClient.h"
 
-class SpyFactorsFactoryClient : public StubFactorsFactoryClient
+class NansSpySingleton
 {
 public:
 	TMap<FString, uint32> MethodCalls;
 
-	SpyFactorsFactoryClient() {}
-	virtual ~SpyFactorsFactoryClient() {}
-	virtual void CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> Timeline) override
+	static NansSpySingleton* Get()
 	{
-		AddCall(FString::Format(TEXT("{0}_1"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::CreateFactor(FactorName, Timeline);
+		static NansSpySingleton* Spy;
+		if (Spy == nullptr)
+		{
+			Spy = new NansSpySingleton();
+		}
+		return Spy;
 	}
-	virtual void CreateFactor(TArray<FName> FactorNames, TSharedPtr<NTimelineInterface> Timeline) override
-	{
-		AddCall(FString::Format(TEXT("{0}_2"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::CreateFactor(FactorNames, Timeline);
-	}
-	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override
-	{
-		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::AddFactor(Factor);
-	}
-	virtual void RemoveFactor(FName FactorName) override
-	{
-		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::RemoveFactor(FactorName);
-	}
-	virtual void GetState(FName FactorName, NFactorStateInterface& State) override
-	{
-		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::GetState(FactorName, State);
-	}
-	virtual TArray<NFactorStateInterface*> GetStates(TArray<FName> FactorNames, NFactorStateInterface* StateTemplate) override
-	{
-		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		return StubFactorsFactoryClient::GetStates(FactorNames, StateTemplate);
-	}
-	virtual int32 AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) override
-	{
-		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		return StubFactorsFactoryClient::AddFactorUnit(FactorName, FactorUnit);
-	}
-	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(FName FactorName, int32 Key) override
-	{
-		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		return StubFactorsFactoryClient::GetFactorUnit(FactorName, Key);
-	}
-	virtual void SetDebug(const TArray<FName> FactorNames, bool bDebug) override
-	{
-		AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
-		StubFactorsFactoryClient::SetDebug(FactorNames, bDebug);
-	}
-	void Clear()
-	{
-		MethodCalls.Empty();
-	}
+
 	uint32 GetCall(FString FnName)
 	{
 		if (!MethodCalls.Contains(FnName))
@@ -83,10 +42,83 @@ public:
 		return MethodCalls[FnName];
 	}
 
-protected:
 	void AddCall(FString FnName)
 	{
 		uint32& Count = MethodCalls.FindOrAdd(FnName);
 		++Count;
+	}
+
+	void Clear()
+	{
+		MethodCalls.Empty();
+	}
+
+private:
+	NansSpySingleton() {}
+};
+
+class SpyFactorsFactoryClient : public StubFactorsFactoryClient
+{
+public:
+	SpyFactorsFactoryClient() {}
+	virtual ~SpyFactorsFactoryClient() {}
+	virtual void CreateFactor(const FName& FactorName, TSharedPtr<NTimelineInterface> Timeline) override
+	{
+		NansSpySingleton::Get()->AddCall(FString::Format(TEXT("{0}_1"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		StubFactorsFactoryClient::CreateFactor(FactorName, Timeline);
+	}
+	virtual void CreateFactor(TArray<FName> FactorNames, TSharedPtr<NTimelineInterface> Timeline) override
+	{
+		NansSpySingleton::Get()->AddCall(FString::Format(TEXT("{0}_2"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		StubFactorsFactoryClient::CreateFactor(FactorNames, Timeline);
+	}
+	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override
+	{
+		NansSpySingleton::Get()->AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		StubFactorsFactoryClient::AddFactor(Factor);
+	}
+	virtual void RemoveFactor(const FName& FactorName) override
+	{
+		NansSpySingleton::Get()->AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		StubFactorsFactoryClient::RemoveFactor(FactorName);
+	}
+	virtual bool HasFactor(const FName& FactorName) const override
+	{
+		NansSpySingleton::Get()->AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		return StubFactorsFactoryClient::HasFactor(FactorName);
+	}
+
+	virtual void GetState(FName FactorName, NFactorStateInterface& State) override
+	{
+		NansSpySingleton::Get()->AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		StubFactorsFactoryClient::GetState(FactorName, State);
+	}
+	virtual TArray<NFactorStateInterface*> GetStates(TArray<FName> FactorNames, NFactorStateInterface* StateTemplate) override
+	{
+		NansSpySingleton::Get()->AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		return StubFactorsFactoryClient::GetStates(FactorNames, StateTemplate);
+	}
+	virtual int32 AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) override
+	{
+		NansSpySingleton::Get()->AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		return StubFactorsFactoryClient::AddFactorUnit(FactorName, FactorUnit);
+	}
+	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(FName FactorName, int32 Key) override
+	{
+		NansSpySingleton::Get()->AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		return StubFactorsFactoryClient::GetFactorUnit(FactorName, Key);
+	}
+	virtual void SetDebug(const TArray<FName> FactorNames, bool bDebug) override
+	{
+		NansSpySingleton::Get()->AddCall(FString::Format(TEXT("{0}"), {ANSI_TO_TCHAR(__FUNCTION__)}));
+		StubFactorsFactoryClient::SetDebug(FactorNames, bDebug);
+	}
+	void Clear()
+	{
+		return NansSpySingleton::Get()->Clear();
+	}
+	uint32 GetCall(FString FnName)
+	{
+		return NansSpySingleton::Get()->GetCall(FnName);
 	}
 };

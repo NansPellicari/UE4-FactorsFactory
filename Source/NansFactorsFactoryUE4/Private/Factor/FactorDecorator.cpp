@@ -132,6 +132,12 @@ TArray<FNFactorUnitRecord> UNFactorDecorator::GetFactorUnitStore() const
 	return FactorUnitStore;
 }
 
+bool UNFactorDecorator::PreAddUnit(NUnrealFactorUnitProxy* Unit)
+{
+	return true;
+}
+void UNFactorDecorator::PostAddUnit(NUnrealFactorUnitProxy* Unit, int32 Key) {}
+
 int32 UNFactorDecorator::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
 	auto Proxy = dynamic_cast<NUnrealFactorUnitProxy*>(FactorUnit.Get());
@@ -139,11 +145,21 @@ int32 UNFactorDecorator::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUn
 	mycheckf(Proxy->GetUnrealObject() != nullptr,
 		TEXT("You should instanciate your factorUnit proxy with a UNFactorUnitAdapter base class"));
 
-	FactorUnitStore.Add(FNFactorUnitRecord(Proxy->GetUnrealObject()));
+	bool bCanAdd = PreAddUnit(Proxy);
+	int32 Key = -1;
 
-	int32 key = Factor->AddFactorUnit(FactorUnit);
-	OnAddFactorUnit(Proxy->GetUnrealObject(), key);
-	return key;
+	if (bCanAdd)
+	{
+		Key = Factor->AddFactorUnit(FactorUnit);
+	}
+
+	if (Key >= 0)
+	{
+		FactorUnitStore.Add(FNFactorUnitRecord(Proxy->GetUnrealObject()));
+		OnAddFactorUnit(Proxy->GetUnrealObject(), Key);
+		PostAddUnit(Proxy, Key);
+	}
+	return Key;
 }
 
 bool UNFactorDecorator::HasStateFlag(FString Flag) const

@@ -14,21 +14,22 @@
 
 #pragma once
 
-#include "NansFactorsFactoryCore/Public/Factor.h"
-#include "NansFactorsFactoryCore/Public/FactorState.h"
-#include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
-#include "NansTimelineSystemCore/Public/Timeline.h"
-#include "gmock/gmock.h"
+#include "CoreMinimal.h"
+#include "FactorState.h"
 
-class FakeFactor : public NFactor
+class NANSFACTORSFACTORYCORE_API NFactorStateInRange : public NFactorState
 {
 public:
-	FakeFactor(FName _Name, TSharedPtr<NTimeline> _Timeline) : NFactor(_Name, _Timeline) {}
-	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override
-	{
-		State.SetTime(0.f);
-		State.Clear();
-		IterationFlags.Empty();
-		AddFactorUnitsToState(State);
-	}
+	bool bDebug = false;
+	virtual ~NFactorStateInRange() {}
+	NFactorStateInRange(float _Min, float _Max);
+	virtual void Clear() override;
+	virtual float Compute() override;
+	float GetDecimalPercent();
+	float GetDecimalPercentInRange();
+
+protected:
+private:
+	const float Max;
+	const float Min;
 };

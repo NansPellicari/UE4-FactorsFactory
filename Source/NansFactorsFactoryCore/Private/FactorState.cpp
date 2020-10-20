@@ -106,6 +106,13 @@ float NFactorState::Compute()
 			}
 
 			FactorUnitValue = Value;
+
+			NFactorOperatorBreakerInterface* Breaker = dynamic_cast<NFactorOperatorBreakerInterface*>(Unit->GetOperator().Get());
+			if (Breaker != nullptr)
+			{
+				bool bBreak = Breaker->IsBreaking();
+				if (bBreak) goto EndOfLoop;
+			}
 		}
 
 		NFactorOperatorPersistentInterface* Persistent =
@@ -115,6 +122,7 @@ float NFactorState::Compute()
 			PersistentUnits.Add(PersistentIndex++, Operation.FactorUnit);
 		}
 	}
+EndOfLoop:
 	PersistentUnits.Empty();
 	return FactorUnitValue;
 }

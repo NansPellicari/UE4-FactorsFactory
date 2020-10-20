@@ -81,3 +81,17 @@ TEST_F(NansFactorsFactoryCoreOperatorTest, ShouldComputeWithADivideOperatorGetIn
 
 	EXPECT_EQ(Operator->GetInverse()->Compute(1, 2), 2.f);
 }
+TEST_F(NansFactorsFactoryCoreOperatorTest, ShouldComputeWithMaxOperator)
+{
+	NMaxOperator* Operator = new NMaxOperator();
+
+	EXPECT_EQ(Operator->Compute(1, 2), 1.f);
+	EXPECT_EQ(Operator->Compute(3, 2), 2.f);
+}
+TEST_F(NansFactorsFactoryCoreOperatorTest, ShouldComputeWithMinOperator)
+{
+	NMinOperator* Operator = new NMinOperator();
+
+	EXPECT_EQ(Operator->Compute(1, 2), 2.f);
+	EXPECT_EQ(Operator->Compute(3, 2), 3.f);
+}

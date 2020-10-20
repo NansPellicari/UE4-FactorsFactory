@@ -63,7 +63,7 @@ UNFactorUnitAdapter* UNFactorsFactoryClientAdapter::CreateFactorUnit(const FName
 }
 
 void UNFactorsFactoryClientAdapter::CreateFactor(
-	FName FactorName, TSharedPtr<NTimelineInterface> Timeline, const UClass* FactorClass)
+	const FName& FactorName, TSharedPtr<NTimelineInterface> Timeline, const UClass* FactorClass)
 {
 	mycheckf(FactorClass->IsChildOf(UNFactorDecorator::StaticClass()),
 		TEXT("%s - The class should be a child of UNFactorDecorator"),
@@ -75,7 +75,7 @@ void UNFactorsFactoryClientAdapter::CreateFactor(
 	AddFactor(Factor);
 }
 
-void UNFactorsFactoryClientAdapter::CreateFactor(FName FactorName, TSharedPtr<NTimelineInterface> Timeline)
+void UNFactorsFactoryClientAdapter::CreateFactor(const FName& FactorName, TSharedPtr<NTimelineInterface> Timeline)
 {
 	CreateFactor(FactorName, Timeline, UNFactorDecorator::StaticClass());
 }
@@ -91,9 +91,14 @@ void UNFactorsFactoryClientAdapter::AddFactor(TSharedPtr<NFactorInterface> Facto
 	Client->AddFactor(Factor);
 }
 
-void UNFactorsFactoryClientAdapter::RemoveFactor(FName FactorName)
+void UNFactorsFactoryClientAdapter::RemoveFactor(const FName& FactorName)
 {
 	Client->RemoveFactor(FactorName);
+}
+
+bool UNFactorsFactoryClientAdapter::HasFactor(const FName& FactorName) const
+{
+	return Client->HasFactor(FactorName);
 }
 
 void UNFactorsFactoryClientAdapter::GetState(FName FactorName, NFactorStateInterface& State)
