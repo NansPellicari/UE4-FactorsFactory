@@ -90,7 +90,7 @@ in your `Source/<MyProject>.Target.cs`:
 ```csharp
 ExtraModuleNames.AddRange(new string[] {
     // Other dependencies here ...
-    "NansUE4TestsHelpers",
+    "NansUE4TestsHelpers", // TODO create an editor module for NansTimelineSystem and remove this
     "NansCoreHelpers",
     "NansTimelineSystemCore",
     "NansTimelineSystemUE4",
@@ -143,6 +143,7 @@ PublicDependencyModuleNames.AddRange(new string[] {
     "NansTimelineSystemUE4",
     "NansFactorFactoryCore",
     "NansFactorFactoryUE4"
+    "NansFactorFactoryEd"
 });
 ```
 

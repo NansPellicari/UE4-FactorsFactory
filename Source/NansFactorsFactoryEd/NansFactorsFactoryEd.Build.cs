@@ -18,6 +18,10 @@ namespace UnrealBuildTool.Rules
 	{
 		public NansFactorsFactoryEd(ReadOnlyTargetRules Target) : base(Target)
 		{
+			// This to allow dynamic_cast
+			// https://answers.unrealengine.com/questions/477792/how-do-i-cast-between-polymorphic-classes-that-don.html?sort=oldest
+			bUseRTTI = true;
+
 			PrivateDependencyModuleNames.AddRange(
 				new string[]
 				{
@@ -35,6 +39,7 @@ namespace UnrealBuildTool.Rules
 					"KismetCompiler",
 					"EditorStyle",
 					"NansCoreHelpers",
+					"NansUE4TestsHelpers",
 					"NansTimelineSystemCore",
 					"NansTimelineSystemUE4",
 					"NansFactorsFactoryCore",

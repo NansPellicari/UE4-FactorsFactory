@@ -36,7 +36,6 @@ public class NansFactorsFactoryUE4 : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-				"NansUE4TestsHelpers",
 				"NansCoreHelpers",
 				"NansTimelineSystemCore",
 				"NansFactorsFactoryCore",

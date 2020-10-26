@@ -34,7 +34,7 @@ Ease and centralized your **factors**<sup>1</sup> management, **retrieve** them 
 
 ## 1. Requirements
 
--   [NansUE4TestsHelpers](https://github.com/NansPellicari/UE4-TestsHelpers) (free UE4 plugins)
+-   [NansUE4TestsHelpers](https://github.com/NansPellicari/UE4-TestsHelpers) (free Editor plugins)
 -   [NansCoreHelpers](https://github.com/NansPellicari/UE4-CoreHelpers) (free UE4 plugins)
 -   [NansTimelineSystem](https://github.com/NansPellicari/UE4-TimelineSystem) (free UE4 plugins)
 

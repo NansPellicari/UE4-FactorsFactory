@@ -86,7 +86,9 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 				}
 				catch (const TCHAR* e)
 				{
-					TEST_EQ("An error trigger", e, TEXT("GI != nullptr"));
+					TEST_EQ("An error trigger",
+						e,
+						TEXT("GI->GetClass()->ImplementsInterface(UNFactorsFactoryGameInstance::StaticClass())"));
 				}
 			});
 

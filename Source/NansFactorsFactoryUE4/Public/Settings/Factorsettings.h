@@ -34,6 +34,20 @@ struct FNFactorSettings
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors")
 	FConfiguredTimeline Timeline;
+
+	/**
+	 * TODO implement this
+	 * This if you want this factor only updatable in c++ code
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors|Access")
+	bool bIsReadOnly = false;
+
+	/**
+	 * TODO implements this
+	 * Give a reason why, this to inform designer in log when they tried
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors|Access", Meta = (EditCondition = "bIsReadOnly"))
+	FText ReadOnlyReason;
 };
 
 /**

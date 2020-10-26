@@ -16,7 +16,7 @@
 
 #include "CoreMinimal.h"
 #include "NansFactorsFactoryUE4/Public/FactorsFactoryClientAdapter.h"
-#include "NansFactorsFactoryUE4/Public/Specs/Mocks/SpyFactorsFactoryClient.h"
+#include "Specs/Mocks/SpyFactorsFactoryClient.h"
 
 #include "FakeFactorsFactoryClientAdapter.generated.h"
 
