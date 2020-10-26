@@ -73,7 +73,7 @@ void FactorsFactorySerializationSpec::Define()
 				Cast<UNFactorUnitAdapter>(Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapter::StaticClass()));
 
 			UNOperatorSimpleOperations* OpProvider = Cast<UNOperatorSimpleOperations>(
-				UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FakeObject, UNOperatorSimpleOperations::StaticClass()));
+				Client->CreateOperatorProvider(Names[0].Name, UNOperatorSimpleOperations::StaticClass()));
 
 			MyObject->FactorUnitValue = 2.f;
 			MyObject->Duration = 0;
@@ -88,8 +88,7 @@ void FactorsFactorySerializationSpec::Define()
 			MyObject->FactorUnitValue = 1.f;
 			MyObject->Duration = 2.f;
 			MyObject->Reason = FName("Reason 2");
-			MyObject->OperatorProvider =
-				UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FakeObject, UNResetOperatorProvider::StaticClass());
+			MyObject->OperatorProvider = Client->CreateOperatorProvider(Names[0].Name, UNResetOperatorProvider::StaticClass());
 
 			MyObject->Init();
 			Client->AddFactorUnit(Names[0].Name, MakeShareable(new NUnrealFactorUnitProxy(MyObject)));
@@ -112,9 +111,8 @@ void FactorsFactorySerializationSpec::Define()
 
 			// Add a factor to ensure it will be deleted when the previous data are loaded
 			{
-				UNOperatorSimpleOperations* Op2Provider =
-					Cast<UNOperatorSimpleOperations>(UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(
-						FakeObject, UNOperatorSimpleOperations::StaticClass()));
+				UNOperatorSimpleOperations* Op2Provider = Cast<UNOperatorSimpleOperations>(
+					Client->CreateOperatorProvider(Names[0].Name, UNOperatorSimpleOperations::StaticClass()));
 				MyObject = Cast<UNFactorUnitAdapter>(Client->CreateFactorUnit(Names[0].Name, UNFactorUnitAdapter::StaticClass()));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;

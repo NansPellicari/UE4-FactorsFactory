@@ -28,6 +28,7 @@
 #include "NansTimelineSystemUE4/Public/Event/UnrealEventProxy.h"
 #include "NansTimelineSystemUE4/Public/TimelineBlueprintHelpers.h"
 #include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
+#include "Operator/OperatorProviders.h"
 #include "Settings/FactorSettings.h"
 
 UNFactorsFactoryClientAdapter::UNFactorsFactoryClientAdapter() {}
@@ -60,6 +61,12 @@ UNFactorUnitAdapter* UNFactorsFactoryClientAdapter::CreateFactorUnit(const FName
 {
 	mycheckf(UEFactors.Contains(FactorName), TEXT("The factor %s doesn't exists!"), *FactorName.ToString());
 	return UEFactors[FactorName]->CreateFactorUnit(Class);
+}
+
+UNOperatorProviderBase* UNFactorsFactoryClientAdapter::CreateOperatorProvider(const FName& FactorName, const UClass* Class)
+{
+	mycheckf(UEFactors.Contains(FactorName), TEXT("The factor %s doesn't exists!"), *FactorName.ToString());
+	return UEFactors[FactorName]->CreateOperatorProvider(Class);
 }
 
 void UNFactorsFactoryClientAdapter::CreateFactor(

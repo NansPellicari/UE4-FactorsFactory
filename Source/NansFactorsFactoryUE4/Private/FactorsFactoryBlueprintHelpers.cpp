@@ -124,14 +124,14 @@ UNFactorUnitAdapter* UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
 	UObject* WorldContextObject, UClass* Class, FFactorAttribute Factor)
 {
 	UNFactorsFactoryClientAdapter* Client = GetFactorUnitClient(WorldContextObject);
-	mycheckf(Client != nullptr, TEXT("It's not possible to create a factor without a FactorsFactory client!"));
+	mycheckf(Client != nullptr, TEXT("It's not possible to create a factor unit without a FactorsFactory client!"));
 	return Client->CreateFactorUnit(Factor.Name, Class);
 }
 
 UNOperatorProviderBase* UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(
-	UObject* WorldContextObject, UClass* OperatorProviderClass)
+	UObject* WorldContextObject, UClass* OperatorProviderClass, FFactorAttribute Factor)
 {
-	// TODO make it attached to the Factor
-	UNOperatorProviderBase* Provider = NewObject<UNOperatorProviderBase>(WorldContextObject, OperatorProviderClass, NAME_None);
-	return Provider;
+    UNFactorsFactoryClientAdapter* Client = GetFactorUnitClient(WorldContextObject);
+	mycheckf(Client != nullptr, TEXT("It's not possible to create a factor unit without a FactorsFactory client!"));
+	return Client->CreateOperatorProvider(Factor.Name, OperatorProviderClass);
 }

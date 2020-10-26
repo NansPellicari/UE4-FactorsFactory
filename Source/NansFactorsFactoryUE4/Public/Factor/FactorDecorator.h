@@ -98,6 +98,7 @@ public:
 
 	void Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
 	UNFactorUnitAdapter* CreateFactorUnit(const UClass* Class);
+	UNOperatorProviderBase* CreateOperatorProvider(const UClass* Class);
 	TArray<FNFactorUnitRecord> GetFactorUnitStore() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")

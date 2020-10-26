@@ -161,7 +161,7 @@ UK2Node_CallFunction* FFactorUnitUtilities::CreateUnitNode(UEdGraphPin* ClassPin
 }
 
 TTuple<UK2Node_CallFunction*, UK2Node_DynamicCast*> FFactorUnitUtilities::CreateOperatorNode(
-	UEdGraphPin* OperatorPin, UClass* OperatorClassType)
+	UEdGraphPin* OperatorPin, UClass* OperatorClassType, UEdGraphPin* TempFactorOutput)
 {
 #if WITH_EDITOR
 	if (bDebug) UE_LOG(LogTemp, Display, TEXT("> CreateOperatorNode "));
@@ -177,25 +177,26 @@ TTuple<UK2Node_CallFunction*, UK2Node_DynamicCast*> FFactorUnitUtilities::Create
 	CompilerContext.MessageLog.NotifyIntermediateObjectCreation(CallCreateOperatorNode, SpawnNode);
 
 	// connect class
-	{
-		UEdGraphPin* CallClassPin = CallCreateOperatorNode->FindPin(FName("OperatorProviderClass"), EGPD_Input);
+	UEdGraphPin* CallClassPin = CallCreateOperatorNode->FindPin(FName("OperatorProviderClass"), EGPD_Input);
+	UEdGraphPin* CallFactorPin = CallCreateOperatorNode->FindPin(FName("Factor"), EGPD_Input);
 
-		bSucceeded &= MovePinLinks(OperatorPin, CallClassPin);
+	bSucceeded &= MovePinLinks(OperatorPin, CallClassPin);
 
 #if WITH_EDITOR
-		if (bDebug)
-		{
-			UE_LOG(LogTemp,
-				Display,
-				TEXT("2A - classname retrieve from Node>>pin->PinType is %s"),
-				*(OperatorPin ? OperatorPin->PinType.PinSubCategoryObject.Get()->GetName() : ""));
-			UE_LOG(LogTemp,
-				Display,
-				TEXT("2B - classname from Node>>pin->defaultObject is %s"),
-				*(OperatorPin ? OperatorPin->DefaultObject->GetName() : ""));
-		}
-#endif
+	if (bDebug)
+	{
+		UE_LOG(LogTemp,
+			Display,
+			TEXT("2A - classname retrieve from Node>>pin->PinType is %s"),
+			*(OperatorPin ? OperatorPin->PinType.PinSubCategoryObject.Get()->GetName() : ""));
+		UE_LOG(LogTemp,
+			Display,
+			TEXT("2B - classname from Node>>pin->defaultObject is %s"),
+			*(OperatorPin ? OperatorPin->DefaultObject->GetName() : ""));
 	}
+#endif
+
+	bSucceeded &= TryConnectPin(TempFactorOutput, CallFactorPin);
 
 	UEdGraphPin* TmpOperatorCreatedPin = CallCreateOperatorNode->GetReturnValuePin();
 

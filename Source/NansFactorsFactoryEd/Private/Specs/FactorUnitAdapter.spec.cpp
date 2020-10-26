@@ -39,7 +39,8 @@ void FactorUnitAdapterSpec::Define()
 		It("Should transform a provider to an operator", [this]() {
 			auto FactorUnit = NewObject<UNFactorUnitAdapter>();
 			UNOperatorSimpleOperations* OpProvider = Cast<UNOperatorSimpleOperations>(
-				UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FactorUnit, UNOperatorSimpleOperations::StaticClass()));
+				NewObject<UNOperatorProviderBase>(FactorUnit, UNOperatorSimpleOperations::StaticClass()));
+
 			FactorUnit->OperatorProvider = OpProvider;
 			OpProvider->Type = ENFactorSimpleOperation::Null;
 			TEST_NOT_NULL(
@@ -48,8 +49,7 @@ void FactorUnitAdapterSpec::Define()
 			OpProvider->Type = ENFactorSimpleOperation::Add;
 			TEST_NOT_NULL(
 				TEXT("Should return a AddOperator"), dynamic_cast<NAddOperator*>(FactorUnit->GetConfiguredOperator().Get()));
-			FactorUnit->OperatorProvider =
-				UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FactorUnit, UNResetOperatorProvider::StaticClass());
+			FactorUnit->OperatorProvider = NewObject<UNOperatorProviderBase>(FactorUnit, UNResetOperatorProvider::StaticClass());
 			TEST_NOT_NULL(
 				TEXT("Should return a ResetOperator"), dynamic_cast<NResetOperator*>(FactorUnit->GetConfiguredOperator().Get()));
 			FactorUnit->OperatorProvider = OpProvider;
@@ -69,7 +69,7 @@ void FactorUnitAdapterSpec::Define()
 		It("Should transform an enum to an operator with operator property", [this]() {
 			auto FactorUnit = NewObject<UNFactorUnitAdapter>();
 			UNOperatorSimpleOperations* OpProvider = Cast<UNOperatorSimpleOperations>(
-				UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FactorUnit, UNOperatorSimpleOperations::StaticClass()));
+				NewObject<UNOperatorProviderBase>(FactorUnit, UNOperatorSimpleOperations::StaticClass()));
 			FactorUnit->OperatorProvider = OpProvider;
 			OpProvider->Type = ENFactorSimpleOperation::Null;
 			TEST_NOT_NULL(
@@ -78,8 +78,7 @@ void FactorUnitAdapterSpec::Define()
 			OpProvider->Type = ENFactorSimpleOperation::Add;
 			TEST_NOT_NULL(
 				TEXT("Should return a AddOperator"), dynamic_cast<NAddOperator*>(FactorUnit->GetConfiguredOperator().Get()));
-			FactorUnit->OperatorProvider =
-				UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FactorUnit, UNResetOperatorProvider::StaticClass());
+			FactorUnit->OperatorProvider = NewObject<UNOperatorProviderBase>(FactorUnit, UNResetOperatorProvider::StaticClass());
 			TEST_NOT_NULL(
 				TEXT("Should return a ResetOperator"), dynamic_cast<NResetOperator*>(FactorUnit->GetConfiguredOperator().Get()));
 			FactorUnit->OperatorProvider = OpProvider;

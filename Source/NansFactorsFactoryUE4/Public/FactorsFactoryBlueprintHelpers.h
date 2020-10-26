@@ -88,6 +88,6 @@ public:
 	static UNFactorUnitAdapter* AddFactorUnit(UObject* WorldContextObject, UNFactorUnitAdapter* FactorUnit, FFactorAttribute Factor);
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "FactorsFactory|Factory")
-	static UNOperatorProviderBase* CreateOperatorProvider(UObject* WorldContextObject, UClass* OperatorProviderClass);
+	static UNOperatorProviderBase* CreateOperatorProvider(UObject* WorldContextObject, UClass* OperatorProviderClass, FFactorAttribute Factor);
 	// clang-format on
 };

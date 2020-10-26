@@ -118,6 +118,16 @@ UNFactorUnitAdapter* UNFactorDecorator::CreateFactorUnit(const UClass* Class)
 	return NewObject<UNFactorUnitAdapter>(this, Class, FName(*Name));
 }
 
+UNOperatorProviderBase* UNFactorDecorator::CreateOperatorProvider(const UClass* Class)
+{
+	static uint32 OperatorNum = 0;
+
+	FString Name = FString::Format(TEXT("OperatorProvider_{0}_"), {Class->GetFullName()});
+	Name.AppendInt(++OperatorNum);
+
+	return NewObject<UNOperatorProviderBase>(this, Class, FName(*Name));
+}
+
 TSharedPtr<NFactorUnitInterface> UNFactorDecorator::GetFactorUnit(uint32 Key) const
 {
 	return Factor->GetFactorUnit(Key);

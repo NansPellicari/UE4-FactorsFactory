@@ -27,6 +27,7 @@ class NFactorInterface;
 class NTimelineInterface;
 class NFactorsFactoryClientInterface;
 class UNFactorDecorator;
+class UNOperatorProviderBase;
 
 UCLASS(BlueprintType)
 class NANSFACTORSFACTORYUE4_API UNFactorsFactoryClientAdapter : public UObject, public NFactorsFactoryClientInterface
@@ -39,6 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
 	virtual void Init();
 	UNFactorUnitAdapter* CreateFactorUnit(const FName& FactorName, const UClass* Class);
+	UNOperatorProviderBase* CreateOperatorProvider(const FName& FactorName, const UClass* Class);
 	virtual void CreateFactor(const FName& FactorName, TSharedPtr<NTimelineInterface> Timeline, const UClass* FactorClass);
 
 	// BEGIN NFactorsFactoryClientInterface override

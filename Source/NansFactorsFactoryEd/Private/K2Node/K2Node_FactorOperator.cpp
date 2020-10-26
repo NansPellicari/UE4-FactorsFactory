@@ -533,7 +533,8 @@ void UK2Node_FactorUnit::ExpandNode(class FKismetCompilerContext& CompilerContex
 	// END Create & populate FactorUnit
 
 	// BEGIN Create & populate OperatorProvider
-	TTuple<UK2Node_CallFunction*, UK2Node_DynamicCast*> lastNodes = Utils->CreateOperatorNode(OperatorPin, OperatorClassType);
+	TTuple<UK2Node_CallFunction*, UK2Node_DynamicCast*> lastNodes =
+		Utils->CreateOperatorNode(OperatorPin, OperatorClassType, TempFactorOutput);
 	bSucceeded &= Utils->MovePinLinks(LastThen, lastNodes.Get<0>()->GetThenPin());
 	bSucceeded &= Utils->TryConnectPin(LastThen, lastNodes.Get<0>()->GetExecPin());
 

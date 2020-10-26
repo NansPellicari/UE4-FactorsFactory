@@ -104,8 +104,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			MyObject->FactorUnitValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = FName("Reason");
-			MyObject->OperatorProvider =
-				UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FakeObject, UNOperatorSimpleOperations::StaticClass());
+			MyObject->OperatorProvider = UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(
+				FakeObject, UNOperatorSimpleOperations::StaticClass(), FactorConf);
 			Cast<UNOperatorSimpleOperations>(MyObject->OperatorProvider)->Type = ENFactorSimpleOperation::Add;
 
 			UNFactorUnitAdapter* ObjectAdded =
@@ -138,8 +138,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			MyObject->FactorUnitValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = Reason;
-			MyObject->OperatorProvider =
-				UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FakeObject, UNOperatorSimpleOperations::StaticClass());
+			MyObject->OperatorProvider = UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(
+				FakeObject, UNOperatorSimpleOperations::StaticClass(), Names[0]);
 			Cast<UNOperatorSimpleOperations>(MyObject->OperatorProvider)->Type = ENFactorSimpleOperation::Add;
 			UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, Names[0]);
 
@@ -167,8 +167,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
-				MyObject->OperatorProvider =
-					UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FakeObject, UNOperatorSimpleOperations::StaticClass());
+				MyObject->OperatorProvider = UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(
+					FakeObject, UNOperatorSimpleOperations::StaticClass(), Names[0]);
 				Cast<UNOperatorSimpleOperations>(MyObject->OperatorProvider)->Type = ENFactorSimpleOperation::Add;
 
 				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, Names[0]);
@@ -199,8 +199,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
-				MyObject->OperatorProvider =
-					UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FakeObject, UNOperatorSimpleOperations::StaticClass());
+				MyObject->OperatorProvider = UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(
+					FakeObject, UNOperatorSimpleOperations::StaticClass(), Names[0]);
 				Cast<UNOperatorSimpleOperations>(MyObject->OperatorProvider)->Type = ENFactorSimpleOperation::Add;
 
 				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, I % 2 ? Names[0] : Names[1]);
@@ -233,8 +233,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
-				MyObject->OperatorProvider =
-					UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(FakeObject, UNOperatorSimpleOperations::StaticClass());
+				MyObject->OperatorProvider = UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(
+					FakeObject, UNOperatorSimpleOperations::StaticClass(), Names[0]);
 				Cast<UNOperatorSimpleOperations>(MyObject->OperatorProvider)->Type = ENFactorSimpleOperation::Add;
 				UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, I % 2 ? Names[0] : Names[1]);
 

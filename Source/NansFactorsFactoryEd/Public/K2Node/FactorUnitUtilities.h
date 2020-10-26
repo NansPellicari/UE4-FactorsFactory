@@ -48,7 +48,8 @@ public:
 #endif	  // WITH_EDITOR
 	bool MovePinLinks(UEdGraphPin* PinA, UEdGraphPin* PinB);
 	UK2Node_CallFunction* CreateUnitNode(UEdGraphPin* ClassPin, UEdGraphPin* TempFactorOutput);
-	TTuple<UK2Node_CallFunction*, UK2Node_DynamicCast*> CreateOperatorNode(UEdGraphPin* OperatorPin, UClass* OperatorClassType);
+	TTuple<UK2Node_CallFunction*, UK2Node_DynamicCast*> CreateOperatorNode(
+		UEdGraphPin* OperatorPin, UClass* OperatorClassType, UEdGraphPin* TempFactorOutput);
 	UEdGraphPin* ConnectPinsForObject(UClass* ClassType,
 		UEdGraphPin* ObjectPin,
 		UEdGraphPin* LastConnection,

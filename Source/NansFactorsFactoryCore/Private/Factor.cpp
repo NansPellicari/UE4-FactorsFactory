@@ -39,7 +39,7 @@ NFactor::NFactor(FName _Name, TSharedPtr<NTimelineInterface> _Timeline)
 {
 	Name = _Name;
 	Timeline = _Timeline;
-	// TODO create an event when timeline is clear and attach to it
+	// TODO create an event when timeline is clear and attach to it too to remove Records
 	_Timeline->OnEventExpired().AddRaw(this, &NFactor::OnTimelineEventExpired);
 }
 
