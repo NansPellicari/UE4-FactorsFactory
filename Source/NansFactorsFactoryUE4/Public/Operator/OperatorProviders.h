@@ -18,6 +18,7 @@
 #include "NansFactorsFactoryCore/Public/Operator/CleanerOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
+#include "NansFactorsFactoryCore/Public/Operator/ReplacerOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/ResetOperator.h"
 
 #include "OperatorProviders.generated.h"
@@ -99,6 +100,7 @@ UENUM()
 enum class ENFactorCleaner : uint8
 {
 	Cleaner,
+	Replacer,
 	ReducersCleaner,
 	IncreasersCleaner,
 	ReducersPersistentCleaner,
@@ -119,6 +121,10 @@ public:
 		if (Type == ENFactorCleaner::IncreasersCleaner)
 		{
 			return MakeShareable(new NIncreasersCleanerOperator());
+		}
+		if (Type == ENFactorCleaner::Replacer)
+		{
+			return MakeShareable(new NReplacerOperator());
 		}
 		if (Type == ENFactorCleaner::ReducersCleaner)
 		{

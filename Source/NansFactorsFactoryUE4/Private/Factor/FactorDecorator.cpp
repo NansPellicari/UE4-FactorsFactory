@@ -14,6 +14,7 @@
 
 #include "Factor/FactorDecorator.h"
 
+#include "FactorUnit/FactorUnitAdapter.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryUE4/Public/FactorUnit/UnrealFactorUnitProxy.h"
 #include "NansTimelineSystemUE4/Public/Event/EventDecorator.h"
@@ -145,6 +146,7 @@ int32 UNFactorDecorator::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUn
 	mycheckf(Proxy->GetUnrealObject() != nullptr,
 		TEXT("You should instanciate your factorUnit proxy with a UNFactorUnitAdapter base class"));
 
+	Proxy->GetUnrealObject()->Init();
 	bool bCanAdd = PreAddUnit(Proxy);
 	int32 Key = -1;
 

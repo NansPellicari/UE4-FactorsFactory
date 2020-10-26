@@ -115,7 +115,6 @@ UNFactorUnitAdapter* UNFactorsFactoryBlueprintHelpers::AddFactorUnit(
 
 	if (Client == nullptr) return FactorUnit;
 
-	FactorUnit->Init();
 	Client->AddFactorUnit(Factor.Name, MakeShareable(new NUnrealFactorUnitProxy(FactorUnit)));
 
 	return FactorUnit;
