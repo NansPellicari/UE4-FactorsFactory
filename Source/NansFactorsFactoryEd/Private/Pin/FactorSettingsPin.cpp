@@ -23,19 +23,11 @@
 void SNFactorSettingsPin::Construct(const FArguments& InArgs, UEdGraphPin* InGraphPinObj)
 {
 	SGraphPin::Construct(SGraphPin::FArguments(), InGraphPinObj);
+	UFactorSettings::GetFactorNames(CategoryList);
 }
 
 TSharedRef<SWidget> SNFactorSettingsPin::GetDefaultValueWidget()
 {
-	TArray<FNFactorSettings> Settings;
-	UFactorSettings::GetConfigs(Settings);
-	for (const auto& Setting : Settings)
-	{
-		CategoryList.Add(MakeShareable(new FName(Setting.Name)));
-	}
-
-	Settings.Empty();
-
 	TSharedPtr<FName> InitialSelectedName = GetSelectedName();
 
 	// if no data selected, save the first one

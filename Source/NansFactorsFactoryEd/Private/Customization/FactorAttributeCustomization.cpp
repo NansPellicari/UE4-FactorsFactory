@@ -18,6 +18,11 @@ TSharedRef<IPropertyTypeCustomization> FNFactorAttributeCustomization::MakeInsta
 	return MakeShareable(new FNFactorAttributeCustomization());
 }
 
+FNFactorAttributeCustomization::FNFactorAttributeCustomization()
+{
+	UFactorSettings::GetFactorNames(FactorsList);
+}
+
 void FNFactorAttributeCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> StructPropertyHandle,
 	class FDetailWidgetRow& HeaderRow,
 	IPropertyTypeCustomizationUtils& StructCustomizationUtils)
@@ -30,32 +35,32 @@ void FNFactorAttributeCustomization::CustomizeHeader(TSharedRef<IPropertyHandle>
 	NameProperty->GetValueAsDisplayString(Val);
 	FName NameSelected = FName(*Val);
 
-	TArray<FNFactorSettings> Settings;
-	UFactorSettings::GetConfigs(Settings);
-	int32 Index = 0;
-	FactorsList.Empty();
 	TSharedPtr<FName> InitialSelectedName;
 
-	for (const auto& Setting : Settings)
+	for (int32 Index = 0; Index < FactorsList.Num(); ++Index)
 	{
-		FactorsList.Add(MakeShareable(new FName(Setting.Name)));
-		if (NameSelected == Setting.Name)
+		if (NameSelected == *FactorsList[Index].Get())
 		{
 			InitialSelectedName = FactorsList[Index];
 		}
-		Index++;
 	}
 
-	Settings.Empty();
+	OnAttributeSelected(InitialSelectedName, ESelectInfo::Direct);
 
-	OnAttributeSelected(MakeShareable(new FName(*Val)), ESelectInfo::Direct);
-
-	HeaderRow.NameContent()[StructPropertyHandle->CreatePropertyNameWidget()]
-		.ValueContent()[SAssignNew(NameComboBox, SNameComboBox)	   // note you can display any widget here
-							.ContentPadding(FMargin(6.0f, 2.0f))
-							.OptionsSource(&FactorsList)
-							.InitiallySelectedItem(InitialSelectedName)
-							.OnSelectionChanged(this, &FNFactorAttributeCustomization::OnAttributeSelected)];
+	// clang-format off
+	HeaderRow.NameContent()
+	[
+		StructPropertyHandle->CreatePropertyNameWidget()
+	]
+	.ValueContent()
+	[
+		SAssignNew(NameComboBox, SNameComboBox)	   // note you can display any widget here
+		.ContentPadding(FMargin(6.0f, 2.0f))
+		.OptionsSource(&FactorsList)
+		.InitiallySelectedItem(InitialSelectedName)
+		.OnSelectionChanged(this, &FNFactorAttributeCustomization::OnAttributeSelected)
+	];
+	// clang-format on
 }
 
 void FNFactorAttributeCustomization::CustomizeChildren(TSharedRef<IPropertyHandle> StructPropertyHandle,
@@ -65,7 +70,7 @@ void FNFactorAttributeCustomization::CustomizeChildren(TSharedRef<IPropertyHandl
 }
 void FNFactorAttributeCustomization::OnAttributeSelected(TSharedPtr<FName> Selection, ESelectInfo::Type SelectInfo)
 {
-	if (NameProperty.IsValid())
+	if (NameProperty.IsValid() && Selection.IsValid())
 	{
 		FPropertyAccess::Result Result = NameProperty->SetValueFromFormattedString(Selection->ToString());
 	}

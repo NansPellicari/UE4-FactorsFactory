@@ -37,14 +37,14 @@ void UNFactorsFactoryClientAdapter::Init()
 {
 	Client = MakeShareable(new NFactorsFactoryClient());
 
-	TArray<FNFactorSettings> ConfigList;
+	TArray<TSharedPtr<FNFactorSettings>> ConfigList;
 	UFactorSettings::GetConfigs(ConfigList);
 	for (auto& Conf : ConfigList)
 	{
-		UNTimelineManagerDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, Conf.Timeline);
+		UNTimelineManagerDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, Conf->Timeline);
 		if (TimelineManager != nullptr)
 		{
-			CreateFactor(Conf.Name, TimelineManager->GetTimeline(), Conf.FactorClass);
+			CreateFactor(Conf->Name, TimelineManager->GetTimeline(), Conf->FactorClass);
 		}
 	}
 }

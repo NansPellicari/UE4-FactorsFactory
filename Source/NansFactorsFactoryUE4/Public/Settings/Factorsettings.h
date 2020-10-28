@@ -26,6 +26,14 @@ struct FNFactorSettings
 {
 	GENERATED_USTRUCT_BODY()
 
+	~FNFactorSettings()
+	{
+		Name = NAME_None;
+		FactorClass = nullptr;
+		bIsReadOnly = false;
+		ReadOnlyReason = FText::GetEmpty();
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors")
 	FName Name;
 
@@ -65,12 +73,20 @@ public:
 	UPROPERTY(config, EditAnywhere)
 	TArray<FNFactorSettings> CategoryNames;
 
-	static void GetConfigs(TArray<FNFactorSettings>& ShareableNames)
+	static void GetConfigs(TArray<TSharedPtr<FNFactorSettings>>& ShareableNames)
 	{
-		static const UFactorSettings* StaticObject = GetDefault<UFactorSettings>();
+		const UFactorSettings* StaticObject = GetDefault<UFactorSettings>();
 		for (FNFactorSettings Settings : StaticObject->CategoryNames)
 		{
-			ShareableNames.Add(Settings);
+			ShareableNames.Add(MakeShareable(new FNFactorSettings(Settings)));
+		}
+	};
+	static void GetFactorNames(TArray<TSharedPtr<FName>>& ShareableNames)
+	{
+		const UFactorSettings* StaticObject = GetDefault<UFactorSettings>();
+		for (const FNFactorSettings& Settings : StaticObject->CategoryNames)
+		{
+			ShareableNames.Add(MakeShareable(new FName(Settings.Name)));
 		}
 	};
 };
