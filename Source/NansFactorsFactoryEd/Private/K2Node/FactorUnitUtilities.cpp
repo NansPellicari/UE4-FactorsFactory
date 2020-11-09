@@ -236,7 +236,7 @@ UEdGraphPin* FFactorUnitUtilities::ConnectPinsForObject(UClass* ClassType,
 	{
 		if (Pin == nullptr || Pin->Direction != EGPD_Input || ExcludedPinsName.Contains(Pin->PinName)) continue;
 
-		UProperty* BoundProperty = FindField<UProperty>(ClassType, Pin->PinName);
+		FProperty* BoundProperty = FindFProperty<FProperty>(ClassType, Pin->PinName);
 
 		if (BoundProperty == nullptr) continue;
 		if (BoundProperty->HasAnyPropertyFlags(CPF_DisableEditOnInstance)) continue;

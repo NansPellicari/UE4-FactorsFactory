@@ -38,7 +38,7 @@ public:
 
 	//~ Begin UObject Interface
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
-	virtual void PreEditChange(UProperty* PropertyAboutToChange) override;
+	virtual void PreEditChange(FProperty* PropertyAboutToChange) override;
 	//~ End UObject Interface
 
 	//~ Begin UEdGraphNode Interface

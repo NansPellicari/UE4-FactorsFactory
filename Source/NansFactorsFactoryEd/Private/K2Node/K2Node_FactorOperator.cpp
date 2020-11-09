@@ -52,7 +52,7 @@ namespace
 			bExcludeObjectContainerProperties = bExcludeObjectContainers;
 		}
 
-		virtual void GetRecordDefaults(UProperty* TestProperty, FOptionalPinFromProperty& Record) const override
+		virtual void GetRecordDefaults(FProperty* TestProperty, FOptionalPinFromProperty& Record) const override
 		{
 			FOptionalPinManager::GetRecordDefaults(TestProperty, Record);
 
@@ -131,7 +131,7 @@ namespace
 		//                                 Pin->PinType.PinCategory != UEdGraphSchema_K2::PC_Exec &&
 		//                                 Pin->PinName != UK2Node_FactorUnit::ClassPinName)
 		//                             {
-		//                                 UProperty* BoundProperty = FindField<UProperty>(ClassType, Pin->PinName);
+		//                                 FProperty* BoundProperty = FindField<FProperty>(ClassType, Pin->PinName);
 		//                                 if (BoundProperty != nullptr)
 		//                                 {
 		//                                     FBPTerminal* OutputTerm =
@@ -195,7 +195,7 @@ FText UK2Node_FactorUnit::GetMenuCategory() const
 	return LOCTEXT("FactorOperatorFactory_MenuCategory", "FactorsFactory|Factory");
 }
 
-void UK2Node_FactorUnit::PreEditChange(UProperty* PropertyThatWillChange)
+void UK2Node_FactorUnit::PreEditChange(FProperty* PropertyThatWillChange)
 {
 	Super::PreEditChange(PropertyThatWillChange);
 
@@ -843,23 +843,23 @@ void UK2Node_FactorUnit::ValidateNodeDuringCompilation(class FCompilerResultsLog
 				// Even though container property defaults are copied, the copy could still contain a reference to a non-class
 				// object that belongs to the CDO, which would potentially be unsafe to modify.
 				bool bEmitWarning = false;
-				const UProperty* TestProperty = SourceClass->FindPropertyByName(Pin->PinName);
-				if (const UArrayProperty* ArrayProperty = Cast<UArrayProperty>(TestProperty))
+				const FProperty* TestProperty = SourceClass->FindPropertyByName(Pin->PinName);
+				if (const FArrayProperty* ArrayProperty = CastField<FArrayProperty>(TestProperty))
 				{
-					bEmitWarning = ArrayProperty->Inner && ArrayProperty->Inner->IsA<UObjectProperty>() &&
-								   !ArrayProperty->Inner->IsA<UClassProperty>();
+					bEmitWarning = ArrayProperty->Inner && ArrayProperty->Inner->IsA<FObjectProperty>() &&
+								   !ArrayProperty->Inner->IsA<FClassProperty>();
 				}
-				else if (const USetProperty* SetProperty = Cast<USetProperty>(TestProperty))
+				else if (const FSetProperty* SetProperty = CastField<FSetProperty>(TestProperty))
 				{
-					bEmitWarning = SetProperty->ElementProp && SetProperty->ElementProp->IsA<UObjectProperty>() &&
-								   !SetProperty->ElementProp->IsA<UClassProperty>();
+					bEmitWarning = SetProperty->ElementProp && SetProperty->ElementProp->IsA<FObjectProperty>() &&
+								   !SetProperty->ElementProp->IsA<FClassProperty>();
 				}
-				else if (const UMapProperty* MapProperty = Cast<UMapProperty>(TestProperty))
+				else if (const FMapProperty* MapProperty = CastField<FMapProperty>(TestProperty))
 				{
-					bEmitWarning = (MapProperty->KeyProp && MapProperty->KeyProp->IsA<UObjectProperty>() &&
-									   !MapProperty->KeyProp->IsA<UClassProperty>()) ||
-								   (MapProperty->ValueProp && MapProperty->ValueProp->IsA<UObjectProperty>() &&
-									   !MapProperty->ValueProp->IsA<UClassProperty>());
+					bEmitWarning = (MapProperty->KeyProp && MapProperty->KeyProp->IsA<FObjectProperty>() &&
+									   !MapProperty->KeyProp->IsA<FClassProperty>()) ||
+								   (MapProperty->ValueProp && MapProperty->ValueProp->IsA<FObjectProperty>() &&
+									   !MapProperty->ValueProp->IsA<FClassProperty>());
 				}
 
 				if (bEmitWarning)

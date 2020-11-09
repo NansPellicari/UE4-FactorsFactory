@@ -90,7 +90,7 @@ public:
 	{
 		return Name;
 	}
-	float bBreak;
+	bool bBreak;
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
 	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
 	virtual float Compute(float Lh, float Rh) override;
@@ -106,7 +106,7 @@ public:
 	{
 		return Name;
 	}
-	float bBreak;
+	bool bBreak;
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
 	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
 	virtual float Compute(float Lh, float Rh) override;
