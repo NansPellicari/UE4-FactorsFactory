@@ -47,3 +47,7 @@ TSharedPtr<NEventInterface> NNullFactorUnit::GetEvent()
 	return nullptr;
 }
 void NNullFactorUnit::Activate(bool _bIsActivated) {}
+
+void NNullFactorUnit::PreDelete() {}
+
+void NNullFactorUnit::Archive(FArchive& Ar) {}

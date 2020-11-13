@@ -39,19 +39,23 @@ public:
 	virtual bool GetStateFlag(FString Flag) const override;
 	virtual void SetStateFlag(FString Flag, bool Value) override;
 	virtual void RemoveStateFlag(FString Flag) override;
+	// TODO refacto: rename this FactorUnits
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override;
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
 	virtual void Debug(bool _bDebug) override;
 	virtual void AddFlag(ENFactorFlag Flag) override;
 	virtual bool HasFlag(ENFactorFlag Flag) const override;
 	virtual void RemoveFlag(ENFactorFlag Flag) override;
+	virtual void PreDelete() override;
+	virtual void Archive(FArchive& Ar) override;
 
 protected:
 	bool bDebug = false;
 	TMap<FString, bool> IterationFlags;
 	TArray<ENFactorFlag> OwnFlags;
 	TSharedPtr<NTimelineInterface> Timeline;
-	TArray<TSharedPtr<NFactorUnitInterface>> Factors;
+	// TODO refacto: do the same as Timeline, create a stack of saved unit, it should be related to a saved event toO
+	TArray<TSharedPtr<NFactorUnitInterface>> FactorUnits;
 	void AddFactorUnitsToState(NFactorStateInterface& State);
 	/** Add a factorUnit to a state. It returns a bool, "false" means a breaker stop the adding process  */
 	bool AddFactorUnitToState(NFactorStateInterface& State, TSharedPtr<NFactorUnitInterface> FactorUnit, const int32& Index);

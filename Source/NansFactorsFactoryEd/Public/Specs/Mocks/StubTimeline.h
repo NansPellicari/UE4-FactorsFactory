@@ -50,4 +50,19 @@ public:
 	{
 		return EventExpired;
 	};
+	virtual const TArray<FNEventSave> GetEvents() const override
+	{
+		return TArray<FNEventSave>({});
+	}
+	virtual void PreDelete() override {}
+	virtual void Archive(FArchive& Ar) override {}
+	virtual TMap<FString, TSharedPtr<NEventInterface>> GetEventObjects() override
+	{
+		return TMap<FString, TSharedPtr<NEventInterface>>();
+	}
+	virtual TSharedPtr<NEventInterface> GetEvent(FString _UID) override
+	{
+		TSharedPtr<NEventInterface> Event;
+		return Event;
+	}
 };

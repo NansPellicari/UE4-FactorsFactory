@@ -72,7 +72,7 @@ class NANSFACTORSFACTORYCORE_API NReducersCleanerPersistentOperator : public NRe
 {
 public:
 	static const FName Name;
-	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
+	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
 };
 
 /**
@@ -97,5 +97,5 @@ class NANSFACTORSFACTORYCORE_API NIncreasersCleanerPersistentOperator : public N
 {
 public:
 	static const FName Name;
-	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
+	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
 };

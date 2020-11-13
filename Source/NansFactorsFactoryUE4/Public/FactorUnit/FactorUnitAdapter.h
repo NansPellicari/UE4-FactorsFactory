@@ -23,14 +23,18 @@
 class NEventInterface;
 class NFactorOperatorInterface;
 class NFactorUnit;
+class NUnrealFactorUnitProxy;
 
 #include "FactorUnitAdapter.generated.h"
 
+// TODO Create a PostEditPropery listener to change embed factor data
 UCLASS(Blueprintable)
 class NANSFACTORSFACTORYUE4_API UNFactorUnitAdapter : public UObject, public NFactorUnitInterface
 {
 	GENERATED_BODY()
 public:
+	friend class NUnrealFactorUnitProxy;
+
 	UNFactorUnitAdapter() {}
 
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
@@ -55,13 +59,10 @@ public:
 
 	UNOperatorProviderBase* OperatorProvider;
 
-	virtual void Init();
+	/** This is used as a constructor */
 	virtual void Init(UNEventDecorator* _Event);
 
 	virtual TSharedPtr<NFactorOperatorInterface> GetConfiguredOperator();
-
-	UFUNCTION(BlueprintCallable, Category = "FactorsFactory|Unit")
-	virtual UNEventDecorator* GetEventDecorator();
 
 	// BEGIN NFactorUnitInterface override
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
@@ -73,6 +74,8 @@ public:
 	virtual void SetFactorUnitValue(float _Value) override;
 	virtual const FString GetUID() const override;
 	virtual void Activate(bool _bIsActivated) override;
+	virtual void PreDelete() override {}
+	virtual void Archive(FArchive& Ar) override {}
 	// END NFactorUnitInterface override
 
 	// BEGIN UObject override
@@ -80,8 +83,10 @@ public:
 	// END UObject override
 
 protected:
+	/** this is used only by serialization */
+	virtual void Init(TSharedPtr<NEventInterface> _Event);
+
 	TSharedPtr<NFactorUnit> FactorUnit;
 
-	UPROPERTY(SkipSerialization)
 	UNEventDecorator* Event;
 };

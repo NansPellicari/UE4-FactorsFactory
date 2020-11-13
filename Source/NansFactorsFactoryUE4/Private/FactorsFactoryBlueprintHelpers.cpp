@@ -115,7 +115,7 @@ UNFactorUnitAdapter* UNFactorsFactoryBlueprintHelpers::AddFactorUnit(
 
 	if (Client == nullptr) return FactorUnit;
 
-	Client->AddFactorUnit(Factor.Name, MakeShareable(new NUnrealFactorUnitProxy(FactorUnit)));
+	Client->AddFactorUnit(Factor.Name, FactorUnit);
 
 	return FactorUnit;
 }
@@ -131,7 +131,7 @@ UNFactorUnitAdapter* UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
 UNOperatorProviderBase* UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(
 	UObject* WorldContextObject, UClass* OperatorProviderClass, FFactorAttribute Factor)
 {
-    UNFactorsFactoryClientAdapter* Client = GetFactorUnitClient(WorldContextObject);
+	UNFactorsFactoryClientAdapter* Client = GetFactorUnitClient(WorldContextObject);
 	mycheckf(Client != nullptr, TEXT("It's not possible to create a factor unit without a FactorsFactory client!"));
 	return Client->CreateOperatorProvider(Factor.Name, OperatorProviderClass);
 }

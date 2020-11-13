@@ -22,6 +22,7 @@ class NFactorUnitInterface;
 class NANSFACTORSFACTORYCORE_API NFactorOperatorInterface
 {
 public:
+	virtual ~NFactorOperatorInterface() {}
 	virtual float Compute(float Lh, float Rh) = 0;
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() = 0;
 	virtual const FName GetName() = 0;
@@ -47,7 +48,7 @@ class NANSFACTORSFACTORYCORE_API NFactorOperatorStopperInterface
 class NANSFACTORSFACTORYCORE_API NFactorOperatorPersistentInterface
 {
 public:
-	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) = 0;
+	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) = 0;
 };
 
 class NOperatorUtils

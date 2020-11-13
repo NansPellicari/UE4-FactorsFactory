@@ -15,6 +15,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Factor/FactorDecorator.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClientInterface.h"
 
@@ -26,11 +27,12 @@ class NFactorStateInterface;
 class NFactorInterface;
 class NTimelineInterface;
 class NFactorsFactoryClientInterface;
-class UNFactorDecorator;
 class UNOperatorProviderBase;
+struct FConfiguredTimeline;
 
+// TODO refacto: this class is really usefull?
 UCLASS(BlueprintType)
-class NANSFACTORSFACTORYUE4_API UNFactorsFactoryClientAdapter : public UObject, public NFactorsFactoryClientInterface
+class NANSFACTORSFACTORYUE4_API UNFactorsFactoryClientAdapter : public UObject
 {
 	GENERATED_BODY()
 
@@ -40,21 +42,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
 	virtual void Init();
 	UNFactorUnitAdapter* CreateFactorUnit(const FName& FactorName, const UClass* Class);
+	int32 AddFactorUnit(FName FactorName, UNFactorUnitAdapter* FactorUnit);
 	UNOperatorProviderBase* CreateOperatorProvider(const FName& FactorName, const UClass* Class);
-	virtual void CreateFactor(const FName& FactorName, TSharedPtr<NTimelineInterface> Timeline, const UClass* FactorClass);
+	void CreateFactor(const TArray<FName> FactorNames,
+		FConfiguredTimeline Timeline,
+		const UClass* FactorClass = UNFactorDecorator::StaticClass());
+	void CreateFactor(
+		const FName& FactorName, FConfiguredTimeline Timeline, const UClass* FactorClass = UNFactorDecorator::StaticClass());
 
-	// BEGIN NFactorsFactoryClientInterface override
-	virtual void CreateFactor(const FName& FactorName, TSharedPtr<NTimelineInterface> Timeline) override;
-	virtual void CreateFactor(TArray<FName> FactorNames, TSharedPtr<NTimelineInterface> Timeline) override;
-	virtual void AddFactor(TSharedPtr<NFactorInterface> Factor) override;
-	virtual bool HasFactor(const FName& FactorName) const override;
-	virtual void RemoveFactor(const FName& FactorName) override;
-	virtual void GetState(FName FactorName, NFactorStateInterface& State) override;
-	virtual TArray<NFactorStateInterface*> GetStates(TArray<FName> FactorNames, NFactorStateInterface* StateTemplate) override;
-	virtual int32 AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit) override;
-	virtual TSharedPtr<NFactorUnitInterface> GetFactorUnit(FName FactorName, int32 Key) override;
-	virtual void SetDebug(const TArray<FName> FactorNames, bool bDebug) override;
-	// END NFactorsFactoryClientInterface override
+	bool HasFactor(const FName& FactorName) const;
+	void RemoveFactor(const FName& FactorName);
+	void GetState(FName FactorName, NFactorStateInterface& State);
+	TArray<NFactorStateInterface*> GetStates(TArray<FName> FactorNames, NFactorStateInterface* StateTemplate);
+	void SetDebug(const TArray<FName> FactorNames, bool bDebug);
 
 	// BEGIN UObject override
 	virtual void Serialize(FArchive& Ar);

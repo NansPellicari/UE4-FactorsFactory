@@ -45,10 +45,15 @@ public:
 	virtual const FString GetUID() const override;
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
 	virtual void Activate(bool _bIsActivated) override;
+	virtual void PreDelete() override;
+	virtual void Archive(FArchive& Ar) override;
 
 protected:
 	TSharedPtr<NEventInterface> Event;
 	bool bIsActivated = true;
 	float FactorUnitValue;
 	TSharedPtr<NFactorOperatorInterface> Operator;
+
+	/** This is used only for serialization */
+	FString UID;
 };

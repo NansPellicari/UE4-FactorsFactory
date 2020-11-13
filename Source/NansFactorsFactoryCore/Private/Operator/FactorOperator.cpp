@@ -88,7 +88,7 @@ bool NMaxOperator::IsBreaking()
 	return bBreak;
 }
 
-float NMaxOperator::Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
+float NMaxOperator::PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
 {
 	if (Lh >= Rh)
 	{
@@ -129,7 +129,7 @@ float NMinOperator::Compute(float Lh, float Rh)
 	return Lh;
 }
 
-float NMinOperator::Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
+float NMinOperator::PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
 {
 	if (Lh <= Rh)
 	{

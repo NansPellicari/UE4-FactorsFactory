@@ -17,74 +17,20 @@
 #include "FactorUnit/FactorUnitAdapter.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryUE4/Public/FactorUnit/UnrealFactorUnitProxy.h"
+#include "NansTimelineSystemUE4/Public/Config/TimelineConfig.h"
 #include "NansTimelineSystemUE4/Public/Event/EventDecorator.h"
+#include "NansTimelineSystemUE4/Public/TimelineBlueprintHelpers.h"
 #include "NansTimelineSystemUE4/Public/TimelineDecorator.h"
 #include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
-
-void FNFactorUnitRecord::Serialize(FArchive& Ar, UNFactorDecorator* Factor)
-{
-	if (Ar.IsSaving() && FactorUnit != nullptr)
-	{
-		FactorUnit->OperatorProvider->Serialize(Ar);
-		FactorUnit->Serialize(Ar);
-	}
-
-	if (Ar.IsLoading() && !FactorUnitClassName.IsEmpty())
-	{
-		auto EventRecord = GetEventRecord(Factor);
-		if (EventRecord.Event == nullptr) return;
-
-		UClass* Class = FindObject<UClass>(ANY_PACKAGE, *FactorUnitClassName);
-		FactorUnit = Factor->CreateFactorUnit(Class);
-		UNEventDecorator* Event = Cast<UNEventDecorator>(EventRecord.Event);
-		mycheckf(Event != nullptr,
-			TEXT("Problems occured during serialization of FNFactorUnitRecord,"
-				 "The associated event has not been found for UID %s"),
-			*UId);
-		UClass* OperatorProviderClass = FindObject<UClass>(ANY_PACKAGE, *OperatorProviderClassName);
-		FactorUnit->OperatorProvider = NewObject<UNOperatorProviderBase>(FactorUnit, OperatorProviderClass, NAME_None);
-		FactorUnit->OperatorProvider->Serialize(Ar);
-		FactorUnit->Init(Event);
-		FactorUnit->Serialize(Ar);
-	}
-}
-
-FNEventRecord& FNFactorUnitRecord::GetEventRecord(UNFactorDecorator* Factor)
-{
-	auto UTimeline = Factor->GetUnrealTimeline();
-	auto EventRecord = UTimeline->GetEventRecord(UId);
-	mycheckf(EventRecord != nullptr,
-		TEXT("Problems occured during serialization of FNFactorUnitRecord,"
-			 "The associated event record has not been found for UID %s"),
-		*UId);
-
-	return *EventRecord;
-}
 
 void UNFactorDecorator::Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline)
 {
 	Factor = MakeShareable(new NFactor(_Name, _Timeline));
-	Factor->GetTimeline()->OnEventExpired().AddUObject(this, &UNFactorDecorator::OnTimelineEventExpired);
 	OnInit();
-}
-
-void UNFactorDecorator::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index)
-{
-	const FString& UId = Event->GetUID();
-	FNFactorUnitRecord* FactorUnitRecord =
-		FactorUnitStore.FindByPredicate([UId](const FNFactorUnitRecord& Record) { return Record.UId == UId; });
-
-	// It could be an event from an another factor or an another type
-	if (FactorUnitRecord == nullptr) return;
-
-	OnFactorUnitExpired(FactorUnitRecord->FactorUnit);
-
-	FactorUnitRecord->FactorUnit = nullptr;
 }
 
 void UNFactorDecorator::Clear()
 {
-	FactorUnitStore.Empty();
 	Factor->Clear();
 }
 
@@ -138,40 +84,23 @@ TArray<TSharedPtr<NFactorUnitInterface>> UNFactorDecorator::GetFactors() const
 	return Factor->GetFactors();
 }
 
-TArray<FNFactorUnitRecord> UNFactorDecorator::GetFactorUnitStore() const
+int32 UNFactorDecorator::AddFactorUnit(UNFactorUnitAdapter* FactorUnit)
 {
-	return FactorUnitStore;
-}
+	FConfiguredTimeline ConfiguredTimeline;
+	ConfiguredTimeline.Name = GetTimeline()->GetLabel();
+	UNEventDecorator* Event =
+		UNTimelineBlueprintHelpers::GetTimeline(this, ConfiguredTimeline)
+			->CreateNewEvent(FactorUnit->EventClass, FactorUnit->Reason, FactorUnit->Duration, FactorUnit->Delay);
+	FactorUnit->Init(Event);
+	// TODO refacto: remove this when OnEventExpired trigger.
+	GCAdapters.Add(FactorUnit);
 
-bool UNFactorDecorator::PreAddUnit(NUnrealFactorUnitProxy* Unit)
-{
-	return true;
+	return Factor->AddFactorUnit(MakeShareable(new NUnrealFactorUnitProxy(FactorUnit)));
 }
-void UNFactorDecorator::PostAddUnit(NUnrealFactorUnitProxy* Unit, int32 Key) {}
 
 int32 UNFactorDecorator::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 {
-	auto Proxy = dynamic_cast<NUnrealFactorUnitProxy*>(FactorUnit.Get());
-	mycheckf(Proxy != nullptr, TEXT("You should passed NUnrealFactorUnitProxy (or derivation) only"));
-	mycheckf(Proxy->GetUnrealObject() != nullptr,
-		TEXT("You should instanciate your factorUnit proxy with a UNFactorUnitAdapter base class"));
-
-	Proxy->GetUnrealObject()->Init();
-	bool bCanAdd = PreAddUnit(Proxy);
-	int32 Key = -1;
-
-	if (bCanAdd)
-	{
-		Key = Factor->AddFactorUnit(FactorUnit);
-	}
-
-	if (Key >= 0)
-	{
-		FactorUnitStore.Add(FNFactorUnitRecord(Proxy->GetUnrealObject()));
-		OnAddFactorUnit(Proxy->GetUnrealObject(), Key);
-		PostAddUnit(Proxy, Key);
-	}
-	return Key;
+	return Factor->AddFactorUnit(FactorUnit);
 }
 
 bool UNFactorDecorator::HasStateFlag(FString Flag) const
@@ -218,47 +147,43 @@ void UNFactorDecorator::SupplyStateWithCurrentData(NFactorStateInterface& State)
 	Factor->SupplyStateWithCurrentData(State);
 }
 
-UNTimelineDecorator* UNFactorDecorator::GetUnrealTimeline()
-{
-	auto UnrealTimeline = dynamic_cast<NUnrealTimelineProxy*>(Factor->GetTimeline().Get());
-	mycheckf(UnrealTimeline != nullptr, TEXT("A factor Factor should work only with a NUnrealTimelineProxy object"));
-	return UnrealTimeline->GetUnrealObject();
-}
-
 void UNFactorDecorator::Serialize(FArchive& Ar)
 {
 	if (Ar.IsSaving())
 	{
-		SavedName = Factor.IsValid() ? Factor->GetName() : SavedName;
+		FactorUnitStoreCount = Factor->GetFactors().Num();
 	}
+
+	Ar << FactorUnitStoreCount;
 
 	if (Ar.IsLoading())
 	{
-		FactorUnitStore.Empty();
+		GCAdapters.Empty();
+		Factor->Clear();
 	}
 
-	Ar << FactorUnitStore;
-	Ar << SavedName;
+	Factor->Archive(Ar);
 
-	if (Ar.IsLoading())
+	if (FactorUnitStoreCount > 0)
 	{
-		// Remove actual factor to avoid cumulate old factors + new factors currently earned
-		if (Factor.IsValid())
+		for (int32 Idx = 0; Idx < FactorUnitStoreCount; ++Idx)
 		{
-			Factor->Clear();
-			Factor->SetName(SavedName);
-		}
-		SavedName = NAME_None;
-	}
+			TSharedPtr<NFactorUnitInterface> FactorUnit;
 
-	if (FactorUnitStore.Num() > 0)
-	{
-		for (FNFactorUnitRecord& Record : FactorUnitStore)
-		{
-			Record.Serialize(Ar, this);
-			if (Ar.IsLoading() && Record.FactorUnit != nullptr)
+			if (Ar.IsLoading())
 			{
-				Factor->AddFactorUnit(MakeShareable(new NUnrealFactorUnitProxy(Record.FactorUnit)));
+				TSharedPtr<NUnrealFactorUnitProxy> Proxy = MakeShareable(new NUnrealFactorUnitProxy());
+				Proxy->ArchiveWithFactor(Ar, this);
+				FactorUnit = Proxy;
+			}
+
+			if (Ar.IsSaving()) FactorUnit = Factor->GetFactors()[Idx];
+
+			FactorUnit->Archive(Ar);
+
+			if (Ar.IsLoading())
+			{
+				Factor->AddFactorUnit(FactorUnit);
 			}
 		}
 	}
@@ -266,7 +191,7 @@ void UNFactorDecorator::Serialize(FArchive& Ar)
 
 void UNFactorDecorator::BeginDestroy()
 {
-	FactorUnitStore.Empty();
+	GCAdapters.Empty();
 	Factor.Reset();
 	Super::BeginDestroy();
 }

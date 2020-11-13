@@ -23,6 +23,7 @@ class NFactorInterface;
 class NANSFACTORSFACTORYCORE_API NResetOperatorBase : public NFactorOperatorInterface
 {
 public:
+	virtual ~NResetOperatorBase() {}
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
 	static FString GetResetIdFlag(TSharedPtr<NFactorUnitInterface> FactorUnit);
 };

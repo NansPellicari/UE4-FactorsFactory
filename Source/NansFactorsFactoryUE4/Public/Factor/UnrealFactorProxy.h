@@ -41,5 +41,6 @@ public:
 	virtual void RemoveFlag(ENFactorFlag Flag) override;
 	virtual void Debug(bool _bDebug) override;
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
-	virtual UNFactorDecorator* GetUnrealObject() const;
+	virtual void PreDelete() override;
+	virtual void Archive(FArchive& Ar) override;
 };

@@ -91,7 +91,7 @@ float NFactorState::Compute()
 			{
 				NFactorOperatorPersistentInterface* Persistent =
 					dynamic_cast<NFactorOperatorPersistentInterface*>(Unit->GetOperator().Get());
-				Value = Persistent->Compute(Value, Unit->GetFactorUnitValue(), PersistentUnits[0]);
+				Value = Persistent->PersistentCompute(Value, Unit->GetFactorUnitValue(), PersistentUnits[0]);
 			}
 
 			if (bDebug)

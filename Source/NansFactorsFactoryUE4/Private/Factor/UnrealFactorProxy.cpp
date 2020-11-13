@@ -91,7 +91,13 @@ void NUnrealFactorProxy::SupplyStateWithCurrentData(NFactorStateInterface& State
 {
 	Factor.SupplyStateWithCurrentData(State);
 }
-UNFactorDecorator* NUnrealFactorProxy::GetUnrealObject() const
+
+void NUnrealFactorProxy::PreDelete()
 {
-	return &Factor;
+	Factor.PreDelete();
+}
+
+void NUnrealFactorProxy::Archive(FArchive& Ar)
+{
+	Factor.Archive(Ar);
 }

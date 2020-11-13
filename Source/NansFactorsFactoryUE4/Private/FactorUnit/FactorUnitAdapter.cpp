@@ -15,6 +15,7 @@
 #include "FactorUnit/FactorUnitAdapter.h"
 
 #include "Attribute/FactorAttribute.h"
+#include "FactorUnit/UnrealFactorUnitProxy.h"
 #include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
@@ -24,29 +25,17 @@
 #include "NansTimelineSystemUE4/Public/Event/UnrealEventProxy.h"
 #include "Settings/FactorSettings.h"
 
-void UNFactorUnitAdapter::Init()
-{
-	UClass* TheEventClass = EventClass;
-	if (!TheEventClass->IsChildOf(UNEventDecorator::StaticClass()))
-	{
-		UE_LOG(LogTemp,
-			Error,
-			TEXT("%s - The event class should be a subclass of UNEventDecorator!"
-				 "To avoid crashing the game, it has been replaced by UNEventDecorator."),
-			ANSI_TO_TCHAR(__FUNCTION__));
-		TheEventClass = UNEventDecorator::StaticClass();
-	}
-
-	Event = UNEventDecoratorFactory::CreateObject<UNEventDecorator>(this, TheEventClass, Reason);
-	TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(*Event));
-	FactorUnit = MakeShareable(new NFactorUnit(FactorUnitValue, GetConfiguredOperator(), Duration, Reason, Delay, EventProxy));
-}
-
 void UNFactorUnitAdapter::Init(UNEventDecorator* _Event)
 {
 	Event = _Event;
-	TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(*Event));
-	FactorUnit = MakeShareable(new NFactorUnit(FactorUnitValue, GetConfiguredOperator(), EventProxy));
+	TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(Event));
+	// FIXME Problem : these last values are set after the init.
+	FactorUnit = MakeShareable(new NFactorUnit(FactorUnitValue, GetConfiguredOperator(), Duration, Reason, Delay, EventProxy));
+}
+
+void UNFactorUnitAdapter::Init(TSharedPtr<NEventInterface> _Event)
+{
+	FactorUnit = MakeShareable(new NFactorUnit(FactorUnitValue, GetConfiguredOperator(), _Event));
 }
 
 TSharedPtr<NEventInterface> UNFactorUnitAdapter::GetEvent()
@@ -61,6 +50,7 @@ void UNFactorUnitAdapter::SetOperatorProvider(UNOperatorProviderBase* _OperatorP
 
 TSharedPtr<NFactorOperatorInterface> UNFactorUnitAdapter::GetConfiguredOperator()
 {
+	check(IsValid(OperatorProvider));
 	return OperatorProvider->GetOperator();
 }
 
@@ -77,11 +67,6 @@ void UNFactorUnitAdapter::SetOperator(TSharedPtr<NFactorOperatorInterface> _Oper
 float UNFactorUnitAdapter::GetFactorUnitValue() const
 {
 	return FactorUnit->GetFactorUnitValue();
-}
-
-UNEventDecorator* UNFactorUnitAdapter::GetEventDecorator()
-{
-	return Event;
 }
 
 FName UNFactorUnitAdapter::GetReason() const
@@ -119,6 +104,7 @@ void UNFactorUnitAdapter::Serialize(FArchive& Ar)
 	}
 
 	Ar << FactorUnitValue;
+	FactorUnit->Archive(Ar);
 
 	if (Ar.IsLoading() && FactorUnit.IsValid())
 	{

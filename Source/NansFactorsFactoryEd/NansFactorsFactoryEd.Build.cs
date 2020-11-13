@@ -42,6 +42,7 @@ namespace UnrealBuildTool.Rules
 					"NansUE4TestsHelpers",
 					"NansTimelineSystemCore",
 					"NansTimelineSystemUE4",
+					"NansTimelineSystemEd",
 					"NansFactorsFactoryCore",
 					"NansFactorsFactoryUE4"
 				});

@@ -23,7 +23,7 @@
 NFactor::~NFactor()
 {
 	IterationFlags.Empty();
-	Factors.Empty();
+	FactorUnits.Empty();
 	Timeline.Reset();
 }
 
@@ -32,7 +32,7 @@ void NFactor::Clear()
 {
 	Name = NAME_None;
 	IterationFlags.Empty();
-	Factors.Empty();
+	FactorUnits.Empty();
 }
 
 NFactor::NFactor(FName _Name, TSharedPtr<NTimelineInterface> _Timeline)
@@ -46,13 +46,13 @@ NFactor::NFactor(FName _Name, TSharedPtr<NTimelineInterface> _Timeline)
 void NFactor::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index)
 {
 	const FString& UId = Event->GetUID();
-	int32 FactorUnitIndex = Factors.IndexOfByPredicate(
+	int32 FactorUnitIndex = FactorUnits.IndexOfByPredicate(
 		[UId](const TSharedPtr<NFactorUnitInterface> Record) { return Record.IsValid() && Record->GetUID() == UId; });
 
 	// It could be an event from an another factor or an another type
 	if (FactorUnitIndex == INDEX_NONE) return;
 
-	TSharedPtr<NFactorUnitInterface> FactorUnit = Factors[FactorUnitIndex];
+	TSharedPtr<NFactorUnitInterface> FactorUnit = FactorUnits[FactorUnitIndex];
 
 	NFactorOperatorStopperInterface* Stopper = dynamic_cast<NFactorOperatorStopperInterface*>(FactorUnit->GetOperator().Get());
 
@@ -62,7 +62,7 @@ void NFactor::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const fl
 		FactorUnit->GetEvent()->OnStart().RemoveAll(this);
 	}
 
-	Factors.RemoveAt(FactorUnitIndex);
+	FactorUnits.RemoveAt(FactorUnitIndex);
 }
 
 FName NFactor::GetName() const
@@ -90,9 +90,9 @@ float NFactor::GetTime() const
 TSharedPtr<NFactorUnitInterface> NFactor::GetFactorUnit(uint32 Key) const
 {
 	mycheck(Name != NAME_None);
-	mycheck(Factors.IsValidIndex(Key));
+	mycheck(FactorUnits.IsValidIndex(Key));
 
-	return Factors[Key].ToSharedRef();
+	return FactorUnits[Key].ToSharedRef();
 }
 
 int32 NFactor::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
@@ -110,7 +110,7 @@ int32 NFactor::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 		Timeline->Attached(FactorUnit->GetEvent());
 	}
 
-	Key = Factors.Add(FactorUnit);
+	Key = FactorUnits.Add(FactorUnit);
 
 	NFactorOperatorStopperInterface* Stopper = dynamic_cast<NFactorOperatorStopperInterface*>(FactorUnit->GetOperator().Get());
 	if (Stopper != nullptr)
@@ -211,16 +211,16 @@ bool NFactor::AddFactorUnitToState(NFactorStateInterface& State, TSharedPtr<NFac
 
 void NFactor::AddFactorUnitsToState(NFactorStateInterface& State)
 {
-	for (int32 Index = 0; Index < Factors.Num(); ++Index)
+	for (int32 Index = 0; Index < FactorUnits.Num(); ++Index)
 	{
-		bool bRet = AddFactorUnitToState(State, Factors[Index], Index);
+		bool bRet = AddFactorUnitToState(State, FactorUnits[Index], Index);
 		if (!bRet) break;
 	}
 }
 
 TArray<TSharedPtr<NFactorUnitInterface>> NFactor::GetFactors() const
 {
-	return Factors;
+	return FactorUnits;
 }
 
 void NFactor::SupplyStateWithCurrentData(NFactorStateInterface& State)
@@ -237,4 +237,12 @@ void NFactor::SupplyStateWithCurrentData(NFactorStateInterface& State)
 void NFactor::Debug(bool _bDebug)
 {
 	bDebug = _bDebug;
+}
+
+void NFactor::PreDelete() {}
+
+void NFactor::Archive(FArchive& Ar)
+{
+	Ar << Name;
+	// The timeline is serialized before, no need to call its Archive method here
 }

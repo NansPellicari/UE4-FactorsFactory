@@ -95,3 +95,11 @@ NFactorUnit::~NFactorUnit()
 {
 	Event.Reset();
 }
+
+void NFactorUnit::PreDelete() {}
+
+void NFactorUnit::Archive(FArchive& Ar)
+{
+	Ar << bIsActivated;
+	Ar << FactorUnitValue;
+}
