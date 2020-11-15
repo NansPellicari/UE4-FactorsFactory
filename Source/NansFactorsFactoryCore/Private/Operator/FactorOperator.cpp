@@ -16,7 +16,7 @@
 
 const FName NNullOperator::Name(TEXT("Null"));
 const FName NAddOperator::Name(TEXT("Add"));
-const FName NSubtractOperator::Name(TEXT("Subsctract"));
+const FName NSubtractOperator::Name(TEXT("Subtract"));
 const FName NMultiplyOperator::Name(TEXT("Multiply"));
 const FName NDividerOperator::Name(TEXT("Divider"));
 const FName NMaxOperator::Name(TEXT("Max"));

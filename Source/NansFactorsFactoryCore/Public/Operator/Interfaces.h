@@ -26,37 +26,42 @@ public:
 	virtual float Compute(float Lh, float Rh) = 0;
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() = 0;
 	virtual const FName GetName() = 0;
-};
-
-class NANSFACTORSFACTORYCORE_API NFactorOperatorWithFactorInterface
-{
-public:
+	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) = 0;
+	virtual bool IsBreaking() = 0;
+	virtual bool IsStopper() = 0;
+	virtual bool IsPersistent() = 0;
+	virtual bool IsOperatorWithFactor() = 0;
 	virtual void SetFactor(NFactorInterface* Factor) = 0;
 	virtual void SetKeyInFactor(uint32 Key) = 0;
 };
 
-class NANSFACTORSFACTORYCORE_API NFactorOperatorBreakerInterface
+class NANSFACTORSFACTORYCORE_API NFactorOperatorBase : public NFactorOperatorInterface
 {
 public:
-	virtual bool IsBreaking() = 0;
-};
-
-class NANSFACTORSFACTORYCORE_API NFactorOperatorStopperInterface
-{
-};
-
-class NANSFACTORSFACTORYCORE_API NFactorOperatorPersistentInterface
-{
-public:
-	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) = 0;
-};
-
-class NOperatorUtils
-{
-public:
-	template <typename T>
-	static bool IsOperatorWithFactor(T Operator)
+	virtual float Compute(float Lh, float Rh) override
 	{
-		return dynamic_cast<NFactorOperatorWithFactorInterface*>(Operator) != nullptr;
+		return Lh;
 	}
+	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override
+	{
+		return Lh;
+	}
+	virtual bool IsBreaking() override
+	{
+		return false;
+	}
+	virtual bool IsStopper() override
+	{
+		return false;
+	}
+	virtual bool IsPersistent() override
+	{
+		return false;
+	}
+	virtual bool IsOperatorWithFactor() override
+	{
+		return false;
+	}
+	virtual void SetFactor(NFactorInterface* Factor) override {}
+	virtual void SetKeyInFactor(uint32 Key) override {}
 };

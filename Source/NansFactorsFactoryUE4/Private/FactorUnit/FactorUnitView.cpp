@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "FactorUnit/FactorUnitAdapter.h"
+#include "FactorUnit/FactorUnitView.h"
 
 #include "Attribute/FactorAttribute.h"
 #include "FactorUnit/UnrealFactorUnitProxy.h"
@@ -21,80 +21,71 @@
 #include "NansFactorsFactoryCore/Public/Operator/FactorOperator.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
 #include "NansFactorsFactoryUE4/Public/Operator/OperatorProviders.h"
-#include "NansTimelineSystemUE4/Public/Event/EventDecorator.h"
-#include "NansTimelineSystemUE4/Public/Event/UnrealEventProxy.h"
+#include "NansTimelineSystemUE4/Public/Event/EventView.h"
 #include "Settings/FactorSettings.h"
 
-void UNFactorUnitAdapter::Init(UNEventDecorator* _Event)
+void UNFactorUnitView::Init(TSharedPtr<NEventInterface> Event)
 {
-	Event = _Event;
-	TSharedPtr<NEventInterface> EventProxy = MakeShareable(new NUnrealEventProxy(Event));
-	// FIXME Problem : these last values are set after the init.
-	FactorUnit = MakeShareable(new NFactorUnit(FactorUnitValue, GetConfiguredOperator(), Duration, Reason, Delay, EventProxy));
+	FactorUnit = MakeShareable(new NFactorUnit(FactorUnitValue, GetConfiguredOperator(), Event));
 }
 
-void UNFactorUnitAdapter::Init(TSharedPtr<NEventInterface> _Event)
-{
-	FactorUnit = MakeShareable(new NFactorUnit(FactorUnitValue, GetConfiguredOperator(), _Event));
-}
-
-TSharedPtr<NEventInterface> UNFactorUnitAdapter::GetEvent()
+TSharedPtr<NEventInterface> UNFactorUnitView::GetEvent()
 {
 	return FactorUnit->GetEvent();
 }
 
-void UNFactorUnitAdapter::SetOperatorProvider(UNOperatorProviderBase* _OperatorProvider)
+void UNFactorUnitView::SetOperatorProvider(UNOperatorProviderBase* _OperatorProvider)
 {
 	OperatorProvider = _OperatorProvider;
 }
 
-TSharedPtr<NFactorOperatorInterface> UNFactorUnitAdapter::GetConfiguredOperator()
+TSharedPtr<NFactorOperatorInterface> UNFactorUnitView::GetConfiguredOperator()
 {
 	check(IsValid(OperatorProvider));
 	return OperatorProvider->GetOperator();
 }
 
-TSharedPtr<NFactorOperatorInterface> UNFactorUnitAdapter::GetOperator() const
+TSharedPtr<NFactorOperatorInterface> UNFactorUnitView::GetOperator()
 {
 	return FactorUnit->GetOperator();
 }
 
-void UNFactorUnitAdapter::SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator)
+void UNFactorUnitView::SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator)
 {
 	FactorUnit->SetOperator(_Operator);
 }
 
-float UNFactorUnitAdapter::GetFactorUnitValue() const
+float UNFactorUnitView::GetFactorUnitValue() const
 {
 	return FactorUnit->GetFactorUnitValue();
 }
 
-FName UNFactorUnitAdapter::GetReason() const
+FName UNFactorUnitView::GetReason() const
 {
 	return FactorUnit->GetReason();
 }
 
-void UNFactorUnitAdapter::SetFactorUnitValue(float _Value)
+void UNFactorUnitView::SetFactorUnitValue(float _Value)
 {
 	FactorUnit->SetFactorUnitValue(_Value);
 }
 
-bool UNFactorUnitAdapter::IsActivated() const
+bool UNFactorUnitView::IsActivated() const
 {
 	return FactorUnit->IsActivated();
 }
 
-const FString UNFactorUnitAdapter::GetUID() const
+const FString UNFactorUnitView::GetUID() const
 {
 	return FactorUnit->GetUID();
 }
 
-void UNFactorUnitAdapter::Activate(bool _bIsActivated)
+void UNFactorUnitView::Activate(bool _bIsActivated)
 {
 	return FactorUnit->Activate(_bIsActivated);
 }
 
-void UNFactorUnitAdapter::Serialize(FArchive& Ar)
+void UNFactorUnitView::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 
@@ -104,7 +95,11 @@ void UNFactorUnitAdapter::Serialize(FArchive& Ar)
 	}
 
 	Ar << FactorUnitValue;
-	FactorUnit->Archive(Ar);
+
+	if (FactorUnit.IsValid())
+	{
+		FactorUnit->Archive(Ar);
+	}
 
 	if (Ar.IsLoading() && FactorUnit.IsValid())
 	{

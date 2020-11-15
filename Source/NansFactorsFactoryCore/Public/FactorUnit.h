@@ -37,7 +37,7 @@ public:
 	NFactorUnit(float _FactorUnitValue, TSharedPtr<NFactorOperatorInterface> _Operator, TSharedPtr<NEventInterface> _Event);
 	virtual ~NFactorUnit();
 	virtual bool IsActivated() const override;
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override;
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override;
 	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) override;
 	virtual float GetFactorUnitValue() const override;
 	virtual FName GetReason() const override;

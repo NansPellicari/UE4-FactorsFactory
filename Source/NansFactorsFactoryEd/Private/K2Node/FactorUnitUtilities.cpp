@@ -263,7 +263,7 @@ UEdGraphPin* FFactorUnitUtilities::ConnectPinsForObject(UClass* ClassType,
 #if WITH_EDITOR
 		if (bDebug)
 		{
-			// clang-format off
+			// @formatter:off
 	            UE_LOG(LogTemp, Display, TEXT("    @Pin Variable Name: %s"), *VariableVarToSetPin->GetName());
 	            UE_LOG(LogTemp, Display, TEXT("    @Pin Object Name: %s"), *ObjectVarToSetPin->GetName());
 	            UE_LOG(LogTemp, Display, TEXT("    @GetMemberParentClass : %s"),
@@ -271,7 +271,7 @@ UEdGraphPin* FFactorUnitUtilities::ConnectPinsForObject(UClass* ClassType,
                 UE_LOG(LogTemp, Display, TEXT("@GetMemberName : %s"), *VarToSetNode->VariableReference.GetMemberName().ToString()); UE_LOG(LogTemp, Display,
 	            TEXT("    @GetScope : %s"), *VarToSetNode->VariableReference.GetScope()->GetName()); UE_LOG(LogTemp, Display,
 	            TEXT("    @GetVariableSourceClass : %s"), *VarToSetNode->GetVariableSourceClass()->GetName());
-			// clang-format on
+			// @formatter:on
 		}
 #endif
 		bSucceeded2 &= MovePinLinks(Pin, VariableVarToSetPin);

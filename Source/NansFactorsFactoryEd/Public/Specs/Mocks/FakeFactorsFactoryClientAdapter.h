@@ -16,9 +16,9 @@
 
 #include "CoreMinimal.h"
 #include "NansFactorsFactoryCore/Public/NullFactorUnit.h"
-#include "NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitAdapter.h"
+#include "NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitView.h"
 #include "NansFactorsFactoryUE4/Public/FactorsFactoryClientAdapter.h"
-#include "NansTimelineSystemUE4/Public/Event/EventDecorator.h"
+#include "NansTimelineSystemUE4/Public/Event/EventView.h"
 #include "Specs/Mocks/SpyFactorsFactoryClient.h"
 
 #include "FakeFactorsFactoryClientAdapter.generated.h"
@@ -51,20 +51,20 @@ public:
 };
 
 UCLASS(NotBlueprintable, NotPlaceable)
-class UNNullFactorUnit : public UNFactorUnitAdapter
+class UNNullFactorUnit : public UNFactorUnitView
 {
 	GENERATED_BODY()
 public:
 	UNNullFactorUnit() {}
 
-	virtual void Init(UNEventDecorator* _Event) {}
+	virtual void Init(UNEventView* _Event) {}
 	virtual void Init(TSharedPtr<NEventInterface> _Event) {}
 
 	virtual bool IsActivated() const override
 	{
 		return false;
 	}
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override
 	{
 		return nullptr;
 	}

@@ -17,8 +17,7 @@
 #include "CoreMinimal.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
-#include "NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitAdapter.h"
-#include "NansTimelineSystemUE4/Public/Event/EventRecord.h"
+#include "NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitView.h"
 
 #include "FactorDecorator.generated.h"
 
@@ -37,7 +36,8 @@ struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 	GENERATED_USTRUCT_BODY()
 
 	FNFactorUnitRecord() {}
-	FNFactorUnitRecord(UNFactorUnitAdapter* _FactorUnit)
+
+	FNFactorUnitRecord(UNFactorUnitView* _FactorUnit)
 	{
 		FactorUnit = _FactorUnit;
 		UId = FactorUnit->GetUID();
@@ -46,10 +46,10 @@ struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 		OperatorProviderClassName = FactorUnit->OperatorProvider->GetClass()->GetPathName();
 	}
 
-	/** The UNFactorUnitAdapter object */
+	/** The UNFactorUnitView object */
 	UPROPERTY(SkipSerialization)
-	UNFactorUnitAdapter* FactorUnit = nullptr;
-	/** The time it as been attached to the timeline in secs (differ to UNEventDecorator::StartedAt) */
+	UNFactorUnitView* FactorUnit = nullptr;
+	/** The time it as been attached to the timeline in secs (differ to UNEventView::StartedAt) */
 	UPROPERTY(SkipSerialization)
 	FString UId = FString("");
 	/** This value to keep trace of what happens, usefull for  */
@@ -76,10 +76,11 @@ public:
 	UNFactorDecorator() {}
 
 	void Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
-	UNFactorUnitAdapter* CreateFactorUnit(const UClass* Class);
-	int32 AddFactorUnit(UNFactorUnitAdapter* FactorUnit);
+	UNFactorUnitView* CreateFactorUnit(const UClass* Class);
+	int32 AddFactorUnit(UNFactorUnitView* FactorUnit);
 	UNOperatorProviderBase* CreateOperatorProvider(const UClass* Class);
 	TArray<FNFactorUnitRecord> GetFactorUnitStore() const;
+	UNFactorUnitView* GetGCFactorUnit(int32 Index);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
 	void OnInit();
@@ -128,7 +129,7 @@ public:
 protected:
 	/** this to save object for GC... */
 	UPROPERTY()
-	TArray<UNFactorUnitAdapter*> GCAdapters;
+	TArray<UNFactorUnitView*> GCAdapters;
 	TSharedPtr<NFactorInterface> Factor;
 
 	int32 FactorUnitStoreCount;

@@ -14,18 +14,21 @@
 
 #include "FactorUnit/UnrealFactorUnitProxy.h"
 
+
+#include "TimelineInterface.h"
 #include "Factor/FactorDecorator.h"
-#include "FactorUnit/FactorUnitAdapter.h"
+#include "FactorUnit/FactorUnitView.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
-#include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
+#include "UObject/Package.h"
 
-NUnrealFactorUnitProxy::NUnrealFactorUnitProxy(UNFactorUnitAdapter* _FactorUnit) : FactorUnit(_FactorUnit) {}
+NUnrealFactorUnitProxy::NUnrealFactorUnitProxy(UNFactorUnitView* _FactorUnit) : FactorUnit(_FactorUnit) {}
 
-TSharedPtr<NFactorOperatorInterface> NUnrealFactorUnitProxy::GetOperator() const
+TSharedPtr<NFactorOperatorInterface> NUnrealFactorUnitProxy::GetOperator()
 {
 	check(IsValid(FactorUnit));
 	return FactorUnit->GetOperator();
 }
+
 void NUnrealFactorUnitProxy::SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator)
 {
 	check(IsValid(FactorUnit));
@@ -88,10 +91,12 @@ void NUnrealFactorUnitProxy::ArchiveWithFactor(FArchive& Ar, UNFactorDecorator* 
 
 		UClass* Class = FindObject<UClass>(ANY_PACKAGE, *FactorUnitClassName);
 		FactorUnit = Factor->CreateFactorUnit(Class);
-		mycheckf(Event.IsValid(),
+		mycheckf(
+			Event.IsValid(),
 			TEXT("Problems occured during serialization of FNFactorUnitRecord,"
-				 "The associated event has not been found for UID %s"),
-			*UID);
+				"The associated event has not been found for UID %s"),
+			*UID
+		);
 		UClass* OperatorProviderClass = FindObject<UClass>(ANY_PACKAGE, *OperatorProviderClassName);
 		FactorUnit->OperatorProvider = NewObject<UNOperatorProviderBase>(FactorUnit, OperatorProviderClass, NAME_None);
 		FactorUnit->Init(Event);

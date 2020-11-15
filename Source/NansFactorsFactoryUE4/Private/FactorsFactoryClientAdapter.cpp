@@ -15,7 +15,7 @@
 #include "FactorsFactoryClientAdapter.h"
 
 #include "Factor/UnrealFactorProxy.h"
-#include "FactorUnit/FactorUnitAdapter.h"
+#include "FactorUnit/FactorUnitView.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
@@ -24,9 +24,7 @@
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemUE4/Public/Attribute/ConfiguredTimeline.h"
-#include "NansTimelineSystemUE4/Public/Event/UnrealEventProxy.h"
 #include "NansTimelineSystemUE4/Public/TimelineBlueprintHelpers.h"
-#include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
 #include "Operator/OperatorProviders.h"
 #include "Settings/FactorSettings.h"
 
@@ -44,13 +42,14 @@ void UNFactorsFactoryClientAdapter::Init()
 	}
 }
 
-UNFactorUnitAdapter* UNFactorsFactoryClientAdapter::CreateFactorUnit(const FName& FactorName, const UClass* Class)
+UNFactorUnitView* UNFactorsFactoryClientAdapter::CreateFactorUnit(const FName& FactorName, const UClass* Class)
 {
 	mycheckf(UEFactors.Contains(FactorName), TEXT("The factor %s doesn't exists!"), *FactorName.ToString());
 	return UEFactors[FactorName]->CreateFactorUnit(Class);
 }
 
-UNOperatorProviderBase* UNFactorsFactoryClientAdapter::CreateOperatorProvider(const FName& FactorName, const UClass* Class)
+UNOperatorProviderBase* UNFactorsFactoryClientAdapter::CreateOperatorProvider(const FName& FactorName,
+	const UClass* Class)
 {
 	mycheckf(UEFactors.Contains(FactorName), TEXT("The factor %s doesn't exists!"), *FactorName.ToString());
 	return UEFactors[FactorName]->CreateOperatorProvider(Class);
@@ -64,11 +63,15 @@ void UNFactorsFactoryClientAdapter::CreateFactor(
 		CreateFactor(FactorName, Timeline, FactorClass);
 	}
 }
-void UNFactorsFactoryClientAdapter::CreateFactor(const FName& FactorName, FConfiguredTimeline Timeline, const UClass* FactorClass)
+
+void UNFactorsFactoryClientAdapter::CreateFactor(const FName& FactorName, FConfiguredTimeline Timeline,
+	const UClass* FactorClass)
 {
-	mycheckf(FactorClass->IsChildOf(UNFactorDecorator::StaticClass()),
+	mycheckf(
+		FactorClass->IsChildOf(UNFactorDecorator::StaticClass()),
 		TEXT("%s - The class should be a child of UNFactorDecorator"),
-		ANSI_TO_TCHAR(__FUNCTION__));
+		ANSI_TO_TCHAR(__FUNCTION__)
+	);
 
 	UNTimelineManagerDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, Timeline);
 	mycheckf(IsValid(TimelineManager), TEXT("Timeline manager %s does not exists"), *Timeline.Name.ToString());
@@ -80,9 +83,14 @@ void UNFactorsFactoryClientAdapter::CreateFactor(const FName& FactorName, FConfi
 	Client->AddFactor(Factor);
 }
 
-int32 UNFactorsFactoryClientAdapter::AddFactorUnit(FName FactorName, UNFactorUnitAdapter* FactorUnit)
+int32 UNFactorsFactoryClientAdapter::AddFactorUnit(FName FactorName, UNFactorUnitView* FactorUnit)
 {
 	return UEFactors[FactorName]->AddFactorUnit(FactorUnit);
+}
+
+UNFactorUnitView* UNFactorsFactoryClientAdapter::GetFactorUnit(FName FactorName, int32 FactorIndex)
+{
+	return UEFactors[FactorName]->GetGCFactorUnit(FactorIndex);
 }
 
 void UNFactorsFactoryClientAdapter::RemoveFactor(const FName& FactorName)

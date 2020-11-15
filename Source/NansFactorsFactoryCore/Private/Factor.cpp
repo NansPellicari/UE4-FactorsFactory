@@ -54,9 +54,9 @@ void NFactor::OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const fl
 
 	TSharedPtr<NFactorUnitInterface> FactorUnit = FactorUnits[FactorUnitIndex];
 
-	NFactorOperatorStopperInterface* Stopper = dynamic_cast<NFactorOperatorStopperInterface*>(FactorUnit->GetOperator().Get());
+	check(FactorUnit.IsValid() && FactorUnit->GetOperator().IsValid());
 
-	if (Stopper != nullptr)
+	if (FactorUnit->GetOperator()->IsStopper())
 	{
 		RemoveFlag(ENFactorFlag::CanNotAddNewUnit);
 		FactorUnit->GetEvent()->OnStart().RemoveAll(this);
@@ -112,8 +112,9 @@ int32 NFactor::AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit)
 
 	Key = FactorUnits.Add(FactorUnit);
 
-	NFactorOperatorStopperInterface* Stopper = dynamic_cast<NFactorOperatorStopperInterface*>(FactorUnit->GetOperator().Get());
-	if (Stopper != nullptr)
+	checkf(FactorUnit->GetOperator().IsValid(), TEXT("Operator is not a valid object!"));
+
+	if (FactorUnit->GetOperator()->IsStopper())
 	{
 		FactorUnit->GetEvent()->OnStart().AddRaw(this, &NFactor::OnStopperStart);
 	}
@@ -188,23 +189,15 @@ bool NFactor::AddFactorUnitToState(NFactorStateInterface& State, TSharedPtr<NFac
 	}
 
 	mycheck(FactorUnit->GetOperator().IsValid());
+	TSharedPtr<NFactorOperatorInterface> Operator = FactorUnit->GetOperator();
 
-	NFactorOperatorWithFactorInterface* Operator =
-		dynamic_cast<NFactorOperatorWithFactorInterface*>(FactorUnit->GetOperator().Get());
-	if (Operator != nullptr)
-	{
-		Operator->SetFactor(this);
-		Operator->SetKeyInFactor(Index);
-	}
+	Operator->SetFactor(this);
+	Operator->SetKeyInFactor(Index);
 
 	State.AddFactorUnit(FactorUnit);
 
-	NFactorOperatorBreakerInterface* Breaker = dynamic_cast<NFactorOperatorBreakerInterface*>(FactorUnit->GetOperator().Get());
-	if (Breaker != nullptr)
-	{
-		bool bBreak = Breaker->IsBreaking();
-		if (bBreak) return false;
-	}
+	bool bBreak = Operator->IsBreaking();
+	if (bBreak) return false;
 
 	return true;
 }

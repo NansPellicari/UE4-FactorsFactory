@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-class NBreakerOperator : public NFactorOperatorBreakerInterface, public NFactorOperatorInterface
+class NBreakerOperator final : public NFactorOperatorBase
 {
 	virtual float Compute(float Lh, float Rh) override
 	{
@@ -31,8 +31,12 @@ class NBreakerOperator : public NFactorOperatorBreakerInterface, public NFactorO
 		return true;
 	};
 };
-class NStopperOperator : public NFactorOperatorStopperInterface, public NFactorOperatorInterface
+class NStopperOperator final : public NFactorOperatorBase
 {
+	virtual bool IsStopper() override
+	{
+		return true;
+	}
 	virtual float Compute(float Lh, float Rh) override
 	{
 		return 0;
@@ -48,7 +52,7 @@ class NStopperOperator : public NFactorOperatorStopperInterface, public NFactorO
 	}
 };
 
-class NAddPersistentOperator : public NFactorOperatorInterface, public NFactorOperatorPersistentInterface
+class NAddPersistentOperator final : public NFactorOperatorBase
 {
 public:
 	NAddPersistentOperator()
@@ -72,6 +76,10 @@ public:
 	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override
 	{
 		return BaseOp->Compute(Lh, Rh);
+	}
+	virtual bool IsPersistent() override
+	{
+		return true;
 	}
 
 private:

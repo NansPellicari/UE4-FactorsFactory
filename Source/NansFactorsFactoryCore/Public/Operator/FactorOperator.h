@@ -17,7 +17,7 @@
 #include "CoreMinimal.h"
 #include "Operator/Interfaces.h"
 
-class NANSFACTORSFACTORYCORE_API NNullOperator final : public NFactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NNullOperator final : public NFactorOperatorBase
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;
@@ -29,7 +29,7 @@ public:
 	}
 };
 
-class NANSFACTORSFACTORYCORE_API NAddOperator final : public NFactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NAddOperator final : public NFactorOperatorBase
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;
@@ -41,7 +41,7 @@ public:
 	}
 };
 
-class NANSFACTORSFACTORYCORE_API NSubtractOperator final : public NFactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NSubtractOperator final : public NFactorOperatorBase
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;
@@ -53,7 +53,7 @@ public:
 	}
 };
 
-class NANSFACTORSFACTORYCORE_API NMultiplyOperator final : public NFactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NMultiplyOperator final : public NFactorOperatorBase
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;
@@ -65,7 +65,7 @@ public:
 	}
 };
 
-class NANSFACTORSFACTORYCORE_API NDividerOperator final : public NFactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NDividerOperator final : public NFactorOperatorBase
 {
 public:
 	virtual float Compute(float Lh, float Rh) override;
@@ -80,9 +80,7 @@ public:
 /**
  * It limits the computation with a max value.
  */
-class NANSFACTORSFACTORYCORE_API NMaxOperator final : public NFactorOperatorBreakerInterface,
-													  public NFactorOperatorPersistentInterface,
-													  public NFactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NMaxOperator final : public NFactorOperatorBase
 {
 public:
 	static const FName Name;
@@ -95,10 +93,12 @@ public:
 	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
 	virtual float Compute(float Lh, float Rh) override;
 	virtual bool IsBreaking() override;
+	virtual bool IsPersistent() override
+	{
+		return true;
+	}
 };
-class NANSFACTORSFACTORYCORE_API NMinOperator final : public NFactorOperatorBreakerInterface,
-													  public NFactorOperatorPersistentInterface,
-													  public NFactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NMinOperator final : public NFactorOperatorBase
 {
 public:
 	static const FName Name;
@@ -111,4 +111,8 @@ public:
 	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
 	virtual float Compute(float Lh, float Rh) override;
 	virtual bool IsBreaking() override;
+	virtual bool IsPersistent() override
+	{
+		return true;
+	}
 };

@@ -65,7 +65,7 @@ bool NFactorUnit::IsActivated() const
 	return bIsActivated && Event.IsValid() && !Event->IsExpired();
 }
 
-TSharedPtr<NFactorOperatorInterface> NFactorUnit::GetOperator() const
+TSharedPtr<NFactorOperatorInterface> NFactorUnit::GetOperator()
 {
 	return Operator;
 }

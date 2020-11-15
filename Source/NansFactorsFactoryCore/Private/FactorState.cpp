@@ -89,9 +89,7 @@ float NFactorState::Compute()
 			}
 			else
 			{
-				NFactorOperatorPersistentInterface* Persistent =
-					dynamic_cast<NFactorOperatorPersistentInterface*>(Unit->GetOperator().Get());
-				Value = Persistent->PersistentCompute(Value, Unit->GetFactorUnitValue(), PersistentUnits[0]);
+				Value = Unit->GetOperator()->PersistentCompute(Value, Unit->GetFactorUnitValue(), PersistentUnits[0]);
 			}
 
 			if (bDebug)
@@ -107,17 +105,11 @@ float NFactorState::Compute()
 
 			FactorUnitValue = Value;
 
-			NFactorOperatorBreakerInterface* Breaker = dynamic_cast<NFactorOperatorBreakerInterface*>(Unit->GetOperator().Get());
-			if (Breaker != nullptr)
-			{
-				bool bBreak = Breaker->IsBreaking();
-				if (bBreak) goto EndOfLoop;
-			}
+			bool bBreak = Unit->GetOperator()->IsBreaking();
+			if (bBreak) goto EndOfLoop;
 		}
 
-		NFactorOperatorPersistentInterface* Persistent =
-			dynamic_cast<NFactorOperatorPersistentInterface*>(Operation.Operator.Get());
-		if (Persistent != nullptr)
+		if (Operation.Operator->IsPersistent())
 		{
 			PersistentUnits.Add(PersistentIndex++, Operation.FactorUnit);
 		}

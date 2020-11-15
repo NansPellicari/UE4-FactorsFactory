@@ -23,7 +23,7 @@ class NANSFACTORSFACTORYCORE_API NFactorUnitInterface
 {
 public:
 	virtual ~NFactorUnitInterface() {}
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const = 0;
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() = 0;
 	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) = 0;
 	virtual float GetFactorUnitValue() const = 0;
 	virtual FName GetReason() const = 0;

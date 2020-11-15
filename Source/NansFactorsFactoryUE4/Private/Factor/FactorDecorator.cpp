@@ -14,14 +14,12 @@
 
 #include "Factor/FactorDecorator.h"
 
-#include "FactorUnit/FactorUnitAdapter.h"
+#include "FactorUnit/FactorUnitView.h"
 #include "NansFactorsFactoryCore/Public/Factor.h"
 #include "NansFactorsFactoryUE4/Public/FactorUnit/UnrealFactorUnitProxy.h"
 #include "NansTimelineSystemUE4/Public/Config/TimelineConfig.h"
-#include "NansTimelineSystemUE4/Public/Event/EventDecorator.h"
+#include "NansTimelineSystemUE4/Public/Event/EventView.h"
 #include "NansTimelineSystemUE4/Public/TimelineBlueprintHelpers.h"
-#include "NansTimelineSystemUE4/Public/TimelineDecorator.h"
-#include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
 
 void UNFactorDecorator::Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline)
 {
@@ -54,14 +52,14 @@ float UNFactorDecorator::GetTime() const
 	return Factor->GetTime();
 }
 
-UNFactorUnitAdapter* UNFactorDecorator::CreateFactorUnit(const UClass* Class)
+UNFactorUnitView* UNFactorDecorator::CreateFactorUnit(const UClass* Class)
 {
 	static uint32 FactorUnitNum = 0;
 
 	FString Name = FString::Format(TEXT("FactorUnit_{0}_"), {Class->GetFullName()});
 	Name.AppendInt(++FactorUnitNum);
 
-	return NewObject<UNFactorUnitAdapter>(this, Class, FName(*Name));
+	return NewObject<UNFactorUnitView>(this, Class, FName(*Name));
 }
 
 UNOperatorProviderBase* UNFactorDecorator::CreateOperatorProvider(const UClass* Class)
@@ -84,13 +82,22 @@ TArray<TSharedPtr<NFactorUnitInterface>> UNFactorDecorator::GetFactors() const
 	return Factor->GetFactors();
 }
 
-int32 UNFactorDecorator::AddFactorUnit(UNFactorUnitAdapter* FactorUnit)
+UNFactorUnitView* UNFactorDecorator::GetGCFactorUnit(int32 Index)
+{
+	if (GCAdapters.IsValidIndex(Index))
+	{
+		return GCAdapters[Index];
+	}
+	return nullptr;
+}
+
+int32 UNFactorDecorator::AddFactorUnit(UNFactorUnitView* FactorUnit)
 {
 	FConfiguredTimeline ConfiguredTimeline;
 	ConfiguredTimeline.Name = GetTimeline()->GetLabel();
-	UNEventDecorator* Event =
+	TSharedPtr<NEventInterface> Event =
 		UNTimelineBlueprintHelpers::GetTimeline(this, ConfiguredTimeline)
-			->CreateNewEvent(FactorUnit->EventClass, FactorUnit->Reason, FactorUnit->Duration, FactorUnit->Delay);
+		->CreateNewEvent(FactorUnit->Reason, FactorUnit->Duration, FactorUnit->Delay);
 	FactorUnit->Init(Event);
 	// TODO refacto: remove this when OnEventExpired trigger.
 	GCAdapters.Add(FactorUnit);
@@ -142,6 +149,7 @@ void UNFactorDecorator::Debug(bool _bDebug)
 {
 	Factor->Debug(_bDebug);
 }
+
 void UNFactorDecorator::SupplyStateWithCurrentData(NFactorStateInterface& State)
 {
 	Factor->SupplyStateWithCurrentData(State);
