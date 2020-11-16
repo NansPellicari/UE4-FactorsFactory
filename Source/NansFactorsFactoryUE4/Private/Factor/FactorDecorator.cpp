@@ -170,7 +170,10 @@ void UNFactorDecorator::Serialize(FArchive& Ar)
 		Factor->Clear();
 	}
 
-	Factor->Archive(Ar);
+	if (Factor.IsValid())
+	{
+		Factor->Archive(Ar);
+	}
 
 	if (FactorUnitStoreCount > 0)
 	{
