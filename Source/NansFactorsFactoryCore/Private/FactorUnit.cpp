@@ -65,7 +65,7 @@ bool NFactorUnit::IsActivated() const
 	return bIsActivated && Event.IsValid() && !Event->IsExpired();
 }
 
-TSharedPtr<NFactorOperatorInterface> NFactorUnit::GetOperator() const
+TSharedPtr<NFactorOperatorInterface> NFactorUnit::GetOperator()
 {
 	return Operator;
 }
@@ -94,4 +94,12 @@ TSharedPtr<NEventInterface> NFactorUnit::GetEvent()
 NFactorUnit::~NFactorUnit()
 {
 	Event.Reset();
+}
+
+void NFactorUnit::PreDelete() {}
+
+void NFactorUnit::Archive(FArchive& Ar)
+{
+	Ar << bIsActivated;
+	Ar << FactorUnitValue;
 }

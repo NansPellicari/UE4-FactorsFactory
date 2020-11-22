@@ -22,7 +22,7 @@
 #include "EditorCategoryUtils.h"
 #include "Engine/Blueprint.h"
 #include "Engine/BlueprintGeneratedClass.h"
-#include "FactorUnit/FactorUnitAdapter.h"
+#include "FactorUnit/FactorUnitView.h"
 #include "FactorsFactoryBlueprintHelpers.h"
 #include "GraphEditorActions.h"
 #include "K2Node/FactorUnitUtilities.h"
@@ -56,7 +56,7 @@ namespace
 		{
 			FOptionalPinManager::GetRecordDefaults(TestProperty, Record);
 
-			// Show pin which the property is owned by the src class or UNFactorUnitAdapter class.
+			// Show pin which the property is owned by the src class or UNFactorUnitView class.
 			Record.bShowPin = TestProperty->GetOwnerClass() == SrcClass;
 			Record.bShowPin = !TestProperty->HasAnyPropertyFlags(CPF_DisableEditOnInstance);
 		}
@@ -76,8 +76,11 @@ namespace
 	class FKCHandler_FactorOperator : public FNodeHandlingFunctor
 	{
 	public:
-		FKCHandler_FactorOperator(FKismetCompilerContext& InCompilerContext) : FNodeHandlingFunctor(InCompilerContext) {}
+		FKCHandler_FactorOperator(FKismetCompilerContext& InCompilerContext) : FNodeHandlingFunctor(
+			InCompilerContext
+		) {}
 
+		// TODO make this working with server
 		// virtual void RegisterNets(FKismetFunctionContext& Context, UEdGraphNode* Node) override
 		// {
 		// 	UE_LOG(LogTemp, Warning, TEXT("*********** Calling %s"), ANSI_TO_TCHAR(__FUNCTION__));
@@ -172,7 +175,7 @@ namespace
 		//         }
 		// }
 	};
-}	 // namespace
+} // namespace
 
 FName UK2Node_FactorUnit::ClassPinName(TEXT("FactorUnitClass"));
 FName UK2Node_FactorUnit::FactorPinName(TEXT("Factor"));
@@ -199,7 +202,10 @@ void UK2Node_FactorUnit::PreEditChange(FProperty* PropertyThatWillChange)
 {
 	Super::PreEditChange(PropertyThatWillChange);
 
-	if (PropertyThatWillChange && PropertyThatWillChange->GetFName() == GET_MEMBER_NAME_CHECKED(FOptionalPinFromProperty, bShowPin))
+	if (PropertyThatWillChange && PropertyThatWillChange->GetFName() == GET_MEMBER_NAME_CHECKED(
+			FOptionalPinFromProperty,
+			bShowPin
+		))
 	{
 		FOptionalPinManager::CacheShownPins(ShowPinForProperties, OldShownPins);
 	}
@@ -260,7 +266,11 @@ UEdGraphPin* UK2Node_FactorUnit::FindClassPin() const
 UEdGraphPin* UK2Node_FactorUnit::FindClassPin(const TArray<UEdGraphPin*>& FromPins) const
 {
 	UEdGraphPin* const* FoundPin = FromPins.FindByPredicate(
-		[](const UEdGraphPin* CurPin) { return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == ClassPinName; });
+		[](const UEdGraphPin* CurPin)
+		{
+			return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == ClassPinName;
+		}
+	);
 
 	return FoundPin ? *FoundPin : nullptr;
 }
@@ -275,7 +285,11 @@ UEdGraphPin* UK2Node_FactorUnit::FindFactorPin() const
 UEdGraphPin* UK2Node_FactorUnit::FindFactorPin(const TArray<UEdGraphPin*>& FromPins) const
 {
 	UEdGraphPin* const* FoundPin = FromPins.FindByPredicate(
-		[](const UEdGraphPin* CurPin) { return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == FactorPinName; });
+		[](const UEdGraphPin* CurPin)
+		{
+			return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == FactorPinName;
+		}
+	);
 
 	return FoundPin ? *FoundPin : nullptr;
 }
@@ -290,7 +304,11 @@ UEdGraphPin* UK2Node_FactorUnit::FindOperatorPin() const
 UEdGraphPin* UK2Node_FactorUnit::FindOperatorPin(const TArray<UEdGraphPin*>& FromPins) const
 {
 	UEdGraphPin* const* FoundPin = FromPins.FindByPredicate(
-		[](const UEdGraphPin* CurPin) { return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == OperatorPinName; });
+		[](const UEdGraphPin* CurPin)
+		{
+			return CurPin && CurPin->Direction == EGPD_Input && CurPin->PinName == OperatorPinName;
+		}
+	);
 
 	return FoundPin ? *FoundPin : nullptr;
 }
@@ -420,23 +438,44 @@ void UK2Node_FactorUnit::AllocateDefaultPins()
 	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, UEdGraphSchema_K2::PN_Then);
 
 	// Create the class input type selector pin
-	UEdGraphPin* ClassPin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Class, UNFactorUnitAdapter::StaticClass(), ClassPinName);
-	K2Schema->ConstructBasicPinTooltip(*ClassPin,
+	UEdGraphPin* ClassPin = CreatePin(
+		EGPD_Input,
+		UEdGraphSchema_K2::PC_Class,
+		UNFactorUnitView::StaticClass(),
+		ClassPinName
+	);
+	K2Schema->ConstructBasicPinTooltip(
+		*ClassPin,
 		LOCTEXT("ClassPinDescription", "The class from which to access one or more default values."),
-		ClassPin->PinToolTip);
+		ClassPin->PinToolTip
+	);
 
-	UEdGraphPin* FactorPin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Struct, FFactorAttribute::StaticStruct(), FactorPinName);
-	K2Schema->ConstructBasicPinTooltip(*FactorPin,
+	UEdGraphPin* FactorPin = CreatePin(
+		EGPD_Input,
+		UEdGraphSchema_K2::PC_Struct,
+		FFactorAttribute::StaticStruct(),
+		FactorPinName
+	);
+	K2Schema->ConstructBasicPinTooltip(
+		*FactorPin,
 		LOCTEXT("ClassPinDescription", "The factor from which the factorUnit will be attached to."),
-		FactorPin->PinToolTip);
+		FactorPin->PinToolTip
+	);
 
 	UEdGraphPin* OperatorClassPin =
 		CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Class, UNOperatorProviderBase::StaticClass(), OperatorPinName);
-	K2Schema->ConstructBasicPinTooltip(*ClassPin,
+	K2Schema->ConstructBasicPinTooltip(
+		*ClassPin,
 		LOCTEXT("ClassPinDescription", "The class from which to access one or more default values."),
-		ClassPin->PinToolTip);
+		ClassPin->PinToolTip
+	);
 
-	CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Object, UNFactorUnitAdapter::StaticClass(), UEdGraphSchema_K2::PN_ReturnValue);
+	CreatePin(
+		EGPD_Output,
+		UEdGraphSchema_K2::PC_Object,
+		UNFactorUnitView::StaticClass(),
+		UEdGraphSchema_K2::PN_ReturnValue
+	);
 }
 
 void UK2Node_FactorUnit::ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
@@ -472,20 +511,24 @@ void UK2Node_FactorUnit::ExpandNode(class FKismetCompilerContext& CompilerContex
 			*LOCTEXT("FactorOperator_Error", "FactorOperator node @@ must have a @@ specified in @@").ToString(),
 			*Node->GetName(),
 			*ClassPin->GetName(),
-			this);
+			this
+		);
 		// we break exec links so this is the only error we get, don't want the SpawnActor node being considered and giving
 		// 'unexpected node' type warnings
 		Node->BreakAllNodeLinks();
 		return;
 	}
 
-	if (!(OperatorClassType || OperatorPin->LinkedTo.Num() > 0) || OperatorClassType->HasAnyClassFlags(EClassFlags::CLASS_Abstract))
+	if (!(OperatorClassType || OperatorPin->LinkedTo.Num() > 0) || OperatorClassType->HasAnyClassFlags(
+			EClassFlags::CLASS_Abstract
+		))
 	{
 		CompilerContext.MessageLog.Error(
 			*LOCTEXT("FactorOperator_Error", "FactorOperator node @@ must have a @@ specified in @@").ToString(),
 			*Node->GetName(),
 			*OperatorPin->GetName(),
-			this);
+			this
+		);
 		// we break exec links so this is the only error we get, don't want the SpawnActor node being considered and giving
 		// 'unexpected node' type warnings
 		Node->BreakAllNodeLinks();
@@ -493,7 +536,10 @@ void UK2Node_FactorUnit::ExpandNode(class FKismetCompilerContext& CompilerContex
 	}
 
 	// Create temp variable for factor field which allows to connect it to blueprint helpers functions
-	UK2Node_TemporaryVariable* TempFactorNode = CompilerContext.SpawnIntermediateNode<UK2Node_TemporaryVariable>(this, SourceGraph);
+	UK2Node_TemporaryVariable* TempFactorNode = CompilerContext.SpawnIntermediateNode<UK2Node_TemporaryVariable>(
+		this,
+		SourceGraph
+	);
 	TempFactorNode->VariableType = FactorPin->PinType;
 	TempFactorNode->AllocateDefaultPins();
 	CompilerContext.MessageLog.NotifyIntermediateObjectCreation(TempFactorNode, this);
@@ -529,7 +575,12 @@ void UK2Node_FactorUnit::ExpandNode(class FKismetCompilerContext& CompilerContex
 	UEdGraphPin* UnitCreatedPin = CallCreateUnitNode->GetReturnValuePin();
 
 	LastThen = Utils->ConnectPinsForObject(
-		ClassType, UnitCreatedPin, LastThen, Pins, {ClassPinName, FactorPinName, OperatorPinName, OuterPinName});
+		ClassType,
+		UnitCreatedPin,
+		LastThen,
+		Pins,
+		{ClassPinName, FactorPinName, OperatorPinName, OuterPinName}
+	);
 	// END Create & populate FactorUnit
 
 	// BEGIN Create & populate OperatorProvider
@@ -547,7 +598,12 @@ void UK2Node_FactorUnit::ExpandNode(class FKismetCompilerContext& CompilerContex
 	UEdGraphPin* OperatorCreatedPin = lastNodes.Get<1>()->GetCastResultPin();
 
 	LastThen = Utils->ConnectPinsForObject(
-		OperatorClassType, OperatorCreatedPin, LastThen, Pins, {ClassPinName, FactorPinName, OperatorPinName, OuterPinName});
+		OperatorClassType,
+		OperatorCreatedPin,
+		LastThen,
+		Pins,
+		{ClassPinName, FactorPinName, OperatorPinName, OuterPinName}
+	);
 	// END Create & populate OperatorProvider
 
 #if WITH_EDITOR
@@ -563,7 +619,10 @@ void UK2Node_FactorUnit::ExpandNode(class FKismetCompilerContext& CompilerContex
 	CompilerContext.MessageLog.NotifyIntermediateObjectCreation(CallFuncOperatorSetterNode, this);
 
 	bSucceeded &= Utils->TryConnectPin(UnitCreatedPin, Schema->FindSelfPin(*CallFuncOperatorSetterNode, EGPD_Input));
-	bSucceeded &= Utils->TryConnectPin(OperatorCreatedPin, CallFuncOperatorSetterNode->FindPin(TEXT("_OperatorProvider")));
+	bSucceeded &= Utils->TryConnectPin(
+		OperatorCreatedPin,
+		CallFuncOperatorSetterNode->FindPin(TEXT("_OperatorProvider"))
+	);
 	bSucceeded &= Utils->MovePinLinks(LastThen, CallFuncOperatorSetterNode->GetThenPin());
 	bSucceeded &= Utils->TryConnectPin(LastThen, CallFuncOperatorSetterNode->GetExecPin());
 
@@ -575,10 +634,14 @@ void UK2Node_FactorUnit::ExpandNode(class FKismetCompilerContext& CompilerContex
 #if WITH_EDITOR
 	if (bDebug) UE_LOG(LogTemp, Display, TEXT("> AddFactorUnitNode "));
 #endif
-	UK2Node_CallFunction* CallAddFactorUnitNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
+	UK2Node_CallFunction* CallAddFactorUnitNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(
+		this,
+		SourceGraph
+	);
 	CallAddFactorUnitNode->FunctionReference.SetExternalMember(
 		GET_FUNCTION_NAME_CHECKED(UNFactorsFactoryBlueprintHelpers, AddFactorUnit),
-		UNFactorsFactoryBlueprintHelpers::StaticClass());
+		UNFactorsFactoryBlueprintHelpers::StaticClass()
+	);
 	CallAddFactorUnitNode->AllocateDefaultPins();
 	CompilerContext.MessageLog.NotifyIntermediateObjectCreation(CallAddFactorUnitNode, this);
 
@@ -606,7 +669,7 @@ void UK2Node_FactorUnit::OnBlueprintClassModified(UBlueprint* TargetBlueprint)
 {
 	check(TargetBlueprint);
 	UBlueprint* OwnerBlueprint =
-		FBlueprintEditorUtils::FindBlueprintForNode(this);	  // GetBlueprint() will crash, when the node is transient, etc
+		FBlueprintEditorUtils::FindBlueprintForNode(this); // GetBlueprint() will crash, when the node is transient, etc
 	if (OwnerBlueprint)
 	{
 		// The Blueprint that contains this node may have finished
@@ -700,8 +763,7 @@ void UK2Node_FactorUnit::CreateNewPins(UClass* InClass, bool bOuputPin)
 		{
 			BlueprintSubscribers[InClass->GetPathName()].Get<0>() = Blueprint;
 			BlueprintSubscribers[InClass->GetPathName()].Get<1>() =
-				Blueprint->OnChanged().AddUObject(this, &ThisClass::OnBlueprintClassModified);
-			;
+				Blueprint->OnChanged().AddUObject(this, &ThisClass::OnBlueprintClassModified);;
 			BlueprintSubscribers[InClass->GetPathName()].Get<2>() =
 				Blueprint->OnCompiled().AddUObject(this, &ThisClass::OnBlueprintClassModified);
 		}
@@ -714,22 +776,28 @@ void UK2Node_FactorUnit::OnClassPinChanged()
 	UClass* InputOpClass = GetInputOperatorClass();
 
 #if WITH_EDITOR
-	if (!InputClass->IsChildOf(UNFactorUnitAdapter::StaticClass()) || InputClass->HasAnyClassFlags(EClassFlags::CLASS_Abstract))
+	if (!InputClass->IsChildOf(UNFactorUnitView::StaticClass()) || InputClass->HasAnyClassFlags(
+			EClassFlags::CLASS_Abstract
+		))
 	{
-		UE_LOG(LogTemp,
+		UE_LOG(
+			LogTemp,
 			Error,
 			TEXT("%s has a wrong class selected, you have to set a subclass of %s"),
 			*this->GetName(),
-			*UNFactorUnitAdapter::StaticClass()->GetName());
+			*UNFactorUnitView::StaticClass()->GetName()
+		);
 	}
 	if (!InputOpClass->IsChildOf(UNOperatorProviderBase::StaticClass()) ||
 		InputOpClass->HasAnyClassFlags(EClassFlags::CLASS_Abstract))
 	{
-		UE_LOG(LogTemp,
+		UE_LOG(
+			LogTemp,
 			Error,
 			TEXT("%s has a wrong operator class selected, you have to set a subclass of %s"),
 			*this->GetName(),
-			*UNOperatorProviderBase::StaticClass()->GetName());
+			*UNOperatorProviderBase::StaticClass()->GetName()
+		);
 	}
 #endif
 
@@ -814,7 +882,7 @@ void UK2Node_FactorUnit::ValidateNodeDuringCompilation(class FCompilerResultsLog
 
 	if (const UClass* Class = GetInputClass())
 	{
-		Classes.Add(Class, UNFactorUnitAdapter::StaticClass());
+		Classes.Add(Class, UNFactorUnitView::StaticClass());
 	}
 
 	for (auto& It : Classes)
@@ -825,10 +893,14 @@ void UK2Node_FactorUnit::ValidateNodeDuringCompilation(class FCompilerResultsLog
 		{
 			bool bEmitWarning = true;
 			MessageLog.Warning(
-				*LOCTEXT("NotInstanciableObjectWarning", "@@ has a wrong class selected, you have to set a subclass of @@")
-					 .ToString(),
+				*LOCTEXT(
+					"NotInstanciableObjectWarning",
+					"@@ has a wrong class selected, you have to set a subclass of @@"
+				)
+				.ToString(),
 				this,
-				ExpectedClass);
+				ExpectedClass
+			);
 			return;
 		}
 
@@ -857,24 +929,28 @@ void UK2Node_FactorUnit::ValidateNodeDuringCompilation(class FCompilerResultsLog
 				else if (const FMapProperty* MapProperty = CastField<FMapProperty>(TestProperty))
 				{
 					bEmitWarning = (MapProperty->KeyProp && MapProperty->KeyProp->IsA<FObjectProperty>() &&
-									   !MapProperty->KeyProp->IsA<FClassProperty>()) ||
+									!MapProperty->KeyProp->IsA<FClassProperty>()) ||
 								   (MapProperty->ValueProp && MapProperty->ValueProp->IsA<FObjectProperty>() &&
-									   !MapProperty->ValueProp->IsA<FClassProperty>());
+									!MapProperty->ValueProp->IsA<FClassProperty>());
 				}
 
 				if (bEmitWarning)
 				{
-					MessageLog.Warning(*LOCTEXT("UnsafeConnectionWarning",
-										   "@@ has an unsafe connection to the @@ output pin that is not fully supported at "
-										   "this time. It should "
-										   "be disconnected to avoid potentially corrupting class defaults at runtime. If you "
-										   "need to keep this "
-										   "connection, make sure you're not changing the state of any elements in the "
-										   "container. Also note that "
-										   "if you recreate this node, it will not include this output pin.")
-											.ToString(),
+					MessageLog.Warning(
+						*LOCTEXT(
+							"UnsafeConnectionWarning",
+							"@@ has an unsafe connection to the @@ output pin that is not fully supported at "
+							"this time. It should "
+							"be disconnected to avoid potentially corrupting class defaults at runtime. If you "
+							"need to keep this "
+							"connection, make sure you're not changing the state of any elements in the "
+							"container. Also note that "
+							"if you recreate this node, it will not include this output pin."
+						)
+						.ToString(),
 						this,
-						Pin);
+						Pin
+					);
 				}
 			}
 		}

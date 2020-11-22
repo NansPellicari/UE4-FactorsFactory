@@ -17,7 +17,7 @@
 #include "Engine.h"
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
-#include "FactorUnit/FactorUnitAdapter.h"
+#include "FactorUnit/FactorUnitView.h"
 #include "FactorUnit/UnrealFactorUnitProxy.h"
 #include "FactorsFactoryClientAdapter.h"
 #include "FactorsFactoryGameInstance.h"
@@ -108,19 +108,19 @@ void UNFactorsFactoryBlueprintHelpers::Clear(UObject* WorldContextObject, TArray
 	}
 }
 
-UNFactorUnitAdapter* UNFactorsFactoryBlueprintHelpers::AddFactorUnit(
-	UObject* WorldContextObject, UNFactorUnitAdapter* FactorUnit, FFactorAttribute Factor)
+UNFactorUnitView* UNFactorsFactoryBlueprintHelpers::AddFactorUnit(
+	UObject* WorldContextObject, UNFactorUnitView* FactorUnit, FFactorAttribute Factor)
 {
 	UNFactorsFactoryClientAdapter* Client = GetFactorUnitClient(WorldContextObject);
 
 	if (Client == nullptr) return FactorUnit;
 
-	Client->AddFactorUnit(Factor.Name, MakeShareable(new NUnrealFactorUnitProxy(FactorUnit)));
+	Client->AddFactorUnit(Factor.Name, FactorUnit);
 
 	return FactorUnit;
 }
 
-UNFactorUnitAdapter* UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+UNFactorUnitView* UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
 	UObject* WorldContextObject, UClass* Class, FFactorAttribute Factor)
 {
 	UNFactorsFactoryClientAdapter* Client = GetFactorUnitClient(WorldContextObject);
@@ -131,7 +131,7 @@ UNFactorUnitAdapter* UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
 UNOperatorProviderBase* UNFactorsFactoryBlueprintHelpers::CreateOperatorProvider(
 	UObject* WorldContextObject, UClass* OperatorProviderClass, FFactorAttribute Factor)
 {
-    UNFactorsFactoryClientAdapter* Client = GetFactorUnitClient(WorldContextObject);
+	UNFactorsFactoryClientAdapter* Client = GetFactorUnitClient(WorldContextObject);
 	mycheckf(Client != nullptr, TEXT("It's not possible to create a factor unit without a FactorsFactory client!"));
 	return Client->CreateOperatorProvider(Factor.Name, OperatorProviderClass);
 }

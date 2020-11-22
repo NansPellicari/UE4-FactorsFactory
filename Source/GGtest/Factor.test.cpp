@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-class NBreakerOperator : public NFactorOperatorBreakerInterface, public NFactorOperatorInterface
+class NBreakerOperator final : public NFactorOperatorBase
 {
 	virtual float Compute(float Lh, float Rh) override
 	{
@@ -31,8 +31,12 @@ class NBreakerOperator : public NFactorOperatorBreakerInterface, public NFactorO
 		return true;
 	};
 };
-class NStopperOperator : public NFactorOperatorStopperInterface, public NFactorOperatorInterface
+class NStopperOperator final : public NFactorOperatorBase
 {
+	virtual bool IsStopper() override
+	{
+		return true;
+	}
 	virtual float Compute(float Lh, float Rh) override
 	{
 		return 0;
@@ -48,13 +52,41 @@ class NStopperOperator : public NFactorOperatorStopperInterface, public NFactorO
 	}
 };
 
-class NAddPersistentOperator : public NAddOperator, public NFactorOperatorPersistentInterface
+class NAddPersistentOperator final : public NFactorOperatorBase
 {
-	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override
+public:
+	NAddPersistentOperator()
 	{
-		return NAddOperator::Compute(Lh, Rh);
+		BaseOp = MakeUnique<NAddOperator>();
 	}
+	virtual ~NAddPersistentOperator() {}
+	virtual float Compute(float Lh, float Rh) override
+	{
+		return BaseOp->Compute(Lh, Rh);
+	}
+	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override
+	{
+		return BaseOp->GetInverse();
+	}
+	static const FName Name;
+	virtual const FName GetName() override
+	{
+		return Name;
+	}
+	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override
+	{
+		return BaseOp->Compute(Lh, Rh);
+	}
+	virtual bool IsPersistent() override
+	{
+		return true;
+	}
+
+private:
+	TUniquePtr<NAddOperator> BaseOp;
 };
+
+const FName NAddPersistentOperator::Name(TEXT("Persistent Add"));
 
 class NansFactorsFactoryCoreFactorTest : public ::testing::Test
 {
@@ -85,7 +117,6 @@ TEST_F(NansFactorsFactoryCoreFactorTest, ShouldRemovesEverySetFlagsAfterGettingT
 	Factor->SetStateFlag("Flag", true);
 	NFactorStateInterface* State = new NFactorState();
 	Factor->SupplyStateWithCurrentData(*State);
-
 	try
 	{
 		Factor->GetStateFlag("Flag");

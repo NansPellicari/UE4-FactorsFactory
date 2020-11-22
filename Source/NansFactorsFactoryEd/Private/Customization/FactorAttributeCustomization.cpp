@@ -47,7 +47,7 @@ void FNFactorAttributeCustomization::CustomizeHeader(TSharedRef<IPropertyHandle>
 
 	OnAttributeSelected(InitialSelectedName, ESelectInfo::Direct);
 
-	// clang-format off
+	// @formatter:off
 	HeaderRow.NameContent()
 	[
 		StructPropertyHandle->CreatePropertyNameWidget()
@@ -60,7 +60,7 @@ void FNFactorAttributeCustomization::CustomizeHeader(TSharedRef<IPropertyHandle>
 		.InitiallySelectedItem(InitialSelectedName)
 		.OnSelectionChanged(this, &FNFactorAttributeCustomization::OnAttributeSelected)
 	];
-	// clang-format on
+	// @formatter:on
 }
 
 void FNFactorAttributeCustomization::CustomizeChildren(TSharedRef<IPropertyHandle> StructPropertyHandle,

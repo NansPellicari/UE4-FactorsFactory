@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-class FakeResetOperator : public NResetOperator
+class FakeResetOperator final : public NResetOperator
 {
 public:
 	uint32 GetKeyInFactor()
@@ -50,8 +50,8 @@ TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldCheckIfIsAnOperatorWithFac
 	// Some factors to be reset
 	FakeResetOperator* Operator = new FakeResetOperator();
 	EXPECT_EQ(Operator->GetName(), NResetOperator::Name);
-	EXPECT_FALSE(NOperatorUtils::IsOperatorWithFactor(new NNullOperator()));
-	EXPECT_TRUE(NOperatorUtils::IsOperatorWithFactor(Operator));
+	EXPECT_FALSE((new NNullOperator())->IsOperatorWithFactor());
+	EXPECT_TRUE(Operator->IsOperatorWithFactor());
 }
 
 TEST_F(NansFactorsFactoryCoreResetOperatorTest, ShouldTriggerAnErrorIfTryingToSetAKeyBeforeHavingAFactor)

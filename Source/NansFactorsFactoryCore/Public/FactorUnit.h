@@ -37,7 +37,7 @@ public:
 	NFactorUnit(float _FactorUnitValue, TSharedPtr<NFactorOperatorInterface> _Operator, TSharedPtr<NEventInterface> _Event);
 	virtual ~NFactorUnit();
 	virtual bool IsActivated() const override;
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override;
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override;
 	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) override;
 	virtual float GetFactorUnitValue() const override;
 	virtual FName GetReason() const override;
@@ -45,10 +45,15 @@ public:
 	virtual const FString GetUID() const override;
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
 	virtual void Activate(bool _bIsActivated) override;
+	virtual void PreDelete() override;
+	virtual void Archive(FArchive& Ar) override;
 
 protected:
 	TSharedPtr<NEventInterface> Event;
 	bool bIsActivated = true;
 	float FactorUnitValue;
 	TSharedPtr<NFactorOperatorInterface> Operator;
+
+	/** This is used only for serialization */
+	FString UID;
 };

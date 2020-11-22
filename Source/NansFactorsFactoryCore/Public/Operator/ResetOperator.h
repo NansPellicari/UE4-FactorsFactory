@@ -20,9 +20,10 @@
 class NFactorUnitInterface;
 class NFactorInterface;
 
-class NANSFACTORSFACTORYCORE_API NResetOperatorBase : public NFactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NResetOperatorBase : public NFactorOperatorBase
 {
 public:
+	virtual ~NResetOperatorBase() {}
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
 	static FString GetResetIdFlag(TSharedPtr<NFactorUnitInterface> FactorUnit);
 };
@@ -34,7 +35,7 @@ public:
  * (The Index of the FactorUnit which embeds this Operator - Rh)
  * of the FactorUnit you want to reset.
  */
-class NANSFACTORSFACTORYCORE_API NResetOperator : public NResetOperatorBase, public NFactorOperatorWithFactorInterface
+class NANSFACTORSFACTORYCORE_API NResetOperator : public NResetOperatorBase
 {
 public:
 	virtual ~NResetOperator();
@@ -47,6 +48,10 @@ public:
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
 	virtual void SetFactor(NFactorInterface* Factor) override;
 	virtual void SetKeyInFactor(uint32 Key) override;
+	virtual bool IsOperatorWithFactor() override
+	{
+		return true;
+	}
 
 protected:
 	NFactorInterface* MyFactor;

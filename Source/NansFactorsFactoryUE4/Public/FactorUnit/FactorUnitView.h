@@ -17,24 +17,25 @@
 #include "Attribute/FactorAttribute.h"
 #include "CoreMinimal.h"
 #include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
-#include "NansTimelineSystemUE4/Public/Event/EventDecorator.h"
+#include "NansTimelineSystemUE4/Public/Event/EventView.h"
 #include "Operator/OperatorProviders.h"
 
 class NEventInterface;
 class NFactorOperatorInterface;
 class NFactorUnit;
+class NUnrealFactorUnitProxy;
 
-#include "FactorUnitAdapter.generated.h"
+#include "FactorUnitView.generated.h"
 
+// TODO Create a PostEditProperty listener to change embed factor data
 UCLASS(Blueprintable)
-class NANSFACTORSFACTORYUE4_API UNFactorUnitAdapter : public UObject, public NFactorUnitInterface
+class NANSFACTORSFACTORYUE4_API UNFactorUnitView : public UObject, public NFactorUnitInterface
 {
 	GENERATED_BODY()
 public:
-	UNFactorUnitAdapter() {}
+	friend class NUnrealFactorUnitProxy;
 
-	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
-	TSubclassOf<UNEventDecorator> EventClass = UNEventDecorator::StaticClass();
+	UNFactorUnitView() {}
 
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
 	float FactorUnitValue = 0.f;
@@ -48,24 +49,22 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "FactorsFactory|Unit")
 	FName Reason = NAME_None;
 
-	// clang-format off
+	// @formatter:off
 	UFUNCTION(meta = (BlueprintInternalUseOnly = "true"), BlueprintCallable, Category = "FactorsFactory|Unit")
 	virtual void SetOperatorProvider(UNOperatorProviderBase* _OperatorProvider);
-	// clang-format on
+	// @formatter:on
 
+	UPROPERTY()
 	UNOperatorProviderBase* OperatorProvider;
 
-	virtual void Init();
-	virtual void Init(UNEventDecorator* _Event);
+	/** This is used as a constructor */
+	virtual void Init(TSharedPtr<NEventInterface> Event);
 
 	virtual TSharedPtr<NFactorOperatorInterface> GetConfiguredOperator();
 
-	UFUNCTION(BlueprintCallable, Category = "FactorsFactory|Unit")
-	virtual UNEventDecorator* GetEventDecorator();
-
 	// BEGIN NFactorUnitInterface override
 	virtual TSharedPtr<NEventInterface> GetEvent() override;
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const override;
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() override;
 	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) override;
 	virtual float GetFactorUnitValue() const override;
 	virtual FName GetReason() const override;
@@ -73,15 +72,15 @@ public:
 	virtual void SetFactorUnitValue(float _Value) override;
 	virtual const FString GetUID() const override;
 	virtual void Activate(bool _bIsActivated) override;
+	virtual void PreDelete() override {}
+	virtual void Archive(FArchive& Ar) override {}
 	// END NFactorUnitInterface override
 
 	// BEGIN UObject override
-	virtual void Serialize(FArchive& Ar);
+	virtual void Serialize(FArchive& Ar) override;
 	// END UObject override
 
 protected:
-	TSharedPtr<NFactorUnit> FactorUnit;
 
-	UPROPERTY(SkipSerialization)
-	UNEventDecorator* Event;
+	TSharedPtr<NFactorUnit> FactorUnit;
 };

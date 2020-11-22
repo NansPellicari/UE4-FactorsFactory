@@ -17,8 +17,7 @@
 #include "CoreMinimal.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/Operator/Interfaces.h"
-#include "NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitAdapter.h"
-#include "NansTimelineSystemUE4/Public/Event/EventRecord.h"
+#include "NansFactorsFactoryUE4/Public/FactorUnit/FactorUnitView.h"
 
 #include "FactorDecorator.generated.h"
 
@@ -37,7 +36,8 @@ struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 	GENERATED_USTRUCT_BODY()
 
 	FNFactorUnitRecord() {}
-	FNFactorUnitRecord(UNFactorUnitAdapter* _FactorUnit)
+
+	FNFactorUnitRecord(UNFactorUnitView* _FactorUnit)
 	{
 		FactorUnit = _FactorUnit;
 		UId = FactorUnit->GetUID();
@@ -46,10 +46,10 @@ struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 		OperatorProviderClassName = FactorUnit->OperatorProvider->GetClass()->GetPathName();
 	}
 
-	/** The UNFactorUnitAdapter object */
+	/** The UNFactorUnitView object */
 	UPROPERTY(SkipSerialization)
-	UNFactorUnitAdapter* FactorUnit = nullptr;
-	/** The time it as been attached to the timeline in secs (differ to UNEventDecorator::StartedAt) */
+	UNFactorUnitView* FactorUnit = nullptr;
+	/** The time it as been attached to the timeline in secs (differ to UNEventView::StartedAt) */
 	UPROPERTY(SkipSerialization)
 	FString UId = FString("");
 	/** This value to keep trace of what happens, usefull for  */
@@ -64,30 +64,9 @@ struct NANSFACTORSFACTORYUE4_API FNFactorUnitRecord
 
 	UPROPERTY(SkipSerialization)
 	FString OperatorProviderClassName = FString("");
-
-	FNEventRecord& GetEventRecord(UNFactorDecorator* Factor);
-
-	/** It manages Event object saving and loading */
-	void Serialize(FArchive& Ar, UNFactorDecorator* Factor);
-
-	/** Just save basic data, see FNFactorUnitRecord::Serialize() to see how FactorUnit object is managed */
-	friend FArchive& operator<<(FArchive& Ar, FNFactorUnitRecord& Record)
-	{
-		if (Ar.IsSaving())
-		{
-			Record.FactorUnitClassName = Record.FactorUnit != nullptr ? Record.FactorUnit->GetClass()->GetPathName() : FString("");
-		}
-
-		Ar << Record.FactorUnitClassName;
-		Ar << Record.OperatorProviderClassName;
-		Ar << Record.UId;
-		Ar << Record.OperatorName;
-		Ar << Record.Value;
-
-		return Ar;
-	};
 };
 
+// TODO remove NFactorInterface dependncy
 UCLASS(Blueprintable)
 class NANSFACTORSFACTORYUE4_API UNFactorDecorator : public UObject, public NFactorInterface
 {
@@ -97,23 +76,14 @@ public:
 	UNFactorDecorator() {}
 
 	void Init(FName _Name, TSharedPtr<NTimelineInterface> _Timeline);
-	UNFactorUnitAdapter* CreateFactorUnit(const UClass* Class);
+	UNFactorUnitView* CreateFactorUnit(const UClass* Class);
+	int32 AddFactorUnit(UNFactorUnitView* FactorUnit);
 	UNOperatorProviderBase* CreateOperatorProvider(const UClass* Class);
 	TArray<FNFactorUnitRecord> GetFactorUnitStore() const;
+	UNFactorUnitView* GetGCFactorUnit(int32 Index);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
 	void OnInit();
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
-	void OnAddFactorUnit(UNFactorUnitAdapter* FactorUnit, int32 key);
-
-	/**
-	 * @warning The FactorUnit pointer is immediatly removed after this method is called.
-	 *
-	 * @param FactorUnit - A pointer to a factorUnit which end its lifetime.
-	 */
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "FactorsFactory")
-	void OnFactorUnitExpired(UNFactorUnitAdapter* FactorUnit);
 
 	UFUNCTION(BlueprintCallable, Category = "FactorsFactory")
 	virtual FName GetName() const override;
@@ -147,6 +117,8 @@ public:
 	virtual TArray<TSharedPtr<NFactorUnitInterface>> GetFactors() const override;
 	virtual int32 AddFactorUnit(TSharedPtr<NFactorUnitInterface> FactorUnit) override;
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) override;
+	virtual void PreDelete() override {}
+	virtual void Archive(FArchive& Ar) override {}
 	// END NFactorInterface override
 
 	// BEGIN UObject override
@@ -155,16 +127,14 @@ public:
 	// END UObject override
 
 protected:
-	TSharedPtr<NFactorInterface> Factor;
+	/** this to save object for GC... */
 	UPROPERTY()
-	TArray<FNFactorUnitRecord> FactorUnitStore;
+	TArray<UNFactorUnitView*> GCAdapters;
+	TSharedPtr<NFactorInterface> Factor;
+
+	int32 FactorUnitStoreCount;
 
 	UPROPERTY(SaveGame)
 	FName SavedName;
-
-	virtual bool PreAddUnit(NUnrealFactorUnitProxy* Unit);
-	virtual void PostAddUnit(NUnrealFactorUnitProxy* Unit, int32 Key);
-
-	UNTimelineDecorator* GetUnrealTimeline();
 	void OnTimelineEventExpired(TSharedPtr<NEventInterface> Event, const float& ExpiredTime, const int32& Index);
 };

@@ -119,7 +119,7 @@ bool NIncreasersCleanerOperator::IsShouldClean(TSharedPtr<NFactorUnitInterface> 
 	return Value > 2.f;
 }
 
-float NReducersCleanerPersistentOperator::Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
+float NReducersCleanerPersistentOperator::PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
 {
 	// The amount of FUs cleared is reached
 	if (FactorUnitsNumber == 0)
@@ -135,7 +135,7 @@ float NReducersCleanerPersistentOperator::Compute(float Lh, float Rh, TSharedPtr
 	return Value;
 }
 
-float NIncreasersCleanerPersistentOperator::Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
+float NIncreasersCleanerPersistentOperator::PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
 {
 	// The amount of FUs cleared is reached
 	if (FactorUnitsNumber == 0)

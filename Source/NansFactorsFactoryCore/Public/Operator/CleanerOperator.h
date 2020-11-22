@@ -26,7 +26,7 @@ class NFactorInterface;
  * For the Compute() method, it returns the value set at the Rh parameter
  * (means that the factor Unit value associated replace every previous value).
  */
-class NANSFACTORSFACTORYCORE_API NCleanerOperator : public NResetOperatorBase, public NFactorOperatorWithFactorInterface
+class NANSFACTORSFACTORYCORE_API NCleanerOperator : public NResetOperatorBase
 {
 public:
 	static const FName Name;
@@ -38,6 +38,10 @@ public:
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
 	virtual void SetFactor(NFactorInterface* Factor) override;
 	virtual void SetKeyInFactor(uint32 Key) override;
+	virtual bool IsOperatorWithFactor() override
+	{
+		return true;
+	}
 
 protected:
 	virtual bool IsShouldClean(TSharedPtr<NFactorUnitInterface> FactorUnit) const;
@@ -67,12 +71,15 @@ protected:
  * @copydoc NReducersCleanerOperator
  * It removes also next Reducers set.
  */
-class NANSFACTORSFACTORYCORE_API NReducersCleanerPersistentOperator : public NReducersCleanerOperator,
-																	  public NFactorOperatorPersistentInterface
+class NANSFACTORSFACTORYCORE_API NReducersCleanerPersistentOperator : public NReducersCleanerOperator
 {
 public:
 	static const FName Name;
-	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
+	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
+	virtual bool IsPersistent() override
+	{
+		return true;
+	}
 };
 
 /**
@@ -92,10 +99,13 @@ public:
  * @copydoc NIncreasersCleanerOperator
  * It removes also next Increasers set.
  */
-class NANSFACTORSFACTORYCORE_API NIncreasersCleanerPersistentOperator : public NIncreasersCleanerOperator,
-																		public NFactorOperatorPersistentInterface
+class NANSFACTORSFACTORYCORE_API NIncreasersCleanerPersistentOperator : public NIncreasersCleanerOperator
 {
 public:
 	static const FName Name;
-	virtual float Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
+	virtual float PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit) override;
+	virtual bool IsPersistent() override
+	{
+		return true;
+	}
 };

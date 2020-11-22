@@ -83,23 +83,3 @@ TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithAMaxOperatorStoppingFor
 
 	EXPECT_EQ(FactorState->Compute(), 3.f);
 }
-TEST_F(NansFactorsFactoryCoreStateTest, ShouldComputeWithAMaxOperatorStoppingForwardComputation)
-{
-	NFactorStateInterface* FactorState = new NFactorState();
-	FactorState->SetTime(1.f);
-	// This to get extra infos on test results
-	// FactorState->bDebug = true;
-	TArray<TSharedPtr<NFactorUnitInterface>> Factors;
-	Factors.Add(MakeShareable(new NFactorUnit(1.f, MakeShareable(new NAddOperator()), 0, FName("Add1"))));
-	Factors.Add(MakeShareable(new NFactorUnit(3.f, MakeShareable(new NMaxOperator()), 0, FName("Max3"))));
-	Factors.Add(MakeShareable(new NFactorUnit(2.f, MakeShareable(new NAddOperator()), 0, FName("Add2"))));
-	Factors.Add(MakeShareable(new NFactorUnit(3.f, MakeShareable(new NAddOperator()), 0, FName("Add3"))));
-
-	for (auto FactorUnit : Factors)
-	{
-		FactorUnit->GetEvent()->Start(0);
-		FactorState->AddFactorUnit(FactorUnit);
-	}
-
-	EXPECT_EQ(FactorState->Compute(), 3.f);
-}

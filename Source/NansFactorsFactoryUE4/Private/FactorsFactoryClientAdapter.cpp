@@ -14,9 +14,8 @@
 
 #include "FactorsFactoryClientAdapter.h"
 
-#include "Factor/FactorDecorator.h"
 #include "Factor/UnrealFactorProxy.h"
-#include "FactorUnit/FactorUnitAdapter.h"
+#include "FactorUnit/FactorUnitView.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorInterface.h"
 #include "NansFactorsFactoryCore/Public/FactorState.h"
@@ -25,9 +24,7 @@
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
 #include "NansTimelineSystemCore/Public/Timeline.h"
 #include "NansTimelineSystemUE4/Public/Attribute/ConfiguredTimeline.h"
-#include "NansTimelineSystemUE4/Public/Event/UnrealEventProxy.h"
 #include "NansTimelineSystemUE4/Public/TimelineBlueprintHelpers.h"
-#include "NansTimelineSystemUE4/Public/UnrealTimelineProxy.h"
 #include "Operator/OperatorProviders.h"
 #include "Settings/FactorSettings.h"
 
@@ -41,61 +38,59 @@ void UNFactorsFactoryClientAdapter::Init()
 	UFactorSettings::GetConfigs(ConfigList);
 	for (auto& Conf : ConfigList)
 	{
-		UNTimelineManagerDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, Conf->Timeline);
-		if (TimelineManager != nullptr)
-		{
-			CreateFactor(Conf->Name, TimelineManager->GetTimeline(), Conf->FactorClass);
-		}
+		CreateFactor(Conf->Name, Conf->Timeline, Conf->FactorClass);
 	}
 }
 
-void UNFactorsFactoryClientAdapter::CreateFactor(TArray<FName> FactorNames, TSharedPtr<NTimelineInterface> Timeline)
-{
-	for (auto& Name : FactorNames)
-	{
-		CreateFactor(Name, Timeline);
-	}
-}
-
-UNFactorUnitAdapter* UNFactorsFactoryClientAdapter::CreateFactorUnit(const FName& FactorName, const UClass* Class)
+UNFactorUnitView* UNFactorsFactoryClientAdapter::CreateFactorUnit(const FName& FactorName, const UClass* Class)
 {
 	mycheckf(UEFactors.Contains(FactorName), TEXT("The factor %s doesn't exists!"), *FactorName.ToString());
 	return UEFactors[FactorName]->CreateFactorUnit(Class);
 }
 
-UNOperatorProviderBase* UNFactorsFactoryClientAdapter::CreateOperatorProvider(const FName& FactorName, const UClass* Class)
+UNOperatorProviderBase* UNFactorsFactoryClientAdapter::CreateOperatorProvider(const FName& FactorName,
+	const UClass* Class)
 {
 	mycheckf(UEFactors.Contains(FactorName), TEXT("The factor %s doesn't exists!"), *FactorName.ToString());
 	return UEFactors[FactorName]->CreateOperatorProvider(Class);
 }
 
 void UNFactorsFactoryClientAdapter::CreateFactor(
-	const FName& FactorName, TSharedPtr<NTimelineInterface> Timeline, const UClass* FactorClass)
+	const TArray<FName> FactorNames, FConfiguredTimeline Timeline, const UClass* FactorClass)
 {
-	mycheckf(FactorClass->IsChildOf(UNFactorDecorator::StaticClass()),
+	for (const FName& FactorName : FactorNames)
+	{
+		CreateFactor(FactorName, Timeline, FactorClass);
+	}
+}
+
+void UNFactorsFactoryClientAdapter::CreateFactor(const FName& FactorName, FConfiguredTimeline Timeline,
+	const UClass* FactorClass)
+{
+	mycheckf(
+		FactorClass->IsChildOf(UNFactorDecorator::StaticClass()),
 		TEXT("%s - The class should be a child of UNFactorDecorator"),
-		ANSI_TO_TCHAR(__FUNCTION__));
+		ANSI_TO_TCHAR(__FUNCTION__)
+	);
+
+	UNTimelineManagerDecorator* TimelineManager = UNTimelineBlueprintHelpers::GetTimeline(this, Timeline);
+	mycheckf(IsValid(TimelineManager), TEXT("Timeline manager %s does not exists"), *Timeline.Name.ToString());
 
 	UNFactorDecorator* UFactor = NewObject<UNFactorDecorator>(this, FactorClass, FactorName);
-	UFactor->Init(FactorName, Timeline);
+	UFactor->Init(FactorName, TimelineManager->GetTimeline());
+	UEFactors.Add(UFactor->GetName(), UFactor);
 	TSharedPtr<NFactorInterface> Factor = MakeShareable(new NUnrealFactorProxy(*UFactor));
-	AddFactor(Factor);
-}
-
-void UNFactorsFactoryClientAdapter::CreateFactor(const FName& FactorName, TSharedPtr<NTimelineInterface> Timeline)
-{
-	CreateFactor(FactorName, Timeline, UNFactorDecorator::StaticClass());
-}
-
-void UNFactorsFactoryClientAdapter::AddFactor(TSharedPtr<NFactorInterface> Factor)
-{
-	auto Proxy = dynamic_cast<NUnrealFactorProxy*>(Factor.Get());
-	mycheckf(Proxy != nullptr, TEXT("You should passed NUnrealFactorProxy (or derivation) factor only"));
-	mycheckf(
-		Proxy->GetUnrealObject() != nullptr, TEXT("You should instanciate your factor proxy with a UNFactorDecorator base class"));
-
-	UEFactors.Add(Proxy->GetName(), Proxy->GetUnrealObject());
 	Client->AddFactor(Factor);
+}
+
+int32 UNFactorsFactoryClientAdapter::AddFactorUnit(FName FactorName, UNFactorUnitView* FactorUnit)
+{
+	return UEFactors[FactorName]->AddFactorUnit(FactorUnit);
+}
+
+UNFactorUnitView* UNFactorsFactoryClientAdapter::GetFactorUnit(FName FactorName, int32 FactorIndex)
+{
+	return UEFactors[FactorName]->GetGCFactorUnit(FactorIndex);
 }
 
 void UNFactorsFactoryClientAdapter::RemoveFactor(const FName& FactorName)
@@ -117,16 +112,6 @@ TArray<NFactorStateInterface*> UNFactorsFactoryClientAdapter::GetStates(
 	TArray<FName> FactorNames, NFactorStateInterface* StateTemplate)
 {
 	return Client->GetStates(FactorNames, StateTemplate);
-}
-
-int32 UNFactorsFactoryClientAdapter::AddFactorUnit(FName FactorName, TSharedPtr<NFactorUnitInterface> FactorUnit)
-{
-	return Client->AddFactorUnit(FactorName, FactorUnit);
-}
-
-TSharedPtr<NFactorUnitInterface> UNFactorsFactoryClientAdapter::GetFactorUnit(FName FactorName, int32 Key)
-{
-	return Client->GetFactorUnit(FactorName, Key);
 }
 
 void UNFactorsFactoryClientAdapter::SetDebug(const TArray<FName> FactorNames, bool bDebug)

@@ -22,6 +22,7 @@ class NStubTimeline : public NTimelineInterface
 {
 public:
 	FNTimelineEventDelegate EventExpired;
+
 	virtual ~NStubTimeline()
 	{
 		EventExpired.Clear();
@@ -32,22 +33,42 @@ public:
 		Event->Start(0.f);
 		return true;
 	}
+
 	virtual void Attached(TArray<TSharedPtr<NEventInterface>> EventsCollection) override {}
 	virtual void SetTickInterval(float _TickInterval) override {}
 	virtual void SetCurrentTime(float _CurrentTime) override {}
+
 	virtual float GetCurrentTime() const override
 	{
 		return 1.0f;
 	}
+
 	virtual void SetLabel(FName _Label) override {}
+
 	virtual FName GetLabel() const override
 	{
 		return FName("A name");
 	}
+
 	virtual void Clear() override {}
 	virtual void NotifyTick() override {}
+
 	virtual FNTimelineEventDelegate& OnEventExpired() override
 	{
 		return EventExpired;
 	};
+
+	virtual TArray<TSharedPtr<NEventInterface>> GetEvents() override
+	{
+		return TArray<TSharedPtr<NEventInterface>>({});
+	}
+
+	virtual void PreDelete() override {}
+	virtual void Archive(FArchive& Ar) override {}
+
+	virtual TSharedPtr<NEventInterface> GetEvent(FString _UID) override
+	{
+		TSharedPtr<NEventInterface> Event;
+		return Event;
+	}
 };

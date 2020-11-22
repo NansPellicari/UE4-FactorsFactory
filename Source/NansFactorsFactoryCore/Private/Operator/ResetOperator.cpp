@@ -44,9 +44,8 @@ float NResetOperator::Compute(float Lh, float Rh)
 	TSharedPtr<NFactorUnitInterface> FactorUnit = MyFactor->GetFactorUnit(KeyInFactor);
 
 	TSharedPtr<NFactorUnitInterface> ResetFactorUnit = FactorUnit;
-	while (MaxAttempt > 0 &&
-		   (!ResetFactorUnit->IsActivated() || NOperatorUtils::IsOperatorWithFactor(ResetFactorUnit->GetOperator().Get()) ||
-			   MyFactor->HasStateFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit))))
+	while (MaxAttempt > 0 && (!ResetFactorUnit->IsActivated() || ResetFactorUnit->GetOperator()->IsOperatorWithFactor() ||
+								 MyFactor->HasStateFlag(NResetOperatorBase::GetResetIdFlag(ResetFactorUnit))))
 	{
 		int32 ResetKey = KeyInFactor - (Rh + (10 - MaxAttempt));
 		if (ResetKey < 0) return NullOperationResult;

@@ -16,9 +16,8 @@
 
 #include "Attribute/FactorAttribute.h"
 #include "CoreMinimal.h"
-#include "FactorUnit/FactorUnitAdapter.h"
+#include "FactorUnit/FactorUnitView.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "NansFactorsFactoryCore/Public/FactorUnit.h"
 #include "Settings/FactorSettings.h"
 
 #include "FactorsFactoryBlueprintHelpers.generated.h"
@@ -26,8 +25,7 @@
 class NFactorOperatorInterface;
 class UNFactorsFactoryClientAdapter;
 class UOperatorTest;
-class FactorUnit;
-class UNFactorUnitAdapter;
+class UNFactorUnitView;
 
 USTRUCT(BlueprintType)
 struct FNFactorStateResult
@@ -35,7 +33,9 @@ struct FNFactorStateResult
 	GENERATED_USTRUCT_BODY()
 
 	FNFactorStateResult() {}
-	FNFactorStateResult(float _Amount, TArray<FName> _Reasons, float _Time) : Amount(_Amount), Reasons(_Reasons), Time(_Time) {}
+
+	FNFactorStateResult(float _Amount, TArray<FName> _Reasons, float _Time) : Amount(_Amount), Reasons(_Reasons),
+																			  Time(_Time) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FactorsFactory")
 	float Amount = -1.f;
@@ -53,7 +53,7 @@ public:
 	static UNFactorsFactoryClientAdapter* GetFactorUnitClient(UObject* WorldContextObject);
 	static FNFactorStateResult GetFactorState(FFactorAttribute FactorName, UNFactorsFactoryClientAdapter* Client);
 
-	// clang-format off
+	// @formatter:off
 	/**
 	 * My design decision here is to always retrieve a result (0 is a result),
 	 * even if the desired FactorName does not (still) exists.
@@ -82,12 +82,12 @@ public:
 	static void Debug(UObject* WorldContextObject, const TArray<FFactorAttribute> FactorNames, const bool Debug);
 	
 	UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "FactorsFactory|Factory")
-	static UNFactorUnitAdapter* CreateFactorUnit(UObject* WorldContextObject, UClass* Class, FFactorAttribute Factor);
+	static UNFactorUnitView* CreateFactorUnit(UObject* WorldContextObject, UClass* Class, FFactorAttribute Factor);
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "FactorsFactory|Factory")
-	static UNFactorUnitAdapter* AddFactorUnit(UObject* WorldContextObject, UNFactorUnitAdapter* FactorUnit, FFactorAttribute Factor);
+	static UNFactorUnitView* AddFactorUnit(UObject* WorldContextObject, UNFactorUnitView* FactorUnit, FFactorAttribute Factor);
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"), BlueprintCallable, Category = "FactorsFactory|Factory")
 	static UNOperatorProviderBase* CreateOperatorProvider(UObject* WorldContextObject, UClass* OperatorProviderClass, FFactorAttribute Factor);
-	// clang-format on
+	// @formatter:on
 };

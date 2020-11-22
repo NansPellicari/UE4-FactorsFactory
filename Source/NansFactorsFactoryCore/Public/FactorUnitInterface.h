@@ -22,7 +22,8 @@ class NFactorOperatorInterface;
 class NANSFACTORSFACTORYCORE_API NFactorUnitInterface
 {
 public:
-	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() const = 0;
+	virtual ~NFactorUnitInterface() {}
+	virtual TSharedPtr<NFactorOperatorInterface> GetOperator() = 0;
 	virtual void SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator) = 0;
 	virtual float GetFactorUnitValue() const = 0;
 	virtual FName GetReason() const = 0;
@@ -31,4 +32,6 @@ public:
 	virtual const FString GetUID() const = 0;
 	virtual TSharedPtr<NEventInterface> GetEvent() = 0;
 	virtual void Activate(bool _bIsActivated) = 0;
+	virtual void PreDelete() = 0;
+	virtual void Archive(FArchive& Ar) = 0;
 };

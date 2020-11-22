@@ -16,11 +16,12 @@
 #include "Engine/Engine.h"
 #include "Engine/GameInstance.h"
 #include "EngineGlobals.h"
-#include "FactorUnit/FactorUnitAdapter.h"
+#include "FactorUnit/FactorUnitView.h"
 #include "FactorsFactoryBlueprintHelpers.h"
 #include "Misc/AutomationTest.h"
 #include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
 #include "NansFactorsFactoryCore/Public/FactorsFactoryClient.h"
+#include "NansTimelineSystemUE4/Public/Config/TimelineConfig.h"
 #include "NansTimelineSystemUE4/Public/Manager/LevelLifeTimelineManager.h"
 #include "NansTimelineSystemUE4/Public/Manager/TimelineManagerDecorator.h"
 #include "NansUE4TestsHelpers/Public/Helpers/Assertions.h"
@@ -38,16 +39,25 @@ UWorld* World;
 // It is used has a worldContext object
 UFakeObject* FakeObject;
 TSharedPtr<NStubTimeline> StubTimeline;
+FConfiguredTimeline TimelineConf;
 END_DEFINE_SPEC(FactorsFactoryBlueprintHelpersSpec)
 void FactorsFactoryBlueprintHelpersSpec::Define()
 {
 	Describe("How to use FactorsFactoryBlueprintHelpers", [this]() {
 		BeforeEach([this]() {
 			UE_LOG(LogTemp, Display, TEXT("-- Create World --"));
+			StubTimeline = MakeShareable(new NStubTimeline());
+			TimelineConf.Name = StubTimeline->GetLabel();
+			TimelineConf.TimelineClass = UNLevelLifeTimelineManager::StaticClass();
+
+			UNTimelineConfig* StaticObject = GetMutableDefault<UNTimelineConfig>();
+			FConfiguredTimelineConf TimelineConfDef;
+			TimelineConfDef.Name = TimelineConf.Name;
+			TimelineConfDef.TimelineClass = TimelineConf.TimelineClass;
+			StaticObject->ConfiguredTimeline.Add(TimelineConfDef);
 			World = NTestWorld::CreateAndPlay(EWorldType::Game, true, NAME_None, UFactorUnitFakeGameInstance::StaticClass());
 			FakeObject = NewObject<UFakeObject>(World, FName("MyFakeObject"), EObjectFlags::RF_MarkAsRootSet);
 			FakeObject->SetMyWorld(World);
-			StubTimeline = MakeShareable(new NStubTimeline());
 		});
 
 		It("Should get GetFactorUnitClient even after Garbage collects", [this]() {
@@ -65,11 +75,11 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 			CollectGarbage(RF_NoFlags);
 		});
 
-		It("Should instanciate a UNFactorUnitAdapter", [this]() {
+		It("Should instanciate a UNFactorUnitView", [this]() {
 			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
-			Client->CreateFactor(FName("test1"), StubTimeline);
-			UNFactorUnitAdapter* MyObject = UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-				FakeObject, UNFactorUnitAdapter::StaticClass(), FFactorAttribute(FName("test1")));
+			Client->CreateFactor(FName("test1"), TimelineConf);
+			UNFactorUnitView* MyObject = UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
+				FakeObject, UNFactorUnitView::StaticClass(), FFactorAttribute(FName("test1")));
 			TEST_NOT_NULL("Should not be null", MyObject);
 		});
 
@@ -81,7 +91,7 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 				try
 				{
 					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(
-						FakeObject, UNFactorUnitAdapter::StaticClass(), FFactorAttribute());
+						FakeObject, UNFactorUnitView::StaticClass(), FFactorAttribute());
 					TEST_TRUE("Should not be called", false);
 				}
 				catch (const TCHAR* e)
@@ -94,11 +104,11 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 
 		It("Should Create and add a new FactorUnit", [this]() {
 			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
-			Client->CreateFactor(FName("test1"), StubTimeline);
+			Client->CreateFactor(FName("test1"), TimelineConf);
 			FFactorAttribute FactorConf = FFactorAttribute(FName("test1"));
 
-			UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
-				UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapter::StaticClass(), FactorConf));
+			UNFactorUnitView* MyObject = Cast<UNFactorUnitView>(
+				UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitView::StaticClass(), FactorConf));
 
 			TEST_NOT_NULL("Should not be null", MyObject);
 			MyObject->FactorUnitValue = 2.f;
@@ -108,8 +118,8 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 				FakeObject, UNOperatorSimpleOperations::StaticClass(), FactorConf);
 			Cast<UNOperatorSimpleOperations>(MyObject->OperatorProvider)->Type = ENFactorSimpleOperation::Add;
 
-			UNFactorUnitAdapter* ObjectAdded =
-				Cast<UNFactorUnitAdapter>(UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, FactorConf));
+			UNFactorUnitView* ObjectAdded =
+				Cast<UNFactorUnitView>(UNFactorsFactoryBlueprintHelpers::AddFactorUnit(FakeObject, MyObject, FactorConf));
 			TEST_EQ("Should be add and equals as itself...", ObjectAdded, MyObject);
 		});
 
@@ -130,11 +140,11 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 		It("Can clear factors", [this]() {
 			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("test1"))};
 			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
-			Client->CreateFactor(Names[0].Name, StubTimeline);
+			Client->CreateFactor(Names[0].Name, TimelineConf);
 
 			FName Reason = FName("A temp object");
-			UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
-				UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
+			UNFactorUnitView* MyObject = Cast<UNFactorUnitView>(
+				UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitView::StaticClass(), Names[0]));
 			MyObject->FactorUnitValue = 2.f;
 			MyObject->Duration = 0;
 			MyObject->Reason = Reason;
@@ -158,12 +168,12 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 		It("Can add a lot of factor in one time", [this]() {
 			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("test1"))};
 			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
-			Client->CreateFactor(Names[0].Name, StubTimeline);
+			Client->CreateFactor(Names[0].Name, TimelineConf);
 
 			for (uint32 I = 0; I < 200; I++)
 			{
-				UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
+				UNFactorUnitView* MyObject = Cast<UNFactorUnitView>(
+					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitView::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
@@ -190,12 +200,12 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 		It("Can add a lot of factor in one time AND in multiple Factors", [this]() {
 			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("test1")), FFactorAttribute(FName("test2"))};
 			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
-			Client->CreateFactor({Names[0].Name, Names[1].Name}, StubTimeline);
+			Client->CreateFactor({Names[0].Name, Names[1].Name}, TimelineConf);
 
 			for (uint32 I = 0; I < 200; I++)
 			{
-				UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
+				UNFactorUnitView* MyObject = Cast<UNFactorUnitView>(
+					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitView::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");
@@ -224,12 +234,12 @@ void FactorsFactoryBlueprintHelpersSpec::Define()
 		It("Should continue to works after garbage collects", [this]() {
 			TArray<FFactorAttribute> Names = {FFactorAttribute(FName("test1")), FFactorAttribute(FName("test2"))};
 			auto Client = UNFactorsFactoryBlueprintHelpers::GetFactorUnitClient(FakeObject);
-			Client->CreateFactor({Names[0].Name, Names[1].Name}, StubTimeline);
+			Client->CreateFactor({Names[0].Name, Names[1].Name}, TimelineConf);
 
 			for (uint32 I = 0; I < 100; I++)
 			{
-				UNFactorUnitAdapter* MyObject = Cast<UNFactorUnitAdapter>(
-					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitAdapter::StaticClass(), Names[0]));
+				UNFactorUnitView* MyObject = Cast<UNFactorUnitView>(
+					UNFactorsFactoryBlueprintHelpers::CreateFactorUnit(FakeObject, UNFactorUnitView::StaticClass(), Names[0]));
 				MyObject->FactorUnitValue = 2.f;
 				MyObject->Duration = 0;
 				MyObject->Reason = FName("Reason");

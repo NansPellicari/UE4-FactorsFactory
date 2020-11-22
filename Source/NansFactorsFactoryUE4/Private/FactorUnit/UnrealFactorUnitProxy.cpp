@@ -14,64 +14,110 @@
 
 #include "FactorUnit/UnrealFactorUnitProxy.h"
 
-#include "FactorUnit/FactorUnitAdapter.h"
-#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
-#include "NansFactorsFactoryCore/Public/FactorUnitInterface.h"
 
-TSharedPtr<NFactorOperatorInterface> NUnrealFactorUnitProxy::GetOperator() const
+#include "TimelineInterface.h"
+#include "Factor/FactorDecorator.h"
+#include "FactorUnit/FactorUnitView.h"
+#include "NansCoreHelpers/Public/Misc/NansAssertionMacros.h"
+#include "UObject/Package.h"
+
+NUnrealFactorUnitProxy::NUnrealFactorUnitProxy(UNFactorUnitView* _FactorUnit) : FactorUnit(_FactorUnit) {}
+
+TSharedPtr<NFactorOperatorInterface> NUnrealFactorUnitProxy::GetOperator()
 {
-	mycheck(FactorUnit != nullptr);
+	check(IsValid(FactorUnit));
 	return FactorUnit->GetOperator();
 }
+
 void NUnrealFactorUnitProxy::SetOperator(TSharedPtr<NFactorOperatorInterface> _Operator)
 {
-	mycheck(FactorUnit != nullptr);
+	check(IsValid(FactorUnit));
 	return FactorUnit->SetOperator(_Operator);
 }
 
 float NUnrealFactorUnitProxy::GetFactorUnitValue() const
 {
-	mycheck(FactorUnit != nullptr);
+	check(IsValid(FactorUnit));
 	return FactorUnit->GetFactorUnitValue();
 }
 
 void NUnrealFactorUnitProxy::SetFactorUnitValue(float _Value)
 {
-	mycheck(FactorUnit != nullptr);
+	check(IsValid(FactorUnit));
 	return FactorUnit->SetFactorUnitValue(_Value);
 }
 
 FName NUnrealFactorUnitProxy::GetReason() const
 {
-	mycheck(FactorUnit != nullptr);
+	check(IsValid(FactorUnit));
 	return FactorUnit->GetReason();
 }
 
 bool NUnrealFactorUnitProxy::IsActivated() const
 {
-	mycheck(FactorUnit != nullptr);
+	check(IsValid(FactorUnit));
 	return FactorUnit->IsActivated();
 }
 
 const FString NUnrealFactorUnitProxy::GetUID() const
 {
-	mycheck(FactorUnit != nullptr);
+	check(IsValid(FactorUnit));
 	return FactorUnit->GetUID();
 }
 
 void NUnrealFactorUnitProxy::Activate(bool _bIsActivated)
 {
-	mycheck(FactorUnit != nullptr);
+	check(IsValid(FactorUnit));
 	return FactorUnit->Activate(_bIsActivated);
 }
 
 TSharedPtr<NEventInterface> NUnrealFactorUnitProxy::GetEvent()
 {
-	mycheck(FactorUnit != nullptr);
+	check(IsValid(FactorUnit));
 	return FactorUnit->GetEvent();
 }
 
-UNFactorUnitAdapter* NUnrealFactorUnitProxy::GetUnrealObject()
+void NUnrealFactorUnitProxy::PreDelete() {}
+
+void NUnrealFactorUnitProxy::ArchiveWithFactor(FArchive& Ar, UNFactorDecorator* Factor)
 {
-	return FactorUnit;
+	if (Ar.IsLoading())
+	{
+		Ar << FactorUnitClassName;
+		Ar << UID;
+		Ar << OperatorProviderClassName;
+
+		TSharedPtr<NEventInterface> Event = Factor->GetTimeline()->GetEvent(UID);
+
+		UClass* Class = FindObject<UClass>(ANY_PACKAGE, *FactorUnitClassName);
+		FactorUnit = Factor->CreateFactorUnit(Class);
+		mycheckf(
+			Event.IsValid(),
+			TEXT("Problems occured during serialization of FNFactorUnitRecord,"
+				"The associated event has not been found for UID %s"),
+			*UID
+		);
+		UClass* OperatorProviderClass = FindObject<UClass>(ANY_PACKAGE, *OperatorProviderClassName);
+		FactorUnit->OperatorProvider = NewObject<UNOperatorProviderBase>(FactorUnit, OperatorProviderClass, NAME_None);
+		FactorUnit->Init(Event);
+	}
+}
+
+void NUnrealFactorUnitProxy::Archive(FArchive& Ar)
+{
+	if (Ar.IsSaving())
+	{
+		UID = FactorUnit->GetUID();
+		FactorUnitClassName = FactorUnit->GetClass()->GetPathName();
+		OperatorProviderClassName = FactorUnit->OperatorProvider->GetClass()->GetPathName();
+		Ar << FactorUnitClassName;
+		Ar << UID;
+		Ar << OperatorProviderClassName;
+	}
+
+	if (IsValid(FactorUnit))
+	{
+		FactorUnit->OperatorProvider->Serialize(Ar);
+		FactorUnit->Serialize(Ar);
+	}
 }

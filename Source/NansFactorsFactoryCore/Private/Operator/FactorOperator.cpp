@@ -16,7 +16,7 @@
 
 const FName NNullOperator::Name(TEXT("Null"));
 const FName NAddOperator::Name(TEXT("Add"));
-const FName NSubtractOperator::Name(TEXT("Subsctract"));
+const FName NSubtractOperator::Name(TEXT("Subtract"));
 const FName NMultiplyOperator::Name(TEXT("Multiply"));
 const FName NDividerOperator::Name(TEXT("Divider"));
 const FName NMaxOperator::Name(TEXT("Max"));
@@ -88,7 +88,7 @@ bool NMaxOperator::IsBreaking()
 	return bBreak;
 }
 
-float NMaxOperator::Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
+float NMaxOperator::PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
 {
 	if (Lh >= Rh)
 	{
@@ -129,7 +129,7 @@ float NMinOperator::Compute(float Lh, float Rh)
 	return Lh;
 }
 
-float NMinOperator::Compute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
+float NMinOperator::PersistentCompute(float Lh, float Rh, TSharedPtr<NFactorUnitInterface> ActualUnit)
 {
 	if (Lh <= Rh)
 	{

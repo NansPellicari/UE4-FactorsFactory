@@ -26,7 +26,7 @@ class NFactorInterface;
  * (It doesn't care of the Lh parameter of the method Compute).
  * For the Compute() method, it returns the value set at the Rh parameter.
  */
-class NANSFACTORSFACTORYCORE_API NReplacerOperator : public NFactorOperatorStopperInterface, public NFactorOperatorInterface
+class NANSFACTORSFACTORYCORE_API NReplacerOperator final : public NFactorOperatorBase
 {
 public:
 	static const FName Name;
@@ -36,4 +36,8 @@ public:
 	}
 	virtual float Compute(float Lh, float Rh) override;
 	virtual TSharedPtr<NFactorOperatorInterface> GetInverse() override;
+	virtual bool IsStopper() override
+	{
+		return true;
+	}
 };

@@ -16,7 +16,6 @@
 
 #include "CoreMinimal.h"
 
-class NFactorInterface;
 class NFactorUnitInterface;
 class NFactorStateInterface;
 class NTimelineInterface;
@@ -29,6 +28,7 @@ enum class ENFactorFlag : uint8
 class NANSFACTORSFACTORYCORE_API NFactorInterface
 {
 public:
+	virtual ~NFactorInterface() {}
 	virtual void Clear() = 0;
 	virtual void SetName(FName _Name) = 0;
 	virtual FName GetName() const = 0;
@@ -46,4 +46,6 @@ public:
 	virtual void RemoveFlag(ENFactorFlag Flag) = 0;
 	virtual void Debug(bool _bDebug) = 0;
 	virtual void SupplyStateWithCurrentData(NFactorStateInterface& State) = 0;
+	virtual void PreDelete() = 0;
+	virtual void Archive(FArchive& Ar) = 0;
 };

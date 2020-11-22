@@ -23,7 +23,7 @@ bool NNullFactorUnit::IsActivated() const
 {
 	return false;
 }
-TSharedPtr<NFactorOperatorInterface> NNullFactorUnit::GetOperator() const
+TSharedPtr<NFactorOperatorInterface> NNullFactorUnit::GetOperator()
 {
 	return nullptr;
 }
@@ -47,3 +47,7 @@ TSharedPtr<NEventInterface> NNullFactorUnit::GetEvent()
 	return nullptr;
 }
 void NNullFactorUnit::Activate(bool _bIsActivated) {}
+
+void NNullFactorUnit::PreDelete() {}
+
+void NNullFactorUnit::Archive(FArchive& Ar) {}

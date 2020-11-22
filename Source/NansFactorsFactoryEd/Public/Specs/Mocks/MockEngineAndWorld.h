@@ -18,7 +18,7 @@
 #include "FactorsFactoryClientAdapter.h"
 #include "FactorsFactoryGameInstance.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "NansTimelineSystemUE4/Public/Specs/FakeTimelineGameInstance.h"
+#include "NansTimelineSystemEd/Public/Specs/FakeTimelineGameInstance.h"
 #include "NansUE4TestsHelpers/Public/Mock/FakeGameInstance.h"
 
 #include "MockEngineAndWorld.generated.h"
