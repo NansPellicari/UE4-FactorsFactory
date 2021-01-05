@@ -54,7 +54,8 @@ struct FNFactorSettings
 	 * TODO implements this
 	 * Give a reason why, this to inform designer in log when they tried
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors|Access", Meta = (EditCondition = "bIsReadOnly"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FactorsFactors|Access", Meta = (EditCondition =
+		"bIsReadOnly"))
 	FText ReadOnlyReason;
 };
 
@@ -70,7 +71,7 @@ class NANSFACTORSFACTORYUE4_API UFactorSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(config, EditAnywhere)
+	UPROPERTY(config, EditAnywhere, Category= "Factor Categories" )
 	TArray<FNFactorSettings> CategoryNames;
 
 	static void GetConfigs(TArray<TSharedPtr<FNFactorSettings>>& ShareableNames)
@@ -81,6 +82,7 @@ public:
 			ShareableNames.Add(MakeShareable(new FNFactorSettings(Settings)));
 		}
 	};
+
 	static void GetFactorNames(TArray<TSharedPtr<FName>>& ShareableNames)
 	{
 		const UFactorSettings* StaticObject = GetDefault<UFactorSettings>();
